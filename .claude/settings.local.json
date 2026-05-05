@@ -14,7 +14,13 @@
       "Bash(git reset *)",
       "Bash(bash *)",
       "Bash(./mvnw test *)",
-      "Bash(mvn test *)"
+      "Bash(mvn test *)",
+      "Bash(./mvnw compile *)",
+      "Bash(ls mvnw*)",
+      "Bash(which mvn *)",
+      "Bash(ls pom.xml)",
+      "Bash(java *)",
+      "Bash(mvn *)"
     ]
   }
 }

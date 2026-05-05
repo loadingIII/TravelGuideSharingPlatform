@@ -15,6 +15,7 @@ async function initUsers(page = 1, status = null) {
         <td><span class="badge ${USER_STATUS_BADGE[u.status] || 'badge-info'}">${USER_STATUS_MAP[u.status] || '未知'}</span></td>
         <td>${u.createdAt || '-'}</td>
         <td>
+          <button class="btn-link" onclick="Router.navigate('/users/detail/${u.id}')">详情</button>
           ${u.status === 0 ? `
             <button class="btn-link" onclick="auditUser(${u.id}, 'approve')">通过</button>
             <button class="btn-link danger" onclick="auditUser(${u.id}, 'reject')">拒绝</button>
@@ -76,4 +77,37 @@ async function deleteUser(id, name) {
     Toast.success('删除成功');
     initUsers();
   } catch (err) { Toast.error(err.message); }
+}
+
+async function initUserDetail(id) {
+  const content = document.getElementById('content');
+  try {
+    const user = await API.get(`/admin/users/${id}`);
+    const avatarHtml = user.avatarUrl
+      ? `<img src="${user.avatarUrl}" alt="头像" class="detail-avatar">`
+      : `<div class="detail-avatar detail-avatar-placeholder">${(user.username || '?')[0].toUpperCase()}</div>`;
+    content.innerHTML = `
+      <div class="card detail-card">
+        <div class="detail-header">
+          <div class="detail-header-left">
+            ${avatarHtml}
+            <div>
+              <div class="detail-header-title">${user.nickname || user.username || '用户详情'}</div>
+              <div class="detail-header-id">ID: ${user.id} ${user.isVip ? '&middot; <span style="color:var(--color-accent)">VIP</span>' : ''}</div>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="Router.navigate('/users')">&larr; 返回列表</button>
+        </div>
+        <div class="detail-body">
+          <div class="detail-row"><div class="detail-row-label">用户名</div><div class="detail-row-value">${user.username || '-'}</div></div>
+          <div class="detail-row"><div class="detail-row-label">昵称</div><div class="detail-row-value ${user.nickname ? '' : 'muted'}">${user.nickname || '未设置'}</div></div>
+          <div class="detail-row"><div class="detail-row-label">手机号</div><div class="detail-row-value">${user.phone || '-'}</div></div>
+          <div class="detail-row"><div class="detail-row-label">邮箱</div><div class="detail-row-value">${user.email || '-'}</div></div>
+          <div class="detail-row"><div class="detail-row-label">简介</div><div class="detail-row-value ${user.bio ? '' : 'muted'}" style="white-space:pre-wrap">${user.bio || '暂无简介'}</div></div>
+          <div class="detail-row"><div class="detail-row-label">状态</div><div class="detail-row-value"><span class="badge ${USER_STATUS_BADGE[user.status] || 'badge-info'}">${USER_STATUS_MAP[user.status] || '未知'}</span></div></div>
+          <div class="detail-row"><div class="detail-row-label">最后登录</div><div class="detail-row-value ${user.lastLoginAt ? '' : 'muted'}">${user.lastLoginAt || '暂无记录'}</div></div>
+          <div class="detail-row"><div class="detail-row-label">注册时间</div><div class="detail-row-value">${user.createdAt || '-'}</div></div>
+        </div>
+      </div>`;
+  } catch (err) { content.innerHTML = `<div class="alert alert-danger">加载失败: ${err.message}</div>`; }
 }

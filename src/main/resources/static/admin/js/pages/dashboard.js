@@ -36,7 +36,7 @@ async function initDashboard() {
       <div class="dashboard-charts">
         <div class="card chart-card" style="margin-bottom:var(--space-5)">
           <div class="card-title">数据概览</div>
-          <div style="height:280px"><canvas id="barChart"></canvas></div>
+          <div style="height:300px"><canvas id="barChart"></canvas></div>
         </div>
         <div class="grid grid-3">
           <div class="card chart-card">
@@ -69,51 +69,83 @@ const chartColors = {
 function renderBarChart(stats) {
   const ctx = document.getElementById('barChart');
   if (!ctx) return;
+  const values = [stats.userCount, stats.guideCount, stats.storyCount, stats.destinationCount, stats.commentCount];
+  const labels = ['用户', '攻略', '故事', '目的地', '评论'];
+  const barColors = chartColors.palette;
+
   new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ['用户', '攻略', '故事', '目的地', '评论'],
+      labels,
       datasets: [{
-        data: [stats.userCount, stats.guideCount, stats.storyCount, stats.destinationCount, stats.commentCount],
-        backgroundColor: chartColors.palette.map(c => c + '20'),
-        borderColor: chartColors.palette,
-        borderWidth: 1.5,
-        borderRadius: 8,
-        barThickness: 48,
-        hoverBackgroundColor: chartColors.palette.map(c => c + '40')
+        data: values,
+        backgroundColor: barColors,
+        borderColor: barColors.map(c => c + 'cc'),
+        borderWidth: 0,
+        borderRadius: 6,
+        barThickness: 40,
+        hoverBackgroundColor: barColors
       }]
     },
     options: {
+      indexAxis: 'y',
       responsive: true,
       maintainAspectRatio: false,
+      layout: { padding: { right: 20 } },
       plugins: {
         legend: { display: false },
         tooltip: {
-          backgroundColor: '#1a2332',
+          backgroundColor: 'rgba(26,35,50,0.92)',
           titleFont: { family: "'DM Sans'", size: 13, weight: '600' },
           bodyFont: { family: "'DM Sans'", size: 12 },
-          padding: 12,
+          padding: { top: 10, bottom: 10, left: 14, right: 14 },
           cornerRadius: 8,
           displayColors: false,
+          borderColor: 'rgba(255,255,255,0.08)',
+          borderWidth: 1,
           callbacks: {
-            label: ctx => `${ctx.parsed.y} 条`
+            label: ctx => `${ctx.label}: ${ctx.parsed.x} 条`
           }
         }
       },
       scales: {
-        y: {
+        x: {
           beginAtZero: true,
-          grid: { color: '#edf2f7', drawBorder: false },
-          ticks: { font: { family: "'DM Sans'", size: 12 }, color: '#8494a7', padding: 8 },
+          grid: { color: 'rgba(226,232,240,0.6)', drawBorder: false },
+          ticks: { font: { family: "'DM Sans'", size: 11 }, color: '#8494a7', padding: 4 },
           border: { display: false }
         },
-        x: {
+        y: {
           grid: { display: false },
-          ticks: { font: { family: "'DM Sans'", size: 12, weight: '500' }, color: '#4a5568', padding: 8 },
+          ticks: {
+            font: { family: "'DM Sans'", size: 13, weight: '600' },
+            color: '#4a5568',
+            padding: 8
+          },
           border: { display: false }
         }
+      },
+      animation: {
+        duration: 800,
+        easing: 'easeOutQuart'
       }
-    }
+    },
+    plugins: [{
+      id: 'barValueLabels',
+      afterDatasetsDraw(chart) {
+        const { ctx: c, data, chartArea } = chart;
+        const meta = chart.getDatasetMeta(0);
+        c.save();
+        c.font = "600 12px 'DM Sans'";
+        c.fillStyle = '#4a5568';
+        c.textBaseline = 'middle';
+        meta.data.forEach((bar, i) => {
+          const val = data.datasets[0].data[i];
+          c.fillText(val, bar.x + 8, bar.y);
+        });
+        c.restore();
+      }
+    }]
   });
 }
 

@@ -15,6 +15,7 @@ async function initGuides(page = 1, status = null) {
         <td><span class="badge ${GUIDE_STATUS_BADGE[g.status] || 'badge-info'}">${GUIDE_STATUS_MAP[g.status] || '未知'}</span></td>
         <td>${g.publishedAt || '-'}</td>
         <td>
+          <button class="btn-link" onclick="Router.navigate('/guides/detail/${g.id}')">详情</button>
           ${g.status === 0 ? `
             <button class="btn-link" onclick="auditGuide(${g.id}, 'approve')">通过</button>
             <button class="btn-link danger" onclick="auditGuide(${g.id}, 'reject')">拒绝</button>
@@ -69,4 +70,49 @@ async function deleteGuide(id, title) {
   if (!await confirmDialog(`确认删除攻略「${title}」？`)) return;
   try { await API.delete(`/admin/guides/${id}`); Toast.success('删除成功'); initGuides(); }
   catch (err) { Toast.error(err.message); }
+}
+
+async function initGuideDetail(id) {
+  const content = document.getElementById('content');
+  try {
+    const g = await API.get(`/admin/guides/${id}`);
+    const coverHtml = g.coverImageUrl
+      ? `<div class="detail-cover"><img src="${g.coverImageUrl}" alt="封面"></div>`
+      : '';
+    const avatarHtml = g.authorAvatarUrl
+      ? `<img src="${g.authorAvatarUrl}" class="detail-avatar-sm" alt="">`
+      : `<div class="detail-avatar-sm detail-avatar-placeholder-sm">${(g.authorName || '?')[0]}</div>`;
+    content.innerHTML = `
+      <div class="card detail-card">
+        ${coverHtml}
+        <div class="detail-header">
+          <div class="detail-header-left">
+            ${avatarHtml}
+            <div>
+              <div class="detail-header-title">${g.title || '攻略详情'}</div>
+              <div class="detail-header-id">ID: ${g.id} &middot; ${g.destinationName || ''}</div>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="Router.navigate('/guides')">&larr; 返回列表</button>
+        </div>
+        <div class="detail-body">
+          <div class="detail-row"><div class="detail-row-label">作者</div><div class="detail-row-value">${g.authorName || '-'}</div></div>
+          <div class="detail-row"><div class="detail-row-label">目的地</div><div class="detail-row-value">${g.destinationName || '-'}</div></div>
+          <div class="detail-row"><div class="detail-row-label">摘要</div><div class="detail-row-value">${g.summary || '-'}</div></div>
+          <div class="detail-row"><div class="detail-row-label">出发地</div><div class="detail-row-value ${g.locationText ? '' : 'muted'}">${g.locationText || '未设置'}</div></div>
+          <div class="detail-row"><div class="detail-row-label">旅行范围</div><div class="detail-row-value">${g.scope || '-'}</div></div>
+          <div class="detail-row"><div class="detail-row-label">旅行方式</div><div class="detail-row-value">${g.travelMode || '-'}</div></div>
+          <div class="detail-row"><div class="detail-row-label">天数</div><div class="detail-row-value">${g.days || '-'}</div></div>
+          <div class="detail-row"><div class="detail-row-label">预算</div><div class="detail-row-value">${g.budgetTotal || '-'}</div></div>
+          <div class="detail-row"><div class="detail-row-label">状态</div><div class="detail-row-value"><span class="badge ${GUIDE_STATUS_BADGE[g.status] || 'badge-info'}">${GUIDE_STATUS_MAP[g.status] || '未知'}</span></div></div>
+          <div class="detail-row"><div class="detail-row-label">发布时间</div><div class="detail-row-value">${g.publishedAt || '-'}</div></div>
+        </div>
+        <div class="detail-stats">
+          <div class="detail-stat"><div class="detail-stat-value">${g.viewsCount || 0}</div><div class="detail-stat-label">浏览</div></div>
+          <div class="detail-stat"><div class="detail-stat-value">${g.likesCount || 0}</div><div class="detail-stat-label">点赞</div></div>
+          <div class="detail-stat"><div class="detail-stat-value">${g.commentsCount || 0}</div><div class="detail-stat-label">评论</div></div>
+          <div class="detail-stat"><div class="detail-stat-value">${g.favoritesCount || 0}</div><div class="detail-stat-label">收藏</div></div>
+        </div>
+      </div>`;
+  } catch (err) { content.innerHTML = `<div class="alert alert-danger">加载失败: ${err.message}</div>`; }
 }

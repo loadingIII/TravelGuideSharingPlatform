@@ -14,6 +14,7 @@ async function initStories(page = 1, status = null) {
         <td><span class="badge ${STORY_STATUS_BADGE[s.status] || 'badge-info'}">${STORY_STATUS_MAP[s.status] || '未知'}</span></td>
         <td>${s.createdAt || '-'}</td>
         <td>
+          <button class="btn-link" onclick="Router.navigate('/stories/detail/${s.id}')">详情</button>
           ${s.status === 0 ? `
             <button class="btn-link" onclick="auditStory(${s.id}, 'approve')">通过</button>
             <button class="btn-link danger" onclick="auditStory(${s.id}, 'reject')">拒绝</button>
@@ -66,4 +67,40 @@ async function deleteStory(id) {
   if (!await confirmDialog('确认删除该故事？')) return;
   try { await API.delete(`/admin/stories/${id}`); Toast.success('删除成功'); initStories(); }
   catch (err) { Toast.error(err.message); }
+}
+
+async function initStoryDetail(id) {
+  const content = document.getElementById('content');
+  try {
+    const s = await API.get(`/admin/stories/${id}`);
+    const avatarHtml = s.authorAvatarUrl
+      ? `<img src="${s.authorAvatarUrl}" class="detail-avatar-sm" alt="">`
+      : `<div class="detail-avatar-sm detail-avatar-placeholder-sm">${(s.authorName || '?')[0]}</div>`;
+    content.innerHTML = `
+      <div class="card detail-card">
+        <div class="detail-header">
+          <div class="detail-header-left">
+            ${avatarHtml}
+            <div>
+              <div class="detail-header-title">${s.authorName || '故事详情'}的故事</div>
+              <div class="detail-header-id">ID: ${s.id} &middot; ${s.isVip ? 'VIP用户' : '普通用户'}</div>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="Router.navigate('/stories')">&larr; 返回列表</button>
+        </div>
+        <div class="detail-body">
+          <div class="detail-row"><div class="detail-row-label">作者</div><div class="detail-row-value">${s.authorName || '-'}</div></div>
+          <div class="detail-row"><div class="detail-row-label">VIP</div><div class="detail-row-value">${s.isVip ? '<span class="badge badge-warning">VIP</span>' : '<span class="badge badge-info">普通</span>'}</div></div>
+          <div class="detail-row"><div class="detail-row-label">状态</div><div class="detail-row-value"><span class="badge ${STORY_STATUS_BADGE[s.status] || 'badge-info'}">${STORY_STATUS_MAP[s.status] || '未知'}</span></div></div>
+          <div class="detail-row"><div class="detail-row-label">内容</div><div class="detail-row-value" style="white-space:pre-wrap;line-height:1.8">${s.content || '-'}</div></div>
+          <div class="detail-row"><div class="detail-row-label">发布时间</div><div class="detail-row-value">${s.publishedAt || '-'}</div></div>
+          <div class="detail-row"><div class="detail-row-label">创建时间</div><div class="detail-row-value">${s.createdAt || '-'}</div></div>
+        </div>
+        <div class="detail-stats">
+          <div class="detail-stat"><div class="detail-stat-value">${s.likesCount || 0}</div><div class="detail-stat-label">点赞</div></div>
+          <div class="detail-stat"><div class="detail-stat-value">${s.commentsCount || 0}</div><div class="detail-stat-label">评论</div></div>
+          <div class="detail-stat"><div class="detail-stat-value">${s.sharesCount || 0}</div><div class="detail-stat-label">分享</div></div>
+        </div>
+      </div>`;
+  } catch (err) { content.innerHTML = `<div class="alert alert-danger">加载失败: ${err.message}</div>`; }
 }

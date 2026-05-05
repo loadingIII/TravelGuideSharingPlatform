@@ -4,14 +4,17 @@ import com.travel.common.ApiResponse;
 import com.travel.common.PageResult;
 import com.travel.mapper.AdminLogMapper;
 import com.travel.mapper.UserMapper;
+import com.travel.mapper.UserProfileMapper;
 import com.travel.pojo.model.AdminLog;
 import com.travel.pojo.model.User;
+import com.travel.pojo.model.UserProfile;
 import com.travel.service.AdminAuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RestController
@@ -20,6 +23,7 @@ import java.util.Map;
 public class AdminUserApiController {
 
     private final UserMapper userMapper;
+    private final UserProfileMapper userProfileMapper;
     private final AdminLogMapper adminLogMapper;
     private final AdminAuthService adminAuthService;
     private static final int PAGE_SIZE = 10;
@@ -33,10 +37,26 @@ public class AdminUserApiController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<User> detail(@PathVariable Long id) {
+    public ApiResponse<Map<String, Object>> detail(@PathVariable Long id) {
         User user = userMapper.selectById(id);
         if (user == null) return ApiResponse.fail("NOT_FOUND", "用户不存在");
-        return ApiResponse.success(user);
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("id", user.getId());
+        result.put("username", user.getUsername());
+        result.put("phone", user.getPhone());
+        result.put("email", user.getEmail());
+        result.put("status", user.getStatus());
+        result.put("lastLoginAt", user.getLastLoginAt());
+        result.put("createdAt", user.getCreatedAt());
+        result.put("updatedAt", user.getUpdatedAt());
+        UserProfile profile = userProfileMapper.selectByUserId(id);
+        if (profile != null) {
+            result.put("nickname", profile.getNickname());
+            result.put("avatarUrl", profile.getAvatarUrl());
+            result.put("bio", profile.getBio());
+            result.put("isVip", profile.getIsVip());
+        }
+        return ApiResponse.success(result);
     }
 
     @PostMapping("/{id}/audit")

@@ -10,6 +10,7 @@ async function initDestinations(page = 1) {
         <td>${d.city || '-'}</td>
         <td>${d.guidesCount || 0}</td>
         <td>
+          <button class="btn-link" onclick="Router.navigate('/destinations/detail/${d.id}')">详情</button>
           <button class="btn-link" onclick="Router.navigate('/destinations/edit/${d.id}')">编辑</button>
           <button class="btn-link danger" onclick="deleteDestination(${d.id}, '${(d.name||'').replace(/'/g,"\\'")}')">删除</button>
         </td>
@@ -35,6 +36,36 @@ async function deleteDestination(id, name) {
   if (!await confirmDialog(`确认删除目的地「${name}」？`)) return;
   try { await API.delete(`/admin/destinations/${id}`); Toast.success('删除成功'); initDestinations(); }
   catch (err) { Toast.error(err.message); }
+}
+
+async function initDestinationDetail(id) {
+  const content = document.getElementById('content');
+  try {
+    const dest = await API.get(`/admin/destinations/${id}`);
+    const coverHtml = dest.coverImageUrl
+      ? `<div class="detail-cover"><img src="${dest.coverImageUrl}" alt="封面"></div>`
+      : '';
+    content.innerHTML = `
+      <div class="card detail-card">
+        ${coverHtml}
+        <div class="detail-header">
+          <div>
+            <div class="detail-header-title">${dest.name || '目的地详情'}</div>
+            <div class="detail-header-id">ID: ${dest.id} &middot; ${dest.country || ''} ${dest.city || ''}</div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="Router.navigate('/destinations')">&larr; 返回列表</button>
+        </div>
+        <div class="detail-body">
+          <div class="detail-row"><div class="detail-row-label">名称</div><div class="detail-row-value">${dest.name || '-'}</div></div>
+          <div class="detail-row"><div class="detail-row-label">国家</div><div class="detail-row-value">${dest.country || '-'}</div></div>
+          <div class="detail-row"><div class="detail-row-label">城市</div><div class="detail-row-value">${dest.city || '-'}</div></div>
+          <div class="detail-row"><div class="detail-row-label">描述</div><div class="detail-row-value" style="white-space:pre-wrap;line-height:1.8">${dest.description || '-'}</div></div>
+        </div>
+        <div class="detail-stats">
+          <div class="detail-stat"><div class="detail-stat-value">${dest.guidesCount || 0}</div><div class="detail-stat-label">攻略数</div></div>
+        </div>
+      </div>`;
+  } catch (err) { content.innerHTML = `<div class="alert alert-danger">加载失败: ${err.message}</div>`; }
 }
 
 async function initDestinationEdit(id) {

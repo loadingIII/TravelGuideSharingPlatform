@@ -26,6 +26,15 @@ public class AdminAuthApiController {
     private final AdminLogMapper adminLogMapper;
     private final AdminUserMapper adminUserMapper;
 
+    @GetMapping
+    public void rootRedirect(HttpSession session, HttpServletResponse response) throws IOException {
+        if (adminAuthService.isLoggedIn(session)) {
+            response.sendRedirect("/admin/index.html");
+        } else {
+            response.sendRedirect("/admin/login.html");
+        }
+    }
+
     @GetMapping("/login")
     public void loginRedirect(HttpServletResponse response) throws IOException {
         response.sendRedirect("/admin/login.html");
@@ -34,8 +43,10 @@ public class AdminAuthApiController {
     @PostMapping("/login")
     public ApiResponse<Void> login(@RequestParam String username,
                                    @RequestParam String password,
+                                   @RequestParam(required = false, defaultValue = "false") boolean remember,
                                    HttpSession session,
-                                   HttpServletRequest request) {
+                                   HttpServletRequest request,
+                                   HttpServletResponse response) {
         log.info("登录尝试: username={}", username);
         AdminUser adminUser = adminUserMapper.selectByUsername(username);
         if (adminUser == null) {
@@ -47,6 +58,9 @@ public class AdminAuthApiController {
         if (!ok) {
             log.warn("登录失败: username={}", username);
             return ApiResponse.fail("AUTH_FAILED", "用户名或密码错误");
+        }
+        if (remember) {
+            adminAuthService.setRememberCookie(response, adminUser.getId());
         }
         try {
             Map<String, Object> admin = adminAuthService.getCurrentAdmin(session);
@@ -66,7 +80,7 @@ public class AdminAuthApiController {
     }
 
     @PostMapping("/logout")
-    public ApiResponse<Void> logout(HttpSession session, HttpServletRequest request) {
+    public ApiResponse<Void> logout(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> admin = adminAuthService.getCurrentAdmin(session);
         if (admin != null) {
             try {
@@ -82,7 +96,7 @@ public class AdminAuthApiController {
                 log.warn("记录登出日志失败(不影响登出): {}", e.getMessage());
             }
         }
-        adminAuthService.logout(session);
+        adminAuthService.logout(session, response);
         return ApiResponse.success();
     }
 

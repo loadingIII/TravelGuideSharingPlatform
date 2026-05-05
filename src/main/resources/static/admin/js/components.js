@@ -55,7 +55,7 @@ function confirmDialog(message) {
 /* Sidebar renderer */
 function renderSidebar(activeKey) {
   const links = [
-    { key: '', label: '仪表盘', icon: Icons.dashboard },
+    { key: '', label: '数据总览', icon: Icons.dashboard },
     { key: 'users', label: '用户管理', icon: Icons.users },
     { key: 'guides', label: '攻略管理', icon: Icons.guide },
     { key: 'stories', label: '故事管理', icon: Icons.story },
