@@ -66,9 +66,6 @@
     <sql id="GuideSummaryWhere">
         <where>
             g.publish_status = 'published'
-            <if test="status != null">
-                AND g.status = #{status}
-            </if>
             <if test="keyword != null and keyword != ''">
                 AND (g.title LIKE CONCAT('%', #{keyword}, '%')
                      OR g.summary LIKE CONCAT('%', #{keyword}, '%')
