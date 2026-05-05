@@ -1,5 +1,6 @@
 package com.travel.pojo.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -15,4 +16,8 @@ public class UpdateProfileDTO {
 
     @Size(max = 500, message = "简介长度不能超过500")
     private String bio;
+
+    @Email(message = "邮箱格式不正确")
+    @Size(max = 100, message = "邮箱长度不能超过100")
+    private String email;
 }

@@ -20,14 +20,31 @@
         <div class="user-card">
           <div class="avatar-section">
             <div class="avatar-wrapper">
-              <img v-if="userInfo.avatar" :src="userInfo.avatar" alt="用户头像" class="user-avatar-img">
-              <div v-else class="avatar-placeholder">
+              <img 
+                v-if="userInfo.avatar" 
+                :src="userInfo.avatar" 
+                alt="用户头像" 
+                class="user-avatar-img"
+                :class="{ 'clickable': !isEditing }"
+                @click="handleAvatarClick"
+              >
+              <div 
+                v-else 
+                class="avatar-placeholder"
+                :class="{ 'clickable': !isEditing }"
+                @click="handleAvatarClick"
+              >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                   <circle cx="12" cy="7" r="4"/>
                 </svg>
               </div>
-              <button class="edit-avatar-btn" @click="triggerAvatarUpload" title="更换头像">
+              <button 
+                v-if="isEditing" 
+                class="edit-avatar-btn" 
+                @click="triggerAvatarUpload" 
+                title="更换头像"
+              >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
                   <circle cx="12" cy="13" r="4"/>
@@ -348,11 +365,35 @@
         </section>
       </main>
     </div>
+
+    <!-- 头像放大预览弹窗 -->
+    <div v-if="showAvatarPreview" class="avatar-preview-modal" @click="closeAvatarPreview">
+      <div class="avatar-preview-content" @click.stop>
+        <button class="close-preview-btn" @click="closeAvatarPreview">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+        <img 
+          v-if="userInfo.avatar" 
+          :src="userInfo.avatar" 
+          alt="用户头像" 
+          class="preview-avatar-img"
+        >
+        <div v-else class="preview-avatar-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, watch } from 'vue'
+import request from '../utils/request.js'
 
 const props = defineProps({
   userInfo: {
@@ -369,6 +410,7 @@ const currentPostTab = ref('guides')
 const currentFavoriteTab = ref('likedGuides')
 const isEditing = ref(false)
 const avatarInput = ref(null)
+const showAvatarPreview = ref(false)
 
 // 菜单项
 const menuItems = [
@@ -415,12 +457,23 @@ const stats = reactive({
 
 // 表单数据
 const formData = reactive({
-  username: props.userInfo.username || '',
-  nickname: props.userInfo.nickname || '',
-  phone: props.userInfo.phone || '',
-  email: props.userInfo.email || '',
-  bio: props.userInfo.bio || ''
+  username: '',
+  nickname: '',
+  phone: '',
+  email: '',
+  bio: ''
 })
+
+// 监听 props.userInfo 变化，同步更新表单数据
+watch(() => props.userInfo, (newUserInfo) => {
+  if (newUserInfo) {
+    formData.username = newUserInfo.username || ''
+    formData.nickname = newUserInfo.nickname || ''
+    formData.phone = newUserInfo.phone || ''
+    formData.email = newUserInfo.email || ''
+    formData.bio = newUserInfo.bio || ''
+  }
+}, { immediate: true, deep: true })
 
 // 数据列表
 const myGuides = ref([])
@@ -439,24 +492,91 @@ const triggerAvatarUpload = () => {
   avatarInput.value?.click()
 }
 
+// 处理头像点击
+const handleAvatarClick = () => {
+  if (!isEditing.value) {
+    openAvatarPreview()
+  }
+}
+
+// 打开头像预览
+const openAvatarPreview = () => {
+  showAvatarPreview.value = true
+  document.body.style.overflow = 'hidden'
+}
+
+// 关闭头像预览
+const closeAvatarPreview = () => {
+  showAvatarPreview.value = false
+  document.body.style.overflow = ''
+}
+
 // 处理头像更换
-const handleAvatarChange = (e) => {
+const handleAvatarChange = async (e) => {
   const file = e.target.files[0]
-  if (file) {
-    const reader = new FileReader()
-    reader.onload = (event) => {
-      props.userInfo.avatar = event.target.result
-      // TODO: 上传到服务器
+  if (!file) return
+
+  // 先显示本地预览
+  const reader = new FileReader()
+  reader.onload = (event) => {
+    // 通过 emit 通知父组件更新头像（本地预览）
+    emit('update-user', { ...props.userInfo, avatar: event.target.result })
+  }
+  reader.readAsDataURL(file)
+
+  // 上传到服务器
+  try {
+    const formData = new FormData()
+    formData.append('file', file)
+
+    const res = await request.post('/files/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+
+    console.log('上传响应:', res) // 调试用
+
+    if (res.code === 'OK' || res.code === 200) {
+      // 上传成功，使用服务器返回的URL
+      emit('update-user', { ...props.userInfo, avatar: res.data })
+      alert('头像上传成功！')
+    } else {
+      alert('上传失败：' + res.message)
     }
-    reader.readAsDataURL(file)
+  } catch (error) {
+    console.error('上传失败:', error)
+    alert('头像上传失败，请稍后重试')
   }
 }
 
 // 保存个人资料
-const saveProfile = () => {
-  // TODO: 调用API保存
-  emit('update-user', { ...props.userInfo, ...formData })
-  isEditing.value = false
+const saveProfile = async () => {
+  try {
+    // 构建请求数据，包含表单信息和头像地址
+    const profileData = {
+      username: formData.username,
+      nickname: formData.nickname,
+      phone: formData.phone,
+      email: formData.email,
+      bio: formData.bio,
+      avatarUrl: props.userInfo.avatar // 包含当前头像地址，注意字段名与后端一致
+    }
+
+    const res = await request.put('/users/me/profile', profileData)
+
+    if (res.code === 'OK' || res.code === 200) {
+      // 更新成功，通知父组件更新用户信息
+      emit('update-user', { ...props.userInfo, ...profileData })
+      isEditing.value = false
+      alert('个人资料保存成功！')
+    } else {
+      alert('保存失败：' + res.message)
+    }
+  } catch (error) {
+    console.error('保存个人资料失败:', error)
+    alert('保存失败，请稍后重试')
+  }
 }
 
 // 格式化日期
@@ -737,6 +857,19 @@ onMounted(() => {
 .edit-avatar-btn:hover {
   transform: scale(1.1);
   background: #e88535;
+}
+
+/* 头像可点击状态 */
+.user-avatar-img.clickable,
+.avatar-placeholder.clickable {
+  cursor: zoom-in;
+  transition: all 0.3s ease;
+}
+
+.user-avatar-img.clickable:hover,
+.avatar-placeholder.clickable:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 20px rgba(247, 149, 69, 0.3);
 }
 
 .edit-avatar-btn svg {
@@ -1320,6 +1453,98 @@ onMounted(() => {
 .empty-state p {
   margin-bottom: 20px;
   font-size: 14px;
+}
+
+/* 头像预览弹窗 */
+.avatar-preview-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.avatar-preview-content {
+  position: relative;
+  max-width: 80vw;
+  max-height: 80vh;
+  animation: scaleIn 0.3s ease;
+}
+
+@keyframes scaleIn {
+  from { 
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.preview-avatar-img {
+  max-width: 400px;
+  max-height: 400px;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.preview-avatar-placeholder {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffc494 0%, #f79545 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.preview-avatar-placeholder svg {
+  width: 120px;
+  height: 120px;
+  color: white;
+}
+
+.close-preview-btn {
+  position: absolute;
+  top: -50px;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.close-preview-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(90deg);
+}
+
+.close-preview-btn svg {
+  width: 24px;
+  height: 24px;
+  color: white;
 }
 
 /* 响应式 */

@@ -9,6 +9,10 @@ spring:
     url: jdbc:mysql://localhost:3306/travel_guide_platform?useSSL=false&serverTimezone=UTC
     username: root
     password: 123321
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 50MB
   jackson:
     default-property-inclusion: non_null # JSON处理时忽略非空字段
   mvc:
@@ -34,3 +38,9 @@ app:
   jwt:
     secret: 6a701ec8714c4e99af80e7329adf06475b26d01c4a0502c48a71d86e76b6d6e9
     access-expire-minutes: 120
+  oss:
+    endpoint: oss-cn-guangzhou.aliyuncs.com
+    access-key-id: LTAI5tBzVgNNNNNfJq8XD9jy
+    access-key-secret: KzoUlxO4YmDxDZne5nviJVjnr3ri9P
+    bucket-name: travel-shared-platform
+#    bucket-name: web-talis-0717

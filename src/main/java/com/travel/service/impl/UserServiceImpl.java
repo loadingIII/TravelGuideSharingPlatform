@@ -73,6 +73,16 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(ErrorCode.UNAUTHORIZED, "请先登录");
         }
 
+        // 更新 User 表的邮箱字段
+        if (request.getEmail() != null) {
+            // 先查询当前用户信息
+            User currentUser = userMapper.selectById(userId);
+            if (currentUser != null) {
+                userMapper.updateUser(userId, currentUser.getUsername(), 
+                    currentUser.getPhone(), request.getEmail(), currentUser.getStatus());
+            }
+        }
+
         // 查询是否已有用户资料记录
         UserProfile current = profileMapper.selectByUserId(userId);
         if (current == null) {
@@ -88,10 +98,16 @@ public class UserServiceImpl implements UserService {
             current.setBio(request.getBio());
             profileMapper.insert(current);
         } else {
-            // 已有记录，只更新允许修改的字段
-            current.setNickname(request.getNickname());
-            current.setAvatarUrl(request.getAvatarUrl());
-            current.setBio(request.getBio());
+            // 已有记录，只更新非空的字段，保留原值
+            if (request.getNickname() != null) {
+                current.setNickname(request.getNickname());
+            }
+            if (request.getAvatarUrl() != null) {
+                current.setAvatarUrl(request.getAvatarUrl());
+            }
+            if (request.getBio() != null) {
+                current.setBio(request.getBio());
+            }
             profileMapper.updateProfile(current);
         }
 
