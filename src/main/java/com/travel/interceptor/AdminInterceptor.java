@@ -1,7 +1,5 @@
 package com.travel.interceptor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.travel.common.ApiResponse;
 import com.travel.service.AdminAuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,7 +12,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 public class AdminInterceptor implements HandlerInterceptor {
 
     private final AdminAuthService adminAuthService;
-    private final ObjectMapper objectMapper;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -23,8 +20,7 @@ public class AdminInterceptor implements HandlerInterceptor {
             if (uri.startsWith("/admin/api/")) {
                 response.setStatus(401);
                 response.setContentType("application/json;charset=UTF-8");
-                response.getWriter().write(objectMapper.writeValueAsString(
-                    ApiResponse.fail("NOT_LOGIN", "未登录")));
+                response.getWriter().write("{\"code\":\"NOT_LOGIN\",\"message\":\"未登录\",\"data\":null}");
                 return false;
             }
             response.sendRedirect("/admin/login.html");
