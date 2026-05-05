@@ -1,0 +1,16 @@
+/* Dashboard */
+.dashboard-charts { margin-top: var(--space-4); }
+.chart-card { padding: var(--space-5); }
+.chart-card canvas { width: 100% !important; }
+
+/* Login */
+.login-page {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: var(--color-bg);
+}
+.login-card { width: 100%; max-width: 400px; padding: var(--space-8); }
+.login-card h2 { text-align: center; margin-bottom: var(--space-6); font-size: 22px; }
+.login-card .btn { width: 100%; padding: 10px; }
+
+/* Edit form */
+.edit-card { max-width: 640px; }
