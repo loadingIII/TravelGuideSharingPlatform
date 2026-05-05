@@ -29,16 +29,11 @@ public interface GuideCommentMapper {
     @Select("SELECT c.id, c.guide_id, c.user_id, c.content, c.parent_comment_id, " +
             "c.likes_count, c.status, c.created_at, u.username AS author_name " +
             "FROM guide_comments c LEFT JOIN users u ON c.user_id = u.id " +
-            "<where>" +
-            "<if test='status != null'>AND c.status = #{status}</if>" +
-            "</where>" +
+            "WHERE (#{status} IS NULL OR c.status = #{status}) " +
             "ORDER BY c.created_at DESC LIMIT #{offset}, #{pageSize}")
     List<GuideComment> selectPage(@Param("offset") int offset, @Param("pageSize") int pageSize, @Param("status") Integer status);
 
-    @Select("SELECT COUNT(*) FROM guide_comments c " +
-            "<where>" +
-            "<if test='status != null'>AND c.status = #{status}</if>" +
-            "</where>")
+    @Select("SELECT COUNT(*) FROM guide_comments c WHERE (#{status} IS NULL OR c.status = #{status})")
     long countAll(@Param("status") Integer status);
 
     @Delete("DELETE FROM guide_comments WHERE id = #{id}")

@@ -45,17 +45,11 @@ public interface UserMapper {
     int updateLastLoginAt(@Param("id") Long id);
 
     @Select("SELECT id, username, phone, email, password_hash, status, last_login_at, created_at, updated_at " +
-            "FROM users " +
-            "<where>" +
-            "<if test='status != null'>AND status = #{status}</if>" +
-            "</where>" +
+            "FROM users WHERE (#{status} IS NULL OR status = #{status}) " +
             "ORDER BY created_at DESC LIMIT #{offset}, #{pageSize}")
     List<User> selectPage(@Param("offset") int offset, @Param("pageSize") int pageSize, @Param("status") Integer status);
 
-    @Select("SELECT COUNT(*) FROM users " +
-            "<where>" +
-            "<if test='status != null'>AND status = #{status}</if>" +
-            "</where>")
+    @Select("SELECT COUNT(*) FROM users WHERE (#{status} IS NULL OR status = #{status})")
     long countAll(@Param("status") Integer status);
 
     @Update("UPDATE users SET username=#{username}, phone=#{phone}, email=#{email}, status=#{status} WHERE id=#{id}")

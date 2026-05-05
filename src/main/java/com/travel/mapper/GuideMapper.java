@@ -107,16 +107,11 @@ public interface GuideMapper {
             "d.name AS destination_name, u.username AS author_name " +
             "FROM guides g LEFT JOIN destinations d ON g.destination_id = d.id " +
             "LEFT JOIN users u ON g.author_id = u.id " +
-            "<where>" +
-            "<if test='status != null'>AND g.status = #{status}</if>" +
-            "</where>" +
+            "WHERE (#{status} IS NULL OR g.status = #{status}) " +
             "ORDER BY g.published_at DESC LIMIT #{offset}, #{pageSize}")
     List<GuideSummary> selectPage(@Param("offset") int offset, @Param("pageSize") int pageSize, @Param("status") Integer status);
 
-    @Select("SELECT COUNT(*) FROM guides g " +
-            "<where>" +
-            "<if test='status != null'>AND g.status = #{status}</if>" +
-            "</where>")
+    @Select("SELECT COUNT(*) FROM guides g WHERE (#{status} IS NULL OR g.status = #{status})")
     long countAll(@Param("status") Integer status);
 
     @Select("SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, " +
