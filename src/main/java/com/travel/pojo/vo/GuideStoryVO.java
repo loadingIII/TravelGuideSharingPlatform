@@ -22,4 +22,5 @@ public class GuideStoryVO {
     private Integer commentsCount;
     private Integer sharesCount;
     private LocalDateTime createdAt;
+    private Integer status;
 }

@@ -26,4 +26,5 @@ public class GuideSummary {
     private String destinationName;
     private String authorName;
     private String authorAvatarUrl;
+    private Integer status;
 }

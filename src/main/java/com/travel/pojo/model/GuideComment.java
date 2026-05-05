@@ -12,6 +12,7 @@ public class GuideComment {
     private String content;
     private Long parentCommentId;
     private Integer likesCount;
+    private Integer status;
     private LocalDateTime createdAt;
 
     /** 评论者昵称（关联查询） */
