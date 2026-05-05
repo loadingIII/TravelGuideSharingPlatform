@@ -1,7 +1,7 @@
 async function initUsers(page = 1) {
   const content = document.getElementById('content');
   try {
-    const result = await API.get(`/admin/api/users?page=${page}`);
+    const result = await API.get(`/admin/users?page=${page}`);
     const rows = result.list.map(u => `
       <tr>
         <td>${u.id}</td>
@@ -39,7 +39,7 @@ async function initUsers(page = 1) {
 async function deleteUser(id, name) {
   if (!await confirmDialog(`确认删除用户「${name}」？`)) return;
   try {
-    await API.delete(`/admin/api/users/${id}`);
+    await API.delete(`/admin/users/${id}`);
     Toast.success('删除成功');
     initUsers();
   } catch (err) { Toast.error(err.message); }
@@ -48,7 +48,7 @@ async function deleteUser(id, name) {
 async function initUserEdit(id) {
   const content = document.getElementById('content');
   try {
-    const user = await API.get(`/admin/api/users/${id}`);
+    const user = await API.get(`/admin/users/${id}`);
     content.innerHTML = `
       <div class="page-header">
         <div class="page-title">编辑用户</div>
@@ -85,7 +85,7 @@ async function initUserEdit(id) {
       const fd = new FormData(e.target);
       const body = { username: fd.get('username'), phone: fd.get('phone'), email: fd.get('email'), status: parseInt(fd.get('status')) };
       try {
-        await API.put(`/admin/api/users/${id}`, body);
+        await API.put(`/admin/users/${id}`, body);
         Toast.success('保存成功');
         Router.navigate('/users');
       } catch (err) { Toast.error(err.message); }

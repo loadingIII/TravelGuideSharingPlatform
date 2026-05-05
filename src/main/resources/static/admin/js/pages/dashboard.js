@@ -1,7 +1,7 @@
 async function initDashboard() {
   const content = document.getElementById('content');
   try {
-    const stats = await API.get('/admin/api/stats');
+    const stats = await API.get('/admin/stats');
     content.innerHTML = `
       <div class="grid grid-4">
         <div class="card stat-card">

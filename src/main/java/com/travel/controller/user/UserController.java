@@ -1,4 +1,4 @@
-package com.travel.controller;
+package com.travel.controller.user;
 
 import com.travel.pojo.dto.UpdateProfileDTO;
 import com.travel.pojo.vo.UserMeVO;

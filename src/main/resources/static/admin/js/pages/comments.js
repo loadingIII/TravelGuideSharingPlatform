@@ -1,7 +1,7 @@
 async function initComments(page = 1) {
   const content = document.getElementById('content');
   try {
-    const result = await API.get(`/admin/api/comments?page=${page}`);
+    const result = await API.get(`/admin/comments?page=${page}`);
     const rows = result.list.map(c => `
       <tr>
         <td>${c.id}</td>
@@ -32,6 +32,6 @@ async function initComments(page = 1) {
 
 async function deleteComment(id) {
   if (!await confirmDialog('确认删除该评论？')) return;
-  try { await API.delete(`/admin/api/comments/${id}`); Toast.success('删除成功'); initComments(); }
+  try { await API.delete(`/admin/comments/${id}`); Toast.success('删除成功'); initComments(); }
   catch (err) { Toast.error(err.message); }
 }

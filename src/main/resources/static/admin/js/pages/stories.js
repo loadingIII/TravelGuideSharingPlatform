@@ -1,7 +1,7 @@
 async function initStories(page = 1) {
   const content = document.getElementById('content');
   try {
-    const result = await API.get(`/admin/api/stories?page=${page}`);
+    const result = await API.get(`/admin/stories?page=${page}`);
     const rows = result.list.map(s => `
       <tr>
         <td>${s.id}</td>
@@ -32,14 +32,14 @@ async function initStories(page = 1) {
 
 async function deleteStory(id) {
   if (!await confirmDialog('确认删除该故事？')) return;
-  try { await API.delete(`/admin/api/stories/${id}`); Toast.success('删除成功'); initStories(); }
+  try { await API.delete(`/admin/stories/${id}`); Toast.success('删除成功'); initStories(); }
   catch (err) { Toast.error(err.message); }
 }
 
 async function initStoryEdit(id) {
   const content = document.getElementById('content');
   try {
-    const story = await API.get(`/admin/api/stories/${id}`);
+    const story = await API.get(`/admin/stories/${id}`);
     content.innerHTML = `
       <div class="page-header">
         <div class="page-title">编辑故事</div>
@@ -54,7 +54,7 @@ async function initStoryEdit(id) {
     document.getElementById('editForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const fd = new FormData(e.target);
-      try { await API.put(`/admin/api/stories/${id}`, { content: fd.get('content') }); Toast.success('保存成功'); Router.navigate('/stories'); }
+      try { await API.put(`/admin/stories/${id}`, { content: fd.get('content') }); Toast.success('保存成功'); Router.navigate('/stories'); }
       catch (err) { Toast.error(err.message); }
     });
   } catch (err) { content.innerHTML = `<div class="alert alert-danger">加载失败: ${err.message}</div>`; }

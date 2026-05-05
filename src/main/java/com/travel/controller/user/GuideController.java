@@ -1,4 +1,4 @@
-package com.travel.controller;
+package com.travel.controller.user;
 
 import com.travel.common.ApiResponse;
 import com.travel.common.PageResult;

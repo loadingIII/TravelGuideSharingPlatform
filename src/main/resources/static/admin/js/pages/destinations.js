@@ -1,7 +1,7 @@
 async function initDestinations(page = 1) {
   const content = document.getElementById('content');
   try {
-    const result = await API.get(`/admin/api/destinations?page=${page}`);
+    const result = await API.get(`/admin/destinations?page=${page}`);
     const rows = result.list.map(d => `
       <tr>
         <td>${d.id}</td>
@@ -33,14 +33,14 @@ async function initDestinations(page = 1) {
 
 async function deleteDestination(id, name) {
   if (!await confirmDialog(`确认删除目的地「${name}」？`)) return;
-  try { await API.delete(`/admin/api/destinations/${id}`); Toast.success('删除成功'); initDestinations(); }
+  try { await API.delete(`/admin/destinations/${id}`); Toast.success('删除成功'); initDestinations(); }
   catch (err) { Toast.error(err.message); }
 }
 
 async function initDestinationEdit(id) {
   const content = document.getElementById('content');
   try {
-    const dest = await API.get(`/admin/api/destinations/${id}`);
+    const dest = await API.get(`/admin/destinations/${id}`);
     content.innerHTML = `
       <div class="page-header">
         <div class="page-title">编辑目的地</div>
@@ -61,7 +61,7 @@ async function initDestinationEdit(id) {
       const fd = new FormData(e.target);
       const body = {};
       fd.forEach((v, k) => body[k] = v);
-      try { await API.put(`/admin/api/destinations/${id}`, body); Toast.success('保存成功'); Router.navigate('/destinations'); }
+      try { await API.put(`/admin/destinations/${id}`, body); Toast.success('保存成功'); Router.navigate('/destinations'); }
       catch (err) { Toast.error(err.message); }
     });
   } catch (err) { content.innerHTML = `<div class="alert alert-danger">加载失败: ${err.message}</div>`; }

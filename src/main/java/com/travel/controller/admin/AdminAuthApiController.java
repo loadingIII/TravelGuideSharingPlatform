@@ -1,4 +1,4 @@
-package com.travel.controller.admin.api;
+package com.travel.controller.admin;
 
 import com.travel.common.ApiResponse;
 import com.travel.mapper.AdminLogMapper;
@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("/admin/api")
+@RequestMapping("/admin")
 @RequiredArgsConstructor
 public class AdminAuthApiController {
 

@@ -1,4 +1,4 @@
-package com.travel.controller.admin.api;
+package com.travel.controller.admin;
 
 import com.travel.common.ApiResponse;
 import com.travel.mapper.*;
@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/admin/api/stats")
+@RequestMapping("/admin/stats")
 @RequiredArgsConstructor
 public class AdminStatsApiController {
 

@@ -1,4 +1,4 @@
-package com.travel.controller.admin.api;
+package com.travel.controller.admin;
 
 import com.travel.common.ApiResponse;
 import com.travel.common.PageResult;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/admin/api/guides")
+@RequestMapping("/admin/guides")
 @RequiredArgsConstructor
 public class AdminGuideApiController {
 

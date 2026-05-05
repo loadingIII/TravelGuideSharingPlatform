@@ -1,0 +1,203 @@
+<h2>最终设计方案</h2>
+<p class="subtitle">管理端前后端分离 + 专业UI重设计</p>
+
+<div class="section">
+  <h3>技术方案</h3>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px;">
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;">
+      <div style="font-weight:600;color:#1e293b;margin-bottom:8px;">前后端分离</div>
+      <div style="font-size:13px;color:#475569;">JSP仅作为入口壳页面加载HTML/CSS/JS，数据通过fetch调用JSON接口获取</div>
+    </div>
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;">
+      <div style="font-weight:600;color:#1e293b;margin-bottom:8px;">纯CSS样式</div>
+      <div style="font-size:13px;color:#475569;">不依赖Bootstrap，完全自定义样式，Tailwind风格设计系统</div>
+    </div>
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;">
+      <div style="font-weight:600;color:#1e293b;margin-bottom:8px;">Chart.js图表</div>
+      <div style="font-size:13px;color:#475569;">折线图展示趋势，环形图展示分布，轻量且API简洁</div>
+    </div>
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;">
+      <div style="font-weight:600;color:#1e293b;margin-bottom:8px;">文件位置</div>
+      <div style="font-size:13px;color:#475569;">HTML/CSS/JS放在 static/admin/ 下，浏览器可直接访问</div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:24px;">
+  <h3>目录结构</h3>
+  <div style="background:#0f172a;border-radius:8px;padding:16px;font-family:monospace;font-size:12px;color:#e2e8f0;line-height:1.8;margin-top:12px;">
+    <div>static/admin/</div>
+    <div style="padding-left:16px;">├── css/</div>
+    <div style="padding-left:32px;">├── variables.css <span style="color:#64748b;">/* 颜色、间距等设计变量 */</span></div>
+    <div style="padding-left:32px;">├── layout.css <span style="color:#64748b;">/* 侧边栏、顶栏、内容区 */</span></div>
+    <div style="padding-left:32px;">├── components.css <span style="color:#64748b;">/* 按钮、卡片、表格、表单 */</span></div>
+    <div style="padding-left:32px;">└── pages.css <span style="color:#64748b;">/* 页面特定样式 */</span></div>
+    <div style="padding-left:16px;">├── js/</div>
+    <div style="padding-left:32px;">├── api.js <span style="color:#64748b;">/* fetch封装，统一请求处理 */</span></div>
+    <div style="padding-left:32px;">├── router.js <span style="color:#64748b;">/* SPA路由（hash模式） */</span></div>
+    <div style="padding-left:32px;">├── components.js <span style="color:#64748b;">/* 侧边栏、表格、分页等组件 */</span></div>
+    <div style="padding-left:32px;">└── pages/</div>
+    <div style="padding-left:48px;">├── dashboard.js</div>
+    <div style="padding-left:48px;">├── users.js</div>
+    <div style="padding-left:48px;">├── guides.js</div>
+    <div style="padding-left:48px;">├── stories.js</div>
+    <div style="padding-left:48px;">├── destinations.js</div>
+    <div style="padding-left:48px;">└── comments.js</div>
+    <div style="padding-left:16px;">└── index.html <span style="color:#64748b;">/* SPA入口，只保留一个JSP壳 */</span></div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:24px;">
+  <h3>页面预览 - 仪表盘</h3>
+  <div class="mockup" style="margin-top:12px;">
+    <div class="mockup-body" style="padding:0;overflow:hidden;border-radius:8px;">
+      <div style="display:flex;height:420px;">
+        <!-- Sidebar -->
+        <div style="width:220px;background:linear-gradient(180deg,#1e293b,#0f172a);color:#fff;padding:20px 0;flex-shrink:0;">
+          <div style="padding:0 20px 20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,0.08);">
+            <div style="width:32px;height:32px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;">T</div>
+            <div style="font-size:15px;font-weight:600;">Travel Admin</div>
+          </div>
+          <div style="padding:20px 12px 8px;font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:1px;">主菜单</div>
+          <div style="padding:10px 16px;background:rgba(59,130,246,0.15);border-radius:8px;margin:2px 8px;display:flex;align-items:center;gap:10px;font-size:13px;color:#60a5fa;">
+            <span style="width:20px;height:20px;background:#3b82f6;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            </span> 仪表盘
+          </div>
+          <div style="padding:10px 16px;margin:2px 8px;display:flex;align-items:center;gap:10px;font-size:13px;color:#94a3b8;border-radius:8px;">
+            <span style="width:20px;height:20px;background:rgba(148,163,184,0.15);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            </span> 用户管理
+          </div>
+          <div style="padding:10px 16px;margin:2px 8px;display:flex;align-items:center;gap:10px;font-size:13px;color:#94a3b8;border-radius:8px;">
+            <span style="width:20px;height:20px;background:rgba(148,163,184,0.15);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </span> 攻略管理
+          </div>
+          <div style="padding:10px 16px;margin:2px 8px;display:flex;align-items:center;gap:10px;font-size:13px;color:#94a3b8;border-radius:8px;">
+            <span style="width:20px;height:20px;background:rgba(148,163,184,0.15);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            </span> 故事管理
+          </div>
+          <div style="padding:10px 16px;margin:2px 8px;display:flex;align-items:center;gap:10px;font-size:13px;color:#94a3b8;border-radius:8px;">
+            <span style="width:20px;height:20px;background:rgba(148,163,184,0.15);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </span> 目的地管理
+          </div>
+          <div style="padding:10px 16px;margin:2px 8px;display:flex;align-items:center;gap:10px;font-size:13px;color:#94a3b8;border-radius:8px;">
+            <span style="width:20px;height:20px;background:rgba(148,163,184,0.15);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            </span> 评论管理
+          </div>
+        </div>
+        <!-- Main -->
+        <div style="flex:1;background:#f1f5f9;">
+          <div style="background:#fff;padding:12px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e2e8f0;">
+            <div style="font-size:18px;font-weight:600;color:#1e293b;">仪表盘</div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="width:32px;height:32px;background:#e2e8f0;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="width:32px;height:32px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:600;">A</div>
+                <span style="font-size:13px;color:#475569;">Admin</span>
+              </div>
+            </div>
+          </div>
+          <div style="padding:20px 24px;">
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">
+              <div style="background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,0.06);border:1px solid #e2e8f0;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                  <div style="width:40px;height:40px;background:#eff6ff;border-radius:10px;display:flex;align-items:center;justify-content:center;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                  </div>
+                  <span style="font-size:12px;color:#22c55e;background:#f0fdf4;padding:2px 8px;border-radius:99px;">+12%</span>
+                </div>
+                <div style="font-size:28px;font-weight:700;color:#1e293b;">128</div>
+                <div style="font-size:13px;color:#64748b;margin-top:4px;">用户总数</div>
+              </div>
+              <div style="background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,0.06);border:1px solid #e2e8f0;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                  <div style="width:40px;height:40px;background:#f0fdf4;border-radius:10px;display:flex;align-items:center;justify-content:center;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  </div>
+                  <span style="font-size:12px;color:#22c55e;background:#f0fdf4;padding:2px 8px;border-radius:99px;">+8%</span>
+                </div>
+                <div style="font-size:28px;font-weight:700;color:#1e293b;">56</div>
+                <div style="font-size:13px;color:#64748b;margin-top:4px;">攻略总数</div>
+              </div>
+              <div style="background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,0.06);border:1px solid #e2e8f0;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                  <div style="width:40px;height:40px;background:#fefce8;border-radius:10px;display:flex;align-items:center;justify-content:center;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                  </div>
+                  <span style="font-size:12px;color:#22c55e;background:#f0fdf4;padding:2px 8px;border-radius:99px;">+15%</span>
+                </div>
+                <div style="font-size:28px;font-weight:700;color:#1e293b;">89</div>
+                <div style="font-size:13px;color:#64748b;margin-top:4px;">故事总数</div>
+              </div>
+              <div style="background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,0.06);border:1px solid #e2e8f0;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                  <div style="width:40px;height:40px;background:#fef2f2;border-radius:10px;display:flex;align-items:center;justify-content:center;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  </div>
+                  <span style="font-size:12px;color:#ef4444;background:#fef2f2;padding:2px 8px;border-radius:99px;">-3%</span>
+                </div>
+                <div style="font-size:28px;font-weight:700;color:#1e293b;">34</div>
+                <div style="font-size:13px;color:#64748b;margin-top:4px;">目的地总数</div>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-top:16px;">
+              <div style="background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,0.06);border:1px solid #e2e8f0;">
+                <div style="font-size:15px;font-weight:600;color:#1e293b;margin-bottom:16px;">访问趋势</div>
+                <svg viewBox="0 0 400 120" style="width:100%;">
+                  <line x1="40" y1="100" x2="390" y2="100" stroke="#e2e8f0" stroke-width="1"/>
+                  <line x1="40" y1="75" x2="390" y2="75" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="4"/>
+                  <line x1="40" y1="50" x2="390" y2="50" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="4"/>
+                  <line x1="40" y1="25" x2="390" y2="25" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="4"/>
+                  <path d="M40,80 L90,60 L140,70 L190,40 L240,50 L290,30 L340,35 L390,20 L390,100 L40,100 Z" fill="url(#g1)" opacity="0.3"/>
+                  <polyline points="40,80 90,60 140,70 190,40 240,50 290,30 340,35 390,20" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="390" cy="20" r="4" fill="#3b82f6" stroke="#fff" stroke-width="2"/>
+                  <text x="40" y="115" font-size="10" fill="#94a3b8">1月</text>
+                  <text x="190" y="115" font-size="10" fill="#94a3b8">4月</text>
+                  <text x="340" y="115" font-size="10" fill="#94a3b8">7月</text>
+                  <defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.4"/><stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/></linearGradient></defs>
+                </svg>
+              </div>
+              <div style="background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,0.06);border:1px solid #e2e8f0;">
+                <div style="font-size:15px;font-weight:600;color:#1e293b;margin-bottom:16px;">内容分布</div>
+                <svg viewBox="0 0 160 160" style="width:100%;max-width:140px;margin:0 auto;display:block;">
+                  <circle cx="80" cy="80" r="55" fill="none" stroke="#3b82f6" stroke-width="22" stroke-dasharray="105 241" stroke-dashoffset="0" transform="rotate(-90 80 80)"/>
+                  <circle cx="80" cy="80" r="55" fill="none" stroke="#22c55e" stroke-width="22" stroke-dasharray="75 271" stroke-dashoffset="-105" transform="rotate(-90 80 80)"/>
+                  <circle cx="80" cy="80" r="55" fill="none" stroke="#eab308" stroke-width="22" stroke-dasharray="55 291" stroke-dashoffset="-180" transform="rotate(-90 80 80)"/>
+                  <circle cx="80" cy="80" r="55" fill="none" stroke="#ef4444" stroke-width="22" stroke-dasharray="45 301" stroke-dashoffset="-235" transform="rotate(-90 80 80)"/>
+                  <circle cx="80" cy="80" r="40" fill="#fff"/>
+                  <text x="80" y="76" text-anchor="middle" font-size="18" font-weight="bold" fill="#1e293b">307</text>
+                  <text x="80" y="92" text-anchor="middle" font-size="10" fill="#64748b">总计</text>
+                </svg>
+                <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px;">
+                  <div style="display:flex;align-items:center;justify-content:space-between;font-size:11px;">
+                    <div style="display:flex;align-items:center;gap:6px;"><div style="width:8px;height:8px;background:#3b82f6;border-radius:2px;"></div><span style="color:#475569;">攻略</span></div>
+                    <span style="color:#1e293b;font-weight:500;">30%</span>
+                  </div>
+                  <div style="display:flex;align-items:center;justify-content:space-between;font-size:11px;">
+                    <div style="display:flex;align-items:center;gap:6px;"><div style="width:8px;height:8px;background:#22c55e;border-radius:2px;"></div><span style="color:#475569;">故事</span></div>
+                    <span style="color:#1e293b;font-weight:500;">22%</span>
+                  </div>
+                  <div style="display:flex;align-items:center;justify-content:space-between;font-size:11px;">
+                    <div style="display:flex;align-items:center;gap:6px;"><div style="width:8px;height:8px;background:#eab308;border-radius:2px;"></div><span style="color:#475569;">目的地</span></div>
+                    <span style="color:#1e293b;font-weight:500;">16%</span>
+                  </div>
+                  <div style="display:flex;align-items:center;justify-content:space-between;font-size:11px;">
+                    <div style="display:flex;align-items:center;gap:6px;"><div style="width:8px;height:8px;background:#ef4444;border-radius:2px;"></div><span style="color:#475569;">评论</span></div>
+                    <span style="color:#1e293b;font-weight:500;">13%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

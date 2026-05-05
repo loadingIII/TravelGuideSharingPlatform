@@ -1,7 +1,7 @@
 async function initGuides(page = 1) {
   const content = document.getElementById('content');
   try {
-    const result = await API.get(`/admin/api/guides?page=${page}`);
+    const result = await API.get(`/admin/guides?page=${page}`);
     const rows = result.list.map(g => `
       <tr>
         <td>${g.id}</td>
@@ -36,14 +36,14 @@ async function initGuides(page = 1) {
 
 async function deleteGuide(id, title) {
   if (!await confirmDialog(`确认删除攻略「${title}」？`)) return;
-  try { await API.delete(`/admin/api/guides/${id}`); Toast.success('删除成功'); initGuides(); }
+  try { await API.delete(`/admin/guides/${id}`); Toast.success('删除成功'); initGuides(); }
   catch (err) { Toast.error(err.message); }
 }
 
 async function initGuideEdit(id) {
   const content = document.getElementById('content');
   try {
-    const guide = await API.get(`/admin/api/guides/${id}`);
+    const guide = await API.get(`/admin/guides/${id}`);
     content.innerHTML = `
       <div class="page-header">
         <div class="page-title">编辑攻略</div>
@@ -59,7 +59,7 @@ async function initGuideEdit(id) {
     document.getElementById('editForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const fd = new FormData(e.target);
-      try { await API.put(`/admin/api/guides/${id}`, { title: fd.get('title'), summary: fd.get('summary') }); Toast.success('保存成功'); Router.navigate('/guides'); }
+      try { await API.put(`/admin/guides/${id}`, { title: fd.get('title'), summary: fd.get('summary') }); Toast.success('保存成功'); Router.navigate('/guides'); }
       catch (err) { Toast.error(err.message); }
     });
   } catch (err) { content.innerHTML = `<div class="alert alert-danger">加载失败: ${err.message}</div>`; }
