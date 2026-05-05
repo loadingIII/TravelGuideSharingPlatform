@@ -1,7 +1,10 @@
 package com.travel.service;
 
+import com.travel.mapper.AdminUserMapper;
+import com.travel.pojo.model.AdminUser;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -10,16 +13,25 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AdminAuthService {
 
-    private static final String ADMIN_USERNAME = "admin";
-    private static final String ADMIN_PASSWORD = "admin123";
+    private final AdminUserMapper adminUserMapper;
+    private final BCryptPasswordEncoder passwordEncoder;
     private static final String SESSION_KEY = "adminUser";
 
     public boolean login(String username, String password, HttpSession session) {
-        if (ADMIN_USERNAME.equals(username) && ADMIN_PASSWORD.equals(password)) {
-            session.setAttribute(SESSION_KEY, Map.of("username", username));
-            return true;
+        AdminUser admin = adminUserMapper.selectByUsername(username);
+        if (admin == null || admin.getStatus() != 1) {
+            return false;
         }
-        return false;
+        if (!passwordEncoder.matches(password, admin.getPasswordHash())) {
+            return false;
+        }
+        adminUserMapper.updateLastLoginAt(admin.getId());
+        session.setAttribute(SESSION_KEY, Map.of(
+                "id", admin.getId(),
+                "username", admin.getUsername(),
+                "realName", admin.getRealName() != null ? admin.getRealName() : admin.getUsername()
+        ));
+        return true;
     }
 
     public void logout(HttpSession session) {
@@ -28,5 +40,10 @@ public class AdminAuthService {
 
     public boolean isLoggedIn(HttpSession session) {
         return session.getAttribute(SESSION_KEY) != null;
+    }
+
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> getCurrentAdmin(HttpSession session) {
+        return (Map<String, Object>) session.getAttribute(SESSION_KEY);
     }
 }
