@@ -25,10 +25,11 @@ public class AdminCommentApiController {
     private static final int PAGE_SIZE = 10;
 
     @GetMapping
-    public ApiResponse<PageResult<GuideComment>> list(@RequestParam(defaultValue = "1") int page) {
+    public ApiResponse<PageResult<GuideComment>> list(@RequestParam(defaultValue = "1") int page,
+                                                      @RequestParam(required = false) Integer status) {
         int offset = (page - 1) * PAGE_SIZE;
-        long total = commentMapper.countAll();
-        return ApiResponse.success(PageResult.of(commentMapper.selectPage(offset, PAGE_SIZE), page, PAGE_SIZE, total));
+        long total = commentMapper.countAll(status);
+        return ApiResponse.success(PageResult.of(commentMapper.selectPage(offset, PAGE_SIZE, status), page, PAGE_SIZE, total));
     }
 
     @DeleteMapping("/{id}")
@@ -37,6 +38,28 @@ public class AdminCommentApiController {
                                     HttpServletRequest request) {
         commentMapper.deleteById(id);
         logOperation(session, request, "DELETE", "COMMENT", id, "删除评论");
+        return ApiResponse.success();
+    }
+
+    @PostMapping("/{id}/audit")
+    public ApiResponse<Void> audit(@PathVariable Long id,
+                                   @RequestBody Map<String, String> body,
+                                   HttpSession session,
+                                   HttpServletRequest request) {
+        String action = body.get("action");
+        Integer newStatus;
+        String detail;
+        switch (action) {
+            case "approve" -> { newStatus = 1; detail = "审核通过"; }
+            case "reject" -> { newStatus = 2; detail = "审核拒绝"; }
+            case "down" -> { newStatus = 3; detail = "下架"; }
+            default -> { newStatus = null; detail = null; }
+        }
+
+        if (newStatus == null) return ApiResponse.fail("INVALID_ACTION", "无效的操作");
+
+        commentMapper.updateStatus(id, newStatus);
+        logOperation(session, request, "AUDIT", "COMMENT", id, detail);
         return ApiResponse.success();
     }
 

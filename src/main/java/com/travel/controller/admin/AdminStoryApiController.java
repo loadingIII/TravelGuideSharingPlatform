@@ -25,10 +25,11 @@ public class AdminStoryApiController {
     private static final int PAGE_SIZE = 10;
 
     @GetMapping
-    public ApiResponse<PageResult<GuideStoryVO>> list(@RequestParam(defaultValue = "1") int page) {
+    public ApiResponse<PageResult<GuideStoryVO>> list(@RequestParam(defaultValue = "1") int page,
+                                                      @RequestParam(required = false) Integer status) {
         int offset = (page - 1) * PAGE_SIZE;
-        long total = storyMapper.countAll();
-        return ApiResponse.success(PageResult.of(storyMapper.selectAll(offset, PAGE_SIZE), page, PAGE_SIZE, total));
+        long total = storyMapper.countAll(status);
+        return ApiResponse.success(PageResult.of(storyMapper.selectAll(offset, PAGE_SIZE, status), page, PAGE_SIZE, total));
     }
 
     @GetMapping("/{id}")
@@ -38,13 +39,28 @@ public class AdminStoryApiController {
         return ApiResponse.success(story);
     }
 
-    @PutMapping("/{id}")
-    public ApiResponse<Void> update(@PathVariable Long id,
-                                    @RequestBody Map<String, Object> body,
-                                    HttpSession session,
-                                    HttpServletRequest request) {
-        storyMapper.updateContent(id, (String) body.get("content"));
-        logOperation(session, request, "UPDATE", "STORY", id, "修改故事");
+    @PostMapping("/{id}/audit")
+    public ApiResponse<Void> audit(@PathVariable Long id,
+                                   @RequestBody Map<String, String> body,
+                                   HttpSession session,
+                                   HttpServletRequest request) {
+        String action = body.get("action");
+        GuideStoryVO story = storyMapper.selectById(id);
+        if (story == null) return ApiResponse.fail("NOT_FOUND", "故事不存在");
+
+        Integer newStatus;
+        String detail;
+        switch (action) {
+            case "approve" -> { newStatus = 1; detail = "审核通过"; }
+            case "reject" -> { newStatus = 2; detail = "审核拒绝"; }
+            case "down" -> { newStatus = 3; detail = "下架"; }
+            default -> { newStatus = null; detail = null; }
+        }
+
+        if (newStatus == null) return ApiResponse.fail("INVALID_ACTION", "无效的操作");
+
+        storyMapper.updateStatus(id, newStatus);
+        logOperation(session, request, "AUDIT", "STORY", id, detail);
         return ApiResponse.success();
     }
 

@@ -25,10 +25,11 @@ public class AdminGuideApiController {
     private static final int PAGE_SIZE = 10;
 
     @GetMapping
-    public ApiResponse<PageResult<GuideSummary>> list(@RequestParam(defaultValue = "1") int page) {
+    public ApiResponse<PageResult<GuideSummary>> list(@RequestParam(defaultValue = "1") int page,
+                                                      @RequestParam(required = false) Integer status) {
         int offset = (page - 1) * PAGE_SIZE;
-        long total = guideMapper.countAll();
-        return ApiResponse.success(PageResult.of(guideMapper.selectPage(offset, PAGE_SIZE), page, PAGE_SIZE, total));
+        long total = guideMapper.countAll(status);
+        return ApiResponse.success(PageResult.of(guideMapper.selectPage(offset, PAGE_SIZE, status), page, PAGE_SIZE, total));
     }
 
     @GetMapping("/{id}")
@@ -38,13 +39,28 @@ public class AdminGuideApiController {
         return ApiResponse.success(guide);
     }
 
-    @PutMapping("/{id}")
-    public ApiResponse<Void> update(@PathVariable Long id,
-                                    @RequestBody Map<String, Object> body,
-                                    HttpSession session,
-                                    HttpServletRequest request) {
-        guideMapper.updateGuide(id, (String) body.get("title"), (String) body.get("summary"));
-        logOperation(session, request, "UPDATE", "GUIDE", id, "修改攻略");
+    @PostMapping("/{id}/audit")
+    public ApiResponse<Void> audit(@PathVariable Long id,
+                                   @RequestBody Map<String, String> body,
+                                   HttpSession session,
+                                   HttpServletRequest request) {
+        String action = body.get("action");
+        GuideSummary guide = guideMapper.selectById(id);
+        if (guide == null) return ApiResponse.fail("NOT_FOUND", "攻略不存在");
+
+        Integer newStatus;
+        String detail;
+        switch (action) {
+            case "approve" -> { newStatus = 1; detail = "审核通过"; }
+            case "reject" -> { newStatus = 2; detail = "审核拒绝"; }
+            case "down" -> { newStatus = 3; detail = "下架"; }
+            default -> { newStatus = null; detail = null; }
+        }
+
+        if (newStatus == null) return ApiResponse.fail("INVALID_ACTION", "无效的操作");
+
+        guideMapper.updateStatus(id, newStatus);
+        logOperation(session, request, "AUDIT", "GUIDE", id, detail + ": " + guide.getTitle());
         return ApiResponse.success();
     }
 

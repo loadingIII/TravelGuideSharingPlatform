@@ -25,10 +25,11 @@ public class AdminUserApiController {
     private static final int PAGE_SIZE = 10;
 
     @GetMapping
-    public ApiResponse<PageResult<User>> list(@RequestParam(defaultValue = "1") int page) {
+    public ApiResponse<PageResult<User>> list(@RequestParam(defaultValue = "1") int page,
+                                              @RequestParam(required = false) Integer status) {
         int offset = (page - 1) * PAGE_SIZE;
-        long total = userMapper.countAll();
-        return ApiResponse.success(PageResult.of(userMapper.selectPage(offset, PAGE_SIZE), page, PAGE_SIZE, total));
+        long total = userMapper.countAll(status);
+        return ApiResponse.success(PageResult.of(userMapper.selectPage(offset, PAGE_SIZE, status), page, PAGE_SIZE, total));
     }
 
     @GetMapping("/{id}")
@@ -38,17 +39,29 @@ public class AdminUserApiController {
         return ApiResponse.success(user);
     }
 
-    @PutMapping("/{id}")
-    public ApiResponse<Void> update(@PathVariable Long id,
-                                    @RequestBody Map<String, Object> body,
-                                    HttpSession session,
-                                    HttpServletRequest request) {
-        userMapper.updateUser(id,
-            (String) body.get("username"),
-            (String) body.get("phone"),
-            (String) body.get("email"),
-            (Integer) body.get("status"));
-        logOperation(session, request, "UPDATE", "USER", id, "修改用户: " + body.get("username"));
+    @PostMapping("/{id}/audit")
+    public ApiResponse<Void> audit(@PathVariable Long id,
+                                   @RequestBody Map<String, String> body,
+                                   HttpSession session,
+                                   HttpServletRequest request) {
+        String action = body.get("action");
+        User user = userMapper.selectById(id);
+        if (user == null) return ApiResponse.fail("NOT_FOUND", "用户不存在");
+
+        Integer newStatus;
+        String detail;
+        switch (action) {
+            case "approve" -> { newStatus = 1; detail = "审核通过"; }
+            case "reject" -> { newStatus = 2; detail = "审核拒绝"; }
+            case "disable" -> { newStatus = 2; detail = "禁用"; }
+            case "enable" -> { newStatus = 1; detail = "启用"; }
+            default -> { newStatus = null; detail = null; }
+        }
+
+        if (newStatus == null) return ApiResponse.fail("INVALID_ACTION", "无效的操作");
+
+        userMapper.updateStatus(id, newStatus);
+        logOperation(session, request, "AUDIT", "USER", id, detail + ": " + user.getUsername());
         return ApiResponse.success();
     }
 
