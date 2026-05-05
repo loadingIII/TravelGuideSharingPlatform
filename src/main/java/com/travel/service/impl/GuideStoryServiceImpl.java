@@ -64,8 +64,8 @@ public class GuideStoryServiceImpl implements GuideStoryService {
         int safePage = normalizePage(page);
         int safePageSize = normalizePageSize(pageSize);
         int offset = (safePage - 1) * safePageSize;
-        List<GuideStoryVO> list = guideStoryMapper.selectAll(offset, safePageSize);
-        long total = guideStoryMapper.countAll();
+        List<GuideStoryVO> list = guideStoryMapper.selectAll(offset, safePageSize, null);
+        long total = guideStoryMapper.countAll(null);
         return PageResult.of(list, safePage, safePageSize, total);
     }
 

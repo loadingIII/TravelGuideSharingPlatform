@@ -24,11 +24,11 @@ public class AdminStatsApiController {
     @GetMapping
     public ApiResponse<Map<String, Object>> stats() {
         Map<String, Object> data = new HashMap<>();
-        data.put("userCount", userMapper.countAll());
-        data.put("guideCount", guideMapper.countAll());
-        data.put("storyCount", storyMapper.countAll());
+        data.put("userCount", userMapper.countAll(null));
+        data.put("guideCount", guideMapper.countAll(null));
+        data.put("storyCount", storyMapper.countAll(null));
         data.put("destinationCount", destinationMapper.countAll());
-        data.put("commentCount", commentMapper.countAll());
+        data.put("commentCount", commentMapper.countAll(null));
         return ApiResponse.success(data);
     }
 }
