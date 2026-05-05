@@ -33,21 +33,88 @@ async function initDashboard() {
           <div class="stat-card-label">目的地总数</div>
         </div>
       </div>
-      <div class="grid grid-2 dashboard-charts">
-        <div class="card chart-card">
-          <div class="card-title">内容分布</div>
-          <canvas id="doughnutChart" height="200"></canvas>
-        </div>
-        <div class="card chart-card">
+      <div class="dashboard-charts">
+        <div class="card chart-card" style="margin-bottom:var(--space-5)">
           <div class="card-title">数据概览</div>
-          <canvas id="barChart" height="200"></canvas>
+          <div style="height:280px"><canvas id="barChart"></canvas></div>
+        </div>
+        <div class="grid grid-3">
+          <div class="card chart-card">
+            <div class="card-title">内容分布</div>
+            <div style="height:240px;display:flex;align-items:center;justify-content:center"><canvas id="doughnutChart"></canvas></div>
+          </div>
+          <div class="card chart-card" style="grid-column:span 2">
+            <div class="card-title">数据明细</div>
+            <div id="statsDetail"></div>
+          </div>
         </div>
       </div>`;
-    renderDoughnutChart(stats);
     renderBarChart(stats);
+    renderDoughnutChart(stats);
+    renderStatsDetail(stats);
   } catch (err) {
     content.innerHTML = `<div class="alert alert-danger">加载失败: ${err.message}</div>`;
   }
+}
+
+const chartColors = {
+  primary: '#4f6d7a',
+  accent: '#c4956a',
+  success: '#5a8f6a',
+  danger: '#b85450',
+  muted: '#8494a7',
+  palette: ['#4f6d7a', '#c4956a', '#5a8f6a', '#b85450', '#8494a7']
+};
+
+function renderBarChart(stats) {
+  const ctx = document.getElementById('barChart');
+  if (!ctx) return;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['用户', '攻略', '故事', '目的地', '评论'],
+      datasets: [{
+        data: [stats.userCount, stats.guideCount, stats.storyCount, stats.destinationCount, stats.commentCount],
+        backgroundColor: chartColors.palette.map(c => c + '20'),
+        borderColor: chartColors.palette,
+        borderWidth: 1.5,
+        borderRadius: 8,
+        barThickness: 48,
+        hoverBackgroundColor: chartColors.palette.map(c => c + '40')
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#1a2332',
+          titleFont: { family: "'DM Sans'", size: 13, weight: '600' },
+          bodyFont: { family: "'DM Sans'", size: 12 },
+          padding: 12,
+          cornerRadius: 8,
+          displayColors: false,
+          callbacks: {
+            label: ctx => `${ctx.parsed.y} 条`
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: { color: '#edf2f7', drawBorder: false },
+          ticks: { font: { family: "'DM Sans'", size: 12 }, color: '#8494a7', padding: 8 },
+          border: { display: false }
+        },
+        x: {
+          grid: { display: false },
+          ticks: { font: { family: "'DM Sans'", size: 12, weight: '500' }, color: '#4a5568', padding: 8 },
+          border: { display: false }
+        }
+      }
+    }
+  });
 }
 
 function renderDoughnutChart(stats) {
@@ -59,36 +126,69 @@ function renderDoughnutChart(stats) {
       labels: ['攻略', '故事', '目的地', '评论'],
       datasets: [{
         data: [stats.guideCount, stats.storyCount, stats.destinationCount, stats.commentCount],
-        backgroundColor: ['#3b82f6', '#22c55e', '#eab308', '#ef4444'],
-        borderWidth: 0
+        backgroundColor: [chartColors.primary, chartColors.success, chartColors.accent, chartColors.danger],
+        borderWidth: 3,
+        borderColor: '#fff',
+        hoverBorderWidth: 0,
+        hoverOffset: 6
       }]
     },
     options: {
       responsive: true,
-      plugins: { legend: { position: 'bottom', labels: { padding: 16 } } },
-      cutout: '65%'
+      maintainAspectRatio: false,
+      cutout: '68%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            padding: 16,
+            usePointStyle: true,
+            pointStyle: 'circle',
+            font: { family: "'DM Sans'", size: 12, weight: '500' },
+            color: '#4a5568'
+          }
+        },
+        tooltip: {
+          backgroundColor: '#1a2332',
+          titleFont: { family: "'DM Sans'", size: 13, weight: '600' },
+          bodyFont: { family: "'DM Sans'", size: 12 },
+          padding: 12,
+          cornerRadius: 8,
+          callbacks: {
+            label: ctx => {
+              const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+              const pct = total > 0 ? Math.round(ctx.parsed / total * 100) : 0;
+              return `${ctx.label}: ${ctx.parsed} (${pct}%)`;
+            }
+          }
+        }
+      }
     }
   });
 }
 
-function renderBarChart(stats) {
-  const ctx = document.getElementById('barChart');
-  if (!ctx) return;
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['用户', '攻略', '故事', '目的地', '评论'],
-      datasets: [{
-        data: [stats.userCount, stats.guideCount, stats.storyCount, stats.destinationCount, stats.commentCount],
-        backgroundColor: ['#3b82f6', '#22c55e', '#eab308', '#ef4444', '#8b5cf6'],
-        borderRadius: 6,
-        barThickness: 32
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { display: false } },
-      scales: { y: { beginAtZero: true, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } }
-    }
-  });
+function renderStatsDetail(stats) {
+  const el = document.getElementById('statsDetail');
+  if (!el) return;
+  const total = stats.userCount + stats.guideCount + stats.storyCount + stats.destinationCount + stats.commentCount;
+  const items = [
+    { label: '用户', value: stats.userCount, color: chartColors.primary },
+    { label: '攻略', value: stats.guideCount, color: chartColors.success },
+    { label: '故事', value: stats.storyCount, color: chartColors.accent },
+    { label: '目的地', value: stats.destinationCount, color: chartColors.danger },
+    { label: '评论', value: stats.commentCount, color: chartColors.muted }
+  ];
+  el.innerHTML = items.map(item => {
+    const pct = total > 0 ? (item.value / total * 100).toFixed(1) : 0;
+    return `
+      <div style="display:flex;align-items:center;padding:12px 0;border-bottom:1px solid var(--color-border-subtle)">
+        <div style="width:10px;height:10px;border-radius:3px;background:${item.color};margin-right:12px;flex-shrink:0"></div>
+        <div style="flex:1;font-size:13px;font-weight:500;color:var(--color-text)">${item.label}</div>
+        <div style="font-size:14px;font-weight:700;color:var(--color-text);margin-right:12px;font-variant-numeric:tabular-nums">${item.value}</div>
+        <div style="width:100px;height:6px;background:var(--color-border-subtle);border-radius:3px;overflow:hidden">
+          <div style="width:${pct}%;height:100%;background:${item.color};border-radius:3px;transition:width 0.6s var(--ease-out)"></div>
+        </div>
+        <div style="width:48px;text-align:right;font-size:12px;color:var(--color-text-muted);margin-left:8px">${pct}%</div>
+      </div>`;
+  }).join('');
 }
