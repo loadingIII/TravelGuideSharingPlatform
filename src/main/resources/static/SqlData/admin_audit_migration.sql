@@ -12,3 +12,6 @@ ALTER TABLE traveler_stories ADD COLUMN status INT DEFAULT 0 COMMENT '0=待审�
 
 -- 评论表：新增 status 字段
 ALTER TABLE guide_comments ADD COLUMN status INT DEFAULT 0 COMMENT '0=待审核, 1=已通过, 2=已拒绝, 3=已下架' AFTER likes_count;
+
+-- 故事评论表：新增 status 字段
+ALTER TABLE traveler_story_comments ADD COLUMN status INT DEFAULT 0 COMMENT '0=待审核, 1=已通过, 2=已拒绝, 3=已下架' AFTER likes_count;
