@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -26,14 +27,23 @@ public interface GuideCommentMapper {
     long countByGuideId(@Param("guideId") Long guideId);
 
     @Select("SELECT c.id, c.guide_id, c.user_id, c.content, c.parent_comment_id, " +
-            "c.likes_count, c.created_at, u.username AS author_name " +
+            "c.likes_count, c.status, c.created_at, u.username AS author_name " +
             "FROM guide_comments c LEFT JOIN users u ON c.user_id = u.id " +
+            "<where>" +
+            "<if test='status != null'>AND c.status = #{status}</if>" +
+            "</where>" +
             "ORDER BY c.created_at DESC LIMIT #{offset}, #{pageSize}")
-    List<GuideComment> selectPage(@Param("offset") int offset, @Param("pageSize") int pageSize);
+    List<GuideComment> selectPage(@Param("offset") int offset, @Param("pageSize") int pageSize, @Param("status") Integer status);
 
-    @Select("SELECT COUNT(*) FROM guide_comments")
-    long countAll();
+    @Select("SELECT COUNT(*) FROM guide_comments c " +
+            "<where>" +
+            "<if test='status != null'>AND c.status = #{status}</if>" +
+            "</where>")
+    long countAll(@Param("status") Integer status);
 
     @Delete("DELETE FROM guide_comments WHERE id = #{id}")
     int deleteById(@Param("id") Long id);
+
+    @Update("UPDATE guide_comments SET status=#{status} WHERE id=#{id}")
+    int updateStatus(@Param("id") Long id, @Param("status") Integer status);
 }

@@ -45,16 +45,26 @@ public interface UserMapper {
     int updateLastLoginAt(@Param("id") Long id);
 
     @Select("SELECT id, username, phone, email, password_hash, status, last_login_at, created_at, updated_at " +
-            "FROM users ORDER BY created_at DESC LIMIT #{offset}, #{pageSize}")
-    List<User> selectPage(@Param("offset") int offset, @Param("pageSize") int pageSize);
+            "FROM users " +
+            "<where>" +
+            "<if test='status != null'>AND status = #{status}</if>" +
+            "</where>" +
+            "ORDER BY created_at DESC LIMIT #{offset}, #{pageSize}")
+    List<User> selectPage(@Param("offset") int offset, @Param("pageSize") int pageSize, @Param("status") Integer status);
 
-    @Select("SELECT COUNT(*) FROM users")
-    long countAll();
+    @Select("SELECT COUNT(*) FROM users " +
+            "<where>" +
+            "<if test='status != null'>AND status = #{status}</if>" +
+            "</where>")
+    long countAll(@Param("status") Integer status);
 
     @Update("UPDATE users SET username=#{username}, phone=#{phone}, email=#{email}, status=#{status} WHERE id=#{id}")
     int updateUser(@Param("id") Long id, @Param("username") String username,
                    @Param("phone") String phone, @Param("email") String email,
                    @Param("status") Integer status);
+
+    @Update("UPDATE users SET status=#{status} WHERE id=#{id}")
+    int updateStatus(@Param("id") Long id, @Param("status") Integer status);
 
     @Delete("DELETE FROM users WHERE id = #{id}")
     int deleteById(@Param("id") Long id);

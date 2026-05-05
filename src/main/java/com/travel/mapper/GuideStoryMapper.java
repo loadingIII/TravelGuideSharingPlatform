@@ -50,18 +50,22 @@ public interface GuideStoryMapper {
      * @return 故事列表
      */
     List<GuideStoryVO> selectAll(@Param("offset") int offset,
-                                  @Param("pageSize") int pageSize);
+                                  @Param("pageSize") int pageSize,
+                                  @Param("status") Integer status);
 
     /**
      * 统计所有故事数量
      *
      * @return 故事数量
      */
-    long countAll();
+    long countAll(@Param("status") Integer status);
 
     @Delete("DELETE FROM traveler_stories WHERE id = #{id}")
     int deleteById(@Param("id") Long id);
 
     @Update("UPDATE traveler_stories SET content=#{content} WHERE id=#{id}")
     int updateContent(@Param("id") Long id, @Param("content") String content);
+
+    @Update("UPDATE traveler_stories SET status=#{status} WHERE id=#{id}")
+    int updateStatus(@Param("id") Long id, @Param("status") Integer status);
 }

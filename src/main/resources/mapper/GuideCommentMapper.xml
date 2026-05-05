@@ -4,7 +4,7 @@
 
     <select id="listByGuideId" resultType="com.travel.pojo.model.GuideComment">
         SELECT gc.id, gc.guide_id, gc.user_id, gc.content, gc.parent_comment_id,
-               gc.likes_count, gc.created_at,
+               gc.likes_count, gc.status, gc.created_at,
                up.nickname AS author_name,
                up.avatar_url AS author_avatar_url
         FROM guide_comments gc

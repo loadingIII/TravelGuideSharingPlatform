@@ -103,15 +103,21 @@ public interface GuideMapper {
 
     @Select("SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, " +
             "g.location_text, g.scope, g.travel_mode, g.published_at, g.days, g.budget_total, " +
-            "g.views_count, g.likes_count, g.comments_count, g.favorites_count, " +
+            "g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status, " +
             "d.name AS destination_name, u.username AS author_name " +
             "FROM guides g LEFT JOIN destinations d ON g.destination_id = d.id " +
             "LEFT JOIN users u ON g.author_id = u.id " +
+            "<where>" +
+            "<if test='status != null'>AND g.status = #{status}</if>" +
+            "</where>" +
             "ORDER BY g.published_at DESC LIMIT #{offset}, #{pageSize}")
-    List<GuideSummary> selectPage(@Param("offset") int offset, @Param("pageSize") int pageSize);
+    List<GuideSummary> selectPage(@Param("offset") int offset, @Param("pageSize") int pageSize, @Param("status") Integer status);
 
-    @Select("SELECT COUNT(*) FROM guides")
-    long countAll();
+    @Select("SELECT COUNT(*) FROM guides g " +
+            "<where>" +
+            "<if test='status != null'>AND g.status = #{status}</if>" +
+            "</where>")
+    long countAll(@Param("status") Integer status);
 
     @Select("SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, " +
             "g.location_text, g.scope, g.travel_mode, g.published_at, g.days, g.budget_total, " +
@@ -126,4 +132,7 @@ public interface GuideMapper {
 
     @Delete("DELETE FROM guides WHERE id = #{id}")
     int deleteById(@Param("id") Long id);
+
+    @Update("UPDATE guides SET status=#{status} WHERE id=#{id}")
+    int updateStatus(@Param("id") Long id, @Param("status") Integer status);
 }

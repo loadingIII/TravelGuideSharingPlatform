@@ -22,6 +22,7 @@
         <result column="destination_name" property="destinationName"/>
         <result column="author_name" property="authorName"/>
         <result column="author_avatar_url" property="authorAvatarUrl"/>
+        <result column="status" property="status"/>
     </resultMap>
 
     <resultMap id="GuideDetailResultMap" type="com.travel.pojo.model.GuideDetail">
@@ -45,11 +46,12 @@
         <result column="destination_name" property="destinationName"/>
         <result column="author_name" property="authorName"/>
         <result column="author_avatar_url" property="authorAvatarUrl"/>
+        <result column="status" property="status"/>
     </resultMap>
 
     <sql id="GuideSummaryColumns">
         SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode,
-        g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count,
+        g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status,
         d.name AS destination_name,
         up.nickname AS author_name,
         up.avatar_url AS author_avatar_url
@@ -64,6 +66,9 @@
     <sql id="GuideSummaryWhere">
         <where>
             g.publish_status = 'published'
+            <if test="status != null">
+                AND g.status = #{status}
+            </if>
             <if test="keyword != null and keyword != ''">
                 AND (g.title LIKE CONCAT('%', #{keyword}, '%')
                      OR g.summary LIKE CONCAT('%', #{keyword}, '%')

@@ -14,11 +14,12 @@
         <result column="comments_count" property="commentsCount"/>
         <result column="shares_count" property="sharesCount"/>
         <result column="created_at" property="createdAt"/>
+        <result column="status" property="status"/>
     </resultMap>
 
     <select id="selectById" resultMap="GuideStoryResultMap">
         SELECT id, author_user_id, author_name, author_avatar_url, is_vip, content,
-               published_at, likes_count, comments_count, shares_count, created_at
+               published_at, likes_count, comments_count, shares_count, status, created_at
         FROM traveler_stories
         WHERE id = #{id}
           AND is_deleted = 0
@@ -43,9 +44,12 @@
 
     <select id="selectAll" resultMap="GuideStoryResultMap">
         SELECT id, author_user_id, author_name, author_avatar_url, is_vip, content,
-               published_at, likes_count, comments_count, shares_count, created_at
+               published_at, likes_count, comments_count, shares_count, status, created_at
         FROM traveler_stories
         WHERE is_deleted = 0
+        <if test="status != null">
+            AND status = #{status}
+        </if>
         ORDER BY published_at DESC
         LIMIT #{offset}, #{pageSize}
     </select>
@@ -54,6 +58,9 @@
         SELECT COUNT(1)
         FROM traveler_stories
         WHERE is_deleted = 0
+        <if test="status != null">
+            AND status = #{status}
+        </if>
     </select>
 
 </mapper>
