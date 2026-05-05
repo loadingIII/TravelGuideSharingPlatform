@@ -4,7 +4,7 @@ import com.travel.mapper.AdminUserMapper;
 import com.travel.pojo.model.AdminUser;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -14,7 +14,7 @@ import java.util.Map;
 public class AdminAuthService {
 
     private final AdminUserMapper adminUserMapper;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private static final String SESSION_KEY = "adminUser";
 
     public boolean login(String username, String password, HttpSession session) {
