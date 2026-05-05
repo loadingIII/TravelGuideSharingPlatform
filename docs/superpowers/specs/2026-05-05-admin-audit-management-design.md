@@ -1,168 +1,170 @@
-# Admin Audit Management Design
+# 管理员审核管理设计
 
-## Overview
+## 概述
 
-Change admin management from "edit content" to "audit (approve/reject) + delete" for users, guides, stories, and comments. Admins should moderate content, not modify it.
+将管理员对用户、攻略、故事、评论的管理从"编辑内容"改为"审核（通过/拒绝）+ 删除"。管理员应该审核内容，而不是直接修改。
 
-## Current State
+## 当前状态
 
-- **User:** Has `status` field (1=normal, 0=disabled). Admin can edit username/phone/email/status.
-- **Guide/Story/Comment:** No status field. Admin can edit content.
-- **Destination:** Unchanged — admin keeps edit capability (destinations are site-managed, not user-generated).
+- **用户(User)：** 有 status 字段（1=正常, 0=禁用）。管理员可编辑用户名/手机/邮箱/状态。
+- **攻略/故事/评论：** 无 status 字段。管理员可编辑内容。
+- **目的地(Destination)：** 保持不变 — 管理员保留编辑能力（目的地由站点管理，非用户生成）。
 
-## Design
+## 设计
 
-### 1. Status Values
+### 1. 状态值定义
 
-| Entity | New Status Values |
-|--------|-------------------|
-| User | 0=待审核, 1=正常, 2=禁用 |
-| Guide | 0=待审核, 1=已通过, 2=已拒绝, 3=已下架 |
-| Story | 0=待审核, 1=已通过, 2=已拒绝, 3=已下架 |
-| Comment | 0=待审核, 1=已通过, 2=已拒绝, 3=已下架 |
+| 实体 | 新状态值 |
+|------|----------|
+| 用户 | 0=待审核, 1=正常, 2=禁用 |
+| 攻略 | 0=待审核, 1=已通过, 2=已拒绝, 3=已下架 |
+| 故事 | 0=待审核, 1=已通过, 2=已拒绝, 3=已下架 |
+| 评论 | 0=待审核, 1=已通过, 2=已拒绝, 3=已下架 |
 
-### 2. Admin Operations
+### 2. 管理员操作
 
-#### User Management
-- **Audit:** Approve (0→1), Reject (0→2)
-- **Disable:** Disable active user (1→2)
-- **Enable:** Re-enable disabled user (2→1)
-- **Delete:** Remove user permanently
-- **Remove:** Edit username/phone/email
+#### 用户管理
+- **审核通过：** 0→1
+- **审核拒绝：** 0→2
+- **禁用：** 1→2（禁用正常用户）
+- **启用：** 2→1（重新启用被禁用用户）
+- **删除：** 永久删除用户
+- **移除：** 编辑用户名/手机/邮箱
 
-#### Guide/Story/Comment Management
-- **Audit:** Approve (0→1), Reject (0→2)
-- **Down:** Take down published content (1→3)
-- **Delete:** Remove permanently
-- **Remove:** Edit content
+#### 攻略/故事/评论管理
+- **审核通过：** 0→1
+- **审核拒绝：** 0→2
+- **下架：** 1→3（下架已发布内容）
+- **删除：** 永久删除
+- **移除：** 编辑内容
 
-### 3. Backend Changes
+### 3. 后端变更
 
-#### New Audit Endpoint
+#### 新增审核接口
 
 ```
 POST /admin/{entity}/{id}/audit
 Body: { "action": "approve" | "reject" | "disable" | "enable" | "down" }
 ```
 
-- `approve`: Set status to 1
-- `reject`: Set status to 2
-- `disable` (User only): Set status to 2
-- `enable` (User only): Set status to 1
-- `down` (Guide/Story/Comment only): Set status to 3
+- `approve`：设置状态为 1
+- `reject`：设置状态为 2
+- `disable`（仅用户）：设置状态为 2
+- `enable`（仅用户）：设置状态为 1
+- `down`（攻略/故事/评论）：设置状态为 3
 
-#### Remove Edit Endpoints
+#### 移除编辑接口
 
-Remove these PUT endpoints:
-- `PUT /admin/users/{id}` (edit user info)
-- `PUT /admin/guides/{id}` (edit guide title/summary)
-- `PUT /admin/stories/{id}` (edit story content)
+移除以下 PUT 接口：
+- `PUT /admin/users/{id}`（编辑用户信息）
+- `PUT /admin/guides/{id}`（编辑攻略标题/摘要）
+- `PUT /admin/stories/{id}`（编辑故事内容）
 
-Keep: `PUT /admin/destinations/{id}` (destinations are site-managed)
+保留：`PUT /admin/destinations/{id}`（目的地由站点管理）
 
-#### Add Status Filter
+#### 新增状态筛选
 
-Add `?status=` query parameter to list endpoints:
-- `GET /admin/users?status=0` — list pending users
-- `GET /admin/guides?status=1` — list approved guides
-- `GET /admin/comments?status=0` — list pending comments
+在列表接口添加 `?status=` 查询参数：
+- `GET /admin/users?status=0` — 列出待审核用户
+- `GET /admin/guides?status=1` — 列出已通过攻略
+- `GET /admin/comments?status=0` — 列出待审核评论
 
-### 4. Database Changes
+### 4. 数据库变更
 
-#### Users Table
+#### 用户表
 ```sql
 ALTER TABLE users MODIFY COLUMN status INT DEFAULT 0 COMMENT '0=待审核, 1=正常, 2=禁用';
 ```
 
-#### Guides/Stories/Comments Tables
+#### 攻略/故事/评论表
 ```sql
 ALTER TABLE guides ADD COLUMN status INT DEFAULT 0 COMMENT '0=待审核, 1=已通过, 2=已拒绝, 3=已下架';
 ALTER TABLE stories ADD COLUMN status INT DEFAULT 0 COMMENT '0=待审核, 1=已通过, 2=已拒绝, 3=已下架';
 ALTER TABLE comments ADD COLUMN status INT DEFAULT 0 COMMENT '0=待审核, 1=已通过, 2=已拒绝, 3=已下架';
 ```
 
-### 5. Frontend Changes
+### 5. 前端变更
 
-#### List Pages
-- Add status filter tabs/buttons (全部/待审核/已通过/已拒绝/已下架)
-- Show status badge on each row
-- Replace "编辑" button with action buttons:
-  - 待审核: [通过] [拒绝]
-  - 已通过: [下架]
-  - 已拒绝: [通过]
-  - 已下架: [通过]
+#### 列表页面
+- 新增状态筛选标签/按钮（全部/待审核/已通过/已拒绝/已下架）
+- 每行显示状态徽章
+- 将"编辑"按钮替换为操作按钮：
+  - 待审核：[通过] [拒绝]
+  - 已通过：[下架]
+  - 已拒绝：[通过]
+  - 已下架：[通过]
 
-#### Remove Edit Routes
-- Remove `#/users/edit/:id`
-- Remove `#/guides/edit/:id`
-- Remove `#/stories/edit/:id`
+#### 移除编辑路由
+- 移除 `#/users/edit/:id`
+- 移除 `#/guides/edit/:id`
+- 移除 `#/stories/edit/:id`
 
-#### User List Special
-- Add enable/disable toggle button
-- Status values map to Chinese labels: 0=待审核, 1=正常, 2=禁用
+#### 用户列表特殊处理
+- 新增启用/禁用切换按钮
+- 状态值映射为中文标签：0=待审核, 1=正常, 2=禁用
 
-### 6. Entity Model Changes
+### 6. 实体模型变更
 
 #### User.java
-- Change status comment: `0=待审核, 1=正常, 2=禁用`
+- 修改 status 注释：`0=待审核, 1=正常, 2=禁用`
 
 #### GuideSummary.java / GuideDetail.java
-- Add `status` (Integer) field
+- 新增 `status` (Integer) 字段
 
 #### GuideStoryVO.java
-- Add `status` (Integer) field
+- 新增 `status` (Integer) 字段
 
 #### GuideComment.java
-- Add `status` (Integer) field
+- 新增 `status` (Integer) 字段
 
-### 7. Mapper Changes
+### 7. Mapper 变更
 
 #### GuideMapper.java
-- Add `updateStatus(Long id, Integer status)` method
-- Update `selectPage` to include `?status=` filter
-- Update `countAll` to include `?status=` filter
-- Update XML: add `g.status` to SELECT columns, add status WHERE clause
+- 新增 `updateStatus(Long id, Integer status)` 方法
+- 修改 `selectPage` 支持 `?status=` 筛选
+- 修改 `countAll` 支持 `?status=` 筛选
+- 修改 XML：SELECT 列添加 `g.status`，WHERE 子句添加 status 条件
 
 #### GuideStoryMapper.java
-- Add `updateStatus(Long id, Integer status)` method
-- Update `selectAll` to include `?status=` filter
-- Update `countAll` to include `?status=` filter
-- Update XML: add `status` to SELECT columns, add status WHERE clause
+- 新增 `updateStatus(Long id, Integer status)` 方法
+- 修改 `selectAll` 支持 `?status=` 筛选
+- 修改 `countAll` 支持 `?status=` 筛选
+- 修改 XML：SELECT 列添加 `status`，WHERE 子句添加 status 条件
 
 #### GuideCommentMapper.java
-- Add `updateStatus(Long id, Integer status)` method
-- Update `selectPage` to include `?status=` filter
-- Update `countAll` to include `?status=` filter
-- Update XML: add `c.status` to SELECT columns, add status WHERE clause
+- 新增 `updateStatus(Long id, Integer status)` 方法
+- 修改 `selectPage` 支持 `?status=` 筛选
+- 修改 `countAll` 支持 `?status=` 筛选
+- 修改 XML：SELECT 列添加 `c.status`，WHERE 子句添加 status 条件
 
-#### UserMapper.java (if exists)
-- Add `updateStatus(Long id, Integer status)` method
-- Add `countByStatus(Integer status)` method
+#### UserMapper.java（如存在）
+- 新增 `updateStatus(Long id, Integer status)` 方法
+- 新增 `countByStatus(Integer status)` 方法
 
-### 8. Admin Controller Changes
+### 8. 管理员控制器变更
 
 #### AdminGuideApiController.java
-- Remove `PUT /{id}` (updateGuide)
-- Add `POST /{id}/audit` endpoint
-- Update `GET /` to accept `?status=` filter
+- 移除 `PUT /{id}`（updateGuide）
+- 新增 `POST /{id}/audit` 接口
+- 修改 `GET /` 支持 `?status=` 筛选
 
 #### AdminStoryApiController.java
-- Remove `PUT /{id}` (updateContent)
-- Add `POST /{id}/audit` endpoint
-- Update `GET /` to accept `?status=` filter
+- 移除 `PUT /{id}`（updateContent）
+- 新增 `POST /{id}/audit` 接口
+- 修改 `GET /` 支持 `?status=` 筛选
 
 #### AdminCommentApiController.java
-- Add `POST /{id}/audit` endpoint
-- Update `GET /` to accept `?status=` filter
+- 新增 `POST /{id}/audit` 接口
+- 修改 `GET /` 支持 `?status=` 筛选
 
 #### AdminUserApiController.java
-- Remove `PUT /{id}` (update user info)
-- Add `POST /{id}/audit` endpoint
-- Update `GET /` to accept `?status=` filter
+- 移除 `PUT /{id}`（编辑用户信息）
+- 新增 `POST /{id}/audit` 接口
+- 修改 `GET /` 支持 `?status=` 筛选
 
-### 9. Admin Log Changes
+### 9. 管理员日志变更
 
-Log audit actions with action type "AUDIT" instead of "UPDATE":
+审核操作使用 action 类型 "AUDIT" 而不是 "UPDATE"：
 ```
 action: AUDIT
 targetType: USER/GUIDE/STORY/COMMENT
@@ -170,43 +172,43 @@ targetId: {id}
 detail: "审核通过" / "审核拒绝" / "禁用" / "下架"
 ```
 
-## Files to Modify
+## 需要修改的文件
 
-### Backend - Controllers
-- `AdminUserApiController.java` — remove PUT, add audit endpoint
-- `AdminGuideApiController.java` — remove PUT, add audit endpoint
-- `AdminStoryApiController.java` — remove PUT, add audit endpoint
-- `AdminCommentApiController.java` — add audit endpoint
+### 后端 - 控制器
+- `AdminUserApiController.java` — 移除 PUT，新增审核接口
+- `AdminGuideApiController.java` — 移除 PUT，新增审核接口
+- `AdminStoryApiController.java` — 移除 PUT，新增审核接口
+- `AdminCommentApiController.java` — 新增审核接口
 
-### Backend - Models
-- `User.java` — update status comment
-- `GuideSummary.java` — add status field
-- `GuideDetail.java` — add status field
-- `GuideStoryVO.java` — add status field
-- `GuideComment.java` — add status field
+### 后端 - 模型
+- `User.java` — 修改 status 注释
+- `GuideSummary.java` — 新增 status 字段
+- `GuideDetail.java` — 新增 status 字段
+- `GuideStoryVO.java` — 新增 status 字段
+- `GuideComment.java` — 新增 status 字段
 
-### Backend - Mappers
-- `GuideMapper.java` — add updateStatus, update selectPage/countAll for status filter
-- `GuideMapper.xml` — add status to SELECT, add status WHERE clause
-- `GuideStoryMapper.java` — add updateStatus, update selectAll/countAll for status filter
-- `GuideStoryMapper.xml` — add status to SELECT, add status WHERE clause
-- `GuideCommentMapper.java` — add updateStatus, update selectPage/countAll for status filter
-- `GuideCommentMapper.xml` — add status to SELECT, add status WHERE clause
+### 后端 - Mapper
+- `GuideMapper.java` — 新增 updateStatus，修改 selectPage/countAll 支持状态筛选
+- `GuideMapper.xml` — SELECT 添加 status，WHERE 添加 status 条件
+- `GuideStoryMapper.java` — 新增 updateStatus，修改 selectAll/countAll 支持状态筛选
+- `GuideStoryMapper.xml` — SELECT 添加 status，WHERE 添加 status 条件
+- `GuideCommentMapper.java` — 新增 updateStatus，修改 selectPage/countAll 支持状态筛选
+- `GuideCommentMapper.xml` — SELECT 添加 status，WHERE 添加 status 条件
 
-### Frontend (SPA)
-- `js/pages/users.js` — replace edit with audit actions
-- `js/pages/guides.js` — replace edit with audit actions
-- `js/pages/stories.js` — replace edit with audit actions
-- `js/pages/comments.js` — add audit actions
-- `js/api.js` — add audit API method
-- `index.html` — remove edit routes
+### 前端 (SPA)
+- `js/pages/users.js` — 替换编辑为审核操作
+- `js/pages/guides.js` — 替换编辑为审核操作
+- `js/pages/stories.js` — 替换编辑为审核操作
+- `js/pages/comments.js` — 新增审核操作
+- `js/api.js` — 新增审核 API 方法
+- `index.html` — 移除编辑路由
 
-### Database
-- SQL migration script for status column changes
+### 数据库
+- SQL 迁移脚本：status 列变更
 
-## Out of Scope
+## 不在范围内
 
-- Destination management (stays as edit+delete)
-- Bulk audit operations
-- Audit history viewing in admin panel
-- Content preview before audit
+- 目的地管理（保持编辑+删除）
+- 批量审核操作
+- 管理后台审核历史查看
+- 审核前内容预览
