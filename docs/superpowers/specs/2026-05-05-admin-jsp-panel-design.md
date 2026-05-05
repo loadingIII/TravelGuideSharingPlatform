@@ -72,31 +72,31 @@ src/main/
 
 ### 用户管理
 - GET `/admin/users` - 分页列表（用户名、昵称、手机号、注册时间）
-- GET `/admin/users/{id}/edit` - 编辑表单
-- POST `/admin/users/{id}/edit` - 保存修改
-- POST `/admin/users/{id}/delete` - 删除用户
+- GET `/admin/users/edit/{id}` - 编辑表单
+- POST `/admin/users/edit/{id}` - 保存修改
+- POST `/admin/users/delete/{id}` - 删除用户
 
 ### 攻略管理
 - GET `/admin/guides` - 分页列表（标题、作者、点赞数、发布时间）
-- GET `/admin/guides/{id}/edit` - 编辑表单
-- POST `/admin/guides/{id}/edit` - 保存修改
-- POST `/admin/guides/{id}/delete` - 删除攻略
+- GET `/admin/guides/edit/{id}` - 编辑表单
+- POST `/admin/guides/edit/{id}` - 保存修改
+- POST `/admin/guides/delete/{id}` - 删除攻略
 
 ### 故事管理
 - GET `/admin/stories` - 分页列表（标题、作者、发布时间）
-- GET `/admin/stories/{id}/edit` - 编辑表单
-- POST `/admin/stories/{id}/edit` - 保存修改
-- POST `/admin/stories/{id}/delete` - 删除故事
+- GET `/admin/stories/edit/{id}` - 编辑表单
+- POST `/admin/stories/edit/{id}` - 保存修改
+- POST `/admin/stories/delete/{id}` - 删除故事
 
 ### 目的地管理
 - GET `/admin/destinations` - 分页列表（名称、评分、收藏数）
-- GET `/admin/destinations/{id}/edit` - 编辑表单
-- POST `/admin/destinations/{id}/edit` - 保存修改
-- POST `/admin/destinations/{id}/delete` - 删除目的地
+- GET `/admin/destinations/edit/{id}` - 编辑表单
+- POST `/admin/destinations/edit/{id}` - 保存修改
+- POST `/admin/destinations/delete/{id}` - 删除目的地
 
 ### 评论管理
 - GET `/admin/comments` - 分页列表（评论内容、评论者、关联攻略、时间）
-- POST `/admin/comments/{id}/delete` - 删除评论（只读，无编辑页）
+- POST `/admin/comments/delete/{id}` - 删除评论（只读，无编辑页）
 
 ## 技术依赖
 
