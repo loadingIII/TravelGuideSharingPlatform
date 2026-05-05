@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>旅游管理后台</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+</head>
+<body>
+  <div class="app" id="app"><div class="loading">加载中...</div></div>
+  <script src="js/api.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/pages/dashboard.js"></script>
+  <script src="js/pages/users.js"></script>
+  <script src="js/pages/guides.js"></script>
+  <script src="js/pages/stories.js"></script>
+  <script src="js/pages/destinations.js"></script>
+  <script src="js/pages/comments.js"></script>
+  <script>
+    Router.register('/', params => { setupLayout('仪表盘', ''); initDashboard(); });
+    Router.register('/users', params => { setupLayout('用户管理', 'users'); initUsers(); });
+    Router.register('/users/edit/:id', params => { setupLayout('用户管理', 'users'); initUserEdit(params.id); });
+    Router.register('/guides', params => { setupLayout('攻略管理', 'guides'); initGuides(); });
+    Router.register('/guides/edit/:id', params => { setupLayout('攻略管理', 'guides'); initGuideEdit(params.id); });
+    Router.register('/stories', params => { setupLayout('故事管理', 'stories'); initStories(); });
+    Router.register('/stories/edit/:id', params => { setupLayout('故事管理', 'stories'); initStoryEdit(params.id); });
+    Router.register('/destinations', params => { setupLayout('目的地管理', 'destinations'); initDestinations(); });
+    Router.register('/destinations/edit/:id', params => { setupLayout('目的地管理', 'destinations'); initDestinationEdit(params.id); });
+    Router.register('/comments', params => { setupLayout('评论管理', 'comments'); initComments(); });
+    Router.start();
+  </script>
+</body>
+</html>
