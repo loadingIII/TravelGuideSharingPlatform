@@ -1,24 +1,47 @@
-async function initUsers(page = 1) {
+const USER_STATUS_MAP = { 0: '待审核', 1: '正常', 2: '禁用' };
+const USER_STATUS_BADGE = { 0: 'badge-warning', 1: 'badge-success', 2: 'badge-danger' };
+
+async function initUsers(page = 1, status = null) {
   const content = document.getElementById('content');
   try {
-    const result = await API.get(`/admin/users?page=${page}`);
+    const statusParam = status !== null ? `&status=${status}` : '';
+    const result = await API.get(`/admin/users?page=${page}${statusParam}`);
     const rows = result.list.map(u => `
       <tr>
         <td>${u.id}</td>
         <td>${u.username}</td>
         <td>${u.phone || '-'}</td>
         <td>${u.email || '-'}</td>
-        <td><span class="badge ${u.status === 1 ? 'badge-success' : 'badge-danger'}">${u.status === 1 ? '正常' : '禁用'}</span></td>
+        <td><span class="badge ${USER_STATUS_BADGE[u.status] || 'badge-info'}">${USER_STATUS_MAP[u.status] || '未知'}</span></td>
         <td>${u.createdAt || '-'}</td>
         <td>
-          <button class="btn-link" onclick="Router.navigate('/users/edit/${u.id}')">编辑</button>
+          ${u.status === 0 ? `
+            <button class="btn-link" onclick="auditUser(${u.id}, 'approve')">通过</button>
+            <button class="btn-link danger" onclick="auditUser(${u.id}, 'reject')">拒绝</button>
+          ` : ''}
+          ${u.status === 1 ? `
+            <button class="btn-link danger" onclick="auditUser(${u.id}, 'disable')">禁用</button>
+          ` : ''}
+          ${u.status === 2 ? `
+            <button class="btn-link" onclick="auditUser(${u.id}, 'enable')">启用</button>
+          ` : ''}
           <button class="btn-link danger" onclick="deleteUser(${u.id}, '${u.username}')">删除</button>
         </td>
       </tr>`).join('');
+
+    const filterButtons = `
+      <div class="filter-bar">
+        <button class="btn btn-sm ${status === null ? 'btn-primary' : 'btn-ghost'}" onclick="initUsers(1, null)">全部</button>
+        <button class="btn btn-sm ${status === 0 ? 'btn-primary' : 'btn-ghost'}" onclick="initUsers(1, 0)">待审核</button>
+        <button class="btn btn-sm ${status === 1 ? 'btn-primary' : 'btn-ghost'}" onclick="initUsers(1, 1)">正常</button>
+        <button class="btn btn-sm ${status === 2 ? 'btn-primary' : 'btn-ghost'}" onclick="initUsers(1, 2)">禁用</button>
+      </div>`;
+
     content.innerHTML = `
       <div class="page-header">
         <div class="page-title">用户管理</div>
       </div>
+      ${filterButtons}
       <div class="card">
         <div class="table-wrapper">
           <table>
@@ -29,11 +52,21 @@ async function initUsers(page = 1) {
         <div class="card-body">${renderPagination(result.page, result.totalPages)}</div>
       </div>`;
     content.querySelectorAll('.page-btn:not([disabled])').forEach(btn => {
-      btn.addEventListener('click', () => initUsers(parseInt(btn.dataset.page)));
+      btn.addEventListener('click', () => initUsers(parseInt(btn.dataset.page), status));
     });
   } catch (err) {
     content.innerHTML = `<div class="alert alert-danger">加载失败: ${err.message}</div>`;
   }
+}
+
+async function auditUser(id, action) {
+  const actionMap = { approve: '审核通过', reject: '审核拒绝', disable: '禁用', enable: '启用' };
+  if (!await confirmDialog(`确认${actionMap[action]}该用户？`)) return;
+  try {
+    await API.post(`/admin/users/${id}/audit`, { action });
+    Toast.success('操作成功');
+    initUsers();
+  } catch (err) { Toast.error(err.message); }
 }
 
 async function deleteUser(id, name) {
@@ -43,54 +76,4 @@ async function deleteUser(id, name) {
     Toast.success('删除成功');
     initUsers();
   } catch (err) { Toast.error(err.message); }
-}
-
-async function initUserEdit(id) {
-  const content = document.getElementById('content');
-  try {
-    const user = await API.get(`/admin/users/${id}`);
-    content.innerHTML = `
-      <div class="page-header">
-        <div class="page-title">编辑用户</div>
-        <button class="btn btn-ghost" onclick="Router.navigate('/users')">返回列表</button>
-      </div>
-      <div class="card edit-card">
-        <div class="card-body">
-          <form id="editForm">
-            <div class="form-group">
-              <label class="form-label">用户名</label>
-              <input type="text" name="username" class="form-input" value="${user.username || ''}" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label">手机号</label>
-              <input type="text" name="phone" class="form-input" value="${user.phone || ''}">
-            </div>
-            <div class="form-group">
-              <label class="form-label">邮箱</label>
-              <input type="email" name="email" class="form-input" value="${user.email || ''}">
-            </div>
-            <div class="form-group">
-              <label class="form-label">状态</label>
-              <select name="status" class="form-select">
-                <option value="1" ${user.status === 1 ? 'selected' : ''}>正常</option>
-                <option value="0" ${user.status === 0 ? 'selected' : ''}>禁用</option>
-              </select>
-            </div>
-            <button type="submit" class="btn btn-primary">保存</button>
-          </form>
-        </div>
-      </div>`;
-    document.getElementById('editForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const fd = new FormData(e.target);
-      const body = { username: fd.get('username'), phone: fd.get('phone'), email: fd.get('email'), status: parseInt(fd.get('status')) };
-      try {
-        await API.put(`/admin/users/${id}`, body);
-        Toast.success('保存成功');
-        Router.navigate('/users');
-      } catch (err) { Toast.error(err.message); }
-    });
-  } catch (err) {
-    content.innerHTML = `<div class="alert alert-danger">加载失败: ${err.message}</div>`;
-  }
 }

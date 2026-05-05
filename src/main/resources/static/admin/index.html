@@ -27,11 +27,8 @@
   <script>
     Router.register('/', params => { setupLayout('仪表盘', ''); initDashboard(); });
     Router.register('/users', params => { setupLayout('用户管理', 'users'); initUsers(); });
-    Router.register('/users/edit/:id', params => { setupLayout('用户管理', 'users'); initUserEdit(params.id); });
     Router.register('/guides', params => { setupLayout('攻略管理', 'guides'); initGuides(); });
-    Router.register('/guides/edit/:id', params => { setupLayout('攻略管理', 'guides'); initGuideEdit(params.id); });
     Router.register('/stories', params => { setupLayout('故事管理', 'stories'); initStories(); });
-    Router.register('/stories/edit/:id', params => { setupLayout('故事管理', 'stories'); initStoryEdit(params.id); });
     Router.register('/destinations', params => { setupLayout('目的地管理', 'destinations'); initDestinations(); });
     Router.register('/destinations/edit/:id', params => { setupLayout('目的地管理', 'destinations'); initDestinationEdit(params.id); });
     Router.register('/comments', params => { setupLayout('评论管理', 'comments'); initComments(); });
