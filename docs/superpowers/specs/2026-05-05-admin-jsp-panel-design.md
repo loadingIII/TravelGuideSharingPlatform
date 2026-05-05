@@ -1,106 +1,106 @@
-# Admin JSP Management Panel Design
+# Admin JSP 管理端设计文档
 
-## Overview
+## 概述
 
-Add a server-side rendered admin management panel to the existing Spring Boot + Vue 3 travel platform. The admin panel uses JSP + JSTL + Bootstrap 5, with independent session-based authentication. All CRUD operations return full page views (no AJAX).
+在现有的 Spring Boot + Vue 3 旅游平台基础上，新增一个服务端渲染的 Admin 管理端。使用 JSP + JSTL + Bootstrap 5 技术栈，独立的 Session 认证机制。所有 CRUD 操作返回完整页面视图（无 AJAX）。
 
-## Goals
+## 目标
 
-- Provide admin interface for managing users, guides, stories, destinations, and comments
-- Independent admin login (not shared with user-side JWT auth)
-- Clean, simple Bootstrap 5 UI with sidebar navigation
-- Reuse existing service/mapper layer
+- 提供管理用户、攻略、故事、目的地、评论的后台界面
+- Admin 独立登录（不复用用户端的 JWT 认证）
+- 简洁的 Bootstrap 5 UI，带侧边栏导航
+- 复用现有的 service/mapper 层
 
-## Project Structure
+## 项目结构
 
 ```
 src/main/
 ├── java/com/travel/
 │   ├── controller/admin/
-│   │   ├── AdminAuthController.java
-│   │   ├── AdminDashboardController.java
-│   │   ├── AdminUserController.java
-│   │   ├── AdminGuideController.java
-│   │   ├── AdminStoryController.java
-│   │   ├── AdminDestinationController.java
-│   │   └── AdminCommentController.java
+│   │   ├── AdminAuthController.java          # 登录/登出
+│   │   ├── AdminDashboardController.java     # 首页仪表盘
+│   │   ├── AdminUserController.java          # 用户管理
+│   │   ├── AdminGuideController.java         # 攻略管理
+│   │   ├── AdminStoryController.java         # 故事管理
+│   │   ├── AdminDestinationController.java   # 目的地管理
+│   │   └── AdminCommentController.java       # 评论管理
 │   ├── interceptor/
-│   │   └── AdminInterceptor.java
+│   │   └── AdminInterceptor.java             # Admin 登录拦截器
 │   └── service/
-│       └── AdminAuthService.java
+│       └── AdminAuthService.java             # Admin 认证服务
 ├── resources/
 │   └── views/admin/
-│       ├── login.jsp
-│       ├── dashboard.jsp
+│       ├── login.jsp                         # 登录页
+│       ├── dashboard.jsp                     # 仪表盘
 │       ├── common/
-│       │   ├── header.jsp
-│       │   └── footer.jsp
+│       │   ├── header.jsp                    # 公共头部+侧边栏
+│       │   └── footer.jsp                    # 公共尾部
 │       ├── user/
-│       │   ├── list.jsp
-│       │   └── edit.jsp
+│       │   ├── list.jsp                      # 用户列表
+│       │   └── edit.jsp                      # 用户编辑
 │       ├── guide/
-│       │   ├── list.jsp
-│       │   └── edit.jsp
+│       │   ├── list.jsp                      # 攻略列表
+│       │   └── edit.jsp                      # 攻略编辑
 │       ├── story/
-│       │   ├── list.jsp
-│       │   └── edit.jsp
+│       │   ├── list.jsp                      # 故事列表
+│       │   └── edit.jsp                      # 故事编辑
 │       ├── destination/
-│       │   ├── list.jsp
-│       │   └── edit.jsp
+│       │   ├── list.jsp                      # 目的地列表
+│       │   └── edit.jsp                      # 目的地编辑
 │       └── comment/
-│           └── list.jsp
+│           └── list.jsp                      # 评论列表（只读）
 ```
 
-## Authentication
+## 认证机制
 
-- Default admin credentials: `admin` / `admin123` (hardcoded in `AdminAuthService`)
-- Session-based: login sets ` HttpSession attribute `adminUser`
-- `AdminInterceptor` intercepts all `/admin/**` paths except `/admin/login` and static resources
-- On unauthorized access, redirect to `/admin/login`
+- 默认管理员账号：`admin` / `admin123`（硬编码在 `AdminAuthService` 中）
+- 基于 Session：登录成功后将管理员信息存入 `HttpSession`，属性名 `adminUser`
+- `AdminInterceptor` 拦截所有 `/admin/**` 路径，排除 `/admin/login` 和静态资源
+- 未登录访问时重定向到 `/admin/login`
 
-## Page Layout
+## 页面布局
 
-- Left sidebar (200px fixed width) + right content area
-- Sidebar: title "旅游管理后台" at top, navigation menu below (仪表盘, 用户管理, 攻略管理, 故事管理, 目的地管理, 评论管理)
-- Current page highlighted in sidebar
-- Bootstrap 5 via CDN, clean white theme, `table-striped` for tables
+- 左侧固定侧边栏（200px 宽）+ 右侧内容区
+- 侧边栏：顶部显示"旅游管理后台"标题，下方导航菜单（仪表盘、用户管理、攻略管理、故事管理、目的地管理、评论管理）
+- 当前页面在侧边栏中高亮显示
+- Bootstrap 5 CDN 引入，简洁白色主题，表格使用 `table-striped`
 
-## Module CRUD Operations
+## 各模块 CRUD 功能
 
-### Dashboard
-- GET `/admin` - Display statistics (total users, guides, stories, destinations, comments)
+### 仪表盘
+- GET `/admin` - 显示统计数据（总用户数、总攻略数、总故事数、总目的地数、总评论数）
 
-### User Management
-- GET `/admin/users` - Paginated list (username, nickname, phone, register time)
-- GET `/admin/users/{id}/edit` - Edit form
-- POST `/admin/users/{id}/edit` - Save changes
-- POST `/admin/users/{id}/delete` - Delete user
+### 用户管理
+- GET `/admin/users` - 分页列表（用户名、昵称、手机号、注册时间）
+- GET `/admin/users/{id}/edit` - 编辑表单
+- POST `/admin/users/{id}/edit` - 保存修改
+- POST `/admin/users/{id}/delete` - 删除用户
 
-### Guide Management
-- GET `/admin/guides` - Paginated list (title, author, likes, publish time)
-- GET `/admin/guides/{id}/edit` - Edit form
-- POST `/admin/guides/{id}/edit` - Save changes
-- POST `/admin/guides/{id}/delete` - Delete guide
+### 攻略管理
+- GET `/admin/guides` - 分页列表（标题、作者、点赞数、发布时间）
+- GET `/admin/guides/{id}/edit` - 编辑表单
+- POST `/admin/guides/{id}/edit` - 保存修改
+- POST `/admin/guides/{id}/delete` - 删除攻略
 
-### Story Management
-- GET `/admin/stories` - Paginated list (title, author, publish time)
-- GET `/admin/stories/{id}/edit` - Edit form
-- POST `/admin/stories/{id}/edit` - Save changes
-- POST `/admin/stories/{id}/delete` - Delete story
+### 故事管理
+- GET `/admin/stories` - 分页列表（标题、作者、发布时间）
+- GET `/admin/stories/{id}/edit` - 编辑表单
+- POST `/admin/stories/{id}/edit` - 保存修改
+- POST `/admin/stories/{id}/delete` - 删除故事
 
-### Destination Management
-- GET `/admin/destinations` - Paginated list (name, rating, favorites)
-- GET `/admin/destinations/{id}/edit` - Edit form
-- POST `/admin/destinations/{id}/edit` - Save changes
-- POST `/admin/destinations/{id}/delete` - Delete destination
+### 目的地管理
+- GET `/admin/destinations` - 分页列表（名称、评分、收藏数）
+- GET `/admin/destinations/{id}/edit` - 编辑表单
+- POST `/admin/destinations/{id}/edit` - 保存修改
+- POST `/admin/destinations/{id}/delete` - 删除目的地
 
-### Comment Management
-- GET `/admin/comments` - Paginated list (content, commenter, related guide, time)
-- POST `/admin/comments/{id}/delete` - Delete comment (read-only, no edit)
+### 评论管理
+- GET `/admin/comments` - 分页列表（评论内容、评论者、关联攻略、时间）
+- POST `/admin/comments/{id}/delete` - 删除评论（只读，无编辑页）
 
-## Technical Dependencies
+## 技术依赖
 
-### pom.xml additions
+### pom.xml 新增依赖
 ```xml
 <dependency>
     <groupId>org.apache.tomcat.embed</groupId>
@@ -122,7 +122,7 @@ src/main/
 </dependency>
 ```
 
-### application.yml additions
+### application.yml 新增配置
 ```yaml
 spring:
   mvc:
@@ -131,31 +131,31 @@ spring:
       suffix: .jsp
 ```
 
-### WebMvcConfig changes
-- Register `AdminInterceptor` for `/admin/**`
-- Exclude `/admin/login`, `/admin/css/**`, `/admin/js/**`, `/admin/images/**`
+### WebMvcConfig 修改
+- 注册 `AdminInterceptor` 拦截 `/admin/**`
+- 排除 `/admin/login`、`/admin/css/**`、`/admin/js/**`、`/admin/images/**`
 
-## Implementation Order
+## 实现顺序
 
-1. Add JSP dependencies and configure view resolver
-2. Create `AdminAuthService` and `AdminInterceptor`
-3. Create `AdminAuthController` (login/logout)
-4. Create login.jsp
-5. Create common header.jsp and footer.jsp (sidebar layout)
-6. Create `AdminDashboardController` + dashboard.jsp
-7. Create `AdminUserController` + user list/edit JSPs
-8. Create `AdminGuideController` + guide list/edit JSPs
-9. Create `AdminStoryController` + story list/edit JSPs
-10. Create `AdminDestinationController` + destination list/edit JSPs
-11. Create `AdminCommentController` + comment list JSP
-12. Test all pages and CRUD operations
+1. 添加 JSP 依赖并配置视图解析器
+2. 创建 `AdminAuthService` 和 `AdminInterceptor`
+3. 创建 `AdminAuthController`（登录/登出）
+4. 创建 login.jsp
+5. 创建公共 header.jsp 和 footer.jsp（侧边栏布局）
+6. 创建 `AdminDashboardController` + dashboard.jsp
+7. 创建 `AdminUserController` + 用户列表/编辑 JSP
+8. 创建 `AdminGuideController` + 攻略列表/编辑 JSP
+9. 创建 `AdminStoryController` + 故事列表/编辑 JSP
+10. 创建 `AdminDestinationController` + 目的地列表/编辑 JSP
+11. 创建 `AdminCommentController` + 评论列表 JSP
+12. 测试所有页面和 CRUD 操作
 
-## Reused Existing Components
+## 复用现有组件
 
-- `UserService` / `UserMapper` - user CRUD
-- `GuideService` / `GuideMapper` - guide queries
-- `GuideStoryService` / `GuideStoryMapper` - story queries
-- `DestinationService` / `DestinationMapper` - destination queries
-- `GuideCommentService` / `GuideCommentMapper` - comment queries
-- `User`, `Destination`, `GuideSummary`, `GuideDetail`, `GuideComment` models
-- `PageResult` for pagination
+- `UserService` / `UserMapper` - 用户增删改查
+- `GuideService` / `GuideMapper` - 攻略查询
+- `GuideStoryService` / `GuideStoryMapper` - 故事查询
+- `DestinationService` / `DestinationMapper` - 目的地查询
+- `GuideCommentService` / `GuideCommentMapper` - 评论查询
+- `User`、`Destination`、`GuideSummary`、`GuideDetail`、`GuideComment` 模型
+- `PageResult` 分页工具
