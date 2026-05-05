@@ -5,6 +5,9 @@ target/
 !**/src/test/**/target/
 
 .claude
+.superpowers
+docs
+CLAUDE.md
 
 ### STS ###
 .apt_generated
