@@ -170,6 +170,16 @@ tbody tr:hover td { background: rgba(79,109,122,0.03); }
 .badge-success::before { background: var(--color-success); }
 .badge-danger { color: var(--color-danger); background: var(--color-danger-bg); }
 .badge-danger::before { background: var(--color-danger); }
+.badge-warning { color: var(--color-accent); background: var(--color-warning-bg); }
+.badge-warning::before { background: var(--color-accent); }
+.badge-info { color: var(--color-primary); background: var(--color-primary-bg); }
+.badge-info::before { background: var(--color-primary); }
+
+/* ===================== Filter bar ===================== */
+.filter-bar {
+  display: flex; gap: var(--space-2); margin-bottom: var(--space-5);
+  flex-wrap: wrap;
+}
 
 /* ===================== Pagination ===================== */
 .pagination { display: flex; gap: var(--space-1); margin-top: var(--space-5); }
