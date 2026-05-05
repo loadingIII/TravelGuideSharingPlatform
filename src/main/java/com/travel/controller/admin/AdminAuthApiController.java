@@ -41,15 +41,19 @@ public class AdminAuthApiController {
             log.warn("登录失败: username={}", username);
             return ApiResponse.fail("AUTH_FAILED", "用户名或密码错误");
         }
-        Map<String, Object> admin = adminAuthService.getCurrentAdmin(session);
-        AdminLog logEntry = new AdminLog();
-        logEntry.setAdminId((Long) admin.get("id"));
-        logEntry.setAdminUsername((String) admin.get("username"));
-        logEntry.setAction("LOGIN");
-        logEntry.setTargetType("ADMIN");
-        logEntry.setDetail("管理员登录");
-        logEntry.setIpAddress(request.getRemoteAddr());
-        adminLogMapper.insert(logEntry);
+        try {
+            Map<String, Object> admin = adminAuthService.getCurrentAdmin(session);
+            AdminLog logEntry = new AdminLog();
+            logEntry.setAdminId((Long) admin.get("id"));
+            logEntry.setAdminUsername((String) admin.get("username"));
+            logEntry.setAction("LOGIN");
+            logEntry.setTargetType("ADMIN");
+            logEntry.setDetail("管理员登录");
+            logEntry.setIpAddress(request.getRemoteAddr());
+            adminLogMapper.insert(logEntry);
+        } catch (Exception e) {
+            log.warn("记录登录日志失败(不影响登录): {}", e.getMessage());
+        }
         log.info("登录成功: username={}", username);
         return ApiResponse.success();
     }
@@ -58,14 +62,18 @@ public class AdminAuthApiController {
     public ApiResponse<Void> logout(HttpSession session, HttpServletRequest request) {
         Map<String, Object> admin = adminAuthService.getCurrentAdmin(session);
         if (admin != null) {
-            AdminLog logEntry = new AdminLog();
-            logEntry.setAdminId((Long) admin.get("id"));
-            logEntry.setAdminUsername((String) admin.get("username"));
-            logEntry.setAction("LOGOUT");
-            logEntry.setTargetType("ADMIN");
-            logEntry.setDetail("管理员登出");
-            logEntry.setIpAddress(request.getRemoteAddr());
-            adminLogMapper.insert(logEntry);
+            try {
+                AdminLog logEntry = new AdminLog();
+                logEntry.setAdminId((Long) admin.get("id"));
+                logEntry.setAdminUsername((String) admin.get("username"));
+                logEntry.setAction("LOGOUT");
+                logEntry.setTargetType("ADMIN");
+                logEntry.setDetail("管理员登出");
+                logEntry.setIpAddress(request.getRemoteAddr());
+                adminLogMapper.insert(logEntry);
+            } catch (Exception e) {
+                log.warn("记录登出日志失败(不影响登出): {}", e.getMessage());
+            }
         }
         adminAuthService.logout(session);
         return ApiResponse.success();

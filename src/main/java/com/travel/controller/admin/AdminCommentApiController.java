@@ -42,16 +42,20 @@ public class AdminCommentApiController {
 
     private void logOperation(HttpSession session, HttpServletRequest request,
                               String action, String targetType, Long targetId, String detail) {
-        Map<String, Object> admin = adminAuthService.getCurrentAdmin(session);
-        if (admin == null) return;
-        AdminLog log = new AdminLog();
-        log.setAdminId((Long) admin.get("id"));
-        log.setAdminUsername((String) admin.get("username"));
-        log.setAction(action);
-        log.setTargetType(targetType);
-        log.setTargetId(targetId);
-        log.setDetail(detail);
-        log.setIpAddress(request.getRemoteAddr());
-        adminLogMapper.insert(log);
+        try {
+            Map<String, Object> admin = adminAuthService.getCurrentAdmin(session);
+            if (admin == null) return;
+            AdminLog log = new AdminLog();
+            log.setAdminId((Long) admin.get("id"));
+            log.setAdminUsername((String) admin.get("username"));
+            log.setAction(action);
+            log.setTargetType(targetType);
+            log.setTargetId(targetId);
+            log.setDetail(detail);
+            log.setIpAddress(request.getRemoteAddr());
+            adminLogMapper.insert(log);
+        } catch (Exception e) {
+            // 日志记录失败不影响业务操作
+        }
     }
 }
