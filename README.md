@@ -53,14 +53,15 @@ TravelProject
 │  │  │  ├─ config               # Spring 配置
 │  │  │  ├─ common               # 统一响应与异常
 │  │  │  └─ pojo                 # model/dto/vo
-│  │  └─ resources
-│  │     ├─ application.yml
-│  │     ├─ mapper\*.xml
-│  │     └─ static
-│  │        ├─ SqlData           # 建表与初始化 SQL
-│  │        └─ admin             # 管理端静态资源
+│  │  ├─ resources
+│  │  │  ├─ application.yml
+│  │  │  ├─ mapper\*.xml
+│  │  │  └─ static
+│  │  │     ├─ SqlData           # 建表与初始化 SQL
+│  │  │     └─ admin             # 管理端静态资源 
+│  │  └─ webapp                  # 管理端静态资源(页面)
 │  └─ test\java\com\travel
-├─ fontend                        # 用户端前端（目录名保持现状）
+├─ frontend                        # 用户端前端（目录名保持现状）
 │  ├─ src
 │  ├─ public
 │  └─ package.json
@@ -86,21 +87,8 @@ TravelProject
 
 ```sql
 -- 1) 基础业务表
-SOURCE src/main/resources/static/SqlData/travel_schema.sql;
-
--- 2) 管理端表（admin_users, admin_logs）
-SOURCE src/main/resources/static/SqlData/admin_schema.sql;
-
--- 3) 可选：审核状态字段迁移
-SOURCE src/main/resources/static/SqlData/admin_audit_migration.sql;
+SOURCE src/main/resources/static/SqlData/init.sql
 ```
-
-可选初始化数据：
-
-- `insert_data.sql`
-- `insert_more_destinations.sql`
-- `insert_more_guides.sql`
-- `insert_guide_comments.sql`
 
 ## 4.3 配置后端
 
@@ -121,7 +109,7 @@ mvn spring-boot:run
 ## 4.5 启动前端（用户端）
 
 ```bash
-cd fontend
+cd frontend
 npm install
 npm run dev
 ```
