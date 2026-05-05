@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mv entity *)",
+      "Bash(sed *)",
+      "Bash(mvn compile *)",
+      "Bash(mysql *)"
+    ]
+  }
+}

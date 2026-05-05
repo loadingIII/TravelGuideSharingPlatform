@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.mapper.GuideCommentMapper">
+
+    <select id="listByGuideId" resultType="com.travel.pojo.model.GuideComment">
+        SELECT gc.id, gc.guide_id, gc.user_id, gc.content, gc.parent_comment_id,
+               gc.likes_count, gc.created_at,
+               up.nickname AS author_name,
+               up.avatar_url AS author_avatar_url
+        FROM guide_comments gc
+        LEFT JOIN user_profiles up ON up.user_id = gc.user_id
+        WHERE gc.guide_id = #{guideId}
+        ORDER BY gc.created_at ASC
+    </select>
+
+    <select id="countByGuideId" resultType="long">
+        SELECT COUNT(1)
+        FROM guide_comments
+        WHERE guide_id = #{guideId}
+    </select>
+
+</mapper>

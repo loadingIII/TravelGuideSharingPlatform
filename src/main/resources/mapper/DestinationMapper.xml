@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.mapper.DestinationMapper">
+
+    <resultMap id="DestinationResultMap" type="com.travel.pojo.model.Destination">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="country" property="country"/>
+        <result column="city" property="city"/>
+        <result column="description" property="description"/>
+        <result column="cover_image_url" property="coverImageUrl"/>
+        <result column="rating_avg" property="ratingAvg"/>
+        <result column="guides_count" property="guidesCount"/>
+        <result column="travelers_count" property="travelersCount"/>
+        <result column="popularity_score" property="popularityScore"/>
+    </resultMap>
+
+    <resultMap id="DestinationShowcaseResultMap" type="com.travel.pojo.model.DestinationShowcase">
+        <id column="id" property="id"/>
+        <result column="destination_id" property="destinationId"/>
+        <result column="section" property="section"/>
+        <result column="display_title" property="displayTitle"/>
+        <result column="display_subtitle" property="displaySubtitle"/>
+        <result column="display_description" property="displayDescription"/>
+        <result column="display_image_url" property="displayImageUrl"/>
+        <result column="display_rating" property="displayRating"/>
+        <result column="sort_order" property="sortOrder"/>
+        <result column="is_active" property="isActive"/>
+    </resultMap>
+
+    <sql id="DestinationWhere">
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (name LIKE CONCAT('%', #{keyword}, '%')
+                     OR country LIKE CONCAT('%', #{keyword}, '%')
+                     OR city LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+    </sql>
+
+    <select id="listDestinations" resultMap="DestinationResultMap">
+        SELECT id, name, country, city, description, cover_image_url, rating_avg, guides_count, travelers_count, popularity_score
+        FROM destinations
+        <include refid="DestinationWhere"/>
+        <choose>
+            <when test="hotSort != null and hotSort">
+                ORDER BY popularity_score DESC, id DESC
+            </when>
+            <otherwise>
+                ORDER BY id DESC
+            </otherwise>
+        </choose>
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="countDestinations" resultType="long">
+        SELECT COUNT(1) FROM destinations
+        <include refid="DestinationWhere"/>
+    </select>
+
+    <select id="selectById" resultMap="DestinationResultMap">
+        SELECT id, name, country, city, description, cover_image_url, rating_avg, guides_count, travelers_count, popularity_score
+        FROM destinations
+        WHERE id = #{id}
+    </select>
+
+    <select id="listShowcasesBySection" resultMap="DestinationShowcaseResultMap">
+        SELECT id, destination_id, section, display_title, display_subtitle, display_description, display_image_url, display_rating, sort_order, is_active
+        FROM destination_showcases
+        WHERE section = #{section} AND is_active = 1
+        ORDER BY sort_order ASC, id DESC
+        LIMIT #{limit}
+    </select>
+
+    <select id="searchDestinations" resultMap="DestinationResultMap">
+        SELECT id, name, country, city, description, cover_image_url, rating_avg, guides_count, travelers_count, popularity_score
+        FROM destinations
+        WHERE name LIKE CONCAT('%', #{query}, '%')
+           OR country LIKE CONCAT('%', #{query}, '%')
+           OR city LIKE CONCAT('%', #{query}, '%')
+        ORDER BY popularity_score DESC, id DESC
+        LIMIT #{limit}
+    </select>
+
+    <select id="listHotDestinations" resultMap="DestinationResultMap">
+        SELECT id, name, country, city, description, cover_image_url, rating_avg, guides_count, travelers_count, popularity_score
+        FROM destinations
+        ORDER BY popularity_score DESC, id DESC
+        LIMIT #{limit}
+    </select>
+
+</mapper>

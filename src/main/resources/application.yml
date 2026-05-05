@@ -1,0 +1,32 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: TravelProject
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/travel_guide_platform?useSSL=false&serverTimezone=UTC
+    username: root
+    password: 123321
+  jackson:
+    default-property-inclusion: non_null # JSON处理时忽略非空字段
+
+
+logging:
+  level:
+    com:
+      travel:
+        mapper: debug
+        service: info
+        controller: info
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.travel.entity
+  configuration:
+    map-underscore-to-camel-case: true
+
+app:
+  jwt:
+    secret: 6a701ec8714c4e99af80e7329adf06475b26d01c4a0502c48a71d86e76b6d6e9
+    access-expire-minutes: 120
