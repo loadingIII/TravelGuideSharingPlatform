@@ -6,7 +6,7 @@ const API = {
     }
     const res = await fetch(url, config);
     if (res.status === 401) {
-      window.location.hash = '#/login';
+      window.location.href = '/admin/login.html';
       throw new Error('未登录');
     }
     const data = await res.json();

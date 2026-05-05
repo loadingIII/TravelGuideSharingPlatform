@@ -7,11 +7,13 @@ import com.travel.pojo.model.AdminLog;
 import com.travel.pojo.model.AdminUser;
 import com.travel.service.AdminAuthService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Map;
 
 @Slf4j
@@ -23,6 +25,11 @@ public class AdminAuthApiController {
     private final AdminAuthService adminAuthService;
     private final AdminLogMapper adminLogMapper;
     private final AdminUserMapper adminUserMapper;
+
+    @GetMapping("/login")
+    public void loginRedirect(HttpServletResponse response) throws IOException {
+        response.sendRedirect("/admin/login.html");
+    }
 
     @PostMapping("/login")
     public ApiResponse<Void> login(@RequestParam String username,
