@@ -1,12 +1,15 @@
 package com.travel.mapper;
 
 import com.travel.pojo.model.User;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+
+import java.util.List;
 
 @Mapper
 public interface UserMapper {
@@ -40,4 +43,19 @@ public interface UserMapper {
 
     @Update("UPDATE users SET last_login_at = NOW() WHERE id = #{id}")
     int updateLastLoginAt(@Param("id") Long id);
+
+    @Select("SELECT id, username, phone, email, password_hash, status, last_login_at, created_at, updated_at " +
+            "FROM users ORDER BY created_at DESC LIMIT #{offset}, #{pageSize}")
+    List<User> selectPage(@Param("offset") int offset, @Param("pageSize") int pageSize);
+
+    @Select("SELECT COUNT(*) FROM users")
+    long countAll();
+
+    @Update("UPDATE users SET username=#{username}, phone=#{phone}, email=#{email}, status=#{status} WHERE id=#{id}")
+    int updateUser(@Param("id") Long id, @Param("username") String username,
+                   @Param("phone") String phone, @Param("email") String email,
+                   @Param("status") Integer status);
+
+    @Delete("DELETE FROM users WHERE id = #{id}")
+    int deleteById(@Param("id") Long id);
 }

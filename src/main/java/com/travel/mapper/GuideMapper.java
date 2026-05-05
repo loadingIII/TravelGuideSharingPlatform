@@ -8,8 +8,11 @@ import com.travel.pojo.model.GuideRelated;
 import com.travel.pojo.model.GuideSummary;
 import com.travel.pojo.model.GuideTipCategory;
 import com.travel.pojo.model.GuideTipItem;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -97,4 +100,30 @@ public interface GuideMapper {
      * 按点赞数获取热门攻略
      */
     List<GuideSummary> listTopGuidesByLikes(@Param("limit") int limit);
+
+    @Select("SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, " +
+            "g.location_text, g.scope, g.travel_mode, g.published_at, g.days, g.budget_total, " +
+            "g.views_count, g.likes_count, g.comments_count, g.favorites_count, " +
+            "d.name AS destination_name, u.username AS author_name " +
+            "FROM guides g LEFT JOIN destinations d ON g.destination_id = d.id " +
+            "LEFT JOIN users u ON g.author_id = u.id " +
+            "ORDER BY g.published_at DESC LIMIT #{offset}, #{pageSize}")
+    List<GuideSummary> selectPage(@Param("offset") int offset, @Param("pageSize") int pageSize);
+
+    @Select("SELECT COUNT(*) FROM guides")
+    long countAll();
+
+    @Select("SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, " +
+            "g.location_text, g.scope, g.travel_mode, g.published_at, g.days, g.budget_total, " +
+            "g.views_count, g.likes_count, g.comments_count, g.favorites_count, " +
+            "d.name AS destination_name, u.username AS author_name " +
+            "FROM guides g LEFT JOIN destinations d ON g.destination_id = d.id " +
+            "LEFT JOIN users u ON g.author_id = u.id WHERE g.id = #{id}")
+    GuideSummary selectById(@Param("id") Long id);
+
+    @Update("UPDATE guides SET title=#{title}, summary=#{summary} WHERE id=#{id}")
+    int updateGuide(@Param("id") Long id, @Param("title") String title, @Param("summary") String summary);
+
+    @Delete("DELETE FROM guides WHERE id = #{id}")
+    int deleteById(@Param("id") Long id);
 }

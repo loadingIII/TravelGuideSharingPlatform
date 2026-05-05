@@ -1,8 +1,10 @@
 package com.travel.mapper;
 
 import com.travel.pojo.vo.GuideStoryVO;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -56,4 +58,10 @@ public interface GuideStoryMapper {
      * @return 故事数量
      */
     long countAll();
+
+    @Delete("DELETE FROM traveler_stories WHERE id = #{id}")
+    int deleteById(@Param("id") Long id);
+
+    @Update("UPDATE traveler_stories SET content=#{content} WHERE id=#{id}")
+    int updateContent(@Param("id") Long id, @Param("content") String content);
 }
