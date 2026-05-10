@@ -6,7 +6,10 @@ const Icons = {
   story: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',
   destination: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>',
   comment: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>',
-  bell: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>'
+  search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>',
+  bell: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>',
+  settings: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>',
+  logout: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>'
 };
 
 /* Toast */
@@ -75,7 +78,12 @@ function renderSidebar(activeKey) {
     <div class="sidebar-section">
       <div class="sidebar-section-title">导航</div>
     </div>
-    <nav class="sidebar-nav">${navHtml}</nav>`;
+    <nav class="sidebar-nav">${navHtml}</nav>
+    <div class="sidebar-logout">
+      <a class="sidebar-link" href="/admin/login.html">
+        <span>${Icons.logout}</span> 退出登录
+      </a>
+    </div>`;
 }
 
 /* Pagination renderer */
@@ -102,12 +110,34 @@ function setupLayout(title, activeKey) {
     <div class="sidebar" id="sidebar">${renderSidebar(activeKey)}</div>
     <div class="main">
       <div class="topbar">
-        <div class="topbar-title">${title}</div>
+        <div class="topbar-search">
+          ${Icons.search}
+          <input type="text" placeholder="搜索..." id="searchInput">
+        </div>
+        <div class="topbar-filters">
+          <span class="topbar-filter-chip active" data-filter="all">全部</span>
+          <span class="topbar-filter-chip" data-filter="users">用户</span>
+          <span class="topbar-filter-chip" data-filter="guides">攻略</span>
+          <span class="topbar-filter-chip" data-filter="stories">故事</span>
+        </div>
         <div class="topbar-right">
+          <button class="topbar-icon-btn" title="通知">
+            ${Icons.bell}
+          </button>
+          <button class="topbar-icon-btn" title="设置">
+            ${Icons.settings}
+          </button>
           <div class="topbar-avatar">A</div>
-          <span style="font-size:13px;color:var(--color-text-secondary)">Admin</span>
         </div>
       </div>
       <div class="content" id="content"><div class="loading">加载中...</div></div>
     </div>`;
+
+  // Add filter chip click handlers
+  document.querySelectorAll('.topbar-filter-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.topbar-filter-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+    });
+  });
 }
