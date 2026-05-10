@@ -2,11 +2,8 @@ package com.travel.controller.admin;
 
 import com.travel.common.ApiResponse;
 import com.travel.common.PageResult;
-import com.travel.mapper.AdminLogMapper;
-import com.travel.mapper.GuideStoryMapper;
-import com.travel.pojo.model.AdminLog;
 import com.travel.pojo.vo.GuideStoryVO;
-import com.travel.service.AdminAuthService;
+import com.travel.service.AdminStoryService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -19,24 +16,40 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AdminStoryApiController {
 
-    private final GuideStoryMapper storyMapper;
-    private final AdminLogMapper adminLogMapper;
-    private final AdminAuthService adminAuthService;
-    private static final int PAGE_SIZE = 10;
+    private final AdminStoryService adminStoryService;
 
     @GetMapping
     public ApiResponse<PageResult<GuideStoryVO>> list(@RequestParam(defaultValue = "1") int page,
                                                       @RequestParam(required = false) Integer status) {
-        int offset = (page - 1) * PAGE_SIZE;
-        long total = storyMapper.countAll(status);
-        return ApiResponse.success(PageResult.of(storyMapper.selectAll(offset, PAGE_SIZE, status), page, PAGE_SIZE, total));
+        return ApiResponse.success(adminStoryService.listStories(page, status));
     }
 
     @GetMapping("/{id}")
     public ApiResponse<GuideStoryVO> detail(@PathVariable Long id) {
-        GuideStoryVO story = storyMapper.selectById(id);
+        GuideStoryVO story = adminStoryService.getStoryDetail(id);
         if (story == null) return ApiResponse.fail("NOT_FOUND", "故事不存在");
         return ApiResponse.success(story);
+    }
+
+    @PutMapping("/{id}")
+    public ApiResponse<Void> update(@PathVariable Long id,
+                                    @RequestBody Map<String, Object> body,
+                                    HttpSession session,
+                                    HttpServletRequest request) {
+        try {
+            adminStoryService.updateStory(id, body, session, request);
+            return ApiResponse.success();
+        } catch (RuntimeException e) {
+            return ApiResponse.fail("NOT_FOUND", e.getMessage());
+        }
+    }
+
+    @PostMapping
+    public ApiResponse<Void> create(@RequestBody Map<String, Object> body,
+                                    HttpSession session,
+                                    HttpServletRequest request) {
+        adminStoryService.createStory(body, session, request);
+        return ApiResponse.success();
     }
 
     @PostMapping("/{id}/audit")
@@ -44,51 +57,20 @@ public class AdminStoryApiController {
                                    @RequestBody Map<String, String> body,
                                    HttpSession session,
                                    HttpServletRequest request) {
-        String action = body.get("action");
-        GuideStoryVO story = storyMapper.selectById(id);
-        if (story == null) return ApiResponse.fail("NOT_FOUND", "故事不存在");
-
-        Integer newStatus;
-        String detail;
-        switch (action) {
-            case "approve" -> { newStatus = 1; detail = "审核通过"; }
-            case "reject" -> { newStatus = 2; detail = "审核拒绝"; }
-            case "down" -> { newStatus = 3; detail = "下架"; }
-            default -> { newStatus = null; detail = null; }
+        try {
+            adminStoryService.auditStory(id, body.get("action"), session, request);
+            return ApiResponse.success();
+        } catch (RuntimeException e) {
+            if (e.getMessage().contains("不存在")) return ApiResponse.fail("NOT_FOUND", e.getMessage());
+            return ApiResponse.fail("INVALID_ACTION", e.getMessage());
         }
-
-        if (newStatus == null) return ApiResponse.fail("INVALID_ACTION", "无效的操作");
-
-        storyMapper.updateStatus(id, newStatus);
-        logOperation(session, request, "AUDIT", "STORY", id, detail);
-        return ApiResponse.success();
     }
 
     @DeleteMapping("/{id}")
     public ApiResponse<Void> delete(@PathVariable Long id,
                                     HttpSession session,
                                     HttpServletRequest request) {
-        storyMapper.deleteById(id);
-        logOperation(session, request, "DELETE", "STORY", id, "删除故事");
+        adminStoryService.deleteStory(id, session, request);
         return ApiResponse.success();
-    }
-
-    private void logOperation(HttpSession session, HttpServletRequest request,
-                              String action, String targetType, Long targetId, String detail) {
-        try {
-            Map<String, Object> admin = adminAuthService.getCurrentAdmin(session);
-            if (admin == null) return;
-            AdminLog log = new AdminLog();
-            log.setAdminId((Long) admin.get("id"));
-            log.setAdminUsername((String) admin.get("username"));
-            log.setAction(action);
-            log.setTargetType(targetType);
-            log.setTargetId(targetId);
-            log.setDetail(detail);
-            log.setIpAddress(request.getRemoteAddr());
-            adminLogMapper.insert(log);
-        } catch (Exception e) {
-            // 日志记录失败不影响业务操作
-        }
     }
 }
