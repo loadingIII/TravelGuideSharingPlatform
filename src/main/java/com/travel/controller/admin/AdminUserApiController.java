@@ -2,13 +2,14 @@ package com.travel.controller.admin;
 
 import com.travel.common.ApiResponse;
 import com.travel.common.PageResult;
-import com.travel.mapper.AdminLogMapper;
 import com.travel.mapper.UserMapper;
 import com.travel.mapper.UserProfileMapper;
-import com.travel.pojo.model.AdminLog;
 import com.travel.pojo.model.User;
 import com.travel.pojo.model.UserProfile;
+import com.travel.pojo.dto.ReviewResult;
 import com.travel.service.AdminAuthService;
+import com.travel.service.AuditLogService;
+import com.travel.service.ReviewService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,9 @@ public class AdminUserApiController {
 
     private final UserMapper userMapper;
     private final UserProfileMapper userProfileMapper;
-    private final AdminLogMapper adminLogMapper;
     private final AdminAuthService adminAuthService;
+    private final AuditLogService auditLogService;
+    private final ReviewService reviewService;
     private static final int PAGE_SIZE = 10;
 
     @GetMapping
@@ -59,6 +61,22 @@ public class AdminUserApiController {
         return ApiResponse.success(result);
     }
 
+    @PutMapping("/{id}")
+    public ApiResponse<Void> update(@PathVariable Long id,
+                                    @RequestBody Map<String, Object> body,
+                                    HttpSession session,
+                                    HttpServletRequest request) {
+        User user = userMapper.selectById(id);
+        if (user == null) return ApiResponse.fail("NOT_FOUND", "用户不存在");
+        String username = (String) body.get("username");
+        String phone = (String) body.get("phone");
+        String email = (String) body.get("email");
+        Integer status = body.get("status") != null ? Integer.valueOf(body.get("status").toString()) : null;
+        userMapper.updateUser(id, username, phone, email, status);
+        auditLogService.log(session, request, "UPDATE", "USER", id, "编辑用户: " + username);
+        return ApiResponse.success();
+    }
+
     @PostMapping("/{id}/audit")
     public ApiResponse<Void> audit(@PathVariable Long id,
                                    @RequestBody Map<String, String> body,
@@ -68,20 +86,11 @@ public class AdminUserApiController {
         User user = userMapper.selectById(id);
         if (user == null) return ApiResponse.fail("NOT_FOUND", "用户不存在");
 
-        Integer newStatus;
-        String detail;
-        switch (action) {
-            case "approve" -> { newStatus = 1; detail = "审核通过"; }
-            case "reject" -> { newStatus = 2; detail = "审核拒绝"; }
-            case "disable" -> { newStatus = 2; detail = "禁用"; }
-            case "enable" -> { newStatus = 1; detail = "启用"; }
-            default -> { newStatus = null; detail = null; }
-        }
+        ReviewResult result = reviewService.resolveAction(action, "disable", "enable");
+        if (result == null) return ApiResponse.fail("INVALID_ACTION", "无效的操作");
 
-        if (newStatus == null) return ApiResponse.fail("INVALID_ACTION", "无效的操作");
-
-        userMapper.updateStatus(id, newStatus);
-        logOperation(session, request, "AUDIT", "USER", id, detail + ": " + user.getUsername());
+        userMapper.updateStatus(id, result.getStatus());
+        auditLogService.log(session, request, "AUDIT", "USER", id, result.getDetail() + ": " + user.getUsername());
         return ApiResponse.success();
     }
 
@@ -91,26 +100,7 @@ public class AdminUserApiController {
                                     HttpServletRequest request) {
         User user = userMapper.selectById(id);
         userMapper.deleteById(id);
-        logOperation(session, request, "DELETE", "USER", id, "删除用户: " + (user != null ? user.getUsername() : id));
+        auditLogService.log(session, request, "DELETE", "USER", id, "删除用户: " + (user != null ? user.getUsername() : id));
         return ApiResponse.success();
-    }
-
-    private void logOperation(HttpSession session, HttpServletRequest request,
-                              String action, String targetType, Long targetId, String detail) {
-        try {
-            Map<String, Object> admin = adminAuthService.getCurrentAdmin(session);
-            if (admin == null) return;
-            AdminLog log = new AdminLog();
-            log.setAdminId((Long) admin.get("id"));
-            log.setAdminUsername((String) admin.get("username"));
-            log.setAction(action);
-            log.setTargetType(targetType);
-            log.setTargetId(targetId);
-            log.setDetail(detail);
-            log.setIpAddress(request.getRemoteAddr());
-            adminLogMapper.insert(log);
-        } catch (Exception e) {
-            // 日志记录失败不影响业务操作
-        }
     }
 }
