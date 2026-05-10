@@ -2,11 +2,11 @@ package com.travel.controller.admin;
 
 import com.travel.common.ApiResponse;
 import com.travel.common.PageResult;
-import com.travel.mapper.AdminLogMapper;
 import com.travel.mapper.GuideCommentMapper;
-import com.travel.pojo.model.AdminLog;
+import com.travel.pojo.dto.ReviewResult;
 import com.travel.pojo.model.GuideComment;
-import com.travel.service.AdminAuthService;
+import com.travel.service.AuditLogService;
+import com.travel.service.ReviewService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +20,8 @@ import java.util.Map;
 public class AdminCommentApiController {
 
     private final GuideCommentMapper commentMapper;
-    private final AdminLogMapper adminLogMapper;
-    private final AdminAuthService adminAuthService;
+    private final AuditLogService auditLogService;
+    private final ReviewService reviewService;
     private static final int PAGE_SIZE = 10;
 
     @GetMapping
@@ -37,7 +37,7 @@ public class AdminCommentApiController {
                                     HttpSession session,
                                     HttpServletRequest request) {
         commentMapper.deleteById(id);
-        logOperation(session, request, "DELETE", "COMMENT", id, "删除评论");
+        auditLogService.log(session, request, "DELETE", "COMMENT", id, "删除评论");
         return ApiResponse.success();
     }
 
@@ -47,38 +47,11 @@ public class AdminCommentApiController {
                                    HttpSession session,
                                    HttpServletRequest request) {
         String action = body.get("action");
-        Integer newStatus;
-        String detail;
-        switch (action) {
-            case "approve" -> { newStatus = 1; detail = "审核通过"; }
-            case "reject" -> { newStatus = 2; detail = "审核拒绝"; }
-            case "down" -> { newStatus = 3; detail = "下架"; }
-            default -> { newStatus = null; detail = null; }
-        }
+        ReviewResult result = reviewService.resolveAction(action);
+        if (result == null) return ApiResponse.fail("INVALID_ACTION", "无效的操作");
 
-        if (newStatus == null) return ApiResponse.fail("INVALID_ACTION", "无效的操作");
-
-        commentMapper.updateStatus(id, newStatus);
-        logOperation(session, request, "AUDIT", "COMMENT", id, detail);
+        commentMapper.updateStatus(id, result.getStatus());
+        auditLogService.log(session, request, "AUDIT", "COMMENT", id, result.getDetail());
         return ApiResponse.success();
-    }
-
-    private void logOperation(HttpSession session, HttpServletRequest request,
-                              String action, String targetType, Long targetId, String detail) {
-        try {
-            Map<String, Object> admin = adminAuthService.getCurrentAdmin(session);
-            if (admin == null) return;
-            AdminLog log = new AdminLog();
-            log.setAdminId((Long) admin.get("id"));
-            log.setAdminUsername((String) admin.get("username"));
-            log.setAction(action);
-            log.setTargetType(targetType);
-            log.setTargetId(targetId);
-            log.setDetail(detail);
-            log.setIpAddress(request.getRemoteAddr());
-            adminLogMapper.insert(log);
-        } catch (Exception e) {
-            // 日志记录失败不影响业务操作
-        }
     }
 }
