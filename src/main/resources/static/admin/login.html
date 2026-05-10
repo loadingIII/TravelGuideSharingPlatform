@@ -3,61 +3,244 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>管理后台 - 登录</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/variables.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/pages.css">
+  <title>Travel Admin - 登录</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-primary: #1a1a2e;
+      --color-primary-light: #2d2d44;
+      --color-primary-bg: #f5f0e8;
+      --color-accent: #f4a261;
+      --color-accent-light: #f8c993;
+      --color-accent-bg: #fef3e6;
+      --color-pink: #f8b4c8;
+      --color-pink-bg: #fef0f4;
+      --color-success: #5a8f6a;
+      --color-success-bg: #eef6f0;
+      --color-danger: #e76f51;
+      --color-danger-bg: #fde8e4;
+      --color-text: #1a2332;
+      --color-text-secondary: #4a5568;
+      --color-text-muted: #8494a7;
+      --color-text-light: #a0aec0;
+      --color-border: #e8e0d4;
+      --color-border-subtle: #f0ebe3;
+      --color-bg: #f5f0e8;
+      --color-bg-card: #ffffff;
+      --radius-xs: 4px;
+      --radius-sm: 8px;
+      --radius: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-full: 9999px;
+      --shadow-xs: 0 1px 2px rgba(26,26,46,0.04);
+      --shadow-sm: 0 1px 3px rgba(26,26,46,0.06), 0 1px 2px rgba(26,26,46,0.04);
+      --shadow: 0 2px 8px rgba(26,26,46,0.06), 0 1px 2px rgba(26,26,46,0.04);
+      --shadow-md: 0 4px 16px rgba(26,26,46,0.08), 0 2px 4px rgba(26,26,46,0.04);
+      --shadow-lg: 0 8px 32px rgba(26,26,46,0.10), 0 2px 8px rgba(26,26,46,0.04);
+      --shadow-glow: 0 0 0 3px rgba(244,162,97,0.2);
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --duration-fast: 120ms;
+      --duration: 200ms;
+      --duration-slow: 350ms;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--color-text);
+      background: var(--color-bg);
+      font-size: 14px;
+      line-height: 1.6;
+      letter-spacing: -0.01em;
+    }
+
+    /* Login page styles */
+    .login-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-bg);
+      padding: 20px;
+    }
+
+    .login-card {
+      background: var(--color-bg-card);
+      border-radius: var(--radius-xl);
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .login-brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .login-brand-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--color-pink) 0%, #e89ab5 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(248,180,200,0.4);
+    }
+
+    .login-brand-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--color-text);
+      letter-spacing: -0.02em;
+    }
+
+    .login-title {
+      font-size: 24px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 8px;
+      color: var(--color-text);
+    }
+
+    .login-subtitle {
+      font-size: 14px;
+      text-align: center;
+      color: var(--color-text-muted);
+      margin-bottom: 32px;
+    }
+
+    .login-form .form-group {
+      margin-bottom: 20px;
+    }
+
+    .login-form .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .login-form .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      color: var(--color-text);
+      background: var(--color-bg);
+      transition: all var(--duration) var(--ease-out);
+      font-family: inherit;
+    }
+
+    .login-form .form-input:focus {
+      outline: none;
+      border-color: var(--color-accent);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 14px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      background: var(--color-primary);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(26,26,46,0.25);
+      transition: all var(--duration) var(--ease-out);
+      margin-top: 8px;
+    }
+
+    .login-btn:hover {
+      background: var(--color-primary-light);
+      box-shadow: 0 6px 16px rgba(26,26,46,0.3);
+      transform: translateY(-1px);
+    }
+
+    .login-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(26,26,46,0.2);
+    }
+
+    .login-error {
+      background: var(--color-danger-bg);
+      color: var(--color-danger);
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(231,111,81,0.2);
+      display: none;
+    }
+  </style>
 </head>
-<body class="login-page">
-  <div class="card login-card">
-    <div class="brand">
-      <div class="brand-icon">T</div>
+<body>
+  <div class="login-page">
+    <div class="login-card">
+      <div class="login-brand">
+        <div class="login-brand-icon">T</div>
+        <div class="login-brand-text">Travel Admin</div>
+      </div>
+      <h1 class="login-title">欢迎回来</h1>
+      <p class="login-subtitle">请登录您的管理员账户</p>
+      <div class="login-error" id="errorMsg"></div>
+      <form class="login-form" id="loginForm">
+        <div class="form-group">
+          <label class="form-label" for="username">用户名</label>
+          <input class="form-input" type="text" id="username" name="username" placeholder="请输入用户名" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">密码</label>
+          <input class="form-input" type="password" id="password" name="password" placeholder="请输入密码" required>
+        </div>
+        <button type="submit" class="login-btn">登录</button>
+      </form>
     </div>
-    <h2>Travel Admin</h2>
-    <p class="subtitle">旅游管理后台</p>
-    <div id="error" class="alert alert-danger" style="display:none"></div>
-    <form id="loginForm">
-      <div class="form-group">
-        <label class="form-label">用户名</label>
-        <input type="text" name="username" class="form-input" required autofocus placeholder="请输入用户名">
-      </div>
-      <div class="form-group">
-        <label class="form-label">密码</label>
-        <input type="password" name="password" class="form-input" required placeholder="请输入密码">
-      </div>
-      <div class="form-group" style="display:flex;align-items:center;gap:8px;margin-bottom:var(--space-4)">
-        <input type="checkbox" id="remember" name="remember" style="width:16px;height:16px;accent-color:var(--color-primary)">
-        <label for="remember" style="font-size:13px;color:var(--color-text-secondary);cursor:pointer;margin:0">记住登录状态（7天）</label>
-      </div>
-      <button type="submit" class="btn btn-primary">登录</button>
-    </form>
   </div>
   <script>
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const form = e.target;
-      const body = new URLSearchParams(new FormData(form));
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const errorMsg = document.getElementById('errorMsg');
+      errorMsg.style.display = 'none';
+
       try {
+        const formData = new URLSearchParams();
+        formData.append('username', username);
+        formData.append('password', password);
+
         const res = await fetch('/admin/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body
+          body: formData
         });
         const data = await res.json();
-        if (data.code === 'OK') {
+        if (data.code === 200 || data.code === 0) {
           window.location.href = '/admin/index.html';
         } else {
-          const err = document.getElementById('error');
-          err.textContent = data.message || '登录失败';
-          err.style.display = 'block';
+          errorMsg.textContent = data.message || '登录失败';
+          errorMsg.style.display = 'block';
         }
       } catch (err) {
-        const el = document.getElementById('error');
-        el.textContent = '网络错误';
-        el.style.display = 'block';
+        errorMsg.textContent = '网络错误，请稍后重试';
+        errorMsg.style.display = 'block';
       }
     });
   </script>
