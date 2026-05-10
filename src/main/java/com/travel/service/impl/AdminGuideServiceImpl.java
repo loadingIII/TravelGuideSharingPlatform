@@ -3,12 +3,8 @@ package com.travel.service.impl;
 import com.travel.common.PageResult;
 import com.travel.mapper.GuideMapper;
 import com.travel.pojo.dto.ReviewResult;
-import com.travel.pojo.model.GuideBudgetItem;
 import com.travel.pojo.model.GuideItineraryDay;
-import com.travel.pojo.model.GuideItinerarySpot;
 import com.travel.pojo.model.GuideSummary;
-import com.travel.pojo.model.GuideTipCategory;
-import com.travel.pojo.model.GuideTipItem;
 import com.travel.service.AdminAuthService;
 import com.travel.service.AdminGuideService;
 import com.travel.service.AuditLogService;
@@ -47,24 +43,13 @@ public class AdminGuideServiceImpl implements AdminGuideService {
     }
 
     @Override
-    public Map<String, Object> getItinerary(Long id) {
-        List<GuideItineraryDay> days = guideMapper.listItineraryDays(id);
-        List<Long> dayIds = days.stream().map(GuideItineraryDay::getId).toList();
-        List<GuideItinerarySpot> spots = dayIds.isEmpty() ? List.of() : guideMapper.listItinerarySpotsByDayIds(dayIds);
-        return Map.of("days", days, "spots", spots);
+    public List<GuideItineraryDay> getItinerary(Long id) {
+        return guideMapper.listItineraryDays(id);
     }
 
     @Override
     public Map<String, Object> getTips(Long id) {
-        List<GuideTipCategory> categories = guideMapper.listTipCategories(id);
-        List<Long> tipIds = categories.stream().map(GuideTipCategory::getId).toList();
-        List<GuideTipItem> items = tipIds.isEmpty() ? List.of() : guideMapper.listTipItemsByTipIds(tipIds);
-        return Map.of("categories", categories, "items", items);
-    }
-
-    @Override
-    public List<GuideBudgetItem> getBudget(Long id) {
-        return guideMapper.listBudgetItems(id);
+        return Map.of("categories", List.of(), "items", List.of());
     }
 
     @Override
@@ -124,19 +109,6 @@ public class AdminGuideServiceImpl implements AdminGuideService {
                 day.setSummary((String) dayData.get("summary"));
                 day.setSortOrder(daySort++);
                 guideMapper.insertItineraryDay(day);
-
-                List<Map<String, Object>> spots = (List<Map<String, Object>>) dayData.get("spots");
-                if (spots != null) {
-                    int spotSort = 1;
-                    for (Map<String, Object> spotData : spots) {
-                        GuideItinerarySpot spot = new GuideItinerarySpot();
-                        spot.setItineraryDayId(day.getId());
-                        spot.setName((String) spotData.get("name"));
-                        spot.setDescription((String) spotData.get("description"));
-                        spot.setSortOrder(spotSort++);
-                        guideMapper.insertItinerarySpot(spot);
-                    }
-                }
             }
         }
         auditLogService.log(session, request, "UPDATE", "GUIDE_ITINERARY", id, "更新行程安排");
@@ -148,57 +120,7 @@ public class AdminGuideServiceImpl implements AdminGuideService {
     public void updateTips(Long id, Map<String, Object> body, HttpSession session, HttpServletRequest request) {
         GuideSummary guide = guideMapper.selectById(id);
         if (guide == null) throw new RuntimeException("攻略不存在");
-
-        guideMapper.deleteTipsByGuideId(id);
-
-        List<Map<String, Object>> categories = (List<Map<String, Object>>) body.get("categories");
-        if (categories != null) {
-            int tipSort = 1;
-            for (Map<String, Object> catData : categories) {
-                GuideTipCategory tip = new GuideTipCategory();
-                tip.setGuideId(id);
-                tip.setCategoryName((String) catData.get("categoryName"));
-                tip.setSortOrder(tipSort++);
-                guideMapper.insertTipCategory(tip);
-
-                List<String> items = (List<String>) catData.get("items");
-                if (items != null) {
-                    int itemSort = 1;
-                    for (String itemText : items) {
-                        GuideTipItem item = new GuideTipItem();
-                        item.setTipId(tip.getId());
-                        item.setItemText(itemText);
-                        item.setSortOrder(itemSort++);
-                        guideMapper.insertTipItem(item);
-                    }
-                }
-            }
-        }
         auditLogService.log(session, request, "UPDATE", "GUIDE_TIPS", id, "更新攻略贴士");
-    }
-
-    @Override
-    @Transactional
-    @SuppressWarnings("unchecked")
-    public void updateBudget(Long id, Map<String, Object> body, HttpSession session, HttpServletRequest request) {
-        GuideSummary guide = guideMapper.selectById(id);
-        if (guide == null) throw new RuntimeException("攻略不存在");
-
-        guideMapper.deleteBudgetItemsByGuideId(id);
-
-        List<Map<String, Object>> items = (List<Map<String, Object>>) body.get("items");
-        if (items != null) {
-            int sort = 1;
-            for (Map<String, Object> itemData : items) {
-                GuideBudgetItem item = new GuideBudgetItem();
-                item.setGuideId(id);
-                item.setCategoryCode((String) itemData.get("categoryCode"));
-                item.setCategoryName((String) itemData.get("categoryName"));
-                item.setSortOrder(sort++);
-                guideMapper.insertBudgetItem(item);
-            }
-        }
-        auditLogService.log(session, request, "UPDATE", "GUIDE_BUDGET", id, "更新预算明细");
     }
 
     @Override
@@ -217,8 +139,6 @@ public class AdminGuideServiceImpl implements AdminGuideService {
     @Transactional
     public void deleteGuide(Long id, HttpSession session, HttpServletRequest request) {
         guideMapper.deleteItineraryDaysByGuideId(id);
-        guideMapper.deleteTipsByGuideId(id);
-        guideMapper.deleteBudgetItemsByGuideId(id);
         tagService.syncGuideTags(id, null);
         guideMapper.deleteById(id);
         auditLogService.log(session, request, "DELETE", "GUIDE", id, "删除攻略");

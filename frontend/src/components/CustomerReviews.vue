@@ -57,7 +57,7 @@
               <svg class="stat-icon views-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 5C7 5 2.73 8.11 1 12C2.73 15.89 7 19 12 19C17 19 21.27 15.89 23 12C21.27 8.11 17 5 12 5Z" fill="#e8e8e8" stroke="#999" stroke-width="1.5"/>
                 <circle cx="12" cy="12" r="4" fill="#fff" stroke="#999" stroke-width="1.5"/>
-                <circle cx="12" cy="12" r="2" fill="#f79545"/>
+                <circle cx="12" cy="12" r="2" fill="#F5F0E8"/>
               </svg>
               {{ formatNumber(guide.viewsCount) }}
             </span>
@@ -67,7 +67,7 @@
                 <defs>
                   <linearGradient id="heartGradient" x1="12" y1="3" x2="12" y2="21.35" gradientUnits="userSpaceOnUse">
                     <stop stop-color="#ff9a9e"/>
-                    <stop offset="1" stop-color="#f79545"/>
+                    <stop offset="1" stop-color="#F5F0E8"/>
                   </linearGradient>
                 </defs>
               </svg>
@@ -92,6 +92,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import request from '../utils/request'
 
 const hoverCard = ref(null)
 const guides = ref([])
@@ -114,16 +115,13 @@ const fetchTopGuides = async () => {
   loading.value = true
   error.value = null
   try {
-    const response = await fetch('/api/guides/ranking/likes')
-    const result = await response.json()
-    console.log('攻略接口返回数据:', result)
+    const result = await request.get('/api/guides/ranking/likes')
     if (result.code === 'OK' && result.data && Array.isArray(result.data)) {
       guides.value = result.data
     } else {
       error.value = '获取攻略数据失败: ' + (result.message || '返回数据格式错误')
     }
   } catch (err) {
-    console.error('请求攻略接口失败:', err)
     error.value = '网络请求失败: ' + err.message
   } finally {
     loading.value = false
@@ -142,7 +140,7 @@ onMounted(() => {
 <style scoped>
 .customer-reviews {
   padding: 80px 0;
-  background-color: #f8f6f3;
+  background-color: var(--color-bg-primary);
 }
 
 .container {
@@ -161,19 +159,19 @@ onMounted(() => {
 
 .customer-reviews h2 {
   font-size: 38px;
-  color: #333;
+  color: var(--color-text-primary);
   margin: 0;
   text-align: left;
-  font-family: 'Noto Serif SC', serif;
+  font-family: var(--font-display);
   font-weight: 700;
   letter-spacing: 2px;
   position: relative;
   padding: 12px 30px;
-  background: linear-gradient(135deg, rgba(247, 149, 69, 0.08) 0%, rgba(255, 196, 148, 0.08) 100%);
+  background: linear-gradient(135deg, var(--color-primary-10) 0%, var(--color-primary-10) 100%);
   border-radius: 16px;
-  border: 2px dashed rgba(247, 149, 69, 0.4);
+  border: 2px dashed var(--color-primary-20);
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
-  box-shadow: 0 4px 15px rgba(247, 149, 69, 0.1);
+  box-shadow: 0 4px 15px var(--color-primary-10);
 }
 
 .customer-reviews h2::before {
@@ -183,7 +181,7 @@ onMounted(() => {
   top: 50%;
   transform: translateY(-50%);
   font-size: 24px;
-  color: #f79545;
+  color: var(--color-primary);
   opacity: 0.7;
   font-family: Georgia, serif;
 }
@@ -192,11 +190,11 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 5px;
-  color: #ff6b6b;
+  color: var(--color-error);
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
-  transition: color 0.3s ease;
+  transition: color var(--transition-normal);
   cursor: pointer;
 }
 
@@ -206,7 +204,7 @@ onMounted(() => {
 
 .view-more .arrow {
   font-size: 16px;
-  transition: transform 0.3s ease;
+  transition: transform var(--transition-normal);
 }
 
 .view-more:hover .arrow {
@@ -216,12 +214,12 @@ onMounted(() => {
 .loading, .error, .empty {
   text-align: center;
   padding: 60px 20px;
-  color: #666;
+  color: var(--color-text-secondary);
   font-size: 16px;
 }
 
 .error {
-  color: #e74c3c;
+  color: var(--color-error);
 }
 
 .reviews-grid {
@@ -231,18 +229,21 @@ onMounted(() => {
 }
 
 .review-card {
-  background: #ffffff;
-  border: 1px solid #f0f0f0;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
   border-radius: 16px;
   padding: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal), background var(--transition-normal);
   cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .review-card.hovered {
   transform: translateY(-5px);
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-lg);
+  background: var(--color-card-bg-hover);
 }
 
 .reviewer-info {
@@ -273,8 +274,8 @@ onMounted(() => {
 
 .destination-tag {
   font-size: 12px;
-  color: #f79545;
-  background: rgba(247, 149, 69, 0.15);
+  color: var(--color-primary);
+  background: var(--color-primary-10);
   padding: 2px 8px;
   border-radius: 12px;
   width: fit-content;
@@ -284,13 +285,13 @@ onMounted(() => {
   font-size: 18px;
   font-weight: 600;
   margin: 0 0 10px 0;
-  color: #333;
+  color: var(--color-text-primary);
   line-height: 1.4;
 }
 
 .review-card p {
   margin-bottom: 15px;
-  color: #666;
+  color: var(--color-text-secondary);
   line-height: 1.6;
   font-size: 14px;
   display: -webkit-box;
@@ -305,7 +306,7 @@ onMounted(() => {
   gap: 12px;
   margin-bottom: 12px;
   padding-bottom: 12px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .meta-item {
@@ -313,19 +314,19 @@ onMounted(() => {
   align-items: center;
   gap: 5px;
   font-size: 13px;
-  color: #888;
-  transition: all 0.3s ease;
+  color: var(--color-text-muted);
+  transition: all var(--transition-normal);
 }
 
 .meta-item:hover {
-  color: #666;
+  color: var(--color-text-secondary);
   transform: translateY(-1px);
 }
 
 .meta-icon {
   width: 16px;
   height: 16px;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
   filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.08));
 }
 
@@ -334,15 +335,15 @@ onMounted(() => {
 }
 
 .meta-item:hover .location-icon {
-  filter: drop-shadow(0 3px 4px rgba(232, 90, 90, 0.25));
+  filter: drop-shadow(0 3px 4px rgba(199, 91, 91, 0.25));
 }
 
 .meta-item:hover .time-icon {
-  filter: drop-shadow(0 3px 4px rgba(74, 144, 217, 0.25));
+  filter: drop-shadow(0 3px 4px rgba(74, 124, 155, 0.25));
 }
 
 .meta-item:hover .budget-icon {
-  filter: drop-shadow(0 3px 4px rgba(245, 166, 35, 0.25));
+  filter: drop-shadow(0 3px 4px rgba(212, 118, 58, 0.25));
 }
 
 .guide-stats {
@@ -350,7 +351,7 @@ onMounted(() => {
   gap: 20px;
   margin-top: 12px;
   padding-top: 12px;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-top: 1px solid var(--color-border-light);
 }
 
 .stat-item {
@@ -358,19 +359,19 @@ onMounted(() => {
   align-items: center;
   gap: 6px;
   font-size: 14px;
-  color: #666;
-  transition: all 0.3s ease;
+  color: var(--color-text-secondary);
+  transition: all var(--transition-normal);
 }
 
 .stat-item:hover {
-  color: #333;
+  color: var(--color-text-primary);
   transform: translateY(-2px);
 }
 
 .stat-icon {
   width: 20px;
   height: 20px;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.1));
 }
 
@@ -380,15 +381,15 @@ onMounted(() => {
 }
 
 .stat-item:hover .views-icon {
-  filter: drop-shadow(0 3px 5px rgba(153, 153, 153, 0.3));
+  filter: drop-shadow(0 3px 5px rgba(138, 133, 129, 0.3));
 }
 
 .stat-item:hover .likes-icon {
-  filter: drop-shadow(0 3px 5px rgba(232, 90, 90, 0.3));
+  filter: drop-shadow(0 3px 5px rgba(199, 91, 91, 0.3));
 }
 
 .stat-item:hover .comments-icon {
-  filter: drop-shadow(0 3px 5px rgba(122, 161, 197, 0.3));
+  filter: drop-shadow(0 3px 5px rgba(74, 124, 155, 0.3));
 }
 
 @media (max-width: 768px) {

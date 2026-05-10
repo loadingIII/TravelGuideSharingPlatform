@@ -3,6 +3,8 @@ package com.travel.mapper;
 import com.travel.pojo.model.AdminUser;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+
 @Mapper
 public interface AdminUserMapper {
 
@@ -21,4 +23,19 @@ public interface AdminUserMapper {
             """)
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insert(AdminUser adminUser);
+
+    @Select("SELECT * FROM admin_users ORDER BY created_at DESC LIMIT #{offset}, #{pageSize}")
+    List<AdminUser> selectPage(@Param("offset") int offset, @Param("pageSize") int pageSize);
+
+    @Select("SELECT COUNT(*) FROM admin_users")
+    long countAll();
+
+    @Update("UPDATE admin_users SET real_name=#{realName}, status=#{status} WHERE id=#{id}")
+    int updateAdmin(@Param("id") Long id, @Param("realName") String realName, @Param("status") Integer status);
+
+    @Update("UPDATE admin_users SET password_hash=#{passwordHash} WHERE id=#{id}")
+    int updatePassword(@Param("id") Long id, @Param("passwordHash") String passwordHash);
+
+    @Delete("DELETE FROM admin_users WHERE id = #{id}")
+    int deleteById(@Param("id") Long id);
 }

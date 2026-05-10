@@ -1,11 +1,19 @@
 package com.travel.service.impl;
 
+import com.travel.common.exception.BusinessException;
+import com.travel.common.exception.ErrorCode;
 import com.travel.mapper.GuideCommentMapper;
+import com.travel.mapper.GuideMapper;
+import com.travel.mapper.UserProfileMapper;
+import com.travel.pojo.dto.CreateCommentDTO;
 import com.travel.pojo.model.GuideComment;
+import com.travel.pojo.model.UserProfile;
 import com.travel.pojo.vo.GuideCommentVO;
+import com.travel.security.UserContext;
 import com.travel.service.GuideCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,6 +35,8 @@ import java.util.stream.Collectors;
 public class GuideCommentServiceImpl implements GuideCommentService {
 
     private final GuideCommentMapper guideCommentMapper;
+    private final GuideMapper guideMapper;
+    private final UserProfileMapper userProfileMapper;
 
     /**
      * 获取攻略的评论树形列表
@@ -51,6 +61,50 @@ public class GuideCommentServiceImpl implements GuideCommentService {
                 .filter(c -> c.getParentCommentId() == null)
                 .map(c -> toCommentVO(c, replyGroup))
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public GuideCommentVO addComment(Long guideId, CreateCommentDTO dto) {
+        Long userId = UserContext.requireUserId();
+        if (userId == null) {
+            throw new BusinessException(ErrorCode.UNAUTHORIZED, "请先登录");
+        }
+
+        UserProfile profile = userProfileMapper.selectByUserId(userId);
+        GuideComment comment = new GuideComment();
+        comment.setGuideId(guideId);
+        comment.setUserId(userId);
+        comment.setContent(dto.getContent());
+        comment.setParentCommentId(dto.getParentCommentId());
+        comment.setAuthorName(profile != null ? profile.getNickname() : "用户");
+        comment.setAuthorAvatarUrl(profile != null ? profile.getAvatarUrl() : null);
+
+        guideCommentMapper.insertComment(comment);
+        guideCommentMapper.incrementCommentsCount(guideId);
+
+        return GuideCommentVO.builder()
+                .id(comment.getId())
+                .guideId(guideId)
+                .userId(userId)
+                .nickname(comment.getAuthorName())
+                .avatarUrl(comment.getAuthorAvatarUrl())
+                .content(dto.getContent())
+                .parentCommentId(dto.getParentCommentId())
+                .likesCount(0)
+                .createdAt(comment.getCreatedAt())
+                .replies(null)
+                .build();
+    }
+
+    @Override
+    @Transactional
+    public void deleteComment(Long commentId) {
+        Long userId = UserContext.requireUserId();
+        if (userId == null) {
+            throw new BusinessException(ErrorCode.UNAUTHORIZED, "请先登录");
+        }
+        guideCommentMapper.softDeleteById(commentId);
     }
 
     /**

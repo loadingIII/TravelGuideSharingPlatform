@@ -2,11 +2,25 @@ package com.travel.controller.user;
 
 import com.travel.common.ApiResponse;
 import com.travel.common.PageResult;
+import com.travel.pojo.dto.CreateCommentDTO;
+import com.travel.pojo.dto.CreateStoryDTO;
+import com.travel.pojo.dto.UpdateStoryDTO;
+import com.travel.pojo.model.StoryComment;
 import com.travel.pojo.vo.GuideStoryVO;
+import com.travel.mapper.StoryCommentMapper;
+import com.travel.mapper.UserProfileMapper;
+import com.travel.pojo.model.UserProfile;
+import com.travel.security.RequireLogin;
+import com.travel.security.UserContext;
 import com.travel.service.GuideStoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,11 +29,13 @@ import org.springframework.web.bind.annotation.RestController;
  * 旅行者故事控制器
  */
 @RestController
-@RequestMapping("/stories")
+@RequestMapping("/api/stories")
 @RequiredArgsConstructor
 public class GuideStorysController {
 
     private final GuideStoryService guideStoryService;
+    private final StoryCommentMapper storyCommentMapper;
+    private final UserProfileMapper userProfileMapper;
 
     /**
      * 根据ID查询旅行者故事
@@ -60,5 +76,55 @@ public class GuideStorysController {
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         return ApiResponse.success(guideStoryService.listStories(page, pageSize));
+    }
+
+    @RequireLogin
+    @PostMapping
+    public ApiResponse<Long> createStory(@Valid @RequestBody CreateStoryDTO dto) {
+        return ApiResponse.success(guideStoryService.createStory(dto));
+    }
+
+    @RequireLogin
+    @PutMapping("/{id}")
+    public ApiResponse<Void> updateStory(@PathVariable("id") Long id, @Valid @RequestBody UpdateStoryDTO dto) {
+        guideStoryService.updateStory(id, dto);
+        return ApiResponse.success();
+    }
+
+    @RequireLogin
+    @DeleteMapping("/{id}")
+    public ApiResponse<Void> deleteStory(@PathVariable("id") Long id) {
+        guideStoryService.deleteStory(id);
+        return ApiResponse.success();
+    }
+
+    @RequireLogin
+    @PostMapping("/{storyId}/comments")
+    public ApiResponse<Long> addStoryComment(@PathVariable("storyId") Long storyId, @Valid @RequestBody CreateCommentDTO dto) {
+        Long userId = UserContext.requireUserId();
+        UserProfile profile = userProfileMapper.selectByUserId(userId);
+        StoryComment comment = new StoryComment();
+        comment.setStoryId(storyId);
+        comment.setUserId(userId);
+        comment.setContent(dto.getContent());
+        comment.setParentCommentId(dto.getParentCommentId());
+        comment.setAuthorName(profile != null ? profile.getNickname() : "用户");
+        comment.setAuthorAvatarUrl(profile != null ? profile.getAvatarUrl() : null);
+        storyCommentMapper.insertComment(comment);
+        storyCommentMapper.incrementCommentsCount(storyId);
+        return ApiResponse.success(comment.getId());
+    }
+
+    @GetMapping("/{storyId}/comments")
+    public ApiResponse<PageResult<StoryComment>> listStoryComments(
+            @PathVariable("storyId") Long storyId,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
+        int safePage = page == null || page < 1 ? 1 : page;
+        int safePageSize = pageSize == null || pageSize < 1 ? 10 : Math.min(pageSize, 50);
+        int offset = (safePage - 1) * safePageSize;
+        var list = storyCommentMapper.selectByStoryId(storyId, offset, safePageSize);
+        long total = storyCommentMapper.countByStoryId(storyId);
+        return ApiResponse.success(PageResult.of(list, safePage, safePageSize, total));
     }
 }

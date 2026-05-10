@@ -3,12 +3,9 @@ package com.travel.service.impl;
 import com.travel.common.PageResult;
 import com.travel.common.exception.BusinessException;
 import com.travel.common.exception.ErrorCode;
-
-import com.travel.pojo.model.Destination;
-import com.travel.pojo.model.DestinationShowcase;
 import com.travel.mapper.DestinationMapper;
+import com.travel.pojo.model.Destination;
 import com.travel.pojo.vo.DestinationItemVO;
-import com.travel.pojo.vo.ShowcaseItemVO;
 import com.travel.service.DestinationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,16 +14,7 @@ import java.util.List;
 
 /**
  * 目的地服务实现类
- * 负责旅游目的地的查询、搜索和展示逻辑
- *
- * 核心功能：
- * - 分页查询目的地列表（支持关键词搜索和热门筛选）
- * - 按分类获取展示数据（推荐、热门、灵感）
- * - 目的地搜索和热度排行
- *
- * 数据说明：
- * - Destination: 目的地基础信息（名称、国家、城市、评分等）
- * - DestinationShowcase: 目的地展示信息（展示标题、描述、图片等，用于首页展示卡片）
+ * 负责旅游目的地相关的业务逻辑处理
  */
 @Service
 @RequiredArgsConstructor
@@ -73,21 +61,6 @@ public class DestinationServiceImpl implements DestinationService {
     }
 
     /**
-     * 获取指定分类的展示列表
-     * 用于首页等场景的卡片展示，section 对应 DestinationShowcase 表中的分类
-     *
-     * @param section 分类：recommended（推荐）、popular（热门）、inspiration（灵感）
-     * @param limit   返回数量
-     */
-    @Override
-    public List<ShowcaseItemVO> listShowcasesBySection(String section, int limit) {
-        return destinationMapper.listShowcasesBySection(section, limit)
-                .stream()
-                .map(this::toShowcaseItem)
-                .toList();
-    }
-
-    /**
      * 搜索目的地
      * 根据关键词模糊匹配目的地名称，返回指定数量的结果
      */
@@ -126,20 +99,6 @@ public class DestinationServiceImpl implements DestinationService {
                 .guidesCount(entity.getGuidesCount())
                 .travelersCount(entity.getTravelersCount())
                 .popularityScore(entity.getPopularityScore())
-                .build();
-    }
-
-    /**
-     * 将展示信息实体转换为展示卡片 VO
-     */
-    private ShowcaseItemVO toShowcaseItem(DestinationShowcase entity) {
-        return ShowcaseItemVO.builder()
-                .destinationId(entity.getDestinationId())
-                .title(entity.getDisplayTitle())
-                .subtitle(entity.getDisplaySubtitle())
-                .description(entity.getDisplayDescription())
-                .imageUrl(entity.getDisplayImageUrl())
-                .rating(entity.getDisplayRating())
                 .build();
     }
 

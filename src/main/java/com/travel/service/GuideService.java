@@ -1,6 +1,8 @@
 package com.travel.service;
 
 import com.travel.common.PageResult;
+import com.travel.pojo.dto.CreateGuideDTO;
+import com.travel.pojo.dto.UpdateGuideDTO;
 import com.travel.pojo.vo.GuideDetailVO;
 import com.travel.pojo.vo.GuideListItemVO;
 
@@ -70,4 +72,12 @@ public interface GuideService {
      * @return 攻略列表
      */
     List<GuideListItemVO> getTopGuidesByLikes(int limit);
+
+    Long createGuide(CreateGuideDTO dto);
+
+    void updateGuide(Long guideId, UpdateGuideDTO dto);
+
+    void deleteGuide(Long guideId);
+
+    PageResult<GuideListItemVO> listMyGuides(Integer page, Integer pageSize);
 }

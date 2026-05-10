@@ -6,8 +6,8 @@
 ## 文档说明
 
 - 下文**每个表均独立用表格描述**，包含字段、类型、可空、键、默认值、说明。
-- “键”列标记规则：`PK` 主键，`UK` 唯一键，`FK` 外键，`IDX` 普通索引。
-- 组合键会标注为“联合”。
+- "键"列标记规则：`PK` 主键，`UK` 唯一键，`FK` 外键，`IDX` 普通索引。
+- 组合键会标注为"联合"。
 
 ---
 
@@ -63,26 +63,7 @@
 
 ---
 
-## 4) destination_showcases（首页展示位）
-
-| 字段 | 类型 | 可空 | 键 | 默认值 | 说明 |
-|---|---|---|---|---|---|
-| id | BIGINT UNSIGNED | 否 | PK | AUTO_INCREMENT | 展示位主键 |
-| destination_id | BIGINT UNSIGNED | 是 | FK, IDX | NULL | 关联目的地（可空，删除目的地后置空） |
-| section | ENUM('recommended','popular','inspiration') | 否 | IDX(联合) | - | 展示分区：推荐/热门/灵感 |
-| display_title | VARCHAR(100) | 否 | - | - | 展示标题 |
-| display_subtitle | VARCHAR(255) | 是 | - | NULL | 展示副标题 |
-| display_description | VARCHAR(1000) | 是 | - | NULL | 展示描述 |
-| display_image_url | VARCHAR(500) | 是 | - | NULL | 展示图 |
-| display_rating | DECIMAL(3,2) | 是 | - | NULL | 展示评分 |
-| sort_order | INT UNSIGNED | 否 | IDX(联合) | 0 | 排序 |
-| is_active | TINYINT(1) | 否 | - | 1 | 是否启用 |
-| created_at | DATETIME | 否 | - | CURRENT_TIMESTAMP | 创建时间 |
-| updated_at | DATETIME | 否 | - | CURRENT_TIMESTAMP | 更新时间（ON UPDATE CURRENT_TIMESTAMP） |
-
----
-
-## 5) guides（攻略主表）
+## 4) guides（攻略主表）
 
 | 字段 | 类型 | 可空 | 键 | 默认值 | 说明 |
 |---|---|---|---|---|---|
@@ -109,7 +90,7 @@
 
 ---
 
-## 6) tags（标签字典）
+## 5) tags（标签字典）
 
 | 字段 | 类型 | 可空 | 键 | 默认值 | 说明 |
 |---|---|---|---|---|---|
@@ -119,7 +100,7 @@
 
 ---
 
-## 7) guide_tags（攻略-标签关联）
+## 6) guide_tags（攻略-标签关联）
 
 | 字段 | 类型 | 可空 | 键 | 默认值 | 说明 |
 |---|---|---|---|---|---|
@@ -129,7 +110,7 @@
 
 ---
 
-## 8) guide_itinerary_days（行程天）
+## 7) guide_itinerary_days（行程天）
 
 | 字段 | 类型 | 可空 | 键 | 默认值 | 说明 |
 |---|---|---|---|---|---|
@@ -144,76 +125,7 @@
 
 ---
 
-## 9) guide_itinerary_spots（行程景点）
-
-| 字段 | 类型 | 可空 | 键 | 默认值 | 说明 |
-|---|---|---|---|---|---|
-| id | BIGINT UNSIGNED | 否 | PK | AUTO_INCREMENT | 景点主键 |
-| itinerary_day_id | BIGINT UNSIGNED | 否 | FK, IDX(联合) | - | 所属行程天 ID |
-| name | VARCHAR(150) | 否 | - | - | 景点名 |
-| description | VARCHAR(1000) | 是 | - | NULL | 景点说明 |
-| visit_time | TIME | 是 | - | NULL | 计划到访时间 |
-| duration_minutes | SMALLINT UNSIGNED | 是 | - | NULL | 停留时长（分钟） |
-| image_url | VARCHAR(500) | 是 | - | NULL | 景点图 |
-| sort_order | SMALLINT UNSIGNED | 否 | IDX(联合) | 1 | 排序 |
-| created_at | DATETIME | 否 | - | CURRENT_TIMESTAMP | 创建时间 |
-| updated_at | DATETIME | 否 | - | CURRENT_TIMESTAMP | 更新时间（ON UPDATE CURRENT_TIMESTAMP） |
-
----
-
-## 10) guide_tips（实用信息分类）
-
-| 字段 | 类型 | 可空 | 键 | 默认值 | 说明 |
-|---|---|---|---|---|---|
-| id | BIGINT UNSIGNED | 否 | PK | AUTO_INCREMENT | 分类主键 |
-| guide_id | BIGINT UNSIGNED | 否 | FK, UK(联合), IDX | - | 攻略 ID |
-| category_name | VARCHAR(100) | 否 | UK(联合) | - | 分类名（同攻略内唯一） |
-| sort_order | SMALLINT UNSIGNED | 否 | - | 1 | 排序 |
-| created_at | DATETIME | 否 | - | CURRENT_TIMESTAMP | 创建时间 |
-| updated_at | DATETIME | 否 | - | CURRENT_TIMESTAMP | 更新时间（ON UPDATE CURRENT_TIMESTAMP） |
-
----
-
-## 11) guide_tip_items（实用信息条目）
-
-| 字段 | 类型 | 可空 | 键 | 默认值 | 说明 |
-|---|---|---|---|---|---|
-| id | BIGINT UNSIGNED | 否 | PK | AUTO_INCREMENT | 条目主键 |
-| tip_id | BIGINT UNSIGNED | 否 | FK, IDX(联合) | - | 对应 guide_tips.id |
-| item_text | VARCHAR(300) | 否 | - | - | 条目文本 |
-| sort_order | SMALLINT UNSIGNED | 否 | IDX(联合) | 1 | 排序 |
-| created_at | DATETIME | 否 | - | CURRENT_TIMESTAMP | 创建时间 |
-
----
-
-## 12) guide_budget_items（预算拆分）
-
-| 字段 | 类型 | 可空 | 键 | 默认值 | 说明 |
-|---|---|---|---|---|---|
-| id | BIGINT UNSIGNED | 否 | PK | AUTO_INCREMENT | 预算项主键 |
-| guide_id | BIGINT UNSIGNED | 否 | FK, UK(联合), IDX | - | 攻略 ID |
-| category_code | VARCHAR(50) | 否 | UK(联合) | - | 类别编码（如 transport） |
-| category_name | VARCHAR(50) | 否 | - | - | 类别名称（如 交通） |
-| amount | DECIMAL(10,2) | 否 | - | - | 金额 |
-| percentage | DECIMAL(5,2) | 否 | - | - | 百分比 |
-| sort_order | SMALLINT UNSIGNED | 否 | - | 1 | 排序 |
-| created_at | DATETIME | 否 | - | CURRENT_TIMESTAMP | 创建时间 |
-| updated_at | DATETIME | 否 | - | CURRENT_TIMESTAMP | 更新时间（ON UPDATE CURRENT_TIMESTAMP） |
-
----
-
-## 13) guide_related（相关攻略）
-
-| 字段 | 类型 | 可空 | 键 | 默认值 | 说明 |
-|---|---|---|---|---|---|
-| guide_id | BIGINT UNSIGNED | 否 | PK(联合), FK | - | 主攻略 ID |
-| related_guide_id | BIGINT UNSIGNED | 否 | PK(联合), FK, IDX | - | 相关攻略 ID |
-| sort_order | SMALLINT UNSIGNED | 否 | - | 1 | 排序 |
-| created_at | DATETIME | 否 | - | CURRENT_TIMESTAMP | 创建时间 |
-
----
-
-## 14) guide_comments（攻略评论）
+## 8) guide_comments（攻略评论）
 
 | 字段 | 类型 | 可空 | 键 | 默认值 | 说明 |
 |---|---|---|---|---|---|
@@ -231,7 +143,7 @@
 
 ---
 
-## 15) guide_likes（攻略点赞）
+## 9) guide_likes（攻略点赞）
 
 | 字段 | 类型 | 可空 | 键 | 默认值 | 说明 |
 |---|---|---|---|---|---|
@@ -241,7 +153,7 @@
 
 ---
 
-## 16) guide_favorites（攻略收藏）
+## 10) guide_favorites（攻略收藏）
 
 | 字段 | 类型 | 可空 | 键 | 默认值 | 说明 |
 |---|---|---|---|---|---|
@@ -251,7 +163,7 @@
 
 ---
 
-## 17) guide_comment_likes（评论点赞）
+## 11) guide_comment_likes（评论点赞）
 
 | 字段 | 类型 | 可空 | 键 | 默认值 | 说明 |
 |---|---|---|---|---|---|
@@ -261,7 +173,7 @@
 
 ---
 
-## 18) user_follows（用户关注）
+## 12) user_follows（用户关注）
 
 | 字段 | 类型 | 可空 | 键 | 默认值 | 说明 |
 |---|---|---|---|---|---|
@@ -271,7 +183,7 @@
 
 ---
 
-## 19) traveler_stories（旅行者故事）
+## 13) traveler_stories（旅行者故事）
 
 | 字段 | 类型 | 可空 | 键 | 默认值 | 说明 |
 |---|---|---|---|---|---|
@@ -291,7 +203,7 @@
 
 ---
 
-## 20) traveler_story_images（故事图片）
+## 14) traveler_story_images（故事图片）
 
 | 字段 | 类型 | 可空 | 键 | 默认值 | 说明 |
 |---|---|---|---|---|---|
@@ -303,7 +215,7 @@
 
 ---
 
-## 21) traveler_story_likes（故事点赞）
+## 15) traveler_story_likes（故事点赞）
 
 | 字段 | 类型 | 可空 | 键 | 默认值 | 说明 |
 |---|---|---|---|---|---|
@@ -313,7 +225,7 @@
 
 ---
 
-## 22) traveler_story_comments（故事评论）
+## 16) traveler_story_comments（故事评论）
 
 | 字段 | 类型 | 可空 | 键 | 默认值 | 说明 |
 |---|---|---|---|---|---|
@@ -336,4 +248,3 @@
 ```sql
 SOURCE travel_schema.sql;
 ```
-

@@ -16,7 +16,10 @@ async function initDestinations(page = 1) {
         </td>
       </tr>`).join('');
     content.innerHTML = `
-      <div class="page-header"><div class="page-title">目的地管理</div></div>
+      <div class="page-header">
+        <div class="page-title">目的地管理</div>
+        <button class="btn btn-primary btn-sm" onclick="Router.navigate('/destinations/create')">新增目的地</button>
+      </div>
       <div class="card">
         <div class="table-wrapper">
           <table>
@@ -96,4 +99,31 @@ async function initDestinationEdit(id) {
       catch (err) { Toast.error(err.message); }
     });
   } catch (err) { content.innerHTML = `<div class="alert alert-danger">加载失败: ${err.message}</div>`; }
+}
+
+async function initDestinationCreate() {
+  const content = document.getElementById('content');
+  content.innerHTML = `
+    <div class="page-header">
+      <div class="page-title">新增目的地</div>
+      <button class="btn btn-ghost" onclick="Router.navigate('/destinations')">返回列表</button>
+    </div>
+    <div class="card edit-card"><div class="card-body">
+      <form id="createForm">
+        <div class="form-group"><label class="form-label">名称</label><input type="text" name="name" class="form-input" required></div>
+        <div class="form-group"><label class="form-label">国家</label><input type="text" name="country" class="form-input"></div>
+        <div class="form-group"><label class="form-label">城市</label><input type="text" name="city" class="form-input"></div>
+        <div class="form-group"><label class="form-label">描述</label><textarea name="description" class="form-textarea"></textarea></div>
+        <div class="form-group"><label class="form-label">封面图URL</label><input type="text" name="coverImageUrl" class="form-input"></div>
+        <button type="submit" class="btn btn-primary">创建</button>
+      </form>
+    </div></div>`;
+  document.getElementById('createForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const body = {};
+    fd.forEach((v, k) => body[k] = v);
+    try { await API.post('/admin/destinations', body); Toast.success('创建成功'); Router.navigate('/destinations'); }
+    catch (err) { Toast.error(err.message); }
+  });
 }

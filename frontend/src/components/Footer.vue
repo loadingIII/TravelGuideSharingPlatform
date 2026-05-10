@@ -30,7 +30,7 @@
 
 <style scoped>
 .footer {
-  background-color: #333;
+  background-color: var(--color-bg-dark);
   color: white;
   padding: 16px 0;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -69,7 +69,7 @@
   color: white;
   text-decoration: none;
   opacity: 0.7;
-  transition: opacity 0.3s ease;
+  transition: opacity var(--transition-normal);
   font-size: 14px;
 }
 

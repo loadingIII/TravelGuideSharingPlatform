@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 处理用户注册、登录、刷新令牌等认证相关操作
  */
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;

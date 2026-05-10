@@ -20,6 +20,7 @@
         </div>
       </form>
     </div>
+    <div class="hero-fade"></div>
   </section>
 </template>
 
@@ -27,13 +28,14 @@
 import { ref } from 'vue'
 
 const searchQuery = ref('')
+const emit = defineEmits(['search'])
 
 const handleSearch = () => {
   if (!searchQuery.value.trim()) {
     alert('请输入目的地')
     return
   }
-  alert(`搜索成功！正在为您查找 "${searchQuery.value}" 的相关旅行信息...`)
+  emit('search', searchQuery.value)
 }
 </script>
 
@@ -59,7 +61,17 @@ const handleSearch = () => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.hero-fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background: linear-gradient(to bottom, transparent 0%, var(--color-bg-primary) 100%);
+  pointer-events: none;
 }
 
 .hero-content {
@@ -103,7 +115,7 @@ const handleSearch = () => {
   -webkit-backdrop-filter: blur(10px);
   color: white;
   outline: none;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
 }
 
 .search-form input::placeholder {
@@ -130,7 +142,7 @@ const handleSearch = () => {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
   padding: 0;
 }
 

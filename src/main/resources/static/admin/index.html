@@ -36,6 +36,12 @@
     Router.register('/destinations/detail/:id', params => { setupLayout('目的地管理', 'destinations'); initDestinationDetail(params.id); });
     Router.register('/destinations/edit/:id', params => { setupLayout('目的地管理', 'destinations'); initDestinationEdit(params.id); });
     Router.register('/comments', params => { setupLayout('评论管理', 'comments'); initComments(); });
+    Router.register('/destinations/create', params => { setupLayout('目的地管理', 'destinations'); initDestinationCreate(); });
+    Router.register('/guides/edit/:id', params => { setupLayout('攻略管理', 'guides'); initGuideEdit(params.id); });
+    Router.register('/guides/create', params => { setupLayout('攻略管理', 'guides'); initGuideCreate(); });
+    Router.register('/stories/edit/:id', params => { setupLayout('故事管理', 'stories'); initStoryEdit(params.id); });
+    Router.register('/stories/create', params => { setupLayout('故事管理', 'stories'); initStoryCreate(); });
+    Router.register('/users/edit/:id', params => { setupLayout('用户管理', 'users'); initUserEdit(params.id); });
     Router.start();
   </script>
 </body>

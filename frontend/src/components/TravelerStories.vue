@@ -1,18 +1,28 @@
 <template>
   <div class="traveler-stories-page">
-    <!-- 页面头部 -->
-    <header class="page-header">
-      <div class="header-content">
-        <div class="back-btn" @click="goBack">
-          <span class="arrow">&lt;</span>
-          <span>返回首页</span>
-        </div>
-        <h1>旅行者故事</h1>
-        <p class="subtitle">分享旅途中的精彩瞬间与难忘经历</p>
+    <!-- 沉浸式页面头部 -->
+    <header class="hero-header">
+      <div class="hero-bg">
+        <img src="/img/富士山.jpg" alt="富士山" class="hero-image">
+        <div class="hero-overlay"></div>
+        <div class="hero-grain"></div>
       </div>
-      <div class="header-wave">
-        <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#f8f6f3"/>
+      <div class="hero-content">
+        <button class="back-pill" @click="goBack">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          <span>返回首页</span>
+        </button>
+        <div class="hero-text">
+          <span class="hero-tag">STORIES</span>
+          <h1>旅行者故事</h1>
+          <p>分享旅途中的精彩瞬间与难忘经历</p>
+        </div>
+      </div>
+      <div class="hero-wave">
+        <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 100L48 94C96 88 192 76 288 70C384 64 480 64 576 68C672 72 768 80 864 82C960 84 1056 80 1152 74C1248 68 1344 60 1392 56L1440 52V100H0Z" fill="#3D4F2F"/>
         </svg>
       </div>
     </header>
@@ -22,121 +32,133 @@
       <div class="container">
         <!-- 加载状态 -->
         <div v-if="loading" class="loading-state">
-          <div class="loading-spinner"></div>
+          <div class="loader">
+            <div class="loader-dot"></div>
+            <div class="loader-dot"></div>
+            <div class="loader-dot"></div>
+          </div>
           <p>正在加载旅行者故事...</p>
         </div>
         
         <!-- 错误状态 -->
         <div v-else-if="error" class="error-state">
-          <span class="error-icon">⚠️</span>
+          <div class="error-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 8v4M12 16h.01"/>
+            </svg>
+          </div>
           <p>{{ error }}</p>
           <button @click="fetchStories" class="retry-btn">重新加载</button>
         </div>
         
         <!-- 空状态 -->
         <div v-else-if="travelerStories.length === 0" class="empty-state">
-          <span class="empty-icon">📖</span>
+          <div class="empty-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
+          </div>
           <p>暂无旅行者故事</p>
         </div>
         
-        <!-- 故事列表 -->
-        <div v-else class="stories-list">
-          <div 
+        <!-- 故事卡片网格 -->
+        <div v-else class="stories-masonry">
+          <article 
             v-for="story in travelerStories" 
             :key="story.id"
-            class="story-item"
+            class="story-card"
             @mouseenter="hoverStory = story.id"
             @mouseleave="hoverStory = null"
             :class="{ hovered: hoverStory === story.id }"
           >
-            <div class="story-avatar">
-              <div class="avatar-wrapper">
+            <!-- 作者头部 -->
+            <div class="story-author">
+              <div class="author-avatar">
                 <img :src="story.avatar" :alt="story.author">
-                <div class="avatar-ring" v-if="story.isVip"></div>
+                <div class="vip-ring" v-if="story.isVip"></div>
               </div>
-              <div class="author-badge" v-if="story.isVip">
+              <div class="author-meta">
+                <div class="author-name">
+                  <span>{{ story.author }}</span>
+                  <svg v-if="story.isVip" class="vip-badge" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                  </svg>
+                </div>
+                <span class="story-time">{{ story.time }}</span>
+              </div>
+              <button class="more-btn">
                 <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                  <circle cx="12" cy="5" r="2"/>
+                  <circle cx="12" cy="12" r="2"/>
+                  <circle cx="12" cy="19" r="2"/>
                 </svg>
-              </div>
+              </button>
             </div>
-            <div class="story-content">
-              <div class="story-header">
-                <div class="author-info">
-                  <h4>{{ story.author }}</h4>
-                  <span class="story-time">{{ story.time }}</span>
-                </div>
-              </div>
+            
+            <!-- 故事内容 -->
+            <div class="story-body">
               <p class="story-text">{{ story.content }}</p>
-              <div class="story-images" v-if="story.images && story.images.length > 0">
-                <div 
-                  v-for="(img, index) in story.images.slice(0, 3)" 
-                  :key="index"
-                  class="image-wrapper"
-                  @click="openImagePreview(story.images, index)"
-                >
-                  <img :src="img" :alt="`图片${index + 1}`" loading="lazy">
-                  <div class="image-overlay">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <circle cx="11" cy="11" r="8"/>
-                      <path d="M21 21l-4.35-4.35"/>
-                      <path d="M11 8v6M8 11h6"/>
-                    </svg>
-                  </div>
+            </div>
+            
+            <!-- 图片画廊 -->
+            <div class="story-gallery" v-if="story.images && story.images.length > 0" :class="`gallery-${Math.min(story.images.length, 3)}`">
+              <div 
+                v-for="(img, index) in story.images.slice(0, 4)" 
+                :key="index"
+                class="gallery-item"
+                :class="{ 'has-more': index === 3 && story.images.length > 4 }"
+                @click="openImagePreview(story.images, index)"
+              >
+                <img :src="img" :alt="`图片${index + 1}`" loading="lazy">
+                <div class="gallery-overlay">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                  </svg>
                 </div>
-                <div class="more-images" v-if="story.images.length > 3">
-                  <span>+{{ story.images.length - 3 }}</span>
+                <div class="more-count" v-if="index === 3 && story.images.length > 4">
+                  <span>+{{ story.images.length - 4 }}</span>
                 </div>
-              </div>
-              <div class="story-actions">
-                <button 
-                  class="action-btn like-btn" 
-                  :class="{ active: story.isLiked, animating: animatingLike === story.id }" 
-                  @click.stop="toggleLike(story)"
-                >
-                  <div class="icon-wrapper">
-                    <svg class="action-icon like-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path class="heart-path" d="M12 21.35L10.55 20.03C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5C22 12.27 18.6 15.36 13.45 20.03L12 21.35Z" :fill="story.isLiked ? 'url(#storyHeartGradient)' : 'none'" :stroke="story.isLiked ? '#e85a5a' : '#9ca3af'" stroke-width="1.8"/>
-                      <defs>
-                        <linearGradient id="storyHeartGradient" x1="12" y1="3" x2="12" y2="21.35" gradientUnits="userSpaceOnUse">
-                          <stop stop-color="#ff6b6b"/>
-                          <stop offset="0.5" stop-color="#ff8e8e"/>
-                          <stop offset="1" stop-color="#ffb4b4"/>
-                        </linearGradient>
-                      </defs>
-                    </svg>
-                    <div class="like-particles" v-if="story.isLiked">
-                      <span v-for="n in 6" :key="n" class="particle"></span>
-                    </div>
-                  </div>
-                  <span class="count">{{ formatNumber(story.likes) }}</span>
-                </button>
-                <button class="action-btn comment-btn" @click.stop="showComments(story)">
-                  <div class="icon-wrapper">
-                    <svg class="action-icon comment-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path class="chat-bubble" d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z" fill="none" stroke="#9ca3af" stroke-width="1.8" stroke-linejoin="round"/>
-                      <circle cx="8" cy="10" r="1.2" fill="#9ca3af"/>
-                      <circle cx="12" cy="10" r="1.2" fill="#9ca3af"/>
-                      <circle cx="16" cy="10" r="1.2" fill="#9ca3af"/>
-                    </svg>
-                  </div>
-                  <span class="count">{{ formatNumber(story.comments) }}</span>
-                </button>
-                <button class="action-btn share-btn" @click.stop="shareStory(story)">
-                  <div class="icon-wrapper">
-                    <svg class="action-icon share-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="18" cy="5" r="2.5" stroke="#9ca3af" stroke-width="1.8" fill="none"/>
-                      <circle cx="6" cy="12" r="2.5" stroke="#9ca3af" stroke-width="1.8" fill="none"/>
-                      <circle cx="18" cy="19" r="2.5" stroke="#9ca3af" stroke-width="1.8" fill="none"/>
-                      <path d="M8.5 10.5L15.5 6.5" stroke="#9ca3af" stroke-width="1.8" stroke-linecap="round"/>
-                      <path d="M8.5 13.5L15.5 17.5" stroke="#9ca3af" stroke-width="1.8" stroke-linecap="round"/>
-                    </svg>
-                  </div>
-                  <span class="label">分享</span>
-                </button>
               </div>
             </div>
-          </div>
+            
+            <!-- 操作栏 -->
+            <div class="story-actions">
+              <button 
+                class="action-btn like-btn" 
+                :class="{ active: story.isLiked, animating: animatingLike === story.id }" 
+                @click.stop="toggleLike(story)"
+              >
+                <div class="action-icon">
+                  <svg viewBox="0 0 24 24" :fill="story.isLiked ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="2">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                  </svg>
+                  <div class="like-particles" v-if="story.isLiked">
+                    <span v-for="n in 8" :key="n" class="particle"></span>
+                  </div>
+                </div>
+                <span>{{ formatNumber(story.likes) }}</span>
+              </button>
+              
+              <button class="action-btn comment-btn" @click.stop="showComments(story)">
+                <div class="action-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                  </svg>
+                </div>
+                <span>{{ formatNumber(story.comments) }}</span>
+              </button>
+              
+              <button class="action-btn share-btn" @click.stop="shareStory(story)">
+                <div class="action-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/>
+                  </svg>
+                </div>
+                <span>分享</span>
+              </button>
+            </div>
+          </article>
         </div>
 
         <!-- 分页 -->
@@ -146,15 +168,23 @@
             :disabled="currentPage === 1"
             @click="changePage(currentPage - 1)"
           >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 18l-6-6 6-6"/>
+            </svg>
             上一页
           </button>
-          <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
+          <div class="page-dots">
+            <span v-for="page in totalPages" :key="page" class="page-dot" :class="{ active: currentPage === page }"></span>
+          </div>
           <button 
             class="page-btn" 
             :disabled="currentPage === totalPages"
             @click="changePage(currentPage + 1)"
           >
             下一页
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 18l6-6-6-6"/>
+            </svg>
           </button>
         </div>
       </div>
@@ -162,7 +192,9 @@
 
     <!-- 发布按钮 -->
     <button class="fab-publish" @click="showPublishModal = true">
-      <span>+</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M5 12h14"/>
+      </svg>
       <span class="fab-text">分享故事</span>
     </button>
 
@@ -171,7 +203,11 @@
       <div class="modal-content">
         <div class="modal-header">
           <h3>分享旅行故事</h3>
-          <button class="close-btn" @click="showPublishModal = false">&times;</button>
+          <button class="close-btn" @click="showPublishModal = false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+          </button>
         </div>
         <div class="modal-body">
           <div class="form-group">
@@ -181,7 +217,10 @@
           <div class="form-group">
             <label>上传图片</label>
             <div class="upload-area" @click="triggerFileInput">
-              <span>+ 点击或拖拽上传图片</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+              <span>点击或拖拽上传图片</span>
               <input type="file" ref="fileInput" multiple accept="image/*" style="display: none" @change="handleFileChange">
             </div>
             <div class="preview-images" v-if="previewImages.length > 0">
@@ -193,18 +232,37 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn-secondary" @click="showPublishModal = false">取消</button>
-          <button class="btn-primary" @click="publishStory">发布</button>
+          <button class="btn-ghost" @click="showPublishModal = false">取消</button>
+          <button class="btn-accent" @click="publishStory">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+            </svg>
+            发布
+          </button>
         </div>
       </div>
     </div>
 
     <!-- 图片预览模态框 -->
     <div class="image-preview-modal" v-if="previewImageList.length > 0" @click.self="closeImagePreview">
-      <button class="preview-close" @click="closeImagePreview">&times;</button>
-      <button class="preview-nav prev" @click.stop="prevImage" v-if="previewImageList.length > 1">&lt;</button>
-      <img :src="previewImageList[currentPreviewIndex]" alt="预览">
-      <button class="preview-nav next" @click.stop="nextImage" v-if="previewImageList.length > 1">&gt;</button>
+      <button class="preview-close" @click="closeImagePreview">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+      <button class="preview-nav prev" @click.stop="prevImage" v-if="previewImageList.length > 1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+      </button>
+      <div class="preview-image-wrap">
+        <img :src="previewImageList[currentPreviewIndex]" alt="预览">
+      </div>
+      <button class="preview-nav next" @click.stop="nextImage" v-if="previewImageList.length > 1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </button>
       <div class="preview-counter">{{ currentPreviewIndex + 1 }} / {{ previewImageList.length }}</div>
     </div>
   </div>
@@ -212,43 +270,33 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import request from '../utils/request'
 
 const emit = defineEmits(['back-to-home'])
 
-// 分页
 const currentPage = ref(1)
 const totalPages = ref(1)
-
-// 悬停状态
 const hoverStory = ref(null)
-
-// 点赞动画状态
 const animatingLike = ref(null)
 
-// 模态框
 const showPublishModal = ref(false)
 const newStoryContent = ref('')
 const previewImages = ref([])
 const fileInput = ref(null)
 
-// 图片预览
 const previewImageList = ref([])
 const currentPreviewIndex = ref(0)
 
-// 数据状态
 const travelerStories = ref([])
 const loading = ref(false)
 const error = ref(null)
 
-// 获取旅行者故事数据
 const fetchStories = async () => {
   loading.value = true
   error.value = null
   
   try {
-    const response = await fetch(`/api/stories/page?page=${currentPage.value}&pageSize=10`)
-    const result = await response.json()
-    
+    const result = await request.get(`/api/stories/page?page=${currentPage.value}&pageSize=10`)
     if (result.code === 200 || result.code === 'OK') {
       if (result.data && result.data.list && result.data.list.length > 0) {
         travelerStories.value = result.data.list.map(item => ({
@@ -265,18 +313,14 @@ const fetchStories = async () => {
         }))
         totalPages.value = result.data.totalPages || 1
       } else {
-        // 使用默认数据
         travelerStories.value = getDefaultStories()
         totalPages.value = 1
       }
     } else {
-      // 使用默认数据
       travelerStories.value = getDefaultStories()
       totalPages.value = 1
     }
   } catch (err) {
-    console.error('请求故事接口失败:', err)
-    // 使用默认数据
     travelerStories.value = getDefaultStories()
     totalPages.value = 1
   } finally {
@@ -284,7 +328,6 @@ const fetchStories = async () => {
   }
 }
 
-// 默认故事数据
 const getDefaultStories = () => [
   {
     id: 1,
@@ -324,17 +367,14 @@ const getDefaultStories = () => [
   }
 ]
 
-// 格式化时间
 const formatTime = (timestamp) => {
   if (!timestamp) return '刚刚'
   const date = new Date(timestamp)
   const now = new Date()
   const diff = now - date
-  
   const minutes = Math.floor(diff / 60000)
   const hours = Math.floor(diff / 3600000)
   const days = Math.floor(diff / 86400000)
-  
   if (minutes < 1) return '刚刚'
   if (minutes < 60) return `${minutes}分钟前`
   if (hours < 24) return `${hours}小时前`
@@ -342,46 +382,34 @@ const formatTime = (timestamp) => {
   return date.toLocaleDateString('zh-CN')
 }
 
-// 返回首页
-const goBack = () => {
-  emit('back-to-home')
-}
+const goBack = () => emit('back-to-home')
 
-// 格式化数字
 const formatNumber = (num) => {
-  if (num >= 10000) {
-    return (num / 10000).toFixed(1) + 'w'
-  } else if (num >= 1000) {
-    return (num / 1000).toFixed(1) + 'k'
-  }
+  if (num >= 10000) return (num / 10000).toFixed(1) + 'w'
+  if (num >= 1000) return (num / 1000).toFixed(1) + 'k'
   return num.toString()
 }
 
-// 点赞
-const toggleLike = (story) => {
-  story.isLiked = !story.isLiked
-  story.likes += story.isLiked ? 1 : -1
-  
-  // 触发动画
-  if (story.isLiked) {
-    animatingLike.value = story.id
-    setTimeout(() => {
-      animatingLike.value = null
-    }, 500)
+const toggleLike = async (story) => {
+  try {
+    const action = story.isLiked ? 'delete' : 'post'
+    const result = await request[action](`/api/stories/${story.id}/like`)
+    if (result.code === 'OK') {
+      story.isLiked = result.data.liked
+      story.likes = result.data.likesCount
+      if (story.isLiked) {
+        animatingLike.value = story.id
+        setTimeout(() => { animatingLike.value = null }, 600)
+      }
+    }
+  } catch (err) {
+    alert('请先登录后再点赞')
   }
 }
 
-// 显示评论
-const showComments = (story) => {
-  alert(`查看 ${story.author} 的故事评论 (${story.comments}条)`)
-}
+const showComments = (story) => alert(`查看 ${story.author} 的故事评论 (${story.comments}条)`)
+const shareStory = (story) => alert(`分享 ${story.author} 的故事`)
 
-// 分享故事
-const shareStory = (story) => {
-  alert(`分享 ${story.author} 的故事`)
-}
-
-// 切换页面
 const changePage = (page) => {
   if (page >= 1 && page <= totalPages.value) {
     currentPage.value = page
@@ -390,430 +418,481 @@ const changePage = (page) => {
   }
 }
 
-// 触发文件选择
-const triggerFileInput = () => {
-  fileInput.value?.click()
-}
+const triggerFileInput = () => fileInput.value?.click()
 
-// 处理文件选择
 const handleFileChange = (event) => {
   const files = event.target.files
   if (files) {
     Array.from(files).forEach(file => {
       const reader = new FileReader()
-      reader.onload = (e) => {
-        previewImages.value.push(e.target.result)
-      }
+      reader.onload = (e) => previewImages.value.push(e.target.result)
       reader.readAsDataURL(file)
     })
   }
 }
 
-// 移除预览图片
-const removeImage = (index) => {
-  previewImages.value.splice(index, 1)
+const removeImage = (index) => previewImages.value.splice(index, 1)
+
+const publishStory = async () => {
+  if (!newStoryContent.value.trim()) { alert('请输入故事内容'); return }
+  try {
+    const result = await request.post('/api/stories', { content: newStoryContent.value, imageUrls: [] })
+    if (result.code === 'OK') {
+      showPublishModal.value = false
+      newStoryContent.value = ''
+      previewImages.value = []
+      fetchStories()
+      alert('故事发布成功！')
+    }
+  } catch (err) {
+    alert('请先登录后再发布故事')
+  }
 }
 
-// 发布故事
-const publishStory = () => {
-  if (!newStoryContent.value.trim()) {
-    alert('请输入故事内容')
-    return
-  }
-  
-  const newStory = {
-    id: Date.now(),
-    author: '我',
-    avatar: '/img/头像1.jpg',
-    isVip: false,
-    time: '刚刚',
-    content: newStoryContent.value,
-    images: [...previewImages.value],
-    likes: 0,
-    comments: 0,
-    isLiked: false
-  }
-  
-  travelerStories.value.unshift(newStory)
-  
-  // 重置表单
-  newStoryContent.value = ''
-  previewImages.value = []
-  showPublishModal.value = false
-  
-  alert('故事发布成功！')
-}
-
-// 打开图片预览
 const openImagePreview = (images, index) => {
   previewImageList.value = images
   currentPreviewIndex.value = index
 }
 
-// 关闭图片预览
 const closeImagePreview = () => {
   previewImageList.value = []
   currentPreviewIndex.value = 0
 }
 
-// 上一张图片
 const prevImage = () => {
-  if (currentPreviewIndex.value > 0) {
-    currentPreviewIndex.value--
-  } else {
-    currentPreviewIndex.value = previewImageList.value.length - 1
-  }
+  currentPreviewIndex.value = currentPreviewIndex.value > 0 
+    ? currentPreviewIndex.value - 1 
+    : previewImageList.value.length - 1
 }
 
-// 下一张图片
 const nextImage = () => {
-  if (currentPreviewIndex.value < previewImageList.value.length - 1) {
-    currentPreviewIndex.value++
-  } else {
-    currentPreviewIndex.value = 0
-  }
+  currentPreviewIndex.value = currentPreviewIndex.value < previewImageList.value.length - 1 
+    ? currentPreviewIndex.value + 1 
+    : 0
 }
 
-// 页面加载时获取数据
-onMounted(() => {
-  fetchStories()
-})
+onMounted(() => fetchStories())
 </script>
 
 <style scoped>
-/* 页面整体样式 */
 .traveler-stories-page {
   min-height: 100vh;
-  background-color: #f8f6f3;
-  font-family: 'Noto Sans SC', sans-serif;
+  background-color: #3D4F2F;
+  font-family: var(--font-body);
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
 }
 
-/* 页面头部 */
-.page-header {
-  background: url('/img/富士山.jpg') center/cover no-repeat;
-  padding: 60px 0 0;
+/* Hero Header */
+.hero-header {
   position: relative;
+  height: 60vh;
+  min-height: 400px;
   overflow: hidden;
+  display: flex;
+  align-items: flex-end;
 }
 
-.page-header::before {
-  content: '';
+.hero-bg {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.4) 100%);
+  inset: 0;
 }
 
-.header-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px 40px;
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.05);
+  animation: heroZoom 20s ease-in-out infinite alternate;
+}
+
+@keyframes heroZoom {
+  0% { transform: scale(1.05); }
+  100% { transform: scale(1.15); }
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,0.1) 0%,
+    rgba(0,0,0,0.3) 40%,
+    rgba(0,0,0,0.7) 100%
+  );
+}
+
+.hero-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.15;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+.hero-content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
+  padding: 40px 60px 60px;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
 }
 
-.back-btn {
+.back-pill {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  padding: 10px 20px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 30px;
   color: white;
   font-size: 14px;
   cursor: pointer;
-  margin-bottom: 20px;
-  padding: 8px 16px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
   transition: all 0.3s ease;
+  margin-bottom: 24px;
 }
 
-.back-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: translateX(-5px);
+.back-pill:hover {
+  background: rgba(255,255,255,0.25);
+  transform: translateX(-4px);
 }
 
-.back-btn .arrow {
-  font-size: 16px;
+.back-pill svg {
+  width: 18px;
+  height: 18px;
 }
 
-.page-header h1 {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 48px;
+.hero-text {
+  margin-bottom: 0;
+}
+
+.hero-tag {
+  display: inline-block;
+  padding: 6px 16px;
+  background: linear-gradient(135deg, #F5F0E8, #FAF8F5);
+  color: #2F3D24;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+
+.hero-text h1 {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 60px);
   color: white;
-  margin-bottom: 15px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-  letter-spacing: 4px;
+  margin: 0 0 16px;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
 
-.subtitle {
+.hero-text p {
   font-size: 18px;
-  color: rgba(255, 255, 255, 0.9);
-  font-weight: 300;
+  color: rgba(255,255,255,0.85);
+  max-width: 400px;
+  line-height: 1.6;
+  margin: 0;
 }
 
-.header-wave {
-  position: relative;
+.hero-wave {
+  position: absolute;
   bottom: -1px;
+  left: 0;
+  right: 0;
+  z-index: 3;
 }
 
-.header-wave svg {
+.hero-wave svg {
   display: block;
   width: 100%;
 }
 
-/* 故事区域 */
+/* Stories Section */
 .stories-section {
-  padding: 60px 0;
-  background-color: #f8f6f3;
-  min-height: 60vh;
+  padding: 40px 0 80px;
 }
 
-/* 加载状态 */
+/* Loading State */
 .loading-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 80px 20px;
-  color: #888;
+  padding: 100px 20px;
+  color: #A8A29E;
 }
 
-.loading-spinner {
-  width: 48px;
-  height: 48px;
-  border: 3px solid #f0f0f0;
-  border-top-color: #f79545;
+.loader {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.loader-dot {
+  width: 12px;
+  height: 12px;
+  background: #F5F0E8;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 16px;
+  animation: loaderBounce 1.4s ease-in-out infinite;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+.loader-dot:nth-child(2) { animation-delay: 0.2s; }
+.loader-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes loaderBounce {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
 }
 
-/* 错误状态 */
+/* Error State */
 .error-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 80px 20px;
-  color: #666;
+  padding: 100px 20px;
+  color: #D4CFC7;
 }
 
-.error-icon {
-  font-size: 48px;
-  margin-bottom: 16px;
+.error-icon-wrap {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(224,112,112,0.15);
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+.error-icon-wrap svg {
+  width: 32px;
+  height: 32px;
+  color: #E07070;
 }
 
 .retry-btn {
   margin-top: 20px;
   padding: 12px 32px;
-  background: linear-gradient(135deg, #f79545 0%, #ffc494 100%);
-  color: #fff;
+  background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
+  color: #2F3D24;
   border: none;
-  border-radius: 25px;
+  border-radius: 30px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .retry-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(247, 149, 69, 0.3);
+  box-shadow: 0 8px 20px rgba(245,240,232,0.3);
 }
 
-/* 空状态 */
+/* Empty State */
 .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 80px 20px;
-  color: #888;
+  padding: 100px 20px;
+  color: #A8A29E;
 }
 
-.empty-icon {
-  font-size: 48px;
-  margin-bottom: 16px;
+.empty-icon-wrap {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.06);
+  border-radius: 24px;
+  margin-bottom: 20px;
 }
 
-/* 故事列表 */
-.stories-list {
+.empty-icon-wrap svg {
+  width: 40px;
+  height: 40px;
+}
+
+/* Stories Masonry */
+.stories-masonry {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-.story-item {
-  display: flex;
-  gap: 18px;
-  background: white;
-  padding: 24px;
+.story-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: 24px;
-  box-shadow: 
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    0 8px 24px rgba(0, 0, 0, 0.04);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  animation: cardSlideIn 0.6s ease backwards;
 }
 
-.story-item.hovered {
+.story-card:nth-child(1) { animation-delay: 0.1s; }
+.story-card:nth-child(2) { animation-delay: 0.2s; }
+.story-card:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes cardSlideIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.story-card:hover {
   transform: translateY(-4px);
-  box-shadow: 
-    0 4px 16px rgba(0, 0, 0, 0.06),
-    0 16px 48px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  border-color: rgba(245,240,232,0.2);
 }
 
-.story-avatar {
+/* Story Author */
+.story-author {
+  display: flex;
+  align-items: center;
+  padding: 20px 24px;
+}
+
+.author-avatar {
   position: relative;
+  width: 48px;
+  height: 48px;
   flex-shrink: 0;
 }
 
-.avatar-wrapper {
-  position: relative;
-  width: 56px;
-  height: 56px;
-}
-
-.story-avatar img {
-  width: 56px;
-  height: 56px;
+.author-avatar img {
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+  border: 2px solid rgba(255,255,255,0.15);
 }
 
-.story-item:hover .story-avatar img {
-  transform: scale(1.05);
-}
-
-.avatar-ring {
+.vip-ring {
   position: absolute;
-  top: -4px;
-  left: -4px;
-  right: -4px;
-  bottom: -4px;
+  inset: -4px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #f59e0b 0%, #f97316 50%, #ef4444 100%);
+  background: linear-gradient(135deg, #F5F0E8, #FAF8F5, #ffd700);
   z-index: -1;
-  animation: ringPulse 2s ease-in-out infinite;
+  animation: ringRotate 3s linear infinite;
 }
 
-@keyframes ringPulse {
-  0%, 100% { opacity: 0.8; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.02); }
+@keyframes ringRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
-.author-badge {
-  position: absolute;
-  bottom: -2px;
-  right: -2px;
-  width: 22px;
-  height: 22px;
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-  border-radius: 50%;
+.author-meta {
+  flex: 1;
+  margin-left: 14px;
+}
+
+.author-name {
   display: flex;
   align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.4);
-  border: 2px solid white;
+  gap: 6px;
 }
 
-.author-badge svg {
-  width: 12px;
-  height: 12px;
-  fill: white;
-}
-
-.story-content {
-  flex: 1;
-  min-width: 0;
-}
-
-.story-header {
-  margin-bottom: 12px;
-}
-
-.author-info {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-}
-
-.story-header h4 {
-  font-size: 16px;
+.author-name span {
+  font-size: 15px;
   font-weight: 600;
-  color: #1f2937;
-  letter-spacing: -0.01em;
+  color: #F5F2ED;
+}
+
+.vip-badge {
+  width: 16px;
+  height: 16px;
+  color: #ffd700;
 }
 
 .story-time {
   font-size: 13px;
-  color: #9ca3af;
-  font-weight: 400;
+  color: #A8A29E;
+}
+
+.more-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  color: #A8A29E;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.more-btn:hover {
+  background: rgba(255,255,255,0.1);
+  color: #F5F2ED;
+}
+
+.more-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Story Body */
+.story-body {
+  padding: 0 24px 16px;
 }
 
 .story-text {
   font-size: 15px;
-  color: #4b5563;
+  color: #D4CFC7;
   line-height: 1.75;
-  margin-bottom: 16px;
+  margin: 0;
   letter-spacing: 0.01em;
 }
 
-/* 图片展示 */
-.story-images {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 18px;
-  flex-wrap: wrap;
+/* Story Gallery */
+.story-gallery {
+  display: grid;
+  gap: 4px;
+  padding: 0 4px;
+  margin-bottom: 16px;
 }
 
-.image-wrapper {
+.gallery-1 { grid-template-columns: 1fr; }
+.gallery-2 { grid-template-columns: 1fr 1fr; }
+.gallery-3 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+.gallery-3 .gallery-item:first-child { grid-row: span 2; }
+
+.gallery-item {
   position: relative;
-  width: 140px;
-  height: 140px;
-  border-radius: 16px;
+  aspect-ratio: 1;
   overflow: hidden;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.image-wrapper:hover {
-  transform: scale(1.03);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-}
+.gallery-1 .gallery-item { aspect-ratio: 16/9; border-radius: 0 0 20px 20px; }
+.gallery-3 .gallery-item:first-child { aspect-ratio: auto; border-radius: 0 0 0 20px; }
 
-.image-wrapper img {
+.gallery-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
+  transition: transform 0.5s ease;
 }
 
-.image-wrapper:hover img {
-  transform: scale(1.1);
+.gallery-item:hover img {
+  transform: scale(1.08);
 }
 
-.image-overlay {
+.gallery-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0,0,0,0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -821,128 +900,95 @@ onMounted(() => {
   transition: opacity 0.3s ease;
 }
 
-.image-wrapper:hover .image-overlay {
+.gallery-item:hover .gallery-overlay {
   opacity: 1;
 }
 
-.image-overlay svg {
+.gallery-overlay svg {
   width: 32px;
   height: 32px;
   color: white;
-  stroke-width: 1.5;
 }
 
-.more-images {
-  width: 140px;
-  height: 140px;
-  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-  border-radius: 16px;
+.more-count {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
 }
 
-.more-images:hover {
-  transform: scale(1.03);
-  box-shadow: 0 8px 24px rgba(251, 191, 36, 0.3);
+.more-count span {
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
 }
 
-.more-images span {
-  font-size: 20px;
-  font-weight: 600;
-  color: #d97706;
-}
-
-/* 故事操作按钮 */
+/* Story Actions */
 .story-actions {
   display: flex;
   gap: 8px;
-  padding-top: 4px;
+  padding: 12px 24px 20px;
 }
 
 .action-btn {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  padding: 10px 16px;
   background: transparent;
   border: none;
-  color: #6b7280;
+  border-radius: 12px;
+  color: #A8A29E;
   font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 8px 14px;
-  border-radius: 20px;
+  transition: all 0.3s ease;
   position: relative;
 }
 
 .action-btn:hover {
-  background: #f3f4f6;
-  color: #374151;
+  background: rgba(255,255,255,0.08);
+  color: #F5F2ED;
 }
 
-.action-btn.like-btn:hover {
-  background: #fef2f2;
-  color: #ef4444;
-}
-
-.action-btn.like-btn.active {
-  color: #ef4444;
-  background: #fef2f2;
-}
-
-.action-btn.comment-btn:hover {
-  background: #eff6ff;
-  color: #3b82f6;
-}
-
-.action-btn.comment-btn:hover .chat-bubble {
-  stroke: #3b82f6;
-}
-
-.action-btn.share-btn:hover {
-  background: #f0fdf4;
-  color: #22c55e;
-}
-
-.icon-wrapper {
+.action-icon {
   position: relative;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.action-icon {
-  width: 20px;
-  height: 20px;
+.action-icon svg {
+  width: 22px;
+  height: 22px;
   transition: all 0.3s ease;
 }
 
-.action-btn:hover .action-icon {
+.action-btn:hover .action-icon svg {
   transform: scale(1.1);
 }
 
-.action-btn.like-btn.active .like-icon {
-  animation: heartBeat 0.4s ease;
+.like-btn:hover {
+  background: rgba(239,68,68,0.1);
+  color: #ef4444;
 }
 
-.action-btn.like-btn.animating .like-icon {
-  animation: heartBurst 0.5s ease;
+.like-btn.active {
+  color: #ef4444;
+  background: rgba(239,68,68,0.1);
 }
 
-@keyframes heartBeat {
-  0%, 100% { transform: scale(1); }
-  25% { transform: scale(1.2); }
-  50% { transform: scale(0.95); }
-  75% { transform: scale(1.1); }
+.like-btn.animating .action-icon svg {
+  animation: heartPop 0.5s ease;
 }
 
-@keyframes heartBurst {
+@keyframes heartPop {
   0% { transform: scale(1); }
-  30% { transform: scale(1.4); }
+  30% { transform: scale(1.3); }
   60% { transform: scale(0.9); }
   100% { transform: scale(1); }
 }
@@ -955,438 +1001,518 @@ onMounted(() => {
 
 .particle {
   position: absolute;
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
   border-radius: 50%;
   top: 50%;
   left: 50%;
-  animation: particleBurst 0.6s ease forwards;
+  animation: particleExplode 0.6s ease forwards;
 }
 
-.particle:nth-child(1) { animation-delay: 0s; transform: translate(-50%, -50%) rotate(0deg); }
-.particle:nth-child(2) { animation-delay: 0.05s; transform: translate(-50%, -50%) rotate(60deg); }
-.particle:nth-child(3) { animation-delay: 0.1s; transform: translate(-50%, -50%) rotate(120deg); }
-.particle:nth-child(4) { animation-delay: 0.15s; transform: translate(-50%, -50%) rotate(180deg); }
-.particle:nth-child(5) { animation-delay: 0.2s; transform: translate(-50%, -50%) rotate(240deg); }
-.particle:nth-child(6) { animation-delay: 0.25s; transform: translate(-50%, -50%) rotate(300deg); }
+.particle:nth-child(1) { animation-delay: 0s; --angle: 0deg; }
+.particle:nth-child(2) { animation-delay: 0.03s; --angle: 45deg; }
+.particle:nth-child(3) { animation-delay: 0.06s; --angle: 90deg; }
+.particle:nth-child(4) { animation-delay: 0.09s; --angle: 135deg; }
+.particle:nth-child(5) { animation-delay: 0.12s; --angle: 180deg; }
+.particle:nth-child(6) { animation-delay: 0.15s; --angle: 225deg; }
+.particle:nth-child(7) { animation-delay: 0.18s; --angle: 270deg; }
+.particle:nth-child(8) { animation-delay: 0.21s; --angle: 315deg; }
 
-@keyframes particleBurst {
+@keyframes particleExplode {
   0% {
     opacity: 1;
-    transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateX(0);
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateX(0);
   }
   100% {
     opacity: 0;
-    transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateX(25px) scale(0);
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateX(30px) scale(0);
   }
 }
 
-.action-btn .count,
-.action-btn .label {
-  font-weight: 500;
-  font-size: 13px;
+.comment-btn:hover {
+  background: rgba(59,130,246,0.1);
+  color: #3b82f6;
 }
 
-.action-btn.like-btn.active .count {
-  color: #ef4444;
+.share-btn:hover {
+  background: rgba(34,197,94,0.1);
+  color: #22c55e;
 }
 
-/* 分页 */
+/* Pagination */
 .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 20px;
-  margin-top: 40px;
+  gap: 16px;
+  margin-top: 48px;
 }
 
 .page-btn {
-  padding: 10px 24px;
-  background: white;
-  border: 2px solid rgba(247, 149, 69, 0.3);
-  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 30px;
   font-size: 14px;
-  color: #666;
+  color: #D4CFC7;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
+.page-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
 .page-btn:hover:not(:disabled) {
-  border-color: #f79545;
-  color: #f79545;
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(245,240,232,0.3);
+  color: #F5F2ED;
 }
 
 .page-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
-.page-info {
-  font-size: 14px;
-  color: #666;
+.page-dots {
+  display: flex;
+  gap: 8px;
 }
 
-/* 发布按钮 */
+.page-dot {
+  width: 8px;
+  height: 8px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.page-dot.active {
+  width: 24px;
+  border-radius: 4px;
+  background: #F5F0E8;
+}
+
+/* FAB Publish */
 .fab-publish {
   position: fixed;
-  bottom: 30px;
-  right: 30px;
+  bottom: 32px;
+  right: 32px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   padding: 16px 28px;
-  background: linear-gradient(135deg, #f79545 0%, #ffc494 100%);
-  color: white;
+  background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
+  color: #2F3D24;
   border: none;
   border-radius: 50px;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 6px 25px rgba(247, 149, 69, 0.4);
+  box-shadow: 0 8px 30px rgba(245,240,232,0.4);
   transition: all 0.3s ease;
   z-index: 100;
 }
 
+.fab-publish svg {
+  width: 20px;
+  height: 20px;
+}
+
 .fab-publish:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 10px 35px rgba(247, 149, 69, 0.5);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 12px 40px rgba(245,240,232,0.5);
 }
 
-.fab-publish span:first-child {
-  font-size: 24px;
-}
-
-/* 模态框 */
+/* Modal */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  inset: 0;
+  background: rgba(0,0,0,0.7);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(8px);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .modal-content {
-  background: white;
+  background: #3D4F2F;
+  border: 1px solid rgba(255,255,255,0.12);
   border-radius: 24px;
   width: 90%;
-  max-width: 600px;
+  max-width: 560px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  animation: modalSlideIn 0.3s ease;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+  animation: modalSlideUp 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-@keyframes modalSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes modalSlideUp {
+  from { opacity: 0; transform: translateY(40px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 25px;
-  border-bottom: 1px solid #f0f0f0;
+  padding: 28px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
 .modal-header h3 {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 600;
-  color: #333;
-  font-family: 'Noto Serif SC', serif;
+  color: #F5F2ED;
+  font-family: var(--font-display);
 }
 
 .close-btn {
-  background: none;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.08);
   border: none;
-  font-size: 28px;
-  color: #999;
+  border-radius: 50%;
+  color: #A8A29E;
   cursor: pointer;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .close-btn:hover {
-  color: #333;
+  background: rgba(255,255,255,0.15);
+  color: #F5F2ED;
+}
+
+.close-btn svg {
+  width: 20px;
+  height: 20px;
 }
 
 .modal-body {
-  padding: 25px;
+  padding: 28px;
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .form-group label {
   display: block;
   font-size: 14px;
-  font-weight: 500;
-  color: #555;
-  margin-bottom: 8px;
+  font-weight: 600;
+  color: #D4CFC7;
+  margin-bottom: 10px;
 }
 
 .form-group textarea {
   width: 100%;
-  padding: 12px 18px;
-  border: 2px solid #e0e0e0;
+  padding: 14px 18px;
+  border: 1px solid rgba(255,255,255,0.12);
   border-radius: 12px;
   font-size: 15px;
+  background: rgba(255,255,255,0.06);
+  color: #F5F2ED;
   transition: all 0.3s ease;
   outline: none;
   resize: vertical;
-  min-height: 120px;
+  min-height: 140px;
+  font-family: var(--font-body);
+}
+
+.form-group textarea::placeholder {
+  color: #A8A29E;
 }
 
 .form-group textarea:focus {
-  border-color: #f79545;
-  box-shadow: 0 0 0 4px rgba(247, 149, 69, 0.1);
+  border-color: #F5F0E8;
+  box-shadow: 0 0 0 3px rgba(245,240,232,0.1);
 }
 
 .upload-area {
-  border: 2px dashed #f79545;
-  border-radius: 12px;
+  border: 2px dashed rgba(255,255,255,0.2);
+  border-radius: 16px;
   padding: 40px;
   text-align: center;
-  color: #f79545;
+  color: #A8A29E;
   cursor: pointer;
   transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
 }
 
 .upload-area:hover {
-  background: rgba(247, 149, 69, 0.05);
+  border-color: rgba(245,240,232,0.4);
+  background: rgba(255,255,255,0.04);
+  color: #D4CFC7;
+}
+
+.upload-area svg {
+  width: 40px;
+  height: 40px;
 }
 
 .preview-images {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 15px;
+  gap: 12px;
+  margin-top: 16px;
 }
 
 .preview-item {
   position: relative;
   width: 80px;
   height: 80px;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 .preview-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 8px;
 }
 
 .remove-btn {
   position: absolute;
-  top: -5px;
-  right: -5px;
-  width: 20px;
-  height: 20px;
-  background: #ff6b6b;
+  top: 4px;
+  right: 4px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.6);
   color: white;
   border: none;
   border-radius: 50%;
   cursor: pointer;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.remove-btn:hover {
+  background: #ef4444;
 }
 
 .modal-footer {
   display: flex;
   justify-content: flex-end;
-  gap: 15px;
-  padding: 20px 25px;
-  border-top: 1px solid #f0f0f0;
+  gap: 12px;
+  padding: 20px 28px;
+  border-top: 1px solid rgba(255,255,255,0.1);
 }
 
-.btn-secondary {
-  padding: 12px 25px;
-  background: #f5f5f5;
-  border: none;
-  border-radius: 25px;
+.btn-ghost {
+  padding: 12px 24px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 30px;
   font-size: 15px;
-  color: #666;
+  color: #D4CFC7;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.btn-secondary:hover {
-  background: #e8e8e8;
+.btn-ghost:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.3);
 }
 
-.btn-primary {
-  padding: 12px 35px;
-  background: linear-gradient(135deg, #f79545 0%, #ffc494 100%);
+.btn-accent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
   border: none;
-  border-radius: 25px;
+  border-radius: 30px;
   font-size: 15px;
-  color: white;
-  font-weight: 500;
+  font-weight: 600;
+  color: #2F3D24;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.btn-primary:hover {
+.btn-accent svg {
+  width: 18px;
+  height: 18px;
+}
+
+.btn-accent:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(247, 149, 69, 0.4);
+  box-shadow: 0 8px 25px rgba(245,240,232,0.4);
 }
 
-/* 图片预览模态框 */
+/* Image Preview Modal */
 .image-preview-modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.9);
+  inset: 0;
+  background: rgba(0,0,0,0.95);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 2000;
 }
 
-.image-preview-modal img {
-  max-width: 90%;
-  max-height: 80vh;
-  object-fit: contain;
-  border-radius: 8px;
-}
-
 .preview-close {
   position: absolute;
-  top: 20px;
-  right: 20px;
-  background: none;
+  top: 24px;
+  right: 24px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.1);
   border: none;
+  border-radius: 50%;
   color: white;
-  font-size: 36px;
   cursor: pointer;
+  transition: all 0.3s ease;
   z-index: 2001;
+}
+
+.preview-close:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.preview-close svg {
+  width: 24px;
+  height: 24px;
 }
 
 .preview-nav {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.2);
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.1);
   border: none;
-  color: white;
-  font-size: 24px;
-  width: 50px;
-  height: 50px;
   border-radius: 50%;
+  color: white;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .preview-nav:hover {
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255,255,255,0.25);
 }
 
-.preview-nav.prev {
-  left: 20px;
+.preview-nav svg {
+  width: 24px;
+  height: 24px;
 }
 
-.preview-nav.next {
-  right: 20px;
+.preview-nav.prev { left: 24px; }
+.preview-nav.next { right: 24px; }
+
+.preview-image-wrap {
+  max-width: 85vw;
+  max-height: 85vh;
+}
+
+.preview-image-wrap img {
+  max-width: 100%;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 8px;
 }
 
 .preview-counter {
   position: absolute;
-  bottom: 20px;
+  bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
+  padding: 8px 20px;
+  background: rgba(0,0,0,0.6);
+  border-radius: 20px;
   color: white;
   font-size: 14px;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 8px 16px;
-  border-radius: 20px;
 }
 
-/* 响应式设计 */
+/* Responsive */
 @media (max-width: 768px) {
-  .page-header h1 {
-    font-size: 32px;
+  .hero-content {
+    padding: 24px;
   }
-
-  .story-item {
-    flex-direction: column;
-    gap: 16px;
-    padding: 20px;
+  
+  .story-card {
     border-radius: 20px;
   }
-
-  .avatar-wrapper {
-    width: 48px;
-    height: 48px;
+  
+  .story-author {
+    padding: 16px 20px;
   }
-
-  .story-avatar img {
-    width: 48px;
-    height: 48px;
+  
+  .story-body {
+    padding: 0 20px 12px;
   }
-
-  .author-badge {
-    width: 18px;
-    height: 18px;
+  
+  .story-gallery {
+    gap: 2px;
+    padding: 0 2px;
   }
-
-  .author-badge svg {
-    width: 10px;
-    height: 10px;
+  
+  .gallery-3 .gallery-item:first-child {
+    border-radius: 0;
   }
-
-  .image-wrapper,
-  .more-images {
-    width: 100px;
-    height: 100px;
-  }
-
+  
   .story-actions {
-    gap: 4px;
+    padding: 8px 16px 16px;
   }
-
+  
   .action-btn {
-    padding: 6px 10px;
+    padding: 8px 12px;
+    font-size: 13px;
   }
-
-  .action-btn .count,
-  .action-btn .label {
-    font-size: 12px;
+  
+  .action-icon svg {
+    width: 20px;
+    height: 20px;
   }
-
+  
   .fab-text {
     display: none;
   }
-
+  
   .fab-publish {
     padding: 16px;
     border-radius: 50%;
   }
-
-  .pagination {
-    flex-wrap: wrap;
+  
+  .page-btn span {
+    display: none;
   }
-
+  
   .preview-nav {
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
+    width: 44px;
+    height: 44px;
+  }
+  
+  .preview-nav svg {
+    width: 20px;
+    height: 20px;
   }
 }
 </style>

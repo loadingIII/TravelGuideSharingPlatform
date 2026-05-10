@@ -123,6 +123,7 @@
 <script setup>
 import { ref } from 'vue'
 import { setCookie } from '../utils/cookie'
+import request from '../utils/request'
 
 const emit = defineEmits(['switch-page', 'login-success'])
 
@@ -143,13 +144,11 @@ const handleSubmit = async () => {
   passwordError.value = false
   let isValid = true
 
-  // 验证手机号（允许root或正常手机号）
   if (phone.value !== 'root' && !/^1[3-9]\d{9}$/.test(phone.value)) {
     phoneError.value = true
     isValid = false
   }
 
-  // 验证密码（测试阶段不限制长度）
   if (password.value.length === 0) {
     passwordError.value = true
     isValid = false
@@ -160,72 +159,44 @@ const handleSubmit = async () => {
   isLoading.value = true
 
   try {
-    const response = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        phone: phone.value,
-        password: password.value
-      })
+    const data = await request.post('/api/auth/login', {
+      phone: phone.value,
+      password: password.value
     })
 
-    const data = await response.json()
-    
-    // 调试：打印后端返回的数据
-    console.log('登录返回数据:', data)
-
-    // 支持多种成功响应格式：{code: 200} 或 {message: 'success'} 或字符串 "success"
-    const isSuccess = (response.ok && data.code === 200) || 
-                      (response.ok && data.message?.toLowerCase() === 'success') ||
-                      (response.ok && typeof data === 'string' && data.toLowerCase() === 'success')
+    const isSuccess = data.code === 'OK' || data.code === 200
 
     if (isSuccess) {
-      // 登录成功，保存token到Cookie，有效期7天
       if (data.data?.accessToken) {
         setCookie('token', data.data.accessToken, 7)
       }
-      
-      // 获取用户信息 - 根据实际后端返回格式
-      // 数据结构: data.data.user.nickname 和 data.data.user.avatarUrl
+
       const user = data.data?.user
       const nickname = user?.nickname || user?.username || phone.value
       let avatar = user?.avatarUrl ? user.avatarUrl.trim() : null
-      
-      // 将本地绝对路径转换为相对路径
-      // 例如: E:/.../public/img/头像2.png -> /img/头像2.png
-      // 或者: E:/.../public/img头像2.png -> /img/头像2.png
+
       if (avatar && avatar.includes('public/')) {
-        avatar = avatar.substring(avatar.indexOf('public/') + 7) // +7 是 'public/' 的长度
-        // 确保 img 后面有斜杠
+        avatar = avatar.substring(avatar.indexOf('public/') + 7)
         if (avatar.startsWith('img') && !avatar.startsWith('img/')) {
           avatar = avatar.replace('img', 'img/')
         }
         avatar = '/' + avatar
       }
-      
-      console.log('提取的用户名:', nickname)
-      console.log('提取的头像URL:', avatar)
-      
-      // 保存用户信息（包含头像和用户名）到Cookie，有效期7天
+
       const userInfo = {
         username: nickname,
         avatar: avatar,
         phone: phone.value
       }
       setCookie('userInfo', JSON.stringify(userInfo), 7)
-      
-      // 触发登录成功事件，传递用户信息
+
       emit('login-success', userInfo)
       emit('switch-page', 'home')
     } else {
-      // 登录失败
       alert(data.message || '登录失败，请检查账号密码')
     }
   } catch (error) {
-    console.error('登录请求失败:', error)
-    alert('网络错误，请稍后重试')
+    alert(error.response?.data?.message || '网络错误，请稍后重试')
   } finally {
     isLoading.value = false
   }
@@ -241,22 +212,13 @@ const goToHome = () => {
 </script>
 
 <style scoped>
-/* 官网色系：
-   - 主背景：#faf8f5 (米白色)
-   - 强调色：#f79545 (橙色系)
-   - 强调色浅：#ffc494 (浅橙色)
-   - 文字主色：#333, #0b0a0a
-   - 区块背景：#f4eed7 (暖黄色)
-   - 按钮悬停：#e88535
-*/
-
 .login-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: linear-gradient(135deg, #f4eed7 0%, #faf8f5 50%, #f4eed7 100%);
+  background: linear-gradient(135deg, #2F3D24 0%, #3D4F2F 50%, #2F3D24 100%);
   position: relative;
   overflow: hidden;
 }
@@ -268,7 +230,7 @@ const goToHome = () => {
   right: -10%;
   width: 60%;
   height: 80%;
-  background: radial-gradient(ellipse at 30% 50%, rgba(247, 149, 69, 0.08) 0%, transparent 60%);
+  background: radial-gradient(ellipse at 30% 50%, rgba(245, 240, 232, 0.1) 0%, transparent 60%);
   opacity: 0.8;
   z-index: 0;
   filter: blur(60px);
@@ -281,7 +243,7 @@ const goToHome = () => {
   left: -10%;
   width: 50%;
   height: 70%;
-  background: radial-gradient(ellipse at 70% 30%, rgba(255, 196, 148, 0.15) 0%, transparent 55%);
+  background: radial-gradient(ellipse at 70% 30%, rgba(107, 142, 78, 0.15) 0%, transparent 55%);
   opacity: 0.6;
   z-index: 0;
   filter: blur(50px);
@@ -307,17 +269,18 @@ const goToHome = () => {
 }
 
 .login-card {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 24px;
   padding: 48px 40px;
   box-shadow:
-    0 4px 20px rgba(247, 149, 69, 0.1),
-    0 8px 40px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(255, 196, 148, 0.3);
+    0 4px 20px rgba(0, 0, 0, 0.2),
+    0 8px 40px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   position: relative;
   overflow: hidden;
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .login-card::before {
@@ -329,9 +292,9 @@ const goToHome = () => {
   height: 3px;
   background: linear-gradient(90deg,
     transparent 0%,
-    #f79545 20%,
-    #ffc494 50%,
-    #f79545 80%,
+    var(--color-primary) 20%,
+    var(--color-primary-light) 50%,
+    var(--color-primary) 80%,
     transparent 100%);
   opacity: 0.8;
 }
@@ -347,12 +310,12 @@ const goToHome = () => {
   width: 64px;
   height: 64px;
   margin: 0 auto 20px;
-  background-color: #ffc494;
+  background: var(--gradient-primary);
   border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(255, 196, 148, 0.3);
+  box-shadow: 0 2px 8px rgba(245, 240, 232, 0.3);
   position: relative;
 }
 
@@ -370,17 +333,17 @@ const goToHome = () => {
 }
 
 .header h1 {
-  font-family: 'Noto Serif SC', serif;
+  font-family: var(--font-display);
   font-size: 28px;
   font-weight: 700;
-  color: #0b0a0a;
+  color: var(--color-text-primary);
   letter-spacing: 3px;
   margin-bottom: 10px;
 }
 
 .header p {
   font-size: 15px;
-  color: #666;
+  color: var(--color-text-secondary);
   font-weight: 400;
   letter-spacing: 1px;
 }
@@ -404,7 +367,7 @@ const goToHome = () => {
   display: block;
   font-size: 13px;
   font-weight: 500;
-  color: #333;
+  color: var(--color-text-primary);
   margin-bottom: 10px;
   letter-spacing: 1px;
 }
@@ -420,7 +383,7 @@ const goToHome = () => {
   transform: translateY(-50%);
   width: 18px;
   height: 18px;
-  color: #999;
+  color: var(--color-text-muted);
   transition: all 0.3s ease;
   pointer-events: none;
 }
@@ -428,43 +391,43 @@ const goToHome = () => {
 .form-input {
   width: 100%;
   padding: 15px 16px 15px 50px;
-  font-family: 'Noto Sans SC', sans-serif;
+  font-family: var(--font-body);
   font-size: 15px;
   font-weight: 400;
-  color: #333;
-  background: rgba(250, 248, 245, 0.9);
-  border: 1.5px solid rgba(247, 149, 69, 0.2);
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
   border-radius: 14px;
   outline: none;
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .form-input::placeholder {
-  color: #aaa;
+  color: var(--color-text-muted);
   font-weight: 400;
 }
 
 .form-input:hover {
-  border-color: rgba(247, 149, 69, 0.4);
-  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .form-input:focus {
-  border-color: #f79545;
-  background: #FFFFFF;
+  border-color: var(--color-primary);
+  background: rgba(255, 255, 255, 0.15);
   box-shadow:
-    0 0 0 4px rgba(247, 149, 69, 0.12),
-    inset 0 1px 2px rgba(0, 0, 0, 0.02);
+    0 0 0 4px rgba(245, 240, 232, 0.15),
+    inset 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .form-input:focus + .input-icon {
-  color: #f79545;
+  color: var(--color-primary);
   transform: translateY(-50%) scale(1.05);
 }
 
 .input-wrapper:hover .input-icon {
-  color: #f79545;
+  color: var(--color-primary);
 }
 
 .password-toggle {
@@ -474,7 +437,7 @@ const goToHome = () => {
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: #999;
+  color: var(--color-text-muted);
   cursor: pointer;
   padding: 6px;
   display: flex;
@@ -485,8 +448,8 @@ const goToHome = () => {
 }
 
 .password-toggle:hover {
-  color: #f79545;
-  background: rgba(247, 149, 69, 0.1);
+  color: var(--color-primary);
+  background: rgba(245, 240, 232, 0.1);
 }
 
 .password-toggle svg {
@@ -518,19 +481,19 @@ const goToHome = () => {
 .checkbox-custom {
   width: 18px;
   height: 18px;
-  border: 1.5px solid rgba(247, 149, 69, 0.3);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
   border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background: rgba(250, 248, 245, 0.9);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .remember-me input:checked + .checkbox-custom {
-  background: linear-gradient(145deg, #ffc494, #f79545);
-  border-color: #f79545;
-  box-shadow: 0 2px 8px rgba(247, 149, 69, 0.3);
+  background: var(--gradient-primary);
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 8px rgba(245, 240, 232, 0.3);
 }
 
 .checkbox-custom svg {
@@ -550,13 +513,13 @@ const goToHome = () => {
 
 .remember-me span:last-child {
   font-size: 13px;
-  color: #666;
+  color: var(--color-text-secondary);
   font-weight: 400;
 }
 
 .forgot-password {
   font-size: 13px;
-  color: #f79545;
+  color: var(--color-primary);
   text-decoration: none;
   font-weight: 500;
   transition: all 0.3s ease;
@@ -570,12 +533,12 @@ const goToHome = () => {
   left: 0;
   width: 0;
   height: 1.5px;
-  background: linear-gradient(90deg, #f79545, #ffc494);
+  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
   transition: width 0.3s ease;
 }
 
 .forgot-password:hover {
-  color: #e88535;
+  color: var(--color-primary-light);
 }
 
 .forgot-password:hover::after {
@@ -585,24 +548,23 @@ const goToHome = () => {
 .login-btn {
   width: 100%;
   padding: 17px;
-  font-family: 'Noto Sans SC', sans-serif;
+  font-family: var(--font-body);
   font-size: 15px;
   font-weight: 500;
   letter-spacing: 3px;
-  color: #7b7474;
-  background-color: #ffc494;
+  color: white;
+  background: var(--gradient-primary);
   border: none;
   border-radius: 20px;
   cursor: pointer;
   transition: all 0.3s ease;
   animation: fadeIn 0.6s ease-out 0.4s backwards;
-  box-shadow: 0 2px 8px rgba(255, 196, 148, 0.3);
+  box-shadow: 0 2px 8px rgba(245, 240, 232, 0.3);
 }
 
 .login-btn:hover {
-  background-color: #ffc494;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 196, 148, 0.4);
+  box-shadow: 0 4px 12px rgba(245, 240, 232, 0.4);
 }
 
 .login-btn:disabled {
@@ -625,13 +587,13 @@ const goToHome = () => {
   content: '';
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(247, 149, 69, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
 }
 
 .divider span {
   padding: 0 18px;
   font-size: 12px;
-  color: #999;
+  color: var(--color-text-muted);
   font-weight: 400;
   letter-spacing: 2px;
 }
@@ -648,9 +610,9 @@ const goToHome = () => {
 .social-btn {
   width: 50px;
   height: 50px;
-  border: 1.5px solid rgba(247, 149, 69, 0.2);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
   border-radius: 14px;
-  background: rgba(250, 248, 245, 0.8);
+  background: rgba(255, 255, 255, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -664,15 +626,15 @@ const goToHome = () => {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(247, 149, 69, 0.1);
+  background: rgba(245, 240, 232, 0.1);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 .social-btn:hover {
-  border-color: #f79545;
+  border-color: var(--color-primary);
   transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(247, 149, 69, 0.2);
+  box-shadow: 0 6px 20px rgba(245, 240, 232, 0.2);
 }
 
 .social-btn:hover::before {
@@ -682,14 +644,14 @@ const goToHome = () => {
 .social-btn svg {
   width: 22px;
   height: 22px;
-  fill: #999;
+  fill: var(--color-text-muted);
   transition: all 0.3s ease;
   position: relative;
   z-index: 1;
 }
 
 .social-btn:hover svg {
-  fill: #f79545;
+  fill: var(--color-primary);
   transform: scale(1.1);
 }
 
@@ -697,14 +659,14 @@ const goToHome = () => {
   text-align: center;
   margin-top: 36px;
   font-size: 14px;
-  color: #666;
+  color: var(--color-text-secondary);
   animation: fadeIn 0.6s ease-out 0.7s backwards;
   position: relative;
   z-index: 1;
 }
 
 .register-hint a {
-  color: #f79545;
+  color: var(--color-primary);
   text-decoration: none;
   font-weight: 500;
   margin-left: 4px;
@@ -719,13 +681,13 @@ const goToHome = () => {
   left: 0;
   width: 100%;
   height: 1px;
-  background: #f79545;
+  background: var(--color-primary);
   transform: scaleX(0);
   transition: transform 0.3s ease;
 }
 
 .register-hint a:hover {
-  color: #e88535;
+  color: var(--color-primary-light);
 }
 
 .register-hint a:hover::after {
@@ -734,14 +696,14 @@ const goToHome = () => {
 
 .error-message {
   font-size: 12px;
-  color: #e74c3c;
+  color: var(--color-error);
   margin-top: 8px;
   padding-left: 2px;
 }
 
 .form-input.error {
-  border-color: #e74c3c;
-  background: rgba(231, 76, 60, 0.05);
+  border-color: var(--color-error);
+  background: rgba(224, 112, 112, 0.1);
   animation: shake 0.4s ease;
 }
 
@@ -760,16 +722,17 @@ const goToHome = () => {
   align-items: center;
   gap: 8px;
   padding: 10px 18px;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(247, 149, 69, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50px;
-  color: #f79545;
+  color: var(--color-primary-light);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
-  box-shadow: 0 2px 12px rgba(247, 149, 69, 0.15);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
   z-index: 100;
 }
 
@@ -780,10 +743,10 @@ const goToHome = () => {
 }
 
 .back-btn:hover {
-  background: rgba(247, 149, 69, 0.1);
-  border-color: #f79545;
+  background: rgba(245, 240, 232, 0.15);
+  border-color: var(--color-primary);
   transform: translateX(-3px);
-  box-shadow: 0 4px 16px rgba(247, 149, 69, 0.25);
+  box-shadow: 0 4px 16px rgba(245, 240, 232, 0.2);
 }
 
 .back-btn:hover svg {

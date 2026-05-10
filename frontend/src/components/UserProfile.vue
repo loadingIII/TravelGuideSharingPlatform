@@ -146,7 +146,7 @@
           <div v-if="currentPostTab === 'guides'" class="content-list">
             <div v-for="guide in myGuides" :key="guide.id" class="content-card">
               <div class="card-image">
-                <img :src="guide.cover_image_url || '/img/富士山.jpg'" alt="攻略封面">
+                <img :src="guide.coverImageUrl || '/img/富士山.jpg'" alt="攻略封面">
               </div>
               <div class="card-body">
                 <h4 class="card-title">{{ guide.title }}</h4>
@@ -157,15 +157,15 @@
                       <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                       <circle cx="12" cy="12" r="3"/>
                     </svg>
-                    {{ guide.views_count || 0 }}
+                    {{ guide.viewsCount || 0 }}
                   </span>
                   <span class="meta-item">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                     </svg>
-                    {{ guide.likes_count || 0 }}
+                    {{ guide.likesCount || 0 }}
                   </span>
-                  <span class="meta-item">{{ formatDate(guide.published_at) }}</span>
+                  <span class="meta-item">{{ formatDate(guide.publishedAt) }}</span>
                 </div>
               </div>
               <div class="card-actions">
@@ -210,7 +210,7 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                     </svg>
-                    {{ story.likes_count || 0 }}
+                    {{ story.likesCount || 0 }}
                   </span>
                   <span class="meta-item">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -265,7 +265,7 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                     </svg>
-                    {{ comment.likes_count || 0 }}
+                    {{ comment.likesCount || 0 }}
                   </span>
                 </div>
                 <div class="card-actions">
@@ -308,14 +308,14 @@
           <div v-if="currentFavoriteTab === 'likedGuides'" class="content-list">
             <div v-for="guide in likedGuides" :key="guide.id" class="content-card">
               <div class="card-image">
-                <img :src="guide.cover_image_url || '/img/富士山.jpg'" alt="攻略封面">
+                <img :src="guide.coverImageUrl || '/img/富士山.jpg'" alt="攻略封面">
               </div>
               <div class="card-body">
                 <h4 class="card-title">{{ guide.title }}</h4>
                 <p class="card-desc">{{ guide.summary }}</p>
                 <div class="card-author">
-                  <img :src="guide.author_avatar || '/img/头像1.jpg'" alt="作者">
-                  <span>{{ guide.author_name }}</span>
+                  <img :src="guide.authorAvatarUrl || '/img/头像1.jpg'" alt="作者">
+                  <span>{{ guide.authorName }}</span>
                 </div>
               </div>
               <div class="card-actions">
@@ -388,12 +388,50 @@
         </div>
       </div>
     </div>
+    <ConfirmDialog ref="confirmRef" />
+
+    <!-- 编辑攻略弹窗 -->
+    <div class="modal-overlay" v-if="showEditModal && editingGuide" @click.self="showEditModal = false">
+      <div class="edit-modal">
+        <div class="edit-modal-header">
+          <h3>编辑攻略</h3>
+          <button class="edit-close" @click="showEditModal = false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+        <div class="edit-modal-body">
+          <div class="edit-field">
+            <label>标题</label>
+            <input type="text" v-model="editingGuide.title" placeholder="攻略标题">
+          </div>
+          <div class="edit-field">
+            <label>简介</label>
+            <input type="text" v-model="editingGuide.summary" placeholder="一句话描述">
+          </div>
+          <div class="edit-field">
+            <label>详细内容</label>
+            <RichEditor v-model="editingGuide.contentHtml" placeholder="攻略内容" />
+          </div>
+        </div>
+        <div class="edit-modal-footer">
+          <button class="btn-cancel" @click="showEditModal = false">取消</button>
+          <button class="btn-save" @click="saveGuide">保存</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, watch } from 'vue'
+import { ref, reactive, onMounted, watch, inject } from 'vue'
 import request from '../utils/request.js'
+import ConfirmDialog from './ConfirmDialog.vue'
+import RichEditor from './RichEditor.vue'
+
+const toast = inject('toast')
+const confirmRef = ref(null)
 
 const props = defineProps({
   userInfo: {
@@ -529,7 +567,7 @@ const handleAvatarChange = async (e) => {
     const formData = new FormData()
     formData.append('file', file)
 
-    const res = await request.post('/files/upload', formData, {
+    const res = await request.post('/api/files/upload', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -563,7 +601,7 @@ const saveProfile = async () => {
       avatarUrl: props.userInfo.avatar // 包含当前头像地址，注意字段名与后端一致
     }
 
-    const res = await request.put('/users/me/profile', profileData)
+    const res = await request.put('/api/users/me/profile', profileData)
 
     if (res.code === 'OK' || res.code === 200) {
       // 更新成功，通知父组件更新用户信息
@@ -587,14 +625,56 @@ const formatDate = (date) => {
 }
 
 // 编辑攻略
-const editGuide = (id) => {
-  console.log('编辑攻略:', id)
+const editGuide = async (id) => {
+  try {
+    const res = await request.get(`/api/guides/${id}`)
+    if (res.code === 'OK' || res.code === 200) {
+      editingGuide.value = res.data
+      showEditModal.value = true
+    }
+  } catch (err) {
+    toast.error('获取攻略详情失败')
+  }
+}
+
+const showEditModal = ref(false)
+const editingGuide = ref(null)
+
+const saveGuide = async () => {
+  const g = editingGuide.value
+  if (!g.title?.trim()) { toast.warning('请输入标题'); return }
+  try {
+    const res = await request.put(`/api/guides/${g.id}`, {
+      title: g.title,
+      summary: g.summary,
+      contentHtml: g.contentHtml,
+      coverImageUrl: g.coverImageUrl,
+      scope: g.scope,
+      travelMode: g.travelMode
+    })
+    if (res.code === 'OK' || res.code === 200) {
+      showEditModal.value = false
+      await fetchMyData()
+      toast.success('攻略已更新')
+    }
+  } catch (err) {
+    toast.error('更新失败')
+  }
 }
 
 // 删除攻略
-const deleteGuide = (id) => {
-  if (confirm('确定要删除这篇攻略吗？')) {
-    myGuides.value = myGuides.value.filter(g => g.id !== id)
+const deleteGuide = async (id) => {
+  const confirmed = await confirmRef.value?.show('确定要删除这篇攻略吗？删除后无法恢复')
+  if (!confirmed) return
+  try {
+    const res = await request.delete(`/api/guides/${id}`)
+    if (res.code === 'OK' || res.code === 200) {
+      myGuides.value = myGuides.value.filter(g => g.id !== id)
+      stats.guides = myGuides.value.length
+      toast.success('攻略已删除')
+    }
+  } catch (err) {
+    toast.error('删除失败')
   }
 }
 
@@ -609,9 +689,16 @@ const editStory = (id) => {
 }
 
 // 删除故事
-const deleteStory = (id) => {
-  if (confirm('确定要删除这个故事吗？')) {
-    myStories.value = myStories.value.filter(s => s.id !== id)
+const deleteStory = async (id) => {
+  if (!confirm('确定要删除这个故事吗？')) return
+  try {
+    const res = await request.delete(`/api/stories/${id}`)
+    if (res.code === 'OK' || res.code === 200) {
+      myStories.value = myStories.value.filter(s => s.id !== id)
+      stats.stories = myStories.value.length
+    }
+  } catch (err) {
+    console.error('删除故事失败:', err)
   }
 }
 
@@ -621,124 +708,92 @@ const createStory = () => {
 }
 
 // 删除评论
-const deleteComment = (id) => {
-  if (confirm('确定要删除这条评论吗？')) {
-    myComments.value = myComments.value.filter(c => c.id !== id)
+const deleteComment = async (id) => {
+  if (!confirm('确定要删除这条评论吗？')) return
+  try {
+    const res = await request.delete(`/api/guides/comments/${id}`)
+    if (res.code === 'OK' || res.code === 200) {
+      myComments.value = myComments.value.filter(c => c.id !== id)
+    }
+  } catch (err) {
+    console.error('删除评论失败:', err)
   }
 }
 
 // 取消点赞
-const unlikeGuide = (id) => {
-  likedGuides.value = likedGuides.value.filter(g => g.id !== id)
+const unlikeGuide = async (id) => {
+  try {
+    const res = await request.delete(`/api/guides/${id}/like`)
+    if (res.code === 'OK' || res.code === 200) {
+      likedGuides.value = likedGuides.value.filter(g => g.id !== id)
+    }
+  } catch (err) {
+    console.error('取消点赞失败:', err)
+  }
 }
 
 // 取消收藏
-const unsaveStory = (id) => {
-  savedStories.value = savedStories.value.filter(s => s.id !== id)
+const unsaveStory = async (id) => {
+  try {
+    const res = await request.delete(`/api/guides/${id}/favorite`)
+    if (res.code === 'OK' || res.code === 200) {
+      savedStories.value = savedStories.value.filter(s => s.id !== id)
+    }
+  } catch (err) {
+    console.error('取消收藏失败:', err)
+  }
 }
 
-// 加载模拟数据
+// 加载我的数据
+const loadMyData = async () => {
+  try {
+    const [guidesRes, storiesRes, commentsRes, likedRes, favoritedRes] = await Promise.all([
+      request.get('/api/users/me/guides?page=1&pageSize=50'),
+      request.get('/api/users/me/stories?page=1&pageSize=50'),
+      request.get('/api/users/me/comments?page=1&pageSize=50'),
+      request.get('/api/users/me/liked-guides?page=1&pageSize=50'),
+      request.get('/api/users/me/favorite-guides?page=1&pageSize=50')
+    ])
+
+    if (guidesRes.data?.list) {
+      myGuides.value = guidesRes.data.list
+      stats.guides = guidesRes.data.total || myGuides.value.length
+    }
+    if (storiesRes.data?.list) {
+      myStories.value = storiesRes.data.list
+      stats.stories = storiesRes.data.total || myStories.value.length
+    }
+    if (commentsRes.data?.list) {
+      myComments.value = commentsRes.data.list
+    }
+    if (likedRes.data?.list) {
+      likedGuides.value = likedRes.data.list
+    }
+    if (favoritedRes.data?.list) {
+      savedStories.value = favoritedRes.data.list
+    }
+    stats.likes = myGuides.value.reduce((sum, g) => sum + (g.likesCount || 0), 0)
+  } catch (err) {
+    console.error('加载用户数据失败:', err)
+  }
+}
+
 onMounted(() => {
-  // 模拟我的攻略数据
-  myGuides.value = [
-    {
-      id: 1,
-      title: '日本京都赏樱完全指南',
-      summary: '3月下旬至4月上旬是最佳赏樱期，推荐清水寺、哲学之道，记得提前预订和服体验和民宿...',
-      cover_image_url: '/img/富士山.jpg',
-      views_count: 12580,
-      likes_count: 2341,
-      published_at: '2024-03-15'
-    },
-    {
-      id: 2,
-      title: '泰国清迈穷游7天攻略',
-      summary: '古城内寺庙免费参观，周末夜市必逛，双条车是性价比最高的交通方式，人均3000玩一周...',
-      cover_image_url: '/img/长尾船.png',
-      views_count: 9870,
-      likes_count: 1856,
-      published_at: '2024-02-20'
-    }
-  ]
-
-  // 模拟我的故事数据
-  myStories.value = [
-    {
-      id: 1,
-      content: '刚从冰岛回来，极光真的太震撼了！分享一下我的追光攻略：最佳时间是9月到次年3月，建议租一辆车自驾，这样可以灵活选择观赏地点。',
-      images: ['/img/纽约城市.jpg', '/img/悉尼歌剧院.jpg', '/img/富士山.jpg'],
-      likes_count: 456,
-      comments_count: 89,
-      created_at: '2024-03-10'
-    }
-  ]
-
-  // 模拟评论数据
-  myComments.value = [
-    {
-      id: 1,
-      guide_title: '日本京都赏樱完全指南',
-      content: '写得太详细了！正好计划明年去京都，收藏了！',
-      likes_count: 23,
-      created_at: '2024-03-16'
-    },
-    {
-      id: 2,
-      guide_title: '泰国清迈穷游7天攻略',
-      content: '周末夜市真的超级棒，美食太多吃不过来了~',
-      likes_count: 15,
-      created_at: '2024-02-25'
-    }
-  ]
-
-  // 模拟点赞的攻略
-  likedGuides.value = [
-    {
-      id: 3,
-      title: '云南大理环洱海骑行记',
-      summary: '全程120公里，建议分两天完成，沿途喜洲古镇、双廊海景不容错过...',
-      cover_image_url: '/img/希腊圣托尼尼.png',
-      author_name: '骑行达人',
-      author_avatar: '/img/头像3.png'
-    },
-    {
-      id: 4,
-      title: '希腊圣托里尼蜜月之旅',
-      summary: '蓝白相间的地中海风情，伊亚小镇的日落是世界最美日落之一...',
-      cover_image_url: '/img/希腊圣托尼尼.png',
-      author_name: '蜜月旅行者',
-      author_avatar: '/img/头像1.jpg'
-    }
-  ]
-
-  // 模拟收藏的故事
-  savedStories.value = [
-    {
-      id: 2,
-      author_name: '摄影师阿明',
-      author_avatar: '/img/头像2.png',
-      content: '在巴塞罗那拍到了圣家堂最美的光线！高迪的建筑真的让人叹为观止...',
-      images: ['/img/巴塞罗亚.png']
-    }
-  ]
-
-  // 更新统计数据
-  stats.guides = myGuides.value.length
-  stats.stories = myStories.value.length
-  stats.likes = myGuides.value.reduce((sum, g) => sum + (g.likes_count || 0), 0)
+  loadMyData()
 })
 </script>
 
 <style scoped>
 .user-profile-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8f6f3 0%, #fff9f5 100%);
+  background: linear-gradient(135deg, #3D4F2F 0%, #2C3A22 100%);
 }
 
 /* 顶部导航 */
 .profile-header {
-  background: white;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -759,14 +814,14 @@ onMounted(() => {
   gap: 8px;
   background: none;
   border: none;
-  color: #666;
+  color: #D4CFC7;
   cursor: pointer;
   font-size: 14px;
   transition: all 0.3s ease;
 }
 
 .back-btn:hover {
-  color: #f79545;
+  color: #F5F0E8;
 }
 
 .back-btn svg {
@@ -777,8 +832,8 @@ onMounted(() => {
 .page-title {
   font-size: 20px;
   font-weight: 600;
-  color: #333;
-  font-family: 'Noto Serif SC', serif;
+  color: #F5F2ED;
+  font-family: var(--font-display);
 }
 
 .header-spacer {
@@ -803,10 +858,10 @@ onMounted(() => {
 }
 
 .user-card {
-  background: white;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 20px;
   padding: 30px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 }
 
 .avatar-section {
@@ -826,7 +881,7 @@ onMounted(() => {
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
-  background: linear-gradient(135deg, #ffc494 0%, #f79545 100%);
+  background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -845,8 +900,8 @@ onMounted(() => {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #f79545;
-  border: 3px solid white;
+  background: #F5F0E8;
+  border: 3px solid #3D4F2F;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -856,7 +911,7 @@ onMounted(() => {
 
 .edit-avatar-btn:hover {
   transform: scale(1.1);
-  background: #e88535;
+  background: #E8E2DA;
 }
 
 /* 头像可点击状态 */
@@ -869,7 +924,7 @@ onMounted(() => {
 .user-avatar-img.clickable:hover,
 .avatar-placeholder.clickable:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 20px rgba(247, 149, 69, 0.3);
+  box-shadow: 0 4px 20px rgba(245, 240, 232, 0.3);
 }
 
 .edit-avatar-btn svg {
@@ -881,13 +936,13 @@ onMounted(() => {
 .user-name {
   font-size: 20px;
   font-weight: 600;
-  color: #333;
+  color: #F5F2ED;
   margin-bottom: 5px;
 }
 
 .user-role {
   font-size: 14px;
-  color: #999;
+  color: #A8A29E;
 }
 
 /* 统计 */
@@ -895,8 +950,8 @@ onMounted(() => {
   display: flex;
   justify-content: space-around;
   padding: 20px 0;
-  border-top: 1px solid #f0f0f0;
-  border-bottom: 1px solid #f0f0f0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   margin-bottom: 20px;
 }
 
@@ -910,12 +965,12 @@ onMounted(() => {
 .stat-value {
   font-size: 20px;
   font-weight: 700;
-  color: #f79545;
+  color: #F5F0E8;
 }
 
 .stat-label {
   font-size: 12px;
-  color: #999;
+  color: #A8A29E;
 }
 
 /* 菜单 */
@@ -935,7 +990,7 @@ onMounted(() => {
   background: transparent;
   cursor: pointer;
   transition: all 0.3s ease;
-  color: #666;
+  color: #D4CFC7;
   font-size: 14px;
 }
 
@@ -945,13 +1000,13 @@ onMounted(() => {
 }
 
 .menu-item:hover {
-  background: #fff5ed;
-  color: #f79545;
+  background: rgba(245, 240, 232, 0.1);
+  color: #F5F0E8;
 }
 
 .menu-item.active {
-  background: linear-gradient(135deg, #f79545 0%, #ffc494 100%);
-  color: white;
+  background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
+  color: #2F3D24;
 }
 
 /* 内容区域 */
@@ -960,10 +1015,10 @@ onMounted(() => {
 }
 
 .content-section {
-  background: white;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 20px;
   padding: 30px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 }
 
 .section-header {
@@ -972,28 +1027,28 @@ onMounted(() => {
   align-items: center;
   margin-bottom: 25px;
   padding-bottom: 20px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .section-header h3 {
   font-size: 18px;
   font-weight: 600;
-  color: #333;
+  color: #F5F2ED;
 }
 
 .edit-btn {
   padding: 8px 20px;
   border-radius: 20px;
-  border: 1px solid #f79545;
+  border: 1px solid #F5F0E8;
   background: transparent;
-  color: #f79545;
+  color: #F5F0E8;
   cursor: pointer;
   font-size: 14px;
   transition: all 0.3s ease;
 }
 
 .edit-btn:hover {
-  background: #f79545;
+  background: #F5F0E8;
   color: white;
 }
 
@@ -1013,29 +1068,36 @@ onMounted(() => {
 .form-group label {
   font-size: 14px;
   font-weight: 500;
-  color: #666;
+  color: #D4CFC7;
 }
 
 .form-group input,
 .form-group textarea {
   padding: 12px 16px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 12px;
   font-size: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #F5F2ED;
   transition: all 0.3s ease;
   font-family: inherit;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #A8A29E;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #f79545;
-  box-shadow: 0 0 0 3px rgba(247, 149, 69, 0.1);
+  border-color: #F5F0E8;
+  box-shadow: 0 0 0 3px rgba(245, 240, 232, 0.1);
 }
 
 .form-group input:disabled,
 .form-group textarea:disabled {
-  background: #f8f8f8;
+  background: rgba(255, 255, 255, 0.05);
   cursor: not-allowed;
 }
 
@@ -1062,22 +1124,22 @@ onMounted(() => {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #f79545 0%, #ffc494 100%);
-  color: white;
+  background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
+  color: #2F3D24;
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(247, 149, 69, 0.4);
+  box-shadow: 0 4px 12px rgba(245, 240, 232, 0.4);
 }
 
 .btn-secondary {
-  background: #f5f5f5;
-  color: #666;
+  background: rgba(255, 255, 255, 0.08);
+  color: #D4CFC7;
 }
 
 .btn-secondary:hover {
-  background: #e8e8e8;
+  background: rgba(255, 255, 255, 0.15);
 }
 
 /* 筛选标签 */
@@ -1090,20 +1152,20 @@ onMounted(() => {
   padding: 6px 16px;
   border-radius: 20px;
   border: none;
-  background: #f5f5f5;
-  color: #666;
+  background: rgba(255, 255, 255, 0.08);
+  color: #D4CFC7;
   cursor: pointer;
   font-size: 13px;
   transition: all 0.3s ease;
 }
 
 .filter-tab:hover {
-  background: #ebebeb;
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .filter-tab.active {
-  background: #f79545;
-  color: white;
+  background: #F5F0E8;
+  color: #2F3D24;
 }
 
 /* 内容列表 */
@@ -1117,7 +1179,7 @@ onMounted(() => {
   display: flex;
   gap: 20px;
   padding: 20px 24px;
-  background: #fafafa;
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 16px;
   transition: all 0.3s ease;
   position: relative;
@@ -1125,9 +1187,9 @@ onMounted(() => {
 }
 
 .content-card:hover {
-  background: #fff;
-  border-color: #f0f0f0;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   transform: translateY(-2px);
 }
 
@@ -1137,7 +1199,7 @@ onMounted(() => {
   border-radius: 12px;
   overflow: hidden;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .card-image img {
@@ -1162,7 +1224,7 @@ onMounted(() => {
 .card-title {
   font-size: 16px;
   font-weight: 600;
-  color: #333;
+  color: #F5F2ED;
   margin-bottom: 10px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1171,12 +1233,12 @@ onMounted(() => {
 }
 
 .content-card:hover .card-title {
-  color: #f79545;
+  color: #F5F0E8;
 }
 
 .card-desc {
   font-size: 13px;
-  color: #666;
+  color: #D4CFC7;
   line-height: 1.7;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1191,7 +1253,7 @@ onMounted(() => {
   display: flex;
   gap: 20px;
   font-size: 12px;
-  color: #999;
+  color: #A8A29E;
   margin-top: auto;
 }
 
@@ -1203,7 +1265,7 @@ onMounted(() => {
 }
 
 .meta-item:hover {
-  color: #f79545;
+  color: #F5F0E8;
 }
 
 .meta-item svg {
@@ -1226,12 +1288,13 @@ onMounted(() => {
   height: 32px;
   border-radius: 8px;
   border: none;
-  background: white;
+  background: rgba(255, 255, 255, 0.1);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  color: #D4CFC7;
 }
 
 .action-btn svg {
@@ -1239,30 +1302,22 @@ onMounted(() => {
   height: 16px;
 }
 
-.action-btn.edit {
-  color: #666;
-}
-
 .action-btn.edit:hover {
-  background: #e3f2fd;
-  color: #2196f3;
-}
-
-.action-btn.delete {
-  color: #666;
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
 }
 
 .action-btn.delete:hover {
-  background: #ffebee;
-  color: #f44336;
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
 }
 
 .action-btn.unlike {
-  color: #f44336;
+  color: #f87171;
 }
 
 .action-btn.unlike:hover {
-  background: #ffebee;
+  background: rgba(239, 68, 68, 0.2);
 }
 
 /* 故事卡片 */
@@ -1278,7 +1333,7 @@ onMounted(() => {
 
 .story-content {
   font-size: 14px;
-  color: #333;
+  color: #F5F2ED;
   line-height: 1.8;
   margin-bottom: 16px;
   padding-right: 50px;
@@ -1336,14 +1391,14 @@ onMounted(() => {
   height: 28px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .story-author span,
 .card-author span {
   font-size: 13px;
-  color: #666;
+  color: #D4CFC7;
   font-weight: 500;
 }
 
@@ -1351,7 +1406,7 @@ onMounted(() => {
   display: flex;
   gap: 20px;
   padding-top: 12px;
-  border-top: 1px solid #eee;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .story-card .card-actions {
@@ -1378,18 +1433,18 @@ onMounted(() => {
 
 .comment-target {
   font-size: 13px;
-  color: #f79545;
+  color: #F5F0E8;
   font-weight: 500;
 }
 
 .comment-time {
   font-size: 12px;
-  color: #999;
+  color: #A8A29E;
 }
 
 .comment-content {
   font-size: 14px;
-  color: #333;
+  color: #F5F2ED;
   line-height: 1.8;
   margin-bottom: 16px;
   padding-right: 40px;
@@ -1411,18 +1466,18 @@ onMounted(() => {
   align-items: center;
   gap: 6px;
   font-size: 13px;
-  color: #999;
+  color: #A8A29E;
   transition: all 0.3s ease;
 }
 
 .comment-stats .stat-item svg {
   width: 16px;
   height: 16px;
-  color: #f79545;
+  color: #F5F0E8;
 }
 
 .comment-stats .stat-item:hover {
-  color: #f79545;
+  color: #F5F0E8;
 }
 
 .comment-card .card-actions {
@@ -1440,7 +1495,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   padding: 60px 20px;
-  color: #999;
+  color: #A8A29E;
 }
 
 .empty-state svg {
@@ -1507,7 +1562,7 @@ onMounted(() => {
   width: 300px;
   height: 300px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #ffc494 0%, #f79545 100%);
+  background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1602,5 +1657,150 @@ onMounted(() => {
     width: 100%;
     overflow-x: auto;
   }
+}
+
+/* 编辑弹窗 */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.2s ease;
+}
+
+.edit-modal {
+  background: #3D4F2F;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px;
+  width: 90%;
+  max-width: 560px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+  animation: modalSlide 0.25s ease;
+}
+
+.edit-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 28px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.edit-modal-header h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #F5F2ED;
+  font-family: var(--font-display);
+}
+
+.edit-close {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.08);
+  border: none;
+  border-radius: 50%;
+  color: #A8A29E;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.edit-close:hover {
+  background: rgba(255,255,255,0.15);
+  color: #F5F2ED;
+}
+
+.edit-close svg {
+  width: 18px;
+  height: 18px;
+}
+
+.edit-modal-body {
+  padding: 24px 28px;
+}
+
+.edit-field {
+  margin-bottom: 20px;
+}
+
+.edit-field label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #D4CFC7;
+  margin-bottom: 8px;
+}
+
+.edit-field input,
+.edit-field textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  font-size: 15px;
+  color: #F5F2ED;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.edit-field input:focus,
+.edit-field textarea:focus {
+  border-color: rgba(245,240,232,0.4);
+  box-shadow: 0 0 0 3px rgba(245,240,232,0.08);
+}
+
+.edit-field textarea {
+  resize: vertical;
+  min-height: 120px;
+  font-family: var(--font-body);
+}
+
+.edit-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px 28px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.edit-modal-footer .btn-cancel {
+  padding: 10px 24px;
+  background: rgba(255,255,255,0.08);
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #D4CFC7;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.edit-modal-footer .btn-cancel:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+.edit-modal-footer .btn-save {
+  padding: 10px 28px;
+  background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2F3D24;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.edit-modal-footer .btn-save:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(245,240,232,0.3);
 }
 </style>

@@ -1,9 +1,10 @@
 package com.travel.mapper;
 
 import com.travel.pojo.model.Destination;
-import com.travel.pojo.model.DestinationShowcase;
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -35,11 +36,6 @@ public interface DestinationMapper {
     Destination selectById(@Param("id") Long id);
 
     /**
-     * 获取指定分类的展示列表
-     */
-    List<DestinationShowcase> listShowcasesBySection(@Param("section") String section, @Param("limit") int limit);
-
-    /**
      * 搜索目的地
      */
     List<Destination> searchDestinations(@Param("query") String query, @Param("limit") int limit);
@@ -63,4 +59,14 @@ public interface DestinationMapper {
 
     @Delete("DELETE FROM destinations WHERE id = #{id}")
     int deleteById(@Param("id") Long id);
+
+    @Insert("INSERT INTO destinations (name, country, city, description, cover_image_url) VALUES (#{name}, #{country}, #{city}, #{description}, #{coverImageUrl})")
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    int insert(Destination destination);
+
+    /**
+     * 根据名称查找目的地
+     */
+    @Select("SELECT * FROM destinations WHERE name = #{name} LIMIT 1")
+    Destination findByName(@Param("name") String name);
 }

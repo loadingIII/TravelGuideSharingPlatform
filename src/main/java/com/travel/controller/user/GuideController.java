@@ -5,16 +5,25 @@ import com.travel.common.PageResult;
 
 import java.util.List;
 
+import com.travel.pojo.dto.CreateCommentDTO;
+import com.travel.pojo.dto.CreateGuideDTO;
+import com.travel.pojo.dto.UpdateGuideDTO;
 import com.travel.pojo.vo.GuideCommentVO;
 import com.travel.pojo.vo.GuideDetailVO;
 import com.travel.pojo.vo.GuideListItemVO;
+import com.travel.security.RequireLogin;
 import com.travel.service.GuideCommentService;
 import com.travel.service.GuideService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 处理旅游攻略相关的操作，如攻略列表查询、攻略详情查看等
  */
 @RestController
-@RequestMapping("/guides")
+@RequestMapping("/api/guides")
 @RequiredArgsConstructor
 public class GuideController {
     private static final Logger log = LoggerFactory.getLogger(GuideController.class);
@@ -83,5 +92,38 @@ public class GuideController {
     public ApiResponse<List<GuideCommentVO>> guideComments(@PathVariable("id") Long id) {
         log.info("获取攻略评论列表");
         return ApiResponse.success(guideCommentService.listCommentsByGuideId(id));
+    }
+
+    @RequireLogin
+    @PostMapping
+    public ApiResponse<Long> createGuide(@Valid @RequestBody CreateGuideDTO dto) {
+        return ApiResponse.success(guideService.createGuide(dto));
+    }
+
+    @RequireLogin
+    @PutMapping("/{id}")
+    public ApiResponse<Void> updateGuide(@PathVariable("id") Long id, @Valid @RequestBody UpdateGuideDTO dto) {
+        guideService.updateGuide(id, dto);
+        return ApiResponse.success();
+    }
+
+    @RequireLogin
+    @DeleteMapping("/{id}")
+    public ApiResponse<Void> deleteGuide(@PathVariable("id") Long id) {
+        guideService.deleteGuide(id);
+        return ApiResponse.success();
+    }
+
+    @RequireLogin
+    @PostMapping("/{guideId}/comments")
+    public ApiResponse<GuideCommentVO> addComment(@PathVariable("guideId") Long guideId, @Valid @RequestBody CreateCommentDTO dto) {
+        return ApiResponse.success(guideCommentService.addComment(guideId, dto));
+    }
+
+    @RequireLogin
+    @DeleteMapping("/comments/{id}")
+    public ApiResponse<Void> deleteComment(@PathVariable("id") Long id) {
+        guideCommentService.deleteComment(id);
+        return ApiResponse.success();
     }
 }

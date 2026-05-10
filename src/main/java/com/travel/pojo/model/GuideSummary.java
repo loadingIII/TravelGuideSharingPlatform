@@ -12,6 +12,7 @@ public class GuideSummary {
     private Long authorId;
     private String title;
     private String summary;
+    private String contentHtml;
     private String coverImageUrl;
     private String locationText;
     private String scope;

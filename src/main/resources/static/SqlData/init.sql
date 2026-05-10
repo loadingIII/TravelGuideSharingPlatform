@@ -1,4 +1,4 @@
-SET NAMES utf8mb4;
+﻿SET NAMES utf8mb4;
 
 CREATE DATABASE IF NOT EXISTS travel_guide_platform
   DEFAULT CHARACTER SET utf8mb4
@@ -6,7 +6,7 @@ CREATE DATABASE IF NOT EXISTS travel_guide_platform
 USE travel_guide_platform;
 
 -- ============================================================
--- 1) 用户
+-- 1) 鐢ㄦ埛
 -- ============================================================
 CREATE TABLE IF NOT EXISTS users (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -43,8 +43,7 @@ CREATE TABLE IF NOT EXISTS user_profiles (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ============================================================
--- 2) 目的地
--- ============================================================
+-- 2) 鐩殑鍦?-- ============================================================
 CREATE TABLE IF NOT EXISTS destinations (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   name VARCHAR(100) NOT NULL,
@@ -64,29 +63,8 @@ CREATE TABLE IF NOT EXISTS destinations (
   KEY idx_destinations_popularity (popularity_score)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE IF NOT EXISTS destination_showcases (
-  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  destination_id BIGINT UNSIGNED NULL,
-  section ENUM('recommended','popular','inspiration') NOT NULL,
-  display_title VARCHAR(100) NOT NULL,
-  display_subtitle VARCHAR(255) NULL,
-  display_description VARCHAR(1000) NULL,
-  display_image_url VARCHAR(500) NULL,
-  display_rating DECIMAL(3,2) NULL,
-  sort_order INT UNSIGNED NOT NULL DEFAULT 0,
-  is_active TINYINT(1) NOT NULL DEFAULT 1,
-  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-  KEY idx_showcases_section_order (section, sort_order),
-  KEY idx_showcases_destination (destination_id),
-  CONSTRAINT fk_showcases_destination
-    FOREIGN KEY (destination_id) REFERENCES destinations(id)
-    ON UPDATE CASCADE ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
 -- ============================================================
--- 3) 攻略主表
+-- 3) 鏀荤暐涓昏〃
 -- ============================================================
 CREATE TABLE IF NOT EXISTS guides (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -107,7 +85,7 @@ CREATE TABLE IF NOT EXISTS guides (
   likes_count INT UNSIGNED NOT NULL DEFAULT 0,
   comments_count INT UNSIGNED NOT NULL DEFAULT 0,
   favorites_count INT UNSIGNED NOT NULL DEFAULT 0,
-  status INT DEFAULT 0 COMMENT '0=待审核, 1=已通过, 2=已拒绝, 3=已下架',
+  status INT DEFAULT 0 COMMENT '0=寰呭鏍? 1=宸查€氳繃, 2=宸叉嫆缁? 3=宸蹭笅鏋?,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
@@ -124,7 +102,7 @@ CREATE TABLE IF NOT EXISTS guides (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ============================================================
--- 4) 标签
+-- 4) 鏍囩
 -- ============================================================
 CREATE TABLE IF NOT EXISTS tags (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -149,8 +127,7 @@ CREATE TABLE IF NOT EXISTS guide_tags (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ============================================================
--- 5) 行程结构（天 -> 景点）
--- ============================================================
+-- 5) 琛岀▼缁撴瀯锛堝ぉ -> 鏅偣锛?-- ============================================================
 CREATE TABLE IF NOT EXISTS guide_itinerary_days (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   guide_id BIGINT UNSIGNED NOT NULL,
@@ -168,96 +145,15 @@ CREATE TABLE IF NOT EXISTS guide_itinerary_days (
     ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE IF NOT EXISTS guide_itinerary_spots (
-  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  itinerary_day_id BIGINT UNSIGNED NOT NULL,
-  name VARCHAR(150) NOT NULL,
-  description VARCHAR(1000) NULL,
-  visit_time TIME NULL,
-  duration_minutes SMALLINT UNSIGNED NULL,
-  image_url VARCHAR(500) NULL,
-  sort_order SMALLINT UNSIGNED NOT NULL DEFAULT 1,
-  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-  KEY idx_itinerary_spots_day (itinerary_day_id, sort_order),
-  CONSTRAINT fk_itinerary_spots_day
-    FOREIGN KEY (itinerary_day_id) REFERENCES guide_itinerary_days(id)
-    ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- ============================================================
+-- 7) 棰勭畻鎷嗗垎
+-- ============================================================
 
 -- ============================================================
--- 6) 实用信息 tips
+-- 8) 鐩稿叧鏀荤暐
 -- ============================================================
-CREATE TABLE IF NOT EXISTS guide_tips (
-  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  guide_id BIGINT UNSIGNED NOT NULL,
-  category_name VARCHAR(100) NOT NULL,
-  sort_order SMALLINT UNSIGNED NOT NULL DEFAULT 1,
-  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-  UNIQUE KEY uk_guide_tip_category (guide_id, category_name),
-  KEY idx_guide_tips_guide (guide_id),
-  CONSTRAINT fk_guide_tips_guide
-    FOREIGN KEY (guide_id) REFERENCES guides(id)
-    ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE IF NOT EXISTS guide_tip_items (
-  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  tip_id BIGINT UNSIGNED NOT NULL,
-  item_text VARCHAR(300) NOT NULL,
-  sort_order SMALLINT UNSIGNED NOT NULL DEFAULT 1,
-  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-  KEY idx_guide_tip_items_tip (tip_id, sort_order),
-  CONSTRAINT fk_guide_tip_items_tip
-    FOREIGN KEY (tip_id) REFERENCES guide_tips(id)
-    ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
 -- ============================================================
--- 7) 预算拆分
--- ============================================================
-CREATE TABLE IF NOT EXISTS guide_budget_items (
-  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  guide_id BIGINT UNSIGNED NOT NULL,
-  category_code VARCHAR(50) NOT NULL,
-  category_name VARCHAR(50) NOT NULL,
-  amount DECIMAL(10,2) NOT NULL,
-  percentage DECIMAL(5,2) NOT NULL,
-  sort_order SMALLINT UNSIGNED NOT NULL DEFAULT 1,
-  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-  UNIQUE KEY uk_guide_budget_item (guide_id, category_code),
-  KEY idx_guide_budget_guide (guide_id),
-  CONSTRAINT fk_guide_budget_guide
-    FOREIGN KEY (guide_id) REFERENCES guides(id)
-    ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- ============================================================
--- 8) 相关攻略
--- ============================================================
-CREATE TABLE IF NOT EXISTS guide_related (
-  guide_id BIGINT UNSIGNED NOT NULL,
-  related_guide_id BIGINT UNSIGNED NOT NULL,
-  sort_order SMALLINT UNSIGNED NOT NULL DEFAULT 1,
-  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (guide_id, related_guide_id),
-  KEY idx_guide_related_related (related_guide_id),
-  CONSTRAINT fk_guide_related_guide
-    FOREIGN KEY (guide_id) REFERENCES guides(id)
-    ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT fk_guide_related_related
-    FOREIGN KEY (related_guide_id) REFERENCES guides(id)
-    ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- ============================================================
--- 9) 攻略评论
+-- 9) 鏀荤暐璇勮
 -- ============================================================
 CREATE TABLE IF NOT EXISTS guide_comments (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -268,7 +164,7 @@ CREATE TABLE IF NOT EXISTS guide_comments (
   author_avatar_url VARCHAR(500) NULL,
   content TEXT NOT NULL,
   likes_count INT UNSIGNED NOT NULL DEFAULT 0,
-  status INT DEFAULT 0 COMMENT '0=待审核, 1=已通过, 2=已拒绝, 3=已下架',
+  status INT DEFAULT 0 COMMENT '0=寰呭鏍? 1=宸查€氳繃, 2=宸叉嫆缁? 3=宸蹭笅鏋?,
   is_deleted TINYINT(1) NOT NULL DEFAULT 0,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -288,7 +184,7 @@ CREATE TABLE IF NOT EXISTS guide_comments (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ============================================================
--- 10) 攻略互动：点赞/收藏/评论点赞
+-- 10) 鏀荤暐浜掑姩锛氱偣璧?鏀惰棌/璇勮鐐硅禐
 -- ============================================================
 CREATE TABLE IF NOT EXISTS guide_likes (
   guide_id BIGINT UNSIGNED NOT NULL,
@@ -333,7 +229,7 @@ CREATE TABLE IF NOT EXISTS guide_comment_likes (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ============================================================
--- 11) 用户关注（作者关注）
+-- 11) 鐢ㄦ埛鍏虫敞锛堜綔鑰呭叧娉級
 -- ============================================================
 CREATE TABLE IF NOT EXISTS user_follows (
   follower_user_id BIGINT UNSIGNED NOT NULL,
@@ -350,7 +246,7 @@ CREATE TABLE IF NOT EXISTS user_follows (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ============================================================
--- 12) 旅行者故事（社区流）
+-- 12) 鏃呰鑰呮晠浜嬶紙绀惧尯娴侊級
 -- ============================================================
 CREATE TABLE IF NOT EXISTS traveler_stories (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -363,7 +259,7 @@ CREATE TABLE IF NOT EXISTS traveler_stories (
   likes_count INT UNSIGNED NOT NULL DEFAULT 0,
   comments_count INT UNSIGNED NOT NULL DEFAULT 0,
   shares_count INT UNSIGNED NOT NULL DEFAULT 0,
-  status INT DEFAULT 0 COMMENT '0=待审核, 1=已通过, 2=已拒绝, 3=已下架',
+  status INT DEFAULT 0 COMMENT '0=寰呭鏍? 1=宸查€氳繃, 2=宸叉嫆缁? 3=宸蹭笅鏋?,
   is_deleted TINYINT(1) NOT NULL DEFAULT 0,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -411,7 +307,7 @@ CREATE TABLE IF NOT EXISTS traveler_story_comments (
   author_avatar_url VARCHAR(500) NULL,
   content TEXT NOT NULL,
   likes_count INT UNSIGNED NOT NULL DEFAULT 0,
-  status INT DEFAULT 0 COMMENT '0=待审核, 1=已通过, 2=已拒绝, 3=已下架',
+  status INT DEFAULT 0 COMMENT '0=寰呭鏍? 1=宸查€氳繃, 2=宸叉嫆缁? 3=宸蹭笅鏋?,
   is_deleted TINYINT(1) NOT NULL DEFAULT 0,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -431,14 +327,13 @@ CREATE TABLE IF NOT EXISTS traveler_story_comments (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ============================================================
--- 13) 管理员账号
--- ============================================================
+-- 13) 绠＄悊鍛樿处鍙?-- ============================================================
 CREATE TABLE IF NOT EXISTS admin_users (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   username VARCHAR(50) NOT NULL,
   password_hash VARCHAR(255) NOT NULL,
   real_name VARCHAR(50) NULL,
-  status TINYINT UNSIGNED NOT NULL DEFAULT 1 COMMENT '1=正常 0=禁用',
+  status TINYINT UNSIGNED NOT NULL DEFAULT 1 COMMENT '1=姝ｅ父 0=绂佺敤',
   last_login_at DATETIME NULL,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -446,20 +341,18 @@ CREATE TABLE IF NOT EXISTS admin_users (
   UNIQUE KEY uk_admin_username (username)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- 默认管理员 admin/admin123 由应用启动时自动创建（BCrypt加密）
-
+-- 榛樿绠＄悊鍛?admin/admin123 鐢卞簲鐢ㄥ惎鍔ㄦ椂鑷姩鍒涘缓锛圔Crypt鍔犲瘑锛?
 -- ============================================================
--- 14) 管理员操作日志
--- ============================================================
+-- 14) 绠＄悊鍛樻搷浣滄棩蹇?-- ============================================================
 CREATE TABLE IF NOT EXISTS admin_logs (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  admin_id BIGINT UNSIGNED NOT NULL COMMENT '操作管理员ID',
-  admin_username VARCHAR(50) NOT NULL COMMENT '操作管理员用户名',
-  action VARCHAR(50) NOT NULL COMMENT '操作类型：CREATE/UPDATE/DELETE/LOGIN/LOGOUT',
-  target_type VARCHAR(50) NOT NULL COMMENT '操作对象类型：USER/GUIDE/STORY/DESTINATION/COMMENT',
-  target_id BIGINT UNSIGNED NULL COMMENT '操作对象ID',
-  detail VARCHAR(500) NULL COMMENT '操作详情',
-  ip_address VARCHAR(50) NULL COMMENT '操作IP',
+  admin_id BIGINT UNSIGNED NOT NULL COMMENT '鎿嶄綔绠＄悊鍛業D',
+  admin_username VARCHAR(50) NOT NULL COMMENT '鎿嶄綔绠＄悊鍛樼敤鎴峰悕',
+  action VARCHAR(50) NOT NULL COMMENT '鎿嶄綔绫诲瀷锛欳REATE/UPDATE/DELETE/LOGIN/LOGOUT',
+  target_type VARCHAR(50) NOT NULL COMMENT '鎿嶄綔瀵硅薄绫诲瀷锛歎SER/GUIDE/STORY/DESTINATION/COMMENT',
+  target_id BIGINT UNSIGNED NULL COMMENT '鎿嶄綔瀵硅薄ID',
+  detail VARCHAR(500) NULL COMMENT '鎿嶄綔璇︽儏',
+  ip_address VARCHAR(50) NULL COMMENT '鎿嶄綔IP',
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   KEY idx_admin_logs_admin_id (admin_id),
@@ -467,11 +360,11 @@ CREATE TABLE IF NOT EXISTS admin_logs (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ============================================================
--- 数据插入
+-- 鏁版嵁鎻掑叆
 -- ============================================================
 
 -- ============================================================
--- 1) 用户数据
+-- 1) 鐢ㄦ埛鏁版嵁
 -- ============================================================
 INSERT INTO users (id, username, phone, email, password_hash, status, last_login_at) VALUES
 (1, 'travel_lover_001', '13800138001', 'travel001@example.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVKIUi', 1, '2026-04-29 10:30:00'),
@@ -488,87 +381,76 @@ INSERT INTO users (id, username, phone, email, password_hash, status, last_login
 (12, 'nature_lover', '13800138012', 'travel012@example.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVKIUi', 1, '2026-04-18 14:30:00');
 
 -- ============================================================
--- 2) 用户档案
+-- 2) 鐢ㄦ埛妗ｆ
 -- ============================================================
 INSERT INTO user_profiles (user_id, nickname, avatar_url, bio, is_vip, guides_count, followers_count, likes_received_count) VALUES
-(1, '旅行达人小明', '/avatars/user1.jpg', '热爱探索世界各地的文化与美食，已完成30+国家旅行', 1, 5, 1250, 3420),
-(2, '背包客小红', '/avatars/user2.jpg', '穷游爱好者，用最少的钱走最多的路', 0, 3, 890, 2150),
-(3, '探险家阿强', '/avatars/user3.jpg', '极限运动爱好者，挑战世界各地的险峻山峰', 1, 4, 2100, 5680),
-(4, '摄影师小李', '/avatars/user4.jpg', '用镜头记录旅途中的美好瞬间', 0, 6, 1560, 4320),
-(5, '美食家小王', '/avatars/user5.jpg', '走遍世界只为寻找最地道的美食', 1, 2, 780, 1890),
-(6, '穷游背包客', '/avatars/user6.jpg', '学生党穷游攻略分享，月均旅行预算2000元', 0, 4, 2340, 6780),
-(7, '奢华旅行家', '/avatars/user7.jpg', '分享高端酒店和私人定制旅行体验', 1, 3, 1890, 4560),
-(8, '独自旅行者', '/avatars/user8.jpg', '一个人的旅行，一个人的精彩', 0, 5, 1230, 3210),
-(9, '吃货旅行家', '/avatars/user9.jpg', '为了美食可以飞越半个地球', 1, 2, 670, 1540),
-(10, '旅行摄影师', '/avatars/user10.jpg', '专业旅行摄影，记录世界的美', 0, 7, 3450, 8920),
-(11, '历史文化迷', '/avatars/user11.jpg', '喜欢探访历史古迹，了解各地文化', 0, 3, 980, 2670),
-(12, '自然探索者', '/avatars/user12.jpg', '热爱大自然，徒步登山是我的生活方式', 1, 4, 1560, 4230);
+(1, '鏃呰杈句汉灏忔槑', '/avatars/user1.jpg', '鐑埍鎺㈢储涓栫晫鍚勫湴鐨勬枃鍖栦笌缇庨锛屽凡瀹屾垚30+鍥藉鏃呰', 1, 5, 1250, 3420),
+(2, '鑳屽寘瀹㈠皬绾?, '/avatars/user2.jpg', '绌锋父鐖卞ソ鑰咃紝鐢ㄦ渶灏戠殑閽辫蛋鏈€澶氱殑璺?, 0, 3, 890, 2150),
+(3, '鎺㈤櫓瀹堕樋寮?, '/avatars/user3.jpg', '鏋侀檺杩愬姩鐖卞ソ鑰咃紝鎸戞垬涓栫晫鍚勫湴鐨勯櫓宄诲北宄?, 1, 4, 2100, 5680),
+(4, '鎽勫奖甯堝皬鏉?, '/avatars/user4.jpg', '鐢ㄩ暅澶磋褰曟梾閫斾腑鐨勭編濂界灛闂?, 0, 6, 1560, 4320),
+(5, '缇庨瀹跺皬鐜?, '/avatars/user5.jpg', '璧伴亶涓栫晫鍙负瀵绘壘鏈€鍦伴亾鐨勭編椋?, 1, 2, 780, 1890),
+(6, '绌锋父鑳屽寘瀹?, '/avatars/user6.jpg', '瀛︾敓鍏氱┓娓告敾鐣ュ垎浜紝鏈堝潎鏃呰棰勭畻2000鍏?, 0, 4, 2340, 6780),
+(7, '濂㈠崕鏃呰瀹?, '/avatars/user7.jpg', '鍒嗕韩楂樼閰掑簵鍜岀浜哄畾鍒舵梾琛屼綋楠?, 1, 3, 1890, 4560),
+(8, '鐙嚜鏃呰鑰?, '/avatars/user8.jpg', '涓€涓汉鐨勬梾琛岋紝涓€涓汉鐨勭簿褰?, 0, 5, 1230, 3210),
+(9, '鍚冭揣鏃呰瀹?, '/avatars/user9.jpg', '涓轰簡缇庨鍙互椋炶秺鍗婁釜鍦扮悆', 1, 2, 670, 1540),
+(10, '鏃呰鎽勫奖甯?, '/avatars/user10.jpg', '涓撲笟鏃呰鎽勫奖锛岃褰曚笘鐣岀殑缇?, 0, 7, 3450, 8920),
+(11, '鍘嗗彶鏂囧寲杩?, '/avatars/user11.jpg', '鍠滄鎺㈣鍘嗗彶鍙よ抗锛屼簡瑙ｅ悇鍦版枃鍖?, 0, 3, 980, 2670),
+(12, '鑷劧鎺㈢储鑰?, '/avatars/user12.jpg', '鐑埍澶ц嚜鐒讹紝寰掓鐧诲北鏄垜鐨勭敓娲绘柟寮?, 1, 4, 1560, 4230);
 
 -- ============================================================
--- 3) 目的地数据
--- ============================================================
+-- 3) 鐩殑鍦版暟鎹?-- ============================================================
 INSERT INTO destinations (id, name, country, city, description, cover_image_url, rating_avg, guides_count, travelers_count, popularity_score) VALUES
-(1, '东京', '日本', '东京', '日本首都，融合传统与现代的国际大都市，拥有丰富的美食文化和购物体验', '/destinations/tokyo.jpg', 4.85, 15, 2560, 95.50),
-(2, '巴黎', '法国', '巴黎', '浪漫之都，艺术与时尚的中心，埃菲尔铁塔和卢浮宫的所在地', '/destinations/paris.jpg', 4.90, 12, 2340, 98.20),
-(3, '曼谷', '泰国', '曼谷', '东南亚最受欢迎的旅游城市，以寺庙、美食和夜市闻名', '/destinations/bangkok.jpg', 4.75, 10, 1890, 88.70),
-(4, '纽约', '美国', '纽约', '世界金融中心，拥有自由女神像、时代广场等标志性景点', '/destinations/newyork.jpg', 4.80, 8, 2100, 92.30),
-(5, '巴厘岛', '印度尼西亚', '巴厘岛', '印尼著名度假胜地，以海滩、梯田和独特的宗教文化著称', '/destinations/bali.jpg', 4.70, 9, 1670, 85.60),
-(6, '伦敦', '英国', '伦敦', '历史悠久的国际都市，大本钟、伦敦眼和白金汉宫必游', '/destinations/london.jpg', 4.75, 7, 1890, 89.40),
-(7, '北京', '中国', '北京', '中国首都，拥有故宫、长城等世界文化遗产', '/destinations/beijing.jpg', 4.85, 14, 3200, 96.80),
-(8, '上海', '中国', '上海', '中国最大城市，现代与传统交融的国际金融中心', '/destinations/shanghai.jpg', 4.80, 11, 2890, 93.50),
-(9, '新加坡', '新加坡', '新加坡', '花园城市，以干净整洁和美食闻名，适合家庭旅游', '/destinations/singapore.jpg', 4.75, 6, 1450, 82.30),
-(10, '清迈', '泰国', '清迈', '泰北玫瑰，以古城寺庙、夜市和悠闲氛围著称', '/destinations/chiangmai.jpg', 4.65, 5, 1230, 78.90),
-(11, '京都', '日本', '京都', '日本古都，保存完好的寺庙神社和传统日式庭院', '/destinations/kyoto.jpg', 4.80, 8, 1670, 87.50),
-(12, '马尔代夫', '马尔代夫', '马累', '印度洋上的珍珠，以水上别墅和清澈海水闻名', '/destinations/maldives.jpg', 4.90, 4, 980, 91.20);
+(1, '涓滀含', '鏃ユ湰', '涓滀含', '鏃ユ湰棣栭兘锛岃瀺鍚堜紶缁熶笌鐜颁唬鐨勫浗闄呭ぇ閮藉競锛屾嫢鏈変赴瀵岀殑缇庨鏂囧寲鍜岃喘鐗╀綋楠?, '/destinations/tokyo.jpg', 4.85, 15, 2560, 95.50),
+(2, '宸撮粠', '娉曞浗', '宸撮粠', '娴极涔嬮兘锛岃壓鏈笌鏃跺皻鐨勪腑蹇冿紝鍩冭彶灏旈搧濉斿拰鍗㈡诞瀹殑鎵€鍦ㄥ湴', '/destinations/paris.jpg', 4.90, 12, 2340, 98.20),
+(3, '鏇艰胺', '娉板浗', '鏇艰胺', '涓滃崡浜氭渶鍙楁杩庣殑鏃呮父鍩庡競锛屼互瀵哄簷銆佺編椋熷拰澶滃競闂诲悕', '/destinations/bangkok.jpg', 4.75, 10, 1890, 88.70),
+(4, '绾界害', '缇庡浗', '绾界害', '涓栫晫閲戣瀺涓績锛屾嫢鏈夎嚜鐢卞コ绁炲儚銆佹椂浠ｅ箍鍦虹瓑鏍囧織鎬ф櫙鐐?, '/destinations/newyork.jpg', 4.80, 8, 2100, 92.30),
+(5, '宸村帢宀?, '鍗板害灏艰タ浜?, '宸村帢宀?, '鍗板凹钁楀悕搴﹀亣鑳滃湴锛屼互娴锋哗銆佹鐢板拰鐙壒鐨勫畻鏁欐枃鍖栬憲绉?, '/destinations/bali.jpg', 4.70, 9, 1670, 85.60),
+(6, '浼︽暒', '鑻卞浗', '浼︽暒', '鍘嗗彶鎮犱箙鐨勫浗闄呴兘甯傦紝澶ф湰閽熴€佷鸡鏁︾溂鍜岀櫧閲戞眽瀹繀娓?, '/destinations/london.jpg', 4.75, 7, 1890, 89.40),
+(7, '鍖椾含', '涓浗', '鍖椾含', '涓浗棣栭兘锛屾嫢鏈夋晠瀹€侀暱鍩庣瓑涓栫晫鏂囧寲閬椾骇', '/destinations/beijing.jpg', 4.85, 14, 3200, 96.80),
+(8, '涓婃捣', '涓浗', '涓婃捣', '涓浗鏈€澶у煄甯傦紝鐜颁唬涓庝紶缁熶氦铻嶇殑鍥介檯閲戣瀺涓績', '/destinations/shanghai.jpg', 4.80, 11, 2890, 93.50),
+(9, '鏂板姞鍧?, '鏂板姞鍧?, '鏂板姞鍧?, '鑺卞洯鍩庡競锛屼互骞插噣鏁存磥鍜岀編椋熼椈鍚嶏紝閫傚悎瀹跺涵鏃呮父', '/destinations/singapore.jpg', 4.75, 6, 1450, 82.30),
+(10, '娓呰繄', '娉板浗', '娓呰繄', '娉板寳鐜懓锛屼互鍙ゅ煄瀵哄簷銆佸甯傚拰鎮犻棽姘涘洿钁楃О', '/destinations/chiangmai.jpg', 4.65, 5, 1230, 78.90),
+(11, '浜兘', '鏃ユ湰', '浜兘', '鏃ユ湰鍙ら兘锛屼繚瀛樺畬濂界殑瀵哄簷绁炵ぞ鍜屼紶缁熸棩寮忓涵闄?, '/destinations/kyoto.jpg', 4.80, 8, 1670, 87.50),
+(12, '椹皵浠ｅか', '椹皵浠ｅか', '椹疮', '鍗板害娲嬩笂鐨勭弽鐝狅紝浠ユ按涓婂埆澧呭拰娓呮緢娴锋按闂诲悕', '/destinations/maldives.jpg', 4.90, 4, 980, 91.20);
 
 -- ============================================================
--- 4) 目的地展示
 -- ============================================================
-INSERT INTO destination_showcases (destination_id, section, display_title, display_subtitle, display_description, display_image_url, display_rating, sort_order, is_active) VALUES
-(1, 'recommended', '东京深度游', '探索日本首都的无限魅力', '从传统神社到现代都市，体验东京的独特韵味', '/showcases/tokyo_deep.jpg', 4.90, 1, 1),
-(2, 'recommended', '浪漫巴黎之旅', '感受世界浪漫之都', '漫步塞纳河畔，品味法式优雅生活', '/showcases/paris_romantic.jpg', 4.95, 2, 1),
-(3, 'popular', '曼谷美食之旅', '舌尖上的泰国', '从街头小吃到高级餐厅，品味地道泰式美食', '/showcases/bangkok_food.jpg', 4.80, 1, 1),
-(7, 'inspiration', '北京文化探索', '穿越千年历史长河', '探访故宫、长城，感受中华文明的博大精深', '/showcases/beijing_culture.jpg', 4.85, 1, 1),
-(8, 'inspiration', '上海现代都市', '东方明珠的璀璨', '体验上海的现代与传统，感受魔都的独特魅力', '/showcases/shanghai_modern.jpg', 4.80, 2, 1),
-(12, 'recommended', '马尔代夫度假天堂', '印度洋上的梦幻天堂', '水上别墅、清澈海水，享受极致的海岛度假体验', '/showcases/maldives_paradise.jpg', 4.95, 3, 1);
-
--- ============================================================
--- 5) 标签数据
+-- 5) 鏍囩鏁版嵁
 -- ============================================================
 INSERT INTO tags (id, name) VALUES
-(1, '美食'),
-(2, '购物'),
-(3, '文化'),
-(4, '自然'),
-(5, '冒险'),
-(6, '浪漫'),
-(7, '家庭'),
-(8, '摄影'),
-(9, '历史'),
-(10, '现代'),
-(11, '海滩'),
-(12, '城市'),
-(13, '乡村'),
-(14, '登山'),
-(15, '潜水');
+(1, '缇庨'),
+(2, '璐墿'),
+(3, '鏂囧寲'),
+(4, '鑷劧'),
+(5, '鍐掗櫓'),
+(6, '娴极'),
+(7, '瀹跺涵'),
+(8, '鎽勫奖'),
+(9, '鍘嗗彶'),
+(10, '鐜颁唬'),
+(11, '娴锋哗'),
+(12, '鍩庡競'),
+(13, '涔℃潙'),
+(14, '鐧诲北'),
+(15, '娼滄按');
 
 -- ============================================================
--- 6) 攻略主表数据
+-- 6) 鏀荤暐涓昏〃鏁版嵁
 -- ============================================================
 INSERT INTO guides (id, destination_id, author_id, title, summary, content_html, cover_image_url, location_text, scope, travel_mode, publish_status, published_at, days, budget_total, views_count, likes_count, comments_count, favorites_count) VALUES
-(1, 1, 1, '东京7日深度游：从浅草寺到涩谷的完美行程', '带你领略东京的传统与现代魅力，包含详细行程安排和美食推荐', '<h1>东京7日深度游</h1><p>东京是一个充满活力的城市...</p>', '/guides/tokyo_guide1.jpg', '东京', 'international', 'free', 'published', '2026-04-15 10:00:00', 7, 15000.00, 12500, 450, 89, 230),
-(2, 2, 4, '巴黎5日浪漫之旅：艺术与美食的完美结合', '探索巴黎的艺术殿堂，品味正宗法式美食', '<h1>巴黎浪漫之旅</h1><p>巴黎是艺术与时尚的中心...</p>', '/guides/paris_guide1.jpg', '巴黎', 'international', 'honeymoon', 'published', '2026-04-10 14:30:00', 5, 18000.00, 9800, 380, 76, 195),
-(3, 3, 2, '曼谷6日穷游攻略：人均3000玩转泰国首都', '低预算也能玩转曼谷，省钱又有趣的旅行指南', '<h1>曼谷穷游攻略</h1><p>曼谷是东南亚最受欢迎的旅游城市...</p>', '/guides/bangkok_guide1.jpg', '曼谷', 'international', 'free', 'published', '2026-04-05 09:15:00', 6, 3000.00, 15600, 620, 134, 310),
-(4, 7, 3, '北京5日文化之旅：探寻中华文明的瑰宝', '深度体验北京的历史文化，从故宫到长城的完整攻略', '<h1>北京文化之旅</h1><p>北京是中国的首都...</p>', '/guides/beijing_guide1.jpg', '北京', 'domestic', 'family', 'published', '2026-03-28 11:45:00', 5, 8000.00, 18900, 720, 156, 420),
-(5, 8, 10, '上海3日现代都市游：感受魔都的独特魅力', '体验上海的现代与传统，从外滩到田子坊', '<h1>上海现代都市游</h1><p>上海是中国最大的城市...</p>', '/guides/shanghai_guide1.jpg', '上海', 'domestic', 'free', 'published', '2026-03-20 16:20:00', 3, 5000.00, 11200, 430, 98, 265),
-(6, 5, 5, '巴厘岛7日蜜月之旅：浪漫与自然的完美融合', '适合新婚夫妇的巴厘岛浪漫行程', '<h1>巴厘岛蜜月之旅</h1><p>巴厘岛是印尼著名的度假胜地...</p>', '/guides/bali_guide1.jpg', '巴厘岛', 'international', 'honeymoon', 'published', '2026-03-15 13:30:00', 7, 25000.00, 8900, 340, 72, 180),
-(7, 1, 8, '东京3日快速游：首次访问东京的必看指南', '适合时间有限的东京精华游', '<h1>东京快速游</h1><p>只有3天时间也能玩转东京...</p>', '/guides/tokyo_guide2.jpg', '东京', 'international', 'free', 'published', '2026-03-10 10:00:00', 3, 6000.00, 7800, 290, 54, 145),
-(8, 4, 6, '纽约4日经济游：学生党的纽约梦', '低预算玩转纽约，省钱又有趣的攻略', '<h1>纽约经济游</h1><p>纽约是世界金融中心...</p>', '/guides/newyork_guide1.jpg', '纽约', 'international', 'free', 'published', '2026-03-05 15:45:00', 4, 8000.00, 6500, 250, 48, 120),
-(9, 11, 11, '京都4日文化游：穿越千年的时光之旅', '深度体验京都的传统文化和历史', '<h1>京都文化游</h1><p>京都是日本的古都...</p>', '/guides/kyoto_guide1.jpg', '京都', 'international', 'free', 'published', '2026-02-28 09:30:00', 4, 10000.00, 5600, 220, 42, 95),
-(10, 12, 7, '马尔代夫5日奢华游：水上别墅的极致体验', '享受顶级度假体验，水上别墅和私人沙滩', '<h1>马尔代夫奢华游</h1><p>马尔代夫是印度洋上的珍珠...</p>', '/guides/maldives_guide1.jpg', '马累', 'international', 'honeymoon', 'published', '2026-02-20 14:00:00', 5, 50000.00, 12000, 480, 92, 280);
+(1, 1, 1, '涓滀含7鏃ユ繁搴︽父锛氫粠娴呰崏瀵哄埌娑╄胺鐨勫畬缇庤绋?, '甯︿綘棰嗙暐涓滀含鐨勪紶缁熶笌鐜颁唬榄呭姏锛屽寘鍚缁嗚绋嬪畨鎺掑拰缇庨鎺ㄨ崘', '<h1>涓滀含7鏃ユ繁搴︽父</h1><p>涓滀含鏄竴涓厖婊℃椿鍔涚殑鍩庡競...</p>', '/guides/tokyo_guide1.jpg', '涓滀含', 'international', 'free', 'published', '2026-04-15 10:00:00', 7, 15000.00, 12500, 450, 89, 230),
+(2, 2, 4, '宸撮粠5鏃ユ氮婕箣鏃咃細鑹烘湳涓庣編椋熺殑瀹岀編缁撳悎', '鎺㈢储宸撮粠鐨勮壓鏈鍫傦紝鍝佸懗姝ｅ畻娉曞紡缇庨', '<h1>宸撮粠娴极涔嬫梾</h1><p>宸撮粠鏄壓鏈笌鏃跺皻鐨勪腑蹇?..</p>', '/guides/paris_guide1.jpg', '宸撮粠', 'international', 'honeymoon', 'published', '2026-04-10 14:30:00', 5, 18000.00, 9800, 380, 76, 195),
+(3, 3, 2, '鏇艰胺6鏃ョ┓娓告敾鐣ワ細浜哄潎3000鐜╄浆娉板浗棣栭兘', '浣庨绠椾篃鑳界帺杞浖璋凤紝鐪侀挶鍙堟湁瓒ｇ殑鏃呰鎸囧崡', '<h1>鏇艰胺绌锋父鏀荤暐</h1><p>鏇艰胺鏄笢鍗椾簹鏈€鍙楁杩庣殑鏃呮父鍩庡競...</p>', '/guides/bangkok_guide1.jpg', '鏇艰胺', 'international', 'free', 'published', '2026-04-05 09:15:00', 6, 3000.00, 15600, 620, 134, 310),
+(4, 7, 3, '鍖椾含5鏃ユ枃鍖栦箣鏃咃細鎺㈠涓崕鏂囨槑鐨勭懓瀹?, '娣卞害浣撻獙鍖椾含鐨勫巻鍙叉枃鍖栵紝浠庢晠瀹埌闀垮煄鐨勫畬鏁存敾鐣?, '<h1>鍖椾含鏂囧寲涔嬫梾</h1><p>鍖椾含鏄腑鍥界殑棣栭兘...</p>', '/guides/beijing_guide1.jpg', '鍖椾含', 'domestic', 'family', 'published', '2026-03-28 11:45:00', 5, 8000.00, 18900, 720, 156, 420),
+(5, 8, 10, '涓婃捣3鏃ョ幇浠ｉ兘甯傛父锛氭劅鍙楅瓟閮界殑鐙壒榄呭姏', '浣撻獙涓婃捣鐨勭幇浠ｄ笌浼犵粺锛屼粠澶栨哗鍒扮敯瀛愬潑', '<h1>涓婃捣鐜颁唬閮藉競娓?/h1><p>涓婃捣鏄腑鍥芥渶澶х殑鍩庡競...</p>', '/guides/shanghai_guide1.jpg', '涓婃捣', 'domestic', 'free', 'published', '2026-03-20 16:20:00', 3, 5000.00, 11200, 430, 98, 265),
+(6, 5, 5, '宸村帢宀?鏃ヨ湝鏈堜箣鏃咃細娴极涓庤嚜鐒剁殑瀹岀編铻嶅悎', '閫傚悎鏂板澶鐨勫反鍘樺矝娴极琛岀▼', '<h1>宸村帢宀涜湝鏈堜箣鏃?/h1><p>宸村帢宀涙槸鍗板凹钁楀悕鐨勫害鍋囪儨鍦?..</p>', '/guides/bali_guide1.jpg', '宸村帢宀?, 'international', 'honeymoon', 'published', '2026-03-15 13:30:00', 7, 25000.00, 8900, 340, 72, 180),
+(7, 1, 8, '涓滀含3鏃ュ揩閫熸父锛氶娆¤闂笢浜殑蹇呯湅鎸囧崡', '閫傚悎鏃堕棿鏈夐檺鐨勪笢浜簿鍗庢父', '<h1>涓滀含蹇€熸父</h1><p>鍙湁3澶╂椂闂翠篃鑳界帺杞笢浜?..</p>', '/guides/tokyo_guide2.jpg', '涓滀含', 'international', 'free', 'published', '2026-03-10 10:00:00', 3, 6000.00, 7800, 290, 54, 145),
+(8, 4, 6, '绾界害4鏃ョ粡娴庢父锛氬鐢熷厷鐨勭航绾︽ⅵ', '浣庨绠楃帺杞航绾︼紝鐪侀挶鍙堟湁瓒ｇ殑鏀荤暐', '<h1>绾界害缁忔祹娓?/h1><p>绾界害鏄笘鐣岄噾铻嶄腑蹇?..</p>', '/guides/newyork_guide1.jpg', '绾界害', 'international', 'free', 'published', '2026-03-05 15:45:00', 4, 8000.00, 6500, 250, 48, 120),
+(9, 11, 11, '浜兘4鏃ユ枃鍖栨父锛氱┛瓒婂崈骞寸殑鏃跺厜涔嬫梾', '娣卞害浣撻獙浜兘鐨勪紶缁熸枃鍖栧拰鍘嗗彶', '<h1>浜兘鏂囧寲娓?/h1><p>浜兘鏄棩鏈殑鍙ら兘...</p>', '/guides/kyoto_guide1.jpg', '浜兘', 'international', 'free', 'published', '2026-02-28 09:30:00', 4, 10000.00, 5600, 220, 42, 95),
+(10, 12, 7, '椹皵浠ｅか5鏃ュア鍗庢父锛氭按涓婂埆澧呯殑鏋佽嚧浣撻獙', '浜彈椤剁骇搴﹀亣浣撻獙锛屾按涓婂埆澧呭拰绉佷汉娌欐哗', '<h1>椹皵浠ｅか濂㈠崕娓?/h1><p>椹皵浠ｅか鏄嵃搴︽磱涓婄殑鐝嶇彔...</p>', '/guides/maldives_guide1.jpg', '椹疮', 'international', 'honeymoon', 'published', '2026-02-20 14:00:00', 5, 50000.00, 12000, 480, 92, 280);
 
 -- ============================================================
--- 7) 攻略标签关联
+-- 7) 鏀荤暐鏍囩鍏宠仈
 -- ============================================================
 INSERT INTO guide_tags (guide_id, tag_id) VALUES
 (1, 1), (1, 2), (1, 3), (1, 12),
@@ -583,182 +465,114 @@ INSERT INTO guide_tags (guide_id, tag_id) VALUES
 (10, 4), (10, 6), (10, 11);
 
 -- ============================================================
--- 8) 攻略行程天数
+-- 8) 鏀荤暐琛岀▼澶╂暟
 -- ============================================================
 INSERT INTO guide_itinerary_days (guide_id, day_no, title, summary, sort_order) VALUES
-(1, 1, '抵达东京 & 浅草寺', '抵达东京后前往浅草寺，感受传统日式文化', 1),
-(1, 2, '涩谷 & 原宿潮流之旅', '探索东京最时尚的街区', 2),
-(1, 3, '东京迪士尼乐园', '在迪士尼乐园度过欢乐的一天', 3),
-(1, 4, '秋叶原 & 上野', '动漫圣地秋叶原和文化气息浓厚的上野', 4),
-(1, 5, '新宿 & 歌舞伎町', '体验东京的夜生活', 5),
-(1, 6, '箱根一日游', '前往箱根欣赏富士山美景', 6),
-(1, 7, '返回 & 购物', '最后一天购物和整理行李', 7),
-(4, 1, '天安门广场 & 故宫', '游览世界最大的城市广场和明清皇宫', 1),
-(4, 2, '长城一日游', '登上万里长城，感受古代工程奇迹', 2),
-(4, 3, '颐和园 & 圆明园', '欣赏皇家园林的精美', 3),
-(4, 4, '南锣鼓巷 & 什刹海', '体验老北京的胡同文化', 4),
-(4, 5, '798艺术区 & 三里屯', '感受北京的现代艺术和时尚', 5),
-(3, 1, '大皇宫 & 卧佛寺', '参观泰国最著名的佛教建筑', 1),
-(3, 2, '暹罗商圈购物', '在曼谷最大的购物中心购物', 2),
-(3, 3, '水上市场 & 铁道市场', '体验泰国独特的水上市场文化', 3),
-(3, 4, '考山路夜生活', '在考山路感受曼谷的夜生活', 4),
-(3, 5, '美功铁道市场', '观看火车穿过市场的奇观', 5),
-(3, 6, '返回 & 最后购物', '购买纪念品和特产', 6);
+(1, 1, '鎶佃揪涓滀含 & 娴呰崏瀵?, '鎶佃揪涓滀含鍚庡墠寰€娴呰崏瀵猴紝鎰熷彈浼犵粺鏃ュ紡鏂囧寲', 1),
+(1, 2, '娑╄胺 & 鍘熷娼祦涔嬫梾', '鎺㈢储涓滀含鏈€鏃跺皻鐨勮鍖?, 2),
+(1, 3, '涓滀含杩＋灏间箰鍥?, '鍦ㄨ开澹凹涔愬洯搴﹁繃娆箰鐨勪竴澶?, 3),
+(1, 4, '绉嬪彾鍘?& 涓婇噹', '鍔ㄦ极鍦ｅ湴绉嬪彾鍘熷拰鏂囧寲姘旀伅娴撳帤鐨勪笂閲?, 4),
+(1, 5, '鏂板 & 姝岃垶浼庣敽', '浣撻獙涓滀含鐨勫鐢熸椿', 5),
+(1, 6, '绠辨牴涓€鏃ユ父', '鍓嶅線绠辨牴娆ｈ祻瀵屽＋灞辩編鏅?, 6),
+(1, 7, '杩斿洖 & 璐墿', '鏈€鍚庝竴澶╄喘鐗╁拰鏁寸悊琛屾潕', 7),
+(4, 1, '澶╁畨闂ㄥ箍鍦?& 鏁呭', '娓歌涓栫晫鏈€澶х殑鍩庡競骞垮満鍜屾槑娓呯殗瀹?, 1),
+(4, 2, '闀垮煄涓€鏃ユ父', '鐧讳笂涓囬噷闀垮煄锛屾劅鍙楀彜浠ｅ伐绋嬪杩?, 2),
+(4, 3, '棰愬拰鍥?& 鍦嗘槑鍥?, '娆ｈ祻鐨囧鍥灄鐨勭簿缇?, 3),
+(4, 4, '鍗楅敚榧撳贩 & 浠€鍒规捣', '浣撻獙鑰佸寳浜殑鑳″悓鏂囧寲', 4),
+(4, 5, '798鑹烘湳鍖?& 涓夐噷灞?, '鎰熷彈鍖椾含鐨勭幇浠ｈ壓鏈拰鏃跺皻', 5),
+(3, 1, '澶х殗瀹?& 鍗т經瀵?, '鍙傝娉板浗鏈€钁楀悕鐨勪經鏁欏缓绛?, 1),
+(3, 2, '鏆圭綏鍟嗗湀璐墿', '鍦ㄦ浖璋锋渶澶х殑璐墿涓績璐墿', 2),
+(3, 3, '姘翠笂甯傚満 & 閾侀亾甯傚満', '浣撻獙娉板浗鐙壒鐨勬按涓婂競鍦烘枃鍖?, 3),
+(3, 4, '鑰冨北璺鐢熸椿', '鍦ㄨ€冨北璺劅鍙楁浖璋风殑澶滅敓娲?, 4),
+(3, 5, '缇庡姛閾侀亾甯傚満', '瑙傜湅鐏溅绌胯繃甯傚満鐨勫瑙?, 5),
+(3, 6, '杩斿洖 & 鏈€鍚庤喘鐗?, '璐拱绾康鍝佸拰鐗逛骇', 6);
 
 -- ============================================================
--- 9) 攻略行程景点
--- ============================================================
-INSERT INTO guide_itinerary_spots (itinerary_day_id, name, description, visit_time, duration_minutes, image_url, sort_order) VALUES
-(1, '浅草寺', '东京最古老的寺庙，雷门是标志性建筑', '09:00:00', 120, '/spots/sensoji.jpg', 1),
-(1, '仲见世通', '浅草寺前的繁华商店街', '11:00:00', 60, '/spots/nakamise.jpg', 2),
-(2, '涩谷十字路口', '世界最繁忙的十字路口', '10:00:00', 30, '/spots/shibuya.jpg', 1),
-(2, '原宿竹下通', '年轻人的时尚圣地', '11:00:00', 120, '/spots/harajuku.jpg', 2),
-(8, '天安门广场', '世界最大的城市广场', '08:00:00', 90, '/spots/tiananmen.jpg', 1),
-(8, '故宫博物院', '明清两代的皇宫', '09:30:00', 240, '/spots/forbidden_city.jpg', 2),
-(9, '八达岭长城', '长城最著名的段落', '07:00:00', 360, '/spots/great_wall.jpg', 1),
-(13, '大皇宫', '泰国最著名的佛教建筑群', '09:00:00', 180, '/spots/grand_palace.jpg', 1),
-(14, '暹罗中心', '曼谷最大的购物中心', '10:00:00', 240, '/spots/siam_center.jpg', 1);
-
--- ============================================================
--- 10) 攻略提示
--- ============================================================
-INSERT INTO guide_tips (guide_id, category_name, sort_order) VALUES
-(1, '交通指南', 1),
-(1, '美食推荐', 2),
-(1, '住宿建议', 3),
-(1, '注意事项', 4),
-(4, '交通指南', 1),
-(4, '门票信息', 2),
-(4, '美食推荐', 3),
-(3, '省钱技巧', 1),
-(3, '美食推荐', 2),
-(3, '交通指南', 3);
-
--- ============================================================
--- 11) 攻略提示项目
--- ============================================================
-INSERT INTO guide_tip_items (tip_id, item_text, sort_order) VALUES
-(1, '建议购买东京地铁72小时通票，约1500日元', 1),
-(1, '从成田机场到市区可乘坐Skyliner约36分钟', 2),
-(1, '市区内推荐使用Suica卡，方便乘坐地铁和便利店消费', 3),
-(2, '必吃：一兰拉面、筑地市场海鲜、章鱼小丸子', 1),
-(2, '推荐餐厅：蟹道乐、CoCo壹番屋、松屋', 2),
-(3, '推荐住在新宿或涩谷，交通便利', 1),
-(3, '预算充足可选择东京塔附近的酒店', 2),
-(4, '日本靠左行驶，扶梯也靠左站', 1),
-(4, '寺庙内禁止拍照，请注意标识', 2),
-(4, '地铁内请勿打电话，保持安静', 3),
-(5, '建议办理北京一卡通，乘坐地铁公交更方便', 1),
-(5, '可下载"亿通行"APP扫码乘车', 2),
-(6, '故宫门票需提前在网上预约，旺季很抢手', 1),
-(6, '长城门票40元，建议网上购买', 2),
-(7, '必吃：北京烤鸭、炸酱面、豆汁儿', 1),
-(8, '在曼谷坐BTS最划算，避免堵车', 1),
-(8, '打车请要求打表，或使用Grab叫车', 2),
-(9, '必吃：芒果糯米饭、冬阴功汤、泰式奶茶', 1),
-(10, 'BTS一日通票150泰铢，可无限次乘坐', 1);
-
--- ============================================================
--- 12) 攻略预算项目
+-- 12) 鏀荤暐棰勭畻椤圭洰
 -- ============================================================
 INSERT INTO guide_budget_items (guide_id, category_code, category_name, amount, percentage, sort_order) VALUES
-(1, 'flights', '机票', 5000.00, 33.33, 1),
-(1, 'accommodation', '住宿', 4500.00, 30.00, 2),
-(1, 'food', '餐饮', 2500.00, 16.67, 3),
-(1, 'transport', '交通', 1500.00, 10.00, 4),
-(1, 'shopping', '购物', 1000.00, 6.67, 5),
-(1, 'tickets', '门票', 500.00, 3.33, 6),
-(2, 'flights', '机票', 8000.00, 44.44, 1),
-(2, 'accommodation', '住宿', 5000.00, 27.78, 2),
-(2, 'food', '餐饮', 3000.00, 16.67, 3),
-(2, 'transport', '交通', 1000.00, 5.56, 4),
-(2, 'shopping', '购物', 1000.00, 5.56, 5),
-(3, 'flights', '机票', 1000.00, 33.33, 1),
-(3, 'accommodation', '住宿', 800.00, 26.67, 2),
-(3, 'food', '餐饮', 600.00, 20.00, 3),
-(3, 'transport', '交通', 300.00, 10.00, 4),
-(3, 'shopping', '购物', 200.00, 6.67, 5),
-(3, 'tickets', '门票', 100.00, 3.33, 6),
-(4, 'flights', '机票', 2000.00, 25.00, 1),
-(4, 'accommodation', '住宿', 2500.00, 31.25, 2),
-(4, 'food', '餐饮', 1500.00, 18.75, 3),
-(4, 'transport', '交通', 800.00, 10.00, 4),
-(4, 'shopping', '购物', 700.00, 8.75, 5),
-(4, 'tickets', '门票', 500.00, 6.25, 6);
+(1, 'flights', '鏈虹エ', 5000.00, 33.33, 1),
+(1, 'accommodation', '浣忓', 4500.00, 30.00, 2),
+(1, 'food', '椁愰ギ', 2500.00, 16.67, 3),
+(1, 'transport', '浜ら€?, 1500.00, 10.00, 4),
+(1, 'shopping', '璐墿', 1000.00, 6.67, 5),
+(1, 'tickets', '闂ㄧエ', 500.00, 3.33, 6),
+(2, 'flights', '鏈虹エ', 8000.00, 44.44, 1),
+(2, 'accommodation', '浣忓', 5000.00, 27.78, 2),
+(2, 'food', '椁愰ギ', 3000.00, 16.67, 3),
+(2, 'transport', '浜ら€?, 1000.00, 5.56, 4),
+(2, 'shopping', '璐墿', 1000.00, 5.56, 5),
+(3, 'flights', '鏈虹エ', 1000.00, 33.33, 1),
+(3, 'accommodation', '浣忓', 800.00, 26.67, 2),
+(3, 'food', '椁愰ギ', 600.00, 20.00, 3),
+(3, 'transport', '浜ら€?, 300.00, 10.00, 4),
+(3, 'shopping', '璐墿', 200.00, 6.67, 5),
+(3, 'tickets', '闂ㄧエ', 100.00, 3.33, 6),
+(4, 'flights', '鏈虹エ', 2000.00, 25.00, 1),
+(4, 'accommodation', '浣忓', 2500.00, 31.25, 2),
+(4, 'food', '椁愰ギ', 1500.00, 18.75, 3),
+(4, 'transport', '浜ら€?, 800.00, 10.00, 4),
+(4, 'shopping', '璐墿', 700.00, 8.75, 5),
+(4, 'tickets', '闂ㄧエ', 500.00, 6.25, 6);
 
 -- ============================================================
--- 13) 相关攻略
--- ============================================================
-INSERT INTO guide_related (guide_id, related_guide_id, sort_order) VALUES
-(1, 7, 1),
-(1, 9, 2),
-(2, 6, 1),
-(2, 10, 2),
-(3, 9, 1),
-(4, 5, 1),
-(5, 4, 1),
-(6, 10, 1),
-(7, 1, 1),
-(7, 9, 2);
-
--- ============================================================
--- 14) 攻略评论
+-- 14) 鏀荤暐璇勮
 -- ============================================================
 INSERT INTO guide_comments (guide_id, user_id, parent_comment_id, author_name, author_avatar_url, content, likes_count) VALUES
-(1, 2, NULL, '背包客小红', '/avatars/user2.jpg', '太详细了！正好计划去东京，收藏了！', 25),
-(1, 3, 1, '探险家阿强', '/avatars/user3.jpg', '同求东京攻略，请问迪士尼值得去吗？', 8),
-(1, 1, 2, '旅行达人小明', '/avatars/user1.jpg', '迪士尼非常值得去，建议安排一整天，早起入园排队能玩更多项目', 15),
-(1, 5, NULL, '美食家小王', '/avatars/user5.jpg', '筑地市场的海鲜真的太新鲜了，推荐寿司大和大和寿司', 18),
-(1, 9, 4, '吃货旅行家', '/avatars/user9.jpg', '同意！还有丰洲市场也不错，人比筑地少一些', 6),
-(1, 4, NULL, '摄影师小李', '/avatars/user4.jpg', '浅草寺的夜景拍照很出片，建议傍晚去', 12),
-(1, 8, 6, '独自旅行者', '/avatars/user8.jpg', '一个人去东京安全吗？语言不通怎么办？', 4),
-(1, 1, 7, '旅行达人小明', '/avatars/user1.jpg', '东京治安很好，地铁有英文标识，Google Maps完全够用', 9),
-(2, 5, NULL, '美食家小王', '/avatars/user5.jpg', '巴黎的餐厅推荐太棒了，下次去一定要试试', 18),
-(2, 7, NULL, '奢华旅行家', '/avatars/user7.jpg', '这个预算对于蜜月游来说很合理，已经加入行程单', 12),
-(2, 10, 10, '旅行摄影师', '/avatars/user10.jpg', '卢浮宫建议预留至少半天，蒙娜丽莎那边人超多', 14),
-(2, 6, 11, '穷游背包客', '/avatars/user6.jpg', '请问巴黎地铁方便吗？有没有推荐的交通卡？', 5),
-(2, 4, 13, '摄影师小李', '/avatars/user4.jpg', '推荐买Paris Pass，地铁公交博物馆都能用', 8),
-(3, 6, NULL, '穷游背包客', '/avatars/user6.jpg', '穷游攻略太实用了，感谢分享！', 32),
-(3, 8, 15, '独自旅行者', '/avatars/user8.jpg', '请问曼谷安全吗？一个人去需要注意什么？', 5),
-(3, 2, 16, '背包客小红', '/avatars/user2.jpg', '曼谷整体很安全，就是注意小偷和突突车砍价', 7),
-(3, 9, NULL, '吃货旅行家', '/avatars/user9.jpg', '考山路的夜市真的太棒了，芒果糯米饭绝了', 20),
-(3, 12, 18, '自然探索者', '/avatars/user12.jpg', '水上市场推荐丹嫩沙多，早上去人少', 10),
-(3, 3, NULL, '探险家阿强', '/avatars/user3.jpg', '大皇宫值得去吗？感觉门票有点贵', 3),
-(4, 11, NULL, '历史文化迷', '/avatars/user11.jpg', '北京的文化之旅写得很详细，收藏了', 28),
-(4, 12, NULL, '自然探索者', '/avatars/user12.jpg', '长城的描述很真实，确实很壮观', 22),
-(4, 1, 21, '旅行达人小明', '/avatars/user1.jpg', '故宫建议租个电子讲解器，不然很多故事都不知道', 15),
-(4, 5, NULL, '美食家小王', '/avatars/user5.jpg', '北京烤鸭推荐四季便宜坊，比全聚德性价比高', 18),
-(4, 8, 24, '独自旅行者', '/avatars/user8.jpg', '便宜坊在哪？需要提前预约吗？', 3),
-(4, 3, 25, '探险家阿强', '/avatars/user3.jpg', '在崇文门附近，建议下午4点去排队', 5),
-(5, 1, NULL, '旅行达人小明', '/avatars/user1.jpg', '上海的现代都市感确实很强', 15),
-(5, 6, NULL, '穷游背包客', '/avatars/user6.jpg', '田子坊和外滩都很出片，推荐晚上去', 10),
-(5, 4, 28, '摄影师小李', '/avatars/user4.jpg', '外滩夜景最佳拍摄时间是晚上7-8点，灯光最美', 12),
-(5, 9, NULL, '吃货旅行家', '/avatars/user9.jpg', '上海的小笼包推荐南翔馒头店，城隍庙那家', 8),
-(6, 7, NULL, '奢华旅行家', '/avatars/user7.jpg', '巴厘岛蜜月太浪漫了，悬崖酒店一定要住', 20),
-(6, 1, 32, '旅行达人小明', '/avatars/user1.jpg', '请问悬崖酒店大概什么价位？需要提前多久预订？', 6),
-(6, 5, 33, '美食家小王', '/avatars/user5.jpg', '推荐乌兰巴图的悬崖酒店，提前1-2个月预订，价格3000-5000/晚', 9),
-(6, 11, NULL, '历史文化迷', '/avatars/user11.jpg', '海神庙日落真的很美，建议下午4点前到', 14),
-(6, 8, 35, '独自旅行者', '/avatars/user8.jpg', '一个人去巴厘岛合适吗？还是更适合情侣？', 4),
-(7, 3, NULL, '探险家阿强', '/avatars/user3.jpg', '3天也能玩东京？行程安排得很紧凑', 10),
-(7, 6, 37, '穷游背包客', '/avatars/user6.jpg', '时间紧的话推荐买地铁一日券，能省不少钱', 8),
-(7, 9, NULL, '吃货旅行家', '/avatars/user9.jpg', '3天的话建议把浅草和涩谷放同一天，节省时间', 6),
-(8, 1, NULL, '旅行达人小明', '/avatars/user1.jpg', '学生党也能玩纽约，太励志了', 12),
-(8, 8, 40, '独自旅行者', '/avatars/user8.jpg', '青旅推荐哪家？安全吗？', 5),
-(8, 6, 41, '穷游背包客', '/avatars/user6.jpg', '推荐Hostelling International的纽约分店，位置好价格便宜', 7),
-(8, 12, NULL, '自然探索者', '/avatars/user12.jpg', '中央公园免费又好玩，值得花半天时间', 9),
-(9, 1, NULL, '旅行达人小明', '/avatars/user1.jpg', '京都的寺庙真的很有韵味，清水寺必去', 15),
-(9, 4, 44, '摄影师小李', '/avatars/user4.jpg', '清水寺建议早上去，人少光线好', 8),
-(9, 12, NULL, '自然探索者', '/avatars/user12.jpg', '岚山竹林太美了，推荐租自行车游览', 12),
-(9, 9, 46, '吃货旅行家', '/avatars/user9.jpg', '京都抹茶甜点推荐中村藤吉，宇治本店最正宗', 10),
-(10, 1, NULL, '旅行达人小明', '/avatars/user1.jpg', '水上别墅太梦幻了，蜜月首选！', 25),
-(10, 5, 48, '美食家小王', '/avatars/user5.jpg', '请问酒店包餐吗？还是需要另外付费？', 6),
-(10, 7, 49, '奢华旅行家', '/avatars/user7.jpg', '大部分套餐包含早餐和晚餐，午餐另付，也可以升级全包', 8),
-(10, 3, NULL, '探险家阿强', '/avatars/user3.jpg', '马尔代夫浮潜真的能看到很多鱼吗？', 10),
-(10, 12, 51, '自然探索者', '/avatars/user12.jpg', '水下生态很丰富，推荐带防水相机拍照', 7),
-(10, 8, NULL, '独自旅行者', '/avatars/user8.jpg', '一个人去马尔代夫会不会太贵了？', 4);
+(1, 2, NULL, '鑳屽寘瀹㈠皬绾?, '/avatars/user2.jpg', '澶缁嗕簡锛佹濂借鍒掑幓涓滀含锛屾敹钘忎簡锛?, 25),
+(1, 3, 1, '鎺㈤櫓瀹堕樋寮?, '/avatars/user3.jpg', '鍚屾眰涓滀含鏀荤暐锛岃闂开澹凹鍊煎緱鍘诲悧锛?, 8),
+(1, 1, 2, '鏃呰杈句汉灏忔槑', '/avatars/user1.jpg', '杩＋灏奸潪甯稿€煎緱鍘伙紝寤鸿瀹夋帓涓€鏁村ぉ锛屾棭璧峰叆鍥帓闃熻兘鐜╂洿澶氶」鐩?, 15),
+(1, 5, NULL, '缇庨瀹跺皬鐜?, '/avatars/user5.jpg', '绛戝湴甯傚満鐨勬捣椴滅湡鐨勫お鏂伴矞浜嗭紝鎺ㄨ崘瀵垮徃澶у拰澶у拰瀵垮徃', 18),
+(1, 9, 4, '鍚冭揣鏃呰瀹?, '/avatars/user9.jpg', '鍚屾剰锛佽繕鏈変赴娲插競鍦轰篃涓嶉敊锛屼汉姣旂瓚鍦板皯涓€浜?, 6),
+(1, 4, NULL, '鎽勫奖甯堝皬鏉?, '/avatars/user4.jpg', '娴呰崏瀵虹殑澶滄櫙鎷嶇収寰堝嚭鐗囷紝寤鸿鍌嶆櫄鍘?, 12),
+(1, 8, 6, '鐙嚜鏃呰鑰?, '/avatars/user8.jpg', '涓€涓汉鍘讳笢浜畨鍏ㄥ悧锛熻瑷€涓嶉€氭€庝箞鍔烇紵', 4),
+(1, 1, 7, '鏃呰杈句汉灏忔槑', '/avatars/user1.jpg', '涓滀含娌诲畨寰堝ソ锛屽湴閾佹湁鑻辨枃鏍囪瘑锛孏oogle Maps瀹屽叏澶熺敤', 9),
+(2, 5, NULL, '缇庨瀹跺皬鐜?, '/avatars/user5.jpg', '宸撮粠鐨勯鍘呮帹鑽愬お妫掍簡锛屼笅娆″幓涓€瀹氳璇曡瘯', 18),
+(2, 7, NULL, '濂㈠崕鏃呰瀹?, '/avatars/user7.jpg', '杩欎釜棰勭畻瀵逛簬铚滄湀娓告潵璇村緢鍚堢悊锛屽凡缁忓姞鍏ヨ绋嬪崟', 12),
+(2, 10, 10, '鏃呰鎽勫奖甯?, '/avatars/user10.jpg', '鍗㈡诞瀹缓璁鐣欒嚦灏戝崐澶╋紝钂欏涓借帋閭ｈ竟浜鸿秴澶?, 14),
+(2, 6, 11, '绌锋父鑳屽寘瀹?, '/avatars/user6.jpg', '璇烽棶宸撮粠鍦伴搧鏂逛究鍚楋紵鏈夋病鏈夋帹鑽愮殑浜ら€氬崱锛?, 5),
+(2, 4, 13, '鎽勫奖甯堝皬鏉?, '/avatars/user4.jpg', '鎺ㄨ崘涔癙aris Pass锛屽湴閾佸叕浜ゅ崥鐗╅閮借兘鐢?, 8),
+(3, 6, NULL, '绌锋父鑳屽寘瀹?, '/avatars/user6.jpg', '绌锋父鏀荤暐澶疄鐢ㄤ簡锛屾劅璋㈠垎浜紒', 32),
+(3, 8, 15, '鐙嚜鏃呰鑰?, '/avatars/user8.jpg', '璇烽棶鏇艰胺瀹夊叏鍚楋紵涓€涓汉鍘婚渶瑕佹敞鎰忎粈涔堬紵', 5),
+(3, 2, 16, '鑳屽寘瀹㈠皬绾?, '/avatars/user2.jpg', '鏇艰胺鏁翠綋寰堝畨鍏紝灏辨槸娉ㄦ剰灏忓伔鍜岀獊绐佽溅鐮嶄环', 7),
+(3, 9, NULL, '鍚冭揣鏃呰瀹?, '/avatars/user9.jpg', '鑰冨北璺殑澶滃競鐪熺殑澶浜嗭紝鑺掓灉绯背楗粷浜?, 20),
+(3, 12, 18, '鑷劧鎺㈢储鑰?, '/avatars/user12.jpg', '姘翠笂甯傚満鎺ㄨ崘涓瑰娌欏锛屾棭涓婂幓浜哄皯', 10),
+(3, 3, NULL, '鎺㈤櫓瀹堕樋寮?, '/avatars/user3.jpg', '澶х殗瀹€煎緱鍘诲悧锛熸劅瑙夐棬绁ㄦ湁鐐硅吹', 3),
+(4, 11, NULL, '鍘嗗彶鏂囧寲杩?, '/avatars/user11.jpg', '鍖椾含鐨勬枃鍖栦箣鏃呭啓寰楀緢璇︾粏锛屾敹钘忎簡', 28),
+(4, 12, NULL, '鑷劧鎺㈢储鑰?, '/avatars/user12.jpg', '闀垮煄鐨勬弿杩板緢鐪熷疄锛岀‘瀹炲緢澹', 22),
+(4, 1, 21, '鏃呰杈句汉灏忔槑', '/avatars/user1.jpg', '鏁呭寤鸿绉熶釜鐢靛瓙璁茶В鍣紝涓嶇劧寰堝鏁呬簨閮戒笉鐭ラ亾', 15),
+(4, 5, NULL, '缇庨瀹跺皬鐜?, '/avatars/user5.jpg', '鍖椾含鐑ら腑鎺ㄨ崘鍥涘渚垮疁鍧婏紝姣斿叏鑱氬痉鎬т环姣旈珮', 18),
+(4, 8, 24, '鐙嚜鏃呰鑰?, '/avatars/user8.jpg', '渚垮疁鍧婂湪鍝紵闇€瑕佹彁鍓嶉绾﹀悧锛?, 3),
+(4, 3, 25, '鎺㈤櫓瀹堕樋寮?, '/avatars/user3.jpg', '鍦ㄥ磭鏂囬棬闄勮繎锛屽缓璁笅鍗?鐐瑰幓鎺掗槦', 5),
+(5, 1, NULL, '鏃呰杈句汉灏忔槑', '/avatars/user1.jpg', '涓婃捣鐨勭幇浠ｉ兘甯傛劅纭疄寰堝己', 15),
+(5, 6, NULL, '绌锋父鑳屽寘瀹?, '/avatars/user6.jpg', '鐢板瓙鍧婂拰澶栨哗閮藉緢鍑虹墖锛屾帹鑽愭櫄涓婂幓', 10),
+(5, 4, 28, '鎽勫奖甯堝皬鏉?, '/avatars/user4.jpg', '澶栨哗澶滄櫙鏈€浣虫媿鎽勬椂闂存槸鏅氫笂7-8鐐癸紝鐏厜鏈€缇?, 12),
+(5, 9, NULL, '鍚冭揣鏃呰瀹?, '/avatars/user9.jpg', '涓婃捣鐨勫皬绗煎寘鎺ㄨ崘鍗楃繑棣掑ご搴楋紝鍩庨殟搴欓偅瀹?, 8),
+(6, 7, NULL, '濂㈠崕鏃呰瀹?, '/avatars/user7.jpg', '宸村帢宀涜湝鏈堝お娴极浜嗭紝鎮礀閰掑簵涓€瀹氳浣?, 20),
+(6, 1, 32, '鏃呰杈句汉灏忔槑', '/avatars/user1.jpg', '璇烽棶鎮礀閰掑簵澶ф浠€涔堜环浣嶏紵闇€瑕佹彁鍓嶅涔呴璁紵', 6),
+(6, 5, 33, '缇庨瀹跺皬鐜?, '/avatars/user5.jpg', '鎺ㄨ崘涔屽叞宸村浘鐨勬偓宕栭厭搴楋紝鎻愬墠1-2涓湀棰勮锛屼环鏍?000-5000/鏅?, 9),
+(6, 11, NULL, '鍘嗗彶鏂囧寲杩?, '/avatars/user11.jpg', '娴风搴欐棩钀界湡鐨勫緢缇庯紝寤鸿涓嬪崍4鐐瑰墠鍒?, 14),
+(6, 8, 35, '鐙嚜鏃呰鑰?, '/avatars/user8.jpg', '涓€涓汉鍘诲反鍘樺矝鍚堥€傚悧锛熻繕鏄洿閫傚悎鎯呬荆锛?, 4),
+(7, 3, NULL, '鎺㈤櫓瀹堕樋寮?, '/avatars/user3.jpg', '3澶╀篃鑳界帺涓滀含锛熻绋嬪畨鎺掑緱寰堢揣鍑?, 10),
+(7, 6, 37, '绌锋父鑳屽寘瀹?, '/avatars/user6.jpg', '鏃堕棿绱х殑璇濇帹鑽愪拱鍦伴搧涓€鏃ュ埜锛岃兘鐪佷笉灏戦挶', 8),
+(7, 9, NULL, '鍚冭揣鏃呰瀹?, '/avatars/user9.jpg', '3澶╃殑璇濆缓璁妸娴呰崏鍜屾订璋锋斁鍚屼竴澶╋紝鑺傜渷鏃堕棿', 6),
+(8, 1, NULL, '鏃呰杈句汉灏忔槑', '/avatars/user1.jpg', '瀛︾敓鍏氫篃鑳界帺绾界害锛屽お鍔卞織浜?, 12),
+(8, 8, 40, '鐙嚜鏃呰鑰?, '/avatars/user8.jpg', '闈掓梾鎺ㄨ崘鍝锛熷畨鍏ㄥ悧锛?, 5),
+(8, 6, 41, '绌锋父鑳屽寘瀹?, '/avatars/user6.jpg', '鎺ㄨ崘Hostelling International鐨勭航绾﹀垎搴楋紝浣嶇疆濂戒环鏍间究瀹?, 7),
+(8, 12, NULL, '鑷劧鎺㈢储鑰?, '/avatars/user12.jpg', '涓ぎ鍏洯鍏嶈垂鍙堝ソ鐜╋紝鍊煎緱鑺卞崐澶╂椂闂?, 9),
+(9, 1, NULL, '鏃呰杈句汉灏忔槑', '/avatars/user1.jpg', '浜兘鐨勫搴欑湡鐨勫緢鏈夐煹鍛筹紝娓呮按瀵哄繀鍘?, 15),
+(9, 4, 44, '鎽勫奖甯堝皬鏉?, '/avatars/user4.jpg', '娓呮按瀵哄缓璁棭涓婂幓锛屼汉灏戝厜绾垮ソ', 8),
+(9, 12, NULL, '鑷劧鎺㈢储鑰?, '/avatars/user12.jpg', '宀氬北绔规灄澶編浜嗭紝鎺ㄨ崘绉熻嚜琛岃溅娓歌', 12),
+(9, 9, 46, '鍚冭揣鏃呰瀹?, '/avatars/user9.jpg', '浜兘鎶硅尪鐢滅偣鎺ㄨ崘涓潙钘ゅ悏锛屽畤娌绘湰搴楁渶姝ｅ畻', 10),
+(10, 1, NULL, '鏃呰杈句汉灏忔槑', '/avatars/user1.jpg', '姘翠笂鍒澶ⅵ骞讳簡锛岃湝鏈堥閫夛紒', 25),
+(10, 5, 48, '缇庨瀹跺皬鐜?, '/avatars/user5.jpg', '璇烽棶閰掑簵鍖呴鍚楋紵杩樻槸闇€瑕佸彟澶栦粯璐癸紵', 6),
+(10, 7, 49, '濂㈠崕鏃呰瀹?, '/avatars/user7.jpg', '澶ч儴鍒嗗椁愬寘鍚棭椁愬拰鏅氶锛屽崍椁愬彟浠橈紝涔熷彲浠ュ崌绾у叏鍖?, 8),
+(10, 3, NULL, '鎺㈤櫓瀹堕樋寮?, '/avatars/user3.jpg', '椹皵浠ｅか娴綔鐪熺殑鑳界湅鍒板緢澶氶奔鍚楋紵', 10),
+(10, 12, 51, '鑷劧鎺㈢储鑰?, '/avatars/user12.jpg', '姘翠笅鐢熸€佸緢涓板瘜锛屾帹鑽愬甫闃叉按鐩告満鎷嶇収', 7),
+(10, 8, NULL, '鐙嚜鏃呰鑰?, '/avatars/user8.jpg', '涓€涓汉鍘婚┈灏斾唬澶細涓嶄細澶吹浜嗭紵', 4);
 
 -- ============================================================
--- 15) 攻略点赞
+-- 15) 鏀荤暐鐐硅禐
 -- ============================================================
 INSERT INTO guide_likes (guide_id, user_id) VALUES
 (1, 2), (1, 3), (1, 4), (1, 5),
@@ -773,7 +587,7 @@ INSERT INTO guide_likes (guide_id, user_id) VALUES
 (10, 7), (10, 10);
 
 -- ============================================================
--- 16) 攻略收藏
+-- 16) 鏀荤暐鏀惰棌
 -- ============================================================
 INSERT INTO guide_favorites (guide_id, user_id) VALUES
 (1, 2), (1, 3), (1, 5),
@@ -788,7 +602,7 @@ INSERT INTO guide_favorites (guide_id, user_id) VALUES
 (10, 7), (10, 10);
 
 -- ============================================================
--- 17) 攻略评论点赞
+-- 17) 鏀荤暐璇勮鐐硅禐
 -- ============================================================
 INSERT INTO guide_comment_likes (comment_id, user_id) VALUES
 (1, 3), (1, 4), (1, 5),
@@ -843,7 +657,7 @@ INSERT INTO guide_comment_likes (comment_id, user_id) VALUES
 (53, 1), (53, 5);
 
 -- ============================================================
--- 18) 用户关注
+-- 18) 鐢ㄦ埛鍏虫敞
 -- ============================================================
 INSERT INTO user_follows (follower_user_id, followed_user_id) VALUES
 (2, 1), (3, 1), (4, 1), (5, 1),
@@ -856,21 +670,19 @@ INSERT INTO user_follows (follower_user_id, followed_user_id) VALUES
 (12, 3), (12, 1);
 
 -- ============================================================
--- 19) 旅行者故事
--- ============================================================
+-- 19) 鏃呰鑰呮晠浜?-- ============================================================
 INSERT INTO traveler_stories (author_user_id, author_name, author_avatar_url, is_vip, content, published_at, likes_count, comments_count, shares_count) VALUES
-(1, '旅行达人小明', '/avatars/user1.jpg', 1, '刚刚从东京回来，太美了！浅草寺的樱花季真的不容错过。这次尝试了当地的小巷美食，发现了很多隐藏的宝藏餐厅。', '2026-04-28 18:30:00', 156, 23, 12),
-(3, '探险家阿强', '/avatars/user3.jpg', 1, '今天挑战了北京慕田峪长城，虽然很累但成就感满满！站在长城上俯瞰群山，感觉一切都值得了。', '2026-04-27 20:15:00', 234, 45, 28),
-(5, '美食家小王', '/avatars/user5.jpg', 1, '曼谷的街头美食真的太棒了！从芒果糯米饭到泰式奶茶，每一口都是惊喜。强烈推荐大家去考山路逛逛。', '2026-04-26 16:45:00', 189, 34, 15),
-(10, '旅行摄影师', '/avatars/user10.jpg', 0, '在巴黎埃菲尔铁塔下拍到了最美的日落，这次的摄影作品太满意了。分享几张精选照片给大家。', '2026-04-25 21:00:00', 312, 56, 42),
-(8, '独自旅行者', '/avatars/user8.jpg', 0, '一个人的旅行也能很精彩！在清迈古城骑行，感受当地人的慢生活，这种自由的感觉太棒了。', '2026-04-24 19:30:00', 145, 28, 18),
-(6, '穷游背包客', '/avatars/user6.jpg', 0, '学生党也能玩转纽约！分享我的穷游攻略，5天只花了5000元，包含机票住宿和所有开销。', '2026-04-23 17:20:00', 278, 67, 35),
-(7, '奢华旅行家', '/avatars/user7.jpg', 1, '马尔代夫的水上别墅真的太梦幻了！从阳台直接跳进清澈的海里，这种体验无与伦比。', '2026-04-22 15:10:00', 423, 78, 56),
-(12, '自然探索者', '/avatars/user12.jpg', 1, '在巴厘岛徒步了阿贡火山，虽然很艰辛，但山顶的日出美到窒息。大自然的力量真的很震撼。', '2026-04-21 13:45:00', 198, 32, 22);
+(1, '鏃呰杈句汉灏忔槑', '/avatars/user1.jpg', 1, '鍒氬垰浠庝笢浜洖鏉ワ紝澶編浜嗭紒娴呰崏瀵虹殑妯辫姳瀛ｇ湡鐨勪笉瀹归敊杩囥€傝繖娆″皾璇曚簡褰撳湴鐨勫皬宸风編椋燂紝鍙戠幇浜嗗緢澶氶殣钘忕殑瀹濊棌椁愬巺銆?, '2026-04-28 18:30:00', 156, 23, 12),
+(3, '鎺㈤櫓瀹堕樋寮?, '/avatars/user3.jpg', 1, '浠婂ぉ鎸戞垬浜嗗寳浜厱鐢板唱闀垮煄锛岃櫧鐒跺緢绱絾鎴愬氨鎰熸弧婊★紒绔欏湪闀垮煄涓婁刊鐬扮兢灞憋紝鎰熻涓€鍒囬兘鍊煎緱浜嗐€?, '2026-04-27 20:15:00', 234, 45, 28),
+(5, '缇庨瀹跺皬鐜?, '/avatars/user5.jpg', 1, '鏇艰胺鐨勮澶寸編椋熺湡鐨勫お妫掍簡锛佷粠鑺掓灉绯背楗埌娉板紡濂惰尪锛屾瘡涓€鍙ｉ兘鏄儕鍠溿€傚己鐑堟帹鑽愬ぇ瀹跺幓鑰冨北璺€涢€涖€?, '2026-04-26 16:45:00', 189, 34, 15),
+(10, '鏃呰鎽勫奖甯?, '/avatars/user10.jpg', 0, '鍦ㄥ反榛庡焹鑿插皵閾佸涓嬫媿鍒颁簡鏈€缇庣殑鏃ヨ惤锛岃繖娆＄殑鎽勫奖浣滃搧澶弧鎰忎簡銆傚垎浜嚑寮犵簿閫夌収鐗囩粰澶у銆?, '2026-04-25 21:00:00', 312, 56, 42),
+(8, '鐙嚜鏃呰鑰?, '/avatars/user8.jpg', 0, '涓€涓汉鐨勬梾琛屼篃鑳藉緢绮惧僵锛佸湪娓呰繄鍙ゅ煄楠戣锛屾劅鍙楀綋鍦颁汉鐨勬參鐢熸椿锛岃繖绉嶈嚜鐢辩殑鎰熻澶浜嗐€?, '2026-04-24 19:30:00', 145, 28, 18),
+(6, '绌锋父鑳屽寘瀹?, '/avatars/user6.jpg', 0, '瀛︾敓鍏氫篃鑳界帺杞航绾︼紒鍒嗕韩鎴戠殑绌锋父鏀荤暐锛?澶╁彧鑺变簡5000鍏冿紝鍖呭惈鏈虹エ浣忓鍜屾墍鏈夊紑閿€銆?, '2026-04-23 17:20:00', 278, 67, 35),
+(7, '濂㈠崕鏃呰瀹?, '/avatars/user7.jpg', 1, '椹皵浠ｅか鐨勬按涓婂埆澧呯湡鐨勫お姊﹀够浜嗭紒浠庨槼鍙扮洿鎺ヨ烦杩涙竻婢堢殑娴烽噷锛岃繖绉嶄綋楠屾棤涓庝鸡姣斻€?, '2026-04-22 15:10:00', 423, 78, 56),
+(12, '鑷劧鎺㈢储鑰?, '/avatars/user12.jpg', 1, '鍦ㄥ反鍘樺矝寰掓浜嗛樋璐＄伀灞憋紝铏界劧寰堣壈杈涳紝浣嗗北椤剁殑鏃ュ嚭缇庡埌绐掓伅銆傚ぇ鑷劧鐨勫姏閲忕湡鐨勫緢闇囨捈銆?, '2026-04-21 13:45:00', 198, 32, 22);
 
 -- ============================================================
--- 20) 旅行者故事图片
--- ============================================================
+-- 20) 鏃呰鑰呮晠浜嬪浘鐗?-- ============================================================
 INSERT INTO traveler_story_images (story_id, image_url, sort_order) VALUES
 (1, '/stories/tokyo_sakura1.jpg', 1),
 (1, '/stories/tokyo_sakura2.jpg', 2),
@@ -890,8 +702,7 @@ INSERT INTO traveler_story_images (story_id, image_url, sort_order) VALUES
 (8, '/stories/bali_hike2.jpg', 2);
 
 -- ============================================================
--- 21) 旅行者故事点赞
--- ============================================================
+-- 21) 鏃呰鑰呮晠浜嬬偣璧?-- ============================================================
 INSERT INTO traveler_story_likes (story_id, user_id) VALUES
 (1, 2), (1, 3), (1, 5),
 (2, 1), (2, 4), (2, 12),
@@ -903,23 +714,22 @@ INSERT INTO traveler_story_likes (story_id, user_id) VALUES
 (8, 1), (8, 3), (8, 5);
 
 -- ============================================================
--- 22) 旅行者故事评论
--- ============================================================
+-- 22) 鏃呰鑰呮晠浜嬭瘎璁?-- ============================================================
 INSERT INTO traveler_story_comments (story_id, user_id, parent_comment_id, author_name, author_avatar_url, content, likes_count) VALUES
-(1, 2, NULL, '背包客小红', '/avatars/user2.jpg', '樱花季真的太美了！请问是几月份去的？', 8),
-(1, 1, 1, '旅行达人小明', '/avatars/user1.jpg', '我是3月底4月初去的，正好赶上樱花盛开', 5),
-(2, 12, NULL, '自然探索者', '/avatars/user12.jpg', '长城真的很壮观，下次一定要去！', 12),
-(3, 9, NULL, '吃货旅行家', '/avatars/user9.jpg', '曼谷的美食真的太诱人了，已经加入旅行清单', 15),
-(4, 3, NULL, '探险家阿强', '/avatars/user3.jpg', '这些照片拍得太美了，摄影技术真棒！', 20),
-(4, 10, 5, '旅行摄影师', '/avatars/user10.jpg', '谢谢夸奖！那天的光线特别好', 8),
-(5, 6, NULL, '穷游背包客', '/avatars/user6.jpg', '一个人的旅行也很精彩，学到了很多', 10),
-(6, 3, NULL, '探险家阿强', '/avatars/user3.jpg', '5000元玩纽约太厉害了，请问是怎么做到的？', 18),
-(6, 6, 8, '穷游背包客', '/avatars/user6.jpg', '主要是住青旅和吃街头美食，交通用地铁通票', 12),
-(7, 1, NULL, '旅行达人小明', '/avatars/user1.jpg', '水上别墅太梦幻了，蜜月首选！', 25),
-(8, 3, NULL, '探险家阿强', '/avatars/user3.jpg', '阿贡火山徒步确实很挑战，但值得！', 15);
+(1, 2, NULL, '鑳屽寘瀹㈠皬绾?, '/avatars/user2.jpg', '妯辫姳瀛ｇ湡鐨勫お缇庝簡锛佽闂槸鍑犳湀浠藉幓鐨勶紵', 8),
+(1, 1, 1, '鏃呰杈句汉灏忔槑', '/avatars/user1.jpg', '鎴戞槸3鏈堝簳4鏈堝垵鍘荤殑锛屾濂借刀涓婃ū鑺辩洓寮€', 5),
+(2, 12, NULL, '鑷劧鎺㈢储鑰?, '/avatars/user12.jpg', '闀垮煄鐪熺殑寰堝．瑙傦紝涓嬫涓€瀹氳鍘伙紒', 12),
+(3, 9, NULL, '鍚冭揣鏃呰瀹?, '/avatars/user9.jpg', '鏇艰胺鐨勭編椋熺湡鐨勫お璇变汉浜嗭紝宸茬粡鍔犲叆鏃呰娓呭崟', 15),
+(4, 3, NULL, '鎺㈤櫓瀹堕樋寮?, '/avatars/user3.jpg', '杩欎簺鐓х墖鎷嶅緱澶編浜嗭紝鎽勫奖鎶€鏈湡妫掞紒', 20),
+(4, 10, 5, '鏃呰鎽勫奖甯?, '/avatars/user10.jpg', '璋㈣阿澶稿锛侀偅澶╃殑鍏夌嚎鐗瑰埆濂?, 8),
+(5, 6, NULL, '绌锋父鑳屽寘瀹?, '/avatars/user6.jpg', '涓€涓汉鐨勬梾琛屼篃寰堢簿褰╋紝瀛﹀埌浜嗗緢澶?, 10),
+(6, 3, NULL, '鎺㈤櫓瀹堕樋寮?, '/avatars/user3.jpg', '5000鍏冪帺绾界害澶帀瀹充簡锛岃闂槸鎬庝箞鍋氬埌鐨勶紵', 18),
+(6, 6, 8, '绌锋父鑳屽寘瀹?, '/avatars/user6.jpg', '涓昏鏄綇闈掓梾鍜屽悆琛楀ご缇庨锛屼氦閫氱敤鍦伴搧閫氱エ', 12),
+(7, 1, NULL, '鏃呰杈句汉灏忔槑', '/avatars/user1.jpg', '姘翠笂鍒澶ⅵ骞讳簡锛岃湝鏈堥閫夛紒', 25),
+(8, 3, NULL, '鎺㈤櫓瀹堕樋寮?, '/avatars/user3.jpg', '闃胯础鐏北寰掓纭疄寰堟寫鎴橈紝浣嗗€煎緱锛?, 15);
 
 -- ============================================================
--- 23) 更新统计字段
+-- 23) 鏇存柊缁熻瀛楁
 -- ============================================================
 UPDATE guides SET
   likes_count = (SELECT COUNT(*) FROM guide_likes WHERE guide_id = guides.id),
@@ -939,4 +749,5 @@ UPDATE destinations SET
   guides_count = (SELECT COUNT(*) FROM guides WHERE destination_id = destinations.id AND publish_status = 'published'),
   travelers_count = (SELECT COUNT(DISTINCT author_id) FROM guides WHERE destination_id = destinations.id);
 
-SELECT '数据库初始化完成！' AS message;
+SELECT '鏁版嵁搴撳垵濮嬪寲瀹屾垚锛? AS message;
+

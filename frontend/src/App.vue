@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <Navbar
-      v-if="currentPage === 'home' || currentPage === 'hot-guides' || currentPage === 'traveler-stories' || currentPage === 'destination-guides'"
+      v-if="currentPage === 'home' || currentPage === 'hot-guides' || currentPage === 'traveler-stories' || currentPage === 'destination-guides' || currentPage === 'destination-detail'"
       @switch-page="switchPage"
       :user-info="userInfo"
       :current-page="currentPage"
@@ -9,7 +9,7 @@
       @view-profile="switchPage('user-profile')"
     />
     <main v-if="currentPage === 'home'">
-      <HeroSection />
+      <HeroSection @search="handleSearch" />
       <RecommendedDestinations />
       <CustomerReviews @switch-page="switchPage" />
     </main>
@@ -19,13 +19,16 @@
     <Register v-if="currentPage === 'register'" @switch-page="switchPage" />
     <GuideDetail
       v-if="currentPage === 'guide-detail'"
+      :guide-id="currentGuideId"
       @back-to-community="switchPage('hot-guides')"
       @view-guide="viewGuideDetail"
     />
     <HotGuides
       v-if="currentPage === 'hot-guides'"
+      :initial-search="searchQuery"
       @back-to-home="switchPage('home')"
       @view-guide-detail="viewGuideDetail"
+      @switch-page="switchPage"
     />
     <TravelerStories
       v-if="currentPage === 'traveler-stories'"
@@ -34,6 +37,13 @@
     <DestinationGuides
       v-if="currentPage === 'destination-guides'"
       @back-to-home="switchPage('home')"
+      @view-destination-detail="viewDestinationDetail"
+    />
+    <DestinationDetail
+      v-if="currentPage === 'destination-detail'"
+      :destination-id="currentDestinationId"
+      @back-to-destinations="switchPage('destination-guides')"
+      @view-guide="viewGuideDetail"
     />
     <UserProfile
       v-if="currentPage === 'user-profile'"
@@ -41,11 +51,12 @@
       @back="switchPage('home')"
       @update-user="handleUpdateUser"
     />
+    <Toast ref="toastRef" />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, provide } from 'vue'
 import { getCookie, removeCookie, setCookie } from './utils/cookie'
 import Navbar from './components/Navbar.vue'
 import HeroSection from './components/HeroSection.vue'
@@ -59,11 +70,23 @@ import GuideDetail from './components/GuideDetail.vue'
 import HotGuides from './components/HotGuides.vue'
 import TravelerStories from './components/TravelerStories.vue'
 import DestinationGuides from './components/DestinationGuides.vue'
+import DestinationDetail from './components/DestinationDetail.vue'
 import UserProfile from './components/UserProfile.vue'
+import Toast from './components/Toast.vue'
 
 const currentPage = ref('home')
 const currentGuideId = ref(null)
+const currentDestinationId = ref(null)
+const searchQuery = ref('')
 const userInfo = ref(null)
+const toastRef = ref(null)
+
+provide('toast', {
+  success: (msg) => toastRef.value?.addToast(msg, 'success'),
+  error: (msg) => toastRef.value?.addToast(msg, 'error'),
+  warning: (msg) => toastRef.value?.addToast(msg, 'warning'),
+  info: (msg) => toastRef.value?.addToast(msg, 'info')
+})
 
 const switchPage = (page) => {
   currentPage.value = page
@@ -74,6 +97,16 @@ const switchPage = (page) => {
 const viewGuideDetail = (guideId) => {
   currentGuideId.value = guideId
   switchPage('guide-detail')
+}
+
+const viewDestinationDetail = (dest) => {
+  currentDestinationId.value = dest.id
+  switchPage('destination-detail')
+}
+
+const handleSearch = (query) => {
+  searchQuery.value = query
+  switchPage('hot-guides')
 }
 
 const handleLoginSuccess = (user) => {
@@ -117,6 +150,8 @@ onMounted(() => {
 </script>
 
 <style>
+@import './styles/variables.css';
+
 /* 全局样式 */
 * {
   margin: 0;
@@ -125,10 +160,10 @@ onMounted(() => {
 }
 
 body {
-  font-family: 'Noto Sans SC', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--font-body);
   line-height: 1.6;
-  color: #333;
-  background-color: #f8f6f3;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-primary);
 }
 
 /* 自定义滚动条样式 */
@@ -138,23 +173,23 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--color-bg-secondary);
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #7aa1c5;
+  background: var(--color-primary-light);
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #5a8ab5;
+  background: var(--color-primary);
 }
 
 /* Firefox 滚动条 */
 html {
   scrollbar-width: thin;
-  scrollbar-color: #7aa1c5 #f1f1f1;
+  scrollbar-color: var(--color-primary-light) var(--color-bg-secondary);
 }
 
 /* 动画效果 */

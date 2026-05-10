@@ -4,8 +4,11 @@ import com.travel.common.PageResult;
 import com.travel.common.exception.BusinessException;
 import com.travel.common.exception.ErrorCode;
 import com.travel.mapper.GuideStoryMapper;
+import com.travel.pojo.dto.CreateStoryDTO;
+import com.travel.pojo.dto.UpdateStoryDTO;
 import com.travel.pojo.vo.GuideStoryVO;
 import com.travel.service.GuideStoryService;
+import com.travel.security.UserContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -67,6 +70,43 @@ public class GuideStoryServiceImpl implements GuideStoryService {
         List<GuideStoryVO> list = guideStoryMapper.selectAll(offset, safePageSize, null);
         long total = guideStoryMapper.countAll(null);
         return PageResult.of(list, safePage, safePageSize, total);
+    }
+
+    @Override
+    public PageResult<GuideStoryVO> listMyStories(Integer page, Integer pageSize) {
+        Long userId = UserContext.requireUserId();
+        return getStoriesByUserId(userId, page, pageSize);
+    }
+
+    @Override
+    public Long createStory(CreateStoryDTO dto) {
+        Long userId = UserContext.requireUserId();
+        GuideStoryVO story = new GuideStoryVO();
+        story.setAuthorUserId(userId);
+        story.setContent(dto.getContent());
+        story.setStatus(0);
+        guideStoryMapper.insert(story);
+        return story.getId();
+    }
+
+    @Override
+    public void deleteStory(Long storyId) {
+        Long userId = UserContext.requireUserId();
+        GuideStoryVO existing = guideStoryMapper.selectById(storyId);
+        if (existing == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND, "故事不存在");
+        }
+        guideStoryMapper.deleteById(storyId);
+    }
+
+    @Override
+    public void updateStory(Long storyId, UpdateStoryDTO dto) {
+        Long userId = UserContext.requireUserId();
+        GuideStoryVO existing = guideStoryMapper.selectById(storyId);
+        if (existing == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND, "故事不存在");
+        }
+        guideStoryMapper.updateContent(storyId, dto.getContent());
     }
 
     /** 页码安全处理：null 或小于1 时默认为1 */

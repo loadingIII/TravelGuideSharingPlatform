@@ -27,20 +27,18 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import request from '../utils/request'
 
 const hoverCard = ref(null)
 const destinations = ref([])
 const loading = ref(true)
 const error = ref(null)
 
-// 获取目的地数据（只取前4个）
 const fetchDestinations = async () => {
   loading.value = true
   error.value = null
   try {
-    const response = await fetch('/api/destinations/hot')
-    const result = await response.json()
-    console.log('接口返回数据:', result)
+    const result = await request.get('/api/destinations/hot')
     if (result.code === 'OK' && result.data && Array.isArray(result.data)) {
       destinations.value = result.data.map(item => ({
         id: item.id,
@@ -53,7 +51,6 @@ const fetchDestinations = async () => {
       error.value = '获取目的地数据失败: ' + (result.message || '返回数据格式错误')
     }
   } catch (err) {
-    console.error('请求目的地接口失败:', err)
     error.value = '网络请求失败: ' + err.message
   } finally {
     loading.value = false
@@ -68,7 +65,7 @@ onMounted(() => {
 <style scoped>
 .recommended {
   padding: 80px 0;
-  background-color: #f8f6f3;
+  background-color: var(--color-bg-primary);
 }
 
 .container {
@@ -81,8 +78,8 @@ onMounted(() => {
   text-align: left;
   font-size: 38px;
   margin-bottom: 40px;
-  color: #0b0a0a;
-  font-family: 'Noto Serif SC', serif;
+  color: var(--color-text-primary);
+  font-family: var(--font-display);
   font-weight: 700;
   letter-spacing: 2px;
   position: relative;
@@ -98,7 +95,7 @@ onMounted(() => {
   left: 0;
   width: 80px;
   height: 4px;
-  background: linear-gradient(90deg, #f79545 0%, #ffc494 50%, transparent 100%);
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-light) 50%, transparent 100%);
   border-radius: 2px;
 }
 
@@ -108,7 +105,7 @@ onMounted(() => {
   right: -35px;
   top: 5px;
   font-size: 20px;
-  color: #f79545;
+  color: var(--color-primary);
   opacity: 0.7;
   animation: twinkle 2s ease-in-out infinite;
 }
@@ -125,14 +122,16 @@ onMounted(() => {
 }
 
 .destination-card {
-  background: #ffffff;
-  border: 1px solid #f0f0f0;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal), background var(--transition-normal);
   cursor: pointer;
   animation: fadeInUp 0.4s ease forwards;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 @keyframes fadeInUp {
@@ -148,14 +147,15 @@ onMounted(() => {
 
 .destination-card.hovered {
   transform: translateY(-5px);
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-lg);
+  background: var(--color-card-bg-hover);
 }
 
 .card-image-wrapper {
   width: 100%;
   height: 200px;
   overflow: hidden;
-  background: linear-gradient(135deg, #f4eed7 0%, #e8e0c5 100%);
+  background: linear-gradient(135deg, var(--color-bg-secondary) 0%, var(--color-bg-tertiary) 100%);
 }
 
 .destination-card img {
@@ -178,7 +178,7 @@ onMounted(() => {
 
 .destination-card p {
   padding: 0 15px 15px;
-  color: #666;
+  color: var(--color-text-secondary);
   font-size: 14px;
   margin: 0;
 }
@@ -187,12 +187,12 @@ onMounted(() => {
   grid-column: 1 / -1;
   text-align: center;
   padding: 60px 20px;
-  color: #666;
+  color: var(--color-text-secondary);
   font-size: 16px;
 }
 
 .error {
-  color: #e74c3c;
+  color: var(--color-error);
 }
 
 @media (max-width: 768px) {

@@ -15,6 +15,7 @@ async function initStories(page = 1, status = null) {
         <td>${s.createdAt || '-'}</td>
         <td>
           <button class="btn-link" onclick="Router.navigate('/stories/detail/${s.id}')">详情</button>
+          <button class="btn-link" onclick="Router.navigate('/stories/edit/${s.id}')">编辑</button>
           ${s.status === 0 ? `
             <button class="btn-link" onclick="auditStory(${s.id}, 'approve')">通过</button>
             <button class="btn-link danger" onclick="auditStory(${s.id}, 'reject')">拒绝</button>
@@ -39,7 +40,10 @@ async function initStories(page = 1, status = null) {
       </div>`;
 
     content.innerHTML = `
-      <div class="page-header"><div class="page-title">故事管理</div></div>
+      <div class="page-header">
+        <div class="page-title">故事管理</div>
+        <button class="btn btn-primary btn-sm" onclick="Router.navigate('/stories/create')">新增故事</button>
+      </div>
       ${filterButtons}
       <div class="card">
         <div class="table-wrapper">
@@ -103,4 +107,55 @@ async function initStoryDetail(id) {
         </div>
       </div>`;
   } catch (err) { content.innerHTML = `<div class="alert alert-danger">加载失败: ${err.message}</div>`; }
+}
+
+async function initStoryEdit(id) {
+  const content = document.getElementById('content');
+  try {
+    const story = await API.get(`/admin/stories/${id}`);
+    content.innerHTML = `
+      <div class="page-header">
+        <div class="page-title">编辑故事</div>
+        <button class="btn btn-ghost" onclick="Router.navigate('/stories')">返回列表</button>
+      </div>
+      <div class="card edit-card"><div class="card-body">
+        <form id="editForm">
+          <div class="form-group"><label class="form-label">内容</label><textarea name="content" class="form-textarea" rows="10" required>${story.content || ''}</textarea></div>
+          <button type="submit" class="btn btn-primary">保存</button>
+        </form>
+      </div></div>`;
+    document.getElementById('editForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const body = {};
+      fd.forEach((v, k) => body[k] = v);
+      try { await API.put(`/admin/stories/${id}`, body); Toast.success('保存成功'); Router.navigate('/stories'); }
+      catch (err) { Toast.error(err.message); }
+    });
+  } catch (err) { content.innerHTML = `<div class="alert alert-danger">加载失败: ${err.message}</div>`; }
+}
+
+async function initStoryCreate() {
+  const content = document.getElementById('content');
+  content.innerHTML = `
+    <div class="page-header">
+      <div class="page-title">新增故事</div>
+      <button class="btn btn-ghost" onclick="Router.navigate('/stories')">返回列表</button>
+    </div>
+    <div class="card edit-card"><div class="card-body">
+      <form id="createForm">
+        <div class="form-group"><label class="form-label">作者名称</label><input type="text" name="authorName" class="form-input" required></div>
+        <div class="form-group"><label class="form-label">作者用户ID</label><input type="number" name="authorUserId" class="form-input"></div>
+        <div class="form-group"><label class="form-label">内容</label><textarea name="content" class="form-textarea" rows="10" required></textarea></div>
+        <button type="submit" class="btn btn-primary">创建</button>
+      </form>
+    </div></div>`;
+  document.getElementById('createForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const body = {};
+    fd.forEach((v, k) => body[k] = v);
+    try { await API.post('/admin/stories', body); Toast.success('创建成功'); Router.navigate('/stories'); }
+    catch (err) { Toast.error(err.message); }
+  });
 }

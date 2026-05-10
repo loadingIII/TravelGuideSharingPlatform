@@ -1,45 +1,59 @@
 <template>
   <div class="destination-guides-page">
-    <!-- 页面头部 -->
-    <header class="page-header">
-      <div class="header-content">
-        <div class="back-btn" @click="goBack">
-          <span class="arrow">&lt;</span>
-          <span>返回首页</span>
-        </div>
-        <h1>目的地指南</h1>
-        <p class="subtitle">探索世界各地的精彩目的地</p>
+    <!-- 沉浸式页面头部 -->
+    <header class="hero-header">
+      <div class="hero-bg">
+        <img src="/img/埃菲尔铁塔.jpg" alt="埃菲尔铁塔" class="hero-image">
+        <div class="hero-overlay"></div>
+        <div class="hero-grain"></div>
       </div>
-      <div class="header-wave">
-        <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#f8f6f3"/>
+      <div class="hero-content">
+        <button class="back-pill" @click="goBack">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          <span>返回首页</span>
+        </button>
+        <div class="hero-text">
+          <span class="hero-tag">DESTINATIONS</span>
+          <h1>目的地指南</h1>
+          <p>探索世界各地的精彩目的地</p>
+        </div>
+        <div class="hero-search">
+          <div class="search-box">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+            <input 
+              type="text" 
+              v-model="searchQuery" 
+              placeholder="搜索目的地..."
+              @keyup.enter="handleSearch"
+            >
+            <button class="search-btn" @click="handleSearch">探索</button>
+          </div>
+        </div>
+      </div>
+      <div class="hero-wave">
+        <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 100L48 94C96 88 192 76 288 70C384 64 480 64 576 68C672 72 768 80 864 82C960 84 1056 80 1152 74C1248 68 1344 60 1392 56L1440 52V100H0Z" fill="#3D4F2F"/>
         </svg>
       </div>
     </header>
 
-    <!-- 搜索和筛选区 -->
-    <section class="search-section">
+    <!-- 地区筛选 -->
+    <section class="region-section">
       <div class="container">
-        <div class="search-box">
-          <input 
-            type="text" 
-            v-model="searchQuery" 
-            placeholder="搜索目的地..."
-            @keyup.enter="handleSearch"
-          >
-          <button class="search-btn" @click="handleSearch">
-            <span>搜索</span>
-          </button>
-        </div>
-        <div class="filter-tags">
+        <div class="region-scroll">
           <button 
             v-for="tag in regionTags" 
             :key="tag.value"
-            class="tag-btn"
+            class="region-chip"
             :class="{ active: currentRegion === tag.value }"
             @click="setRegion(tag.value)"
           >
-            {{ tag.label }}
+            <span>{{ tag.label }}</span>
           </button>
         </div>
       </div>
@@ -50,46 +64,95 @@
       <div class="container">
         <!-- 加载状态 -->
         <div v-if="loading" class="loading-state">
-          <div class="loading-spinner"></div>
+          <div class="loader">
+            <div class="loader-dot"></div>
+            <div class="loader-dot"></div>
+            <div class="loader-dot"></div>
+          </div>
           <p>正在加载目的地...</p>
         </div>
         
         <!-- 错误状态 -->
         <div v-else-if="error" class="error-state">
-          <span class="error-icon">⚠️</span>
+          <div class="error-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 8v4M12 16h.01"/>
+            </svg>
+          </div>
           <p>{{ error }}</p>
           <button @click="fetchDestinations" class="retry-btn">重新加载</button>
         </div>
         
         <!-- 空状态 -->
         <div v-else-if="filteredDestinations.length === 0" class="empty-state">
-          <span class="empty-icon">🌍</span>
+          <div class="empty-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
           <p>暂无目的地数据</p>
         </div>
         
-        <!-- 目的地列表 -->
-        <div v-else class="destinations-grid">
+        <!-- 目的地网格 -->
+        <div v-else class="destinations-showcase">
           <div 
-            v-for="dest in filteredDestinations" 
+            v-for="(dest, index) in filteredDestinations" 
             :key="dest.name"
             class="destination-card"
-            @mouseenter="hoverDest = dest.name"
-            @mouseleave="hoverDest = null"
-            :class="{ hovered: hoverDest === dest.name }"
+            :class="[`card-${(index % 4) + 1}`]"
             @click="viewDestinationDetail(dest)"
           >
-            <img :src="dest.image" :alt="dest.name" loading="lazy">
-            <div class="dest-info">
-              <h3>{{ dest.name }}</h3>
-              <p class="dest-desc">{{ dest.description }}</p>
-              <div class="dest-stats">
-                <span>{{ dest.guidesCount }} 篇攻略</span>
-                <span>{{ dest.travelersCount }} 人去过</span>
-              </div>
+            <div class="card-visual">
+              <img :src="dest.image" :alt="dest.name" loading="lazy">
+              <div class="card-overlay"></div>
+              <div class="card-shine"></div>
             </div>
-            <div class="dest-rating" v-if="dest.rating">
-              <span class="star">★</span>
-              <span>{{ dest.rating }}</span>
+            
+            <div class="card-content">
+              <div class="card-rating" v-if="dest.rating">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+                <span>{{ dest.rating }}</span>
+              </div>
+              
+              <div class="card-info">
+                <div class="card-location">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                  </svg>
+                  <span>{{ dest.country }} · {{ dest.city }}</span>
+                </div>
+                <h3>{{ dest.name }}</h3>
+                <p class="dest-desc">{{ dest.description }}</p>
+                
+                <div class="card-stats">
+                  <div class="stat">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                      <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+                    </svg>
+                    <span>{{ formatNumber(dest.guidesCount) }} 篇攻略</span>
+                  </div>
+                  <div class="stat">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                      <circle cx="9" cy="7" r="4"/>
+                      <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+                    </svg>
+                    <span>{{ formatNumber(dest.travelersCount) }} 人去过</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="card-cta">
+                <span>探索目的地</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </div>
             </div>
           </div>
         </div>
@@ -101,29 +164,36 @@
             :disabled="currentPage === 1"
             @click="changePage(currentPage - 1)"
           >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 18l-6-6 6-6"/>
+            </svg>
             上一页
           </button>
-          <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
+          <div class="page-dots">
+            <span v-for="page in totalPages" :key="page" class="page-dot" :class="{ active: currentPage === page }"></span>
+          </div>
           <button 
             class="page-btn" 
             :disabled="currentPage === totalPages"
             @click="changePage(currentPage + 1)"
           >
             下一页
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 18l6-6-6-6"/>
+            </svg>
           </button>
         </div>
       </div>
     </section>
-
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import request from '../utils/request'
 
 const emit = defineEmits(['back-to-home', 'view-destination-detail'])
 
-// 搜索和筛选
 const searchQuery = ref('')
 const currentRegion = ref('all')
 const currentPage = ref(1)
@@ -139,23 +209,16 @@ const regionTags = [
   { label: '非洲', value: 'africa' }
 ]
 
-// 悬停状态
-const hoverDest = ref(null)
-
-// 数据状态
 const destinations = ref([])
 const loading = ref(false)
 const error = ref(null)
 
-// 获取目的地数据
 const fetchDestinations = async () => {
   loading.value = true
   error.value = null
   
   try {
-    const response = await fetch(`/api/destinations/page?page=${currentPage.value}&pageSize=12`)
-    const result = await response.json()
-    
+    const result = await request.get(`/api/destinations/page?page=${currentPage.value}&pageSize=12`)
     if (result.code === 200 || result.code === 'OK') {
       if (result.data && result.data.list && result.data.list.length > 0) {
         destinations.value = result.data.list.map(item => ({
@@ -172,18 +235,14 @@ const fetchDestinations = async () => {
         }))
         totalPages.value = result.data.totalPages || 1
       } else {
-        // 使用默认数据
         destinations.value = getDefaultDestinations()
         totalPages.value = 1
       }
     } else {
-      // 使用默认数据
       destinations.value = getDefaultDestinations()
       totalPages.value = 1
     }
   } catch (err) {
-    console.error('请求目的地接口失败:', err)
-    // 使用默认数据
     destinations.value = getDefaultDestinations()
     totalPages.value = 1
   } finally {
@@ -191,116 +250,22 @@ const fetchDestinations = async () => {
   }
 }
 
-// 默认目的地数据
 const getDefaultDestinations = () => [
-  {
-    id: 1,
-    name: '日本',
-    country: '日本',
-    city: '东京',
-    description: '樱花、温泉、美食，四季皆有不同风情',
-    image: '/img/富士山.jpg',
-    guidesCount: 1250,
-    travelersCount: 56800,
-    rating: 4.9,
-    region: 'asia'
-  },
-  {
-    id: 2,
-    name: '泰国',
-    country: '泰国',
-    city: '清迈',
-    description: '微笑之国，热带风情与佛教文化的完美融合',
-    image: '/img/长尾船.png',
-    guidesCount: 980,
-    travelersCount: 45200,
-    rating: 4.7,
-    region: 'asia'
-  },
-  {
-    id: 3,
-    name: '法国',
-    country: '法国',
-    city: '巴黎',
-    description: '浪漫之都，艺术与时尚的殿堂',
-    image: '/img/埃菲尔铁塔.jpg',
-    guidesCount: 856,
-    travelersCount: 38900,
-    rating: 4.7,
-    region: 'europe'
-  },
-  {
-    id: 4,
-    name: '意大利',
-    country: '意大利',
-    city: '罗马',
-    description: '文艺复兴发源地，美食与历史的交响曲',
-    image: '/img/比萨斜塔.png',
-    guidesCount: 723,
-    travelersCount: 32100,
-    rating: 4.7,
-    region: 'europe'
-  },
-  {
-    id: 5,
-    name: '希腊',
-    country: '希腊',
-    city: '圣托里尼',
-    description: '蓝白相间的地中海风情，世界最美日落所在地',
-    image: '/img/希腊圣托尼尼.png',
-    guidesCount: 450,
-    travelersCount: 25000,
-    rating: 4.9,
-    region: 'europe'
-  },
-  {
-    id: 6,
-    name: '澳大利亚',
-    country: '澳大利亚',
-    city: '悉尼',
-    description: '海港城市，阳光海滩与现代建筑的完美结合',
-    image: '/img/悉尼歌剧院.jpg',
-    guidesCount: 650,
-    travelersCount: 32000,
-    rating: 4.8,
-    region: 'oceania'
-  },
-  {
-    id: 7,
-    name: '中国',
-    country: '中国',
-    city: '大理',
-    description: '风花雪月，云南慢生活的代表',
-    image: '/img/希腊圣托尼尼.png',
-    guidesCount: 560,
-    travelersCount: 28000,
-    rating: 4.6,
-    region: 'asia'
-  },
-  {
-    id: 8,
-    name: '西班牙',
-    country: '西班牙',
-    city: '巴塞罗那',
-    description: '高迪的建筑之城，地中海风情的艺术之都',
-    image: '/img/巴塞罗亚.png',
-    guidesCount: 690,
-    travelersCount: 31000,
-    rating: 4.8,
-    region: 'europe'
-  }
+  { id: 1, name: '日本', country: '日本', city: '东京', description: '樱花、温泉、美食，四季皆有不同风情', image: '/img/富士山.jpg', guidesCount: 1250, travelersCount: 56800, rating: 4.9, region: 'asia' },
+  { id: 2, name: '泰国', country: '泰国', city: '清迈', description: '微笑之国，热带风情与佛教文化的完美融合', image: '/img/长尾船.png', guidesCount: 980, travelersCount: 45200, rating: 4.7, region: 'asia' },
+  { id: 3, name: '法国', country: '法国', city: '巴黎', description: '浪漫之都，艺术与时尚的殿堂', image: '/img/埃菲尔铁塔.jpg', guidesCount: 856, travelersCount: 38900, rating: 4.7, region: 'europe' },
+  { id: 4, name: '意大利', country: '意大利', city: '罗马', description: '文艺复兴发源地，美食与历史的交响曲', image: '/img/比萨斜塔.png', guidesCount: 723, travelersCount: 32100, rating: 4.7, region: 'europe' },
+  { id: 5, name: '希腊', country: '希腊', city: '圣托里尼', description: '蓝白相间的地中海风情，世界最美日落所在地', image: '/img/希腊圣托尼尼.png', guidesCount: 450, travelersCount: 25000, rating: 4.9, region: 'europe' },
+  { id: 6, name: '澳大利亚', country: '澳大利亚', city: '悉尼', description: '海港城市，阳光海滩与现代建筑的完美结合', image: '/img/悉尼歌剧院.jpg', guidesCount: 650, travelersCount: 32000, rating: 4.8, region: 'oceania' },
+  { id: 7, name: '中国', country: '中国', city: '大理', description: '风花雪月，云南慢生活的代表', image: '/img/希腊圣托尼尼.png', guidesCount: 560, travelersCount: 28000, rating: 4.6, region: 'asia' },
+  { id: 8, name: '西班牙', country: '西班牙', city: '巴塞罗那', description: '高迪的建筑之城，地中海风情的艺术之都', image: '/img/巴塞罗亚.png', guidesCount: 690, travelersCount: 31000, rating: 4.8, region: 'europe' }
 ]
 
-// 过滤后的目的地
 const filteredDestinations = computed(() => {
   let result = destinations.value
-  
-  // 按地区筛选
   if (currentRegion.value !== 'all') {
     result = result.filter(dest => dest.region === currentRegion.value)
   }
-  
-  // 按搜索词筛选
   if (searchQuery.value.trim()) {
     const query = searchQuery.value.toLowerCase()
     result = result.filter(dest => 
@@ -310,33 +275,21 @@ const filteredDestinations = computed(() => {
       dest.description.toLowerCase().includes(query)
     )
   }
-  
   return result
 })
 
-// 返回首页
-const goBack = () => {
-  emit('back-to-home')
+const formatNumber = (num) => {
+  if (num >= 10000) return (num / 10000).toFixed(1) + 'w'
+  if (num >= 1000) return (num / 1000).toFixed(1) + 'k'
+  return num.toString()
 }
 
-// 查看目的地详情
-const viewDestinationDetail = (dest) => {
-  emit('view-destination-detail', dest)
-}
+const goBack = () => emit('back-to-home')
+const viewDestinationDetail = (dest) => emit('view-destination-detail', dest)
 
-// 搜索
-const handleSearch = () => {
-  console.log('搜索:', searchQuery.value)
-  currentPage.value = 1
-}
+const handleSearch = () => { currentPage.value = 1 }
+const setRegion = (value) => { currentRegion.value = value; currentPage.value = 1 }
 
-// 设置地区筛选
-const setRegion = (value) => {
-  currentRegion.value = value
-  currentPage.value = 1
-}
-
-// 切换页面
 const changePage = (page) => {
   if (page >= 1 && page <= totalPages.value) {
     currentPage.value = page
@@ -345,393 +298,689 @@ const changePage = (page) => {
   }
 }
 
-// 页面加载时获取数据
-onMounted(() => {
-  fetchDestinations()
-})
+onMounted(() => fetchDestinations())
 </script>
 
 <style scoped>
-/* 页面整体样式 */
 .destination-guides-page {
   min-height: 100vh;
-  background-color: #f8f6f3;
-  font-family: 'Noto Sans SC', sans-serif;
+  background-color: #3D4F2F;
+  font-family: var(--font-body);
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
 }
 
-/* 页面头部 */
-.page-header {
-  background: url('/img/埃菲尔铁塔.jpg') center/cover no-repeat;
-  padding: 60px 0 0;
+/* Hero Header */
+.hero-header {
   position: relative;
+  height: 70vh;
+  min-height: 480px;
   overflow: hidden;
+  display: flex;
+  align-items: flex-end;
 }
 
-.page-header::before {
-  content: '';
+.hero-bg {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.4) 100%);
+  inset: 0;
 }
 
-.header-content {
-  max-width: 1200px;
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.05);
+  animation: heroZoom 20s ease-in-out infinite alternate;
+}
+
+@keyframes heroZoom {
+  0% { transform: scale(1.05); }
+  100% { transform: scale(1.15); }
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,0.1) 0%,
+    rgba(0,0,0,0.3) 40%,
+    rgba(0,0,0,0.75) 100%
+  );
+}
+
+.hero-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.15;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 40px 60px 60px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 20px 40px;
-  position: relative;
-  z-index: 1;
-}
-
-.back-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: white;
-  font-size: 14px;
-  cursor: pointer;
-  margin-bottom: 20px;
-  padding: 8px 16px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-}
-
-.back-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: translateX(-5px);
-}
-
-.back-btn .arrow {
-  font-size: 16px;
-}
-
-.page-header h1 {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 48px;
-  color: white;
-  margin-bottom: 15px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-  letter-spacing: 4px;
-}
-
-.subtitle {
-  font-size: 18px;
-  color: rgba(255, 255, 255, 0.9);
-  font-weight: 300;
-}
-
-.header-wave {
-  position: relative;
-  bottom: -1px;
-}
-
-.header-wave svg {
-  display: block;
   width: 100%;
 }
 
-/* 搜索区域 */
-.search-section {
-  background-color: #f8f6f3;
-  padding: 40px 0;
+.back-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 30px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 24px;
+}
+
+.back-pill:hover {
+  background: rgba(255,255,255,0.25);
+  transform: translateX(-4px);
+}
+
+.back-pill svg {
+  width: 18px;
+  height: 18px;
+}
+
+.hero-text {
+  margin-bottom: 32px;
+}
+
+.hero-tag {
+  display: inline-block;
+  padding: 6px 16px;
+  background: linear-gradient(135deg, #F5F0E8, #FAF8F5);
+  color: #2F3D24;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+
+.hero-text h1 {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 6vw, 72px);
+  color: white;
+  margin: 0 0 16px;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.hero-text p {
+  font-size: 18px;
+  color: rgba(255,255,255,0.85);
+  max-width: 450px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.hero-search {
+  max-width: 560px;
 }
 
 .search-box {
   display: flex;
-  gap: 15px;
-  margin-bottom: 25px;
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
+  align-items: center;
+  padding: 8px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.search-box:focus-within {
+  background: rgba(255,255,255,0.2);
+  border-color: rgba(245,240,232,0.5);
+  box-shadow: 0 0 0 4px rgba(245,240,232,0.15);
+}
+
+.search-icon {
+  width: 20px;
+  height: 20px;
+  margin-left: 16px;
+  color: rgba(255,255,255,0.7);
 }
 
 .search-box input {
   flex: 1;
-  padding: 15px 25px;
-  border: 2px solid rgba(247, 149, 69, 0.3);
-  border-radius: 30px;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
   font-size: 16px;
-  background: white;
-  transition: all 0.3s ease;
+  color: white;
   outline: none;
 }
 
-.search-box input:focus {
-  border-color: #f79545;
-  box-shadow: 0 0 0 4px rgba(247, 149, 69, 0.1);
+.search-box input::placeholder {
+  color: rgba(255,255,255,0.6);
 }
 
 .search-btn {
-  padding: 15px 35px;
-  background: linear-gradient(135deg, #f79545 0%, #ffc494 100%);
-  color: white;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
+  color: #2F3D24;
   border: none;
   border-radius: 30px;
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(247, 149, 69, 0.3);
 }
 
 .search-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(247, 149, 69, 0.4);
+  transform: scale(1.02);
+  box-shadow: 0 4px 15px rgba(245,240,232,0.3);
 }
 
-.filter-tags {
+.hero-wave {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  z-index: 3;
+}
+
+.hero-wave svg {
+  display: block;
+  width: 100%;
+}
+
+/* Region Section */
+.region-section {
+  padding: 32px 0;
+  position: relative;
+  z-index: 4;
+}
+
+.region-scroll {
   display: flex;
-  flex-wrap: wrap;
   gap: 12px;
+  overflow-x: auto;
+  padding: 4px 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   justify-content: center;
 }
 
-.tag-btn {
-  padding: 10px 24px;
-  background: white;
-  border: 2px solid rgba(247, 149, 69, 0.2);
-  border-radius: 25px;
-  font-size: 14px;
-  color: #666;
+.region-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.region-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 30px;
+  color: #D4CFC7;
+  font-size: 15px;
   cursor: pointer;
   transition: all 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.tag-btn:hover {
-  border-color: #f79545;
-  color: #f79545;
+.region-chip:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(245,240,232,0.3);
+  color: #F5F2ED;
 }
 
-.tag-btn.active {
-  background: linear-gradient(135deg, #f79545 0%, #ffc494 100%);
-  border-color: #f79545;
-  color: white;
+.region-chip.active {
+  background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
+  border-color: #F5F0E8;
+  color: #2F3D24;
 }
 
-/* 目的地区域 */
+/* Destinations Section */
 .destinations-section {
-  padding: 60px 0;
-  background-color: #f8f6f3;
-  min-height: 50vh;
+  padding: 20px 0 80px;
 }
 
-/* 加载状态 */
+/* Loading State */
 .loading-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 80px 20px;
-  color: #888;
+  padding: 100px 20px;
+  color: #A8A29E;
 }
 
-.loading-spinner {
-  width: 48px;
-  height: 48px;
-  border: 3px solid #f0f0f0;
-  border-top-color: #f79545;
+.loader {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.loader-dot {
+  width: 12px;
+  height: 12px;
+  background: #F5F0E8;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 16px;
+  animation: loaderBounce 1.4s ease-in-out infinite;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+.loader-dot:nth-child(2) { animation-delay: 0.2s; }
+.loader-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes loaderBounce {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
 }
 
-/* 错误状态 */
+/* Error State */
 .error-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 80px 20px;
-  color: #666;
+  padding: 100px 20px;
+  color: #D4CFC7;
 }
 
-.error-icon {
-  font-size: 48px;
-  margin-bottom: 16px;
+.error-icon-wrap {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(224,112,112,0.15);
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+.error-icon-wrap svg {
+  width: 32px;
+  height: 32px;
+  color: #E07070;
 }
 
 .retry-btn {
   margin-top: 20px;
   padding: 12px 32px;
-  background: linear-gradient(135deg, #f79545 0%, #ffc494 100%);
-  color: #fff;
+  background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
+  color: #2F3D24;
   border: none;
-  border-radius: 25px;
+  border-radius: 30px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .retry-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(247, 149, 69, 0.3);
+  box-shadow: 0 8px 20px rgba(245,240,232,0.3);
 }
 
-/* 空状态 */
+/* Empty State */
 .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 80px 20px;
-  color: #888;
+  padding: 100px 20px;
+  color: #A8A29E;
 }
 
-.empty-icon {
-  font-size: 48px;
-  margin-bottom: 16px;
+.empty-icon-wrap {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.06);
+  border-radius: 24px;
+  margin-bottom: 20px;
 }
 
-/* 目的地网格 */
-.destinations-grid {
+.empty-icon-wrap svg {
+  width: 40px;
+  height: 40px;
+}
+
+/* Destinations Showcase */
+.destinations-showcase {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 380px;
+  gap: 20px;
 }
 
 .destination-card {
   position: relative;
-  border-radius: 20px;
+  border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  transition: all 0.4s ease;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  animation: cardFadeIn 0.6s ease backwards;
 }
 
-.destination-card.hovered {
+.destination-card:nth-child(1) { animation-delay: 0.1s; }
+.destination-card:nth-child(2) { animation-delay: 0.15s; }
+.destination-card:nth-child(3) { animation-delay: 0.2s; }
+.destination-card:nth-child(4) { animation-delay: 0.25s; }
+.destination-card:nth-child(5) { animation-delay: 0.3s; }
+.destination-card:nth-child(6) { animation-delay: 0.35s; }
+.destination-card:nth-child(7) { animation-delay: 0.4s; }
+.destination-card:nth-child(8) { animation-delay: 0.45s; }
+
+@keyframes cardFadeIn {
+  from { opacity: 0; transform: translateY(30px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.destination-card:hover {
   transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.4);
 }
 
-.destination-card img {
+/* Card Variations */
+.card-1, .card-5 { grid-column: span 2; }
+
+.card-visual {
+  position: absolute;
+  inset: 0;
+}
+
+.card-visual img {
   width: 100%;
-  height: 320px;
+  height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.destination-card.hovered img {
+.destination-card:hover .card-visual img {
   transform: scale(1.1);
 }
 
-.dest-info {
+.card-overlay {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 25px;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-  color: white;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    transparent 40%,
+    rgba(0,0,0,0.85) 100%
+  );
 }
 
-.dest-info h3 {
-  font-size: 24px;
-  font-weight: 700;
+.card-shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.1) 0%,
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.destination-card:hover .card-shine {
+  opacity: 1;
+}
+
+.card-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 24px;
+}
+
+.card-rating {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(8px);
+  border-radius: 20px;
+  color: #ffd700;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.card-rating svg {
+  width: 16px;
+  height: 16px;
+}
+
+.card-info {
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.destination-card:hover .card-info {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.card-location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   margin-bottom: 8px;
-  font-family: 'Noto Serif SC', serif;
+}
+
+.card-location svg {
+  width: 14px;
+  height: 14px;
+  color: rgba(255,255,255,0.7);
+}
+
+.card-location span {
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+}
+
+.card-info h3 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 8px;
 }
 
 .dest-desc {
   font-size: 14px;
-  opacity: 0.9;
-  margin-bottom: 12px;
+  color: rgba(255,255,255,0.8);
   line-height: 1.5;
+  margin: 0 0 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.dest-stats {
+.card-stats {
   display: flex;
   gap: 20px;
-  font-size: 13px;
-  opacity: 0.8;
 }
 
-.dest-rating {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: rgba(247, 149, 69, 0.9);
-  color: white;
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 600;
+.stat {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
 }
 
-.dest-rating .star {
-  color: #ffd700;
+.stat svg {
+  width: 14px;
+  height: 14px;
 }
 
-/* 分页 */
+.card-cta {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
+  color: #2F3D24;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.destination-card:hover .card-cta {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.card-cta svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Pagination */
 .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 20px;
-  margin-top: 40px;
+  gap: 16px;
+  margin-top: 48px;
 }
 
 .page-btn {
-  padding: 10px 24px;
-  background: white;
-  border: 2px solid rgba(247, 149, 69, 0.3);
-  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 30px;
   font-size: 14px;
-  color: #666;
+  color: #D4CFC7;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
+.page-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
 .page-btn:hover:not(:disabled) {
-  border-color: #f79545;
-  color: #f79545;
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(245,240,232,0.3);
+  color: #F5F2ED;
 }
 
 .page-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
-.page-info {
-  font-size: 14px;
-  color: #666;
+.page-dots {
+  display: flex;
+  gap: 8px;
 }
 
-/* 响应式设计 */
-@media (max-width: 768px) {
-  .page-header h1 {
-    font-size: 32px;
-  }
+.page-dot {
+  width: 8px;
+  height: 8px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
 
-  .destinations-grid {
+.page-dot.active {
+  width: 24px;
+  border-radius: 4px;
+  background: #F5F0E8;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .destinations-showcase {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .card-1, .card-5 { grid-column: span 2; }
+  .card-2, .card-3, .card-4 { grid-column: span 1; }
+}
+
+@media (max-width: 900px) {
+  .destinations-showcase {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 320px;
+  }
+  .card-1, .card-2, .card-3, .card-4, .card-5 {
+    grid-column: span 1;
+  }
+  .card-1 { grid-column: span 2; }
+  
+  .hero-content {
+    padding: 40px;
+  }
+  
+  .hero-search {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .destinations-showcase {
     grid-template-columns: 1fr;
+    grid-auto-rows: 360px;
   }
-
-  .destination-card img {
-    height: 250px;
+  .card-1, .card-2, .card-3, .card-4, .card-5 {
+    grid-column: span 1;
   }
-
-  .pagination {
-    flex-wrap: wrap;
+  
+  .hero-content {
+    padding: 24px;
+  }
+  
+  .region-scroll {
+    justify-content: flex-start;
+    padding: 0 20px;
+    margin: 0 -20px;
+  }
+  
+  .card-info {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  
+  .card-cta {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  
+  .page-btn span {
+    display: none;
   }
 }
 </style>

@@ -1,6 +1,8 @@
 package com.travel.service;
 
 import com.travel.common.PageResult;
+import com.travel.pojo.dto.CreateStoryDTO;
+import com.travel.pojo.dto.UpdateStoryDTO;
 import com.travel.pojo.vo.GuideStoryVO;
 
 /**
@@ -34,4 +36,12 @@ public interface GuideStoryService {
      * @return 分页的故事列表
      */
     PageResult<GuideStoryVO> listStories(Integer page, Integer pageSize);
+
+    Long createStory(CreateStoryDTO dto);
+
+    void updateStory(Long storyId, UpdateStoryDTO dto);
+
+    void deleteStory(Long storyId);
+
+    PageResult<GuideStoryVO> listMyStories(Integer page, Integer pageSize);
 }

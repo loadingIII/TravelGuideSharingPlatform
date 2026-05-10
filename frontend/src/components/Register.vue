@@ -159,6 +159,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import request from '../utils/request'
 
 const emit = defineEmits(['switch-page'])
 
@@ -231,35 +232,22 @@ const handleSubmit = async () => {
   isLoading.value = true
 
   try {
-    const response = await fetch('/api/auth/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        username: usernameVal,
-        phone: phoneVal,
-        email: emailVal,
-        password: passwordVal
-      })
+    const data = await request.post('/api/auth/register', {
+      username: usernameVal,
+      phone: phoneVal,
+      email: emailVal,
+      password: passwordVal
     })
 
-    const data = await response.json()
-
-    // 支持多种成功响应格式
-    const isSuccess = (response.ok && data.code === 200) ||
-                      (response.ok && data.message?.toLowerCase() === 'success') ||
-                      (response.ok && typeof data === 'string' && data.toLowerCase() === 'success')
+    const isSuccess = data.code === 'OK' || data.code === 200
 
     if (isSuccess) {
       showSuccessModal.value = true
     } else {
-      // 注册失败
       alert(data.message || '注册失败，请检查输入信息')
     }
   } catch (error) {
-    console.error('注册请求失败:', error)
-    alert('网络错误，请稍后重试')
+    alert(error.response?.data?.message || '网络错误，请稍后重试')
   } finally {
     isLoading.value = false
   }
@@ -280,22 +268,13 @@ const closeSuccessModal = () => {
 </script>
 
 <style scoped>
-/* 官网色系：
-   - 主背景：#faf8f5 (米白色)
-   - 强调色：#f79545 (橙色系)
-   - 强调色浅：#ffc494 (浅橙色)
-   - 文字主色：#333, #0b0a0a
-   - 区块背景：#f4eed7 (暖黄色)
-   - 按钮悬停：#e88535
-*/
-
 .register-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: linear-gradient(135deg, #f4eed7 0%, #faf8f5 50%, #f4eed7 100%);
+  background: linear-gradient(135deg, #2F3D24 0%, #3D4F2F 50%, #2F3D24 100%);
   position: relative;
   overflow: hidden;
 }
@@ -307,7 +286,7 @@ const closeSuccessModal = () => {
   right: -10%;
   width: 60%;
   height: 80%;
-  background: radial-gradient(ellipse at 30% 50%, rgba(247, 149, 69, 0.08) 0%, transparent 60%);
+  background: radial-gradient(ellipse at 30% 50%, rgba(245, 240, 232, 0.1) 0%, transparent 60%);
   opacity: 0.8;
   z-index: 0;
   filter: blur(60px);
@@ -320,7 +299,7 @@ const closeSuccessModal = () => {
   left: -10%;
   width: 50%;
   height: 70%;
-  background: radial-gradient(ellipse at 70% 30%, rgba(255, 196, 148, 0.15) 0%, transparent 55%);
+  background: radial-gradient(ellipse at 70% 30%, rgba(107, 142, 78, 0.15) 0%, transparent 55%);
   opacity: 0.6;
   z-index: 0;
   filter: blur(50px);
@@ -340,17 +319,18 @@ const closeSuccessModal = () => {
 }
 
 .register-card {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 24px;
   padding: 48px 40px;
   box-shadow:
-    0 4px 20px rgba(247, 149, 69, 0.1),
-    0 8px 40px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(255, 196, 148, 0.3);
+    0 4px 20px rgba(0, 0, 0, 0.2),
+    0 8px 40px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   position: relative;
   overflow: hidden;
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .register-card::before {
@@ -360,7 +340,7 @@ const closeSuccessModal = () => {
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, transparent 0%, #f79545 20%, #ffc494 50%, #f79545 80%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, var(--color-primary) 20%, var(--color-primary-light) 50%, var(--color-primary) 80%, transparent 100%);
   opacity: 0.8;
 }
 
@@ -375,12 +355,12 @@ const closeSuccessModal = () => {
   width: 64px;
   height: 64px;
   margin: 0 auto 20px;
-  background-color: #ffc494;
+  background: var(--gradient-primary);
   border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(255, 196, 148, 0.3);
+  box-shadow: 0 2px 8px rgba(245, 240, 232, 0.3);
   position: relative;
 }
 
@@ -398,17 +378,17 @@ const closeSuccessModal = () => {
 }
 
 .header h1 {
-  font-family: 'Noto Serif SC', serif;
+  font-family: var(--font-display);
   font-size: 28px;
   font-weight: 700;
-  color: #0b0a0a;
+  color: var(--color-text-primary);
   letter-spacing: 3px;
   margin-bottom: 10px;
 }
 
 .header p {
   font-size: 15px;
-  color: #666;
+  color: var(--color-text-secondary);
   font-weight: 400;
   letter-spacing: 1px;
 }
@@ -435,7 +415,7 @@ const closeSuccessModal = () => {
   display: block;
   font-size: 13px;
   font-weight: 500;
-  color: #333;
+  color: var(--color-text-primary);
   margin-bottom: 10px;
   letter-spacing: 1px;
 }
@@ -451,7 +431,7 @@ const closeSuccessModal = () => {
   transform: translateY(-50%);
   width: 18px;
   height: 18px;
-  color: #999;
+  color: var(--color-text-muted);
   pointer-events: none;
   transition: all 0.3s ease;
 }
@@ -459,52 +439,52 @@ const closeSuccessModal = () => {
 .form-input {
   width: 100%;
   padding: 15px 16px 15px 50px;
-  font-family: 'Noto Sans SC', sans-serif;
+  font-family: var(--font-body);
   font-size: 15px;
   font-weight: 400;
-  color: #333;
-  background: rgba(250, 248, 245, 0.9);
-  border: 1.5px solid rgba(247, 149, 69, 0.2);
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
   border-radius: 14px;
   outline: none;
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .form-input::placeholder {
-  color: #aaa;
+  color: var(--color-text-muted);
   font-weight: 400;
 }
 
 .form-input:hover {
-  border-color: rgba(247, 149, 69, 0.4);
-  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .form-input:focus {
-  border-color: #f79545;
-  background: #fff;
-  box-shadow: 0 0 0 4px rgba(247, 149, 69, 0.12), inset 0 1px 2px rgba(0, 0, 0, 0.02);
+  border-color: var(--color-primary);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 4px rgba(245, 240, 232, 0.15), inset 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .form-input:focus + .input-icon {
-  color: #f79545;
+  color: var(--color-primary);
   transform: translateY(-50%) scale(1.05);
 }
 
 .input-wrapper:hover .input-icon {
-  color: #f79545;
+  color: var(--color-primary);
 }
 
 .form-input.error {
-  border-color: #e74c3c;
-  background: rgba(231, 76, 60, 0.05);
+  border-color: var(--color-error);
+  background: rgba(224, 112, 112, 0.1);
   animation: shake 0.4s ease;
 }
 
 .error-message {
   font-size: 12px;
-  color: #e74c3c;
+  color: var(--color-error);
   margin-top: 8px;
   padding-left: 2px;
 }
@@ -512,18 +492,18 @@ const closeSuccessModal = () => {
 .submit-btn {
   width: 100%;
   padding: 17px;
-  font-family: 'Noto Sans SC', sans-serif;
+  font-family: var(--font-body);
   font-size: 15px;
   font-weight: 500;
   letter-spacing: 3px;
-  color: #7b7474;
-  background-color: #ffc494;
+  color: white;
+  background: var(--gradient-primary);
   border: none;
   border-radius: 20px;
   cursor: pointer;
   transition: all 0.3s ease;
   animation: fadeIn 0.6s ease-out 0.4s backwards;
-  box-shadow: 0 2px 8px rgba(255, 196, 148, 0.3);
+  box-shadow: 0 2px 8px rgba(245, 240, 232, 0.3);
 }
 
 .submit-btn:disabled {
@@ -533,20 +513,19 @@ const closeSuccessModal = () => {
 }
 
 .submit-btn:hover {
-  background-color: #ffc494;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 196, 148, 0.4);
+  box-shadow: 0 4px 12px rgba(245, 240, 232, 0.4);
 }
 
 .info-text {
   font-size: 13px;
-  color: #666;
+  color: var(--color-text-secondary);
   margin-top: 18px;
   text-align: center;
 }
 
 .info-text a {
-  color: #f79545;
+  color: var(--color-primary);
   text-decoration: none;
   font-weight: 500;
   transition: all 0.3s ease;
@@ -560,13 +539,13 @@ const closeSuccessModal = () => {
   left: 0;
   width: 100%;
   height: 1px;
-  background: #f79545;
+  background: var(--color-primary);
   transform: scaleX(0);
   transition: transform 0.3s ease;
 }
 
 .info-text a:hover {
-  color: #e88535;
+  color: var(--color-primary-light);
 }
 
 .info-text a:hover::after {
@@ -588,16 +567,17 @@ const closeSuccessModal = () => {
   align-items: center;
   gap: 8px;
   padding: 10px 18px;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(247, 149, 69, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50px;
-  color: #f79545;
+  color: var(--color-primary-light);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
-  box-shadow: 0 2px 12px rgba(247, 149, 69, 0.15);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
   z-index: 100;
 }
 
@@ -608,10 +588,10 @@ const closeSuccessModal = () => {
 }
 
 .back-btn:hover {
-  background: rgba(247, 149, 69, 0.1);
-  border-color: #f79545;
+  background: rgba(245, 240, 232, 0.15);
+  border-color: var(--color-primary);
   transform: translateX(-3px);
-  box-shadow: 0 4px 16px rgba(247, 149, 69, 0.25);
+  box-shadow: 0 4px 16px rgba(245, 240, 232, 0.2);
 }
 
 .back-btn:hover svg {
@@ -625,8 +605,9 @@ const closeSuccessModal = () => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -635,16 +616,16 @@ const closeSuccessModal = () => {
 }
 
 .modal-content {
-  background: linear-gradient(135deg, #fff 0%, #faf8f5 100%);
+  background: rgba(61, 79, 47, 0.95);
   border-radius: 24px;
   padding: 48px 40px;
   text-align: center;
   max-width: 360px;
   width: 100%;
   box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.2),
-    0 0 0 1px rgba(247, 149, 69, 0.1);
-  border: 1px solid rgba(255, 196, 148, 0.3);
+    0 20px 60px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -663,12 +644,12 @@ const closeSuccessModal = () => {
   width: 72px;
   height: 72px;
   margin: 0 auto 24px;
-  background: linear-gradient(135deg, #ffc494 0%, #f79545 100%);
+  background: var(--gradient-primary);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 24px rgba(247, 149, 69, 0.3);
+  box-shadow: 0 8px 24px rgba(245, 240, 232, 0.3);
   animation: iconPulse 0.6s ease 0.2s both;
 }
 
@@ -692,17 +673,17 @@ const closeSuccessModal = () => {
 }
 
 .modal-title {
-  font-family: 'Noto Serif SC', serif;
+  font-family: var(--font-display);
   font-size: 24px;
   font-weight: 700;
-  color: #0b0a0a;
+  color: var(--color-text-primary);
   margin-bottom: 12px;
   letter-spacing: 2px;
 }
 
 .modal-message {
   font-size: 15px;
-  color: #666;
+  color: var(--color-text-secondary);
   line-height: 1.6;
   margin-bottom: 32px;
   font-weight: 400;
@@ -711,22 +692,22 @@ const closeSuccessModal = () => {
 .modal-btn {
   width: 100%;
   padding: 16px 32px;
-  font-family: 'Noto Sans SC', sans-serif;
+  font-family: var(--font-body);
   font-size: 15px;
   font-weight: 500;
   letter-spacing: 2px;
   color: white;
-  background: linear-gradient(135deg, #ffc494 0%, #f79545 100%);
+  background: var(--gradient-primary);
   border: none;
   border-radius: 16px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(247, 149, 69, 0.3);
+  box-shadow: 0 4px 16px rgba(245, 240, 232, 0.3);
 }
 
 .modal-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(247, 149, 69, 0.4);
+  box-shadow: 0 6px 20px rgba(245, 240, 232, 0.4);
 }
 
 .modal-btn:active {

@@ -1,5 +1,6 @@
 package com.travel.service;
 
+import com.travel.pojo.dto.CreateCommentDTO;
 import com.travel.pojo.vo.GuideCommentVO;
 
 import java.util.List;
@@ -18,4 +19,8 @@ public interface GuideCommentService {
      * @return 评论列表（一级评论 + 嵌套回复）
      */
     List<GuideCommentVO> listCommentsByGuideId(Long guideId);
+
+    GuideCommentVO addComment(Long guideId, CreateCommentDTO dto);
+
+    void deleteComment(Long commentId);
 }

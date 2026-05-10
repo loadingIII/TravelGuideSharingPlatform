@@ -114,8 +114,8 @@ const menuItems = [
 ]
 
 const navbarStyle = computed(() => ({
-  backgroundColor: scrollY.value > 100 ? 'rgba(255, 255, 255, 0.95)' : '#f8f6f3',
-  boxShadow: scrollY.value > 100 ? '0 2px 10px rgba(0, 0, 0, 0.1)' : '0 2px 4px rgba(0, 0, 0, 0.1)'
+  backgroundColor: scrollY.value > 100 ? 'rgba(61, 79, 47, 0.95)' : 'rgba(61, 79, 47, 0.9)',
+  boxShadow: scrollY.value > 100 ? '0 2px 10px rgba(0, 0, 0, 0.2)' : '0 2px 4px rgba(0, 0, 0, 0.15)'
 }))
 
 const iconStyles = computed(() => {
@@ -231,12 +231,14 @@ onUnmounted(() => {
 
 <style scoped>
 .navbar {
-  background-color: #f8f6f3;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: rgba(61, 79, 47, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-sm);
   position: sticky;
   top: 0;
   z-index: 1000;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
 }
 
 .navbar .container {
@@ -251,14 +253,14 @@ onUnmounted(() => {
 .navbar-brand a {
   font-size: 26px;
   font-weight: 700;
-  color: #f79545;
+  color: var(--color-primary);
   text-decoration: none;
-  font-family: 'Noto Serif SC', serif;
+  font-family: var(--font-display);
   letter-spacing: 3px;
   position: relative;
   padding: 5px 0;
-  text-shadow: 1px 1px 2px rgba(247, 149, 69, 0.3);
-  transition: all 0.3s ease;
+  text-shadow: 1px 1px 2px rgba(212, 118, 58, 0.3);
+  transition: all var(--transition-normal);
 }
 
 .navbar-brand a::after {
@@ -268,8 +270,8 @@ onUnmounted(() => {
   left: 0;
   width: 0;
   height: 2px;
-  background: linear-gradient(90deg, #f79545, #ffc494);
-  transition: width 0.3s ease;
+  background: var(--gradient-primary);
+  transition: width var(--transition-normal);
   border-radius: 1px;
 }
 
@@ -278,8 +280,8 @@ onUnmounted(() => {
 }
 
 .navbar-brand a:hover {
-  color: #e88535;
-  text-shadow: 2px 2px 4px rgba(247, 149, 69, 0.4);
+  color: var(--color-primary-dark);
+  text-shadow: 2px 2px 4px rgba(212, 118, 58, 0.4);
 }
 
 .navbar-toggle {
@@ -298,9 +300,9 @@ onUnmounted(() => {
   display: block;
   width: 100%;
   height: 3px;
-  background-color: #333;
+  background-color: var(--color-text-primary);
   border-radius: 1.5px;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
 }
 
 .navbar-menu ul {
@@ -322,25 +324,25 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #f79545, #ffc494);
+  background: var(--gradient-primary);
   border-radius: 2px;
 }
 
 .navbar-menu a {
-  color: #333;
+  color: var(--color-text-primary);
   text-decoration: none;
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
   padding: 5px 0;
 }
 
 .navbar-menu li.active a {
-  color: #f79545;
+  color: var(--color-primary);
   font-weight: 600;
 }
 
 .navbar-menu a:hover {
-  color: #f79545;
+  color: var(--color-primary);
 }
 
 .navbar-actions {
@@ -355,13 +357,12 @@ onUnmounted(() => {
   align-items: center;
   gap: 12px;
   padding: 8px 16px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 250, 245, 0.95) 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.1) 100%);
   border-radius: 50px;
-  border: 1px solid rgba(247, 149, 69, 0.25);
+  border: 1px solid var(--color-primary-20);
   box-shadow: 
-    0 4px 15px rgba(247, 149, 69, 0.12),
-    0 2px 6px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    0 4px 15px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: default;
   position: relative;
@@ -378,7 +379,7 @@ onUnmounted(() => {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(247, 149, 69, 0.08),
+    var(--color-primary-10),
     transparent
   );
   transition: left 0.5s ease;
@@ -391,10 +392,10 @@ onUnmounted(() => {
 .user-info:hover {
   transform: translateY(-2px);
   box-shadow: 
-    0 8px 25px rgba(247, 149, 69, 0.18),
+    0 8px 25px var(--color-primary-20),
     0 4px 10px rgba(0, 0, 0, 0.06),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  border-color: rgba(247, 149, 69, 0.4);
+  border-color: var(--color-primary);
 }
 
 .user-avatar {
@@ -402,14 +403,14 @@ onUnmounted(() => {
   height: 36px;
   border-radius: 50%;
   overflow: hidden;
-  background: linear-gradient(135deg, #ffc494 0%, #f79545 50%, #e88535 100%);
+  background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 50%, var(--color-primary-dark) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   box-shadow: 
-    0 3px 8px rgba(247, 149, 69, 0.35),
-    0 0 0 3px rgba(247, 149, 69, 0.1);
+    0 3px 8px var(--color-primary-20),
+    0 0 0 3px var(--color-primary-10);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
 }
@@ -426,8 +427,8 @@ onUnmounted(() => {
 .user-info:hover .user-avatar {
   transform: scale(1.08) rotate(3deg);
   box-shadow: 
-    0 5px 15px rgba(247, 149, 69, 0.45),
-    0 0 0 4px rgba(247, 149, 69, 0.15);
+    0 5px 15px var(--color-primary-20),
+    0 0 0 4px var(--color-primary-10);
 }
 
 .user-avatar img {
@@ -451,24 +452,24 @@ onUnmounted(() => {
 .user-name {
   font-size: 14px;
   font-weight: 600;
-  color: #2d2a26;
+  color: var(--color-text-primary);
   max-width: 120px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   letter-spacing: 0.3px;
-  transition: color 0.3s ease;
+  transition: color var(--transition-normal);
 }
 
 .user-info:hover .user-name {
-  color: #e88535;
+  color: var(--color-primary);
 }
 
 .logout-btn {
   width: 32px;
   height: 32px;
   border: none;
-  background: linear-gradient(135deg, rgba(247, 149, 69, 0.12) 0%, rgba(247, 149, 69, 0.06) 100%);
+  background: linear-gradient(135deg, var(--color-primary-10) 0%, var(--color-primary-10) 100%);
   border-radius: 50%;
   cursor: pointer;
   display: flex;
@@ -484,23 +485,23 @@ onUnmounted(() => {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+  background: linear-gradient(135deg, var(--color-error) 0%, #ff5252 100%);
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity var(--transition-normal);
 }
 
 .logout-btn svg {
   width: 16px;
   height: 16px;
-  color: #f79545;
-  transition: all 0.3s ease;
+  color: var(--color-primary);
+  transition: all var(--transition-normal);
   position: relative;
   z-index: 1;
 }
 
 .logout-btn:hover {
   transform: scale(1.12) rotate(-5deg);
-  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.35);
+  box-shadow: 0 4px 12px rgba(199, 91, 91, 0.35);
 }
 
 .logout-btn:hover::before {
@@ -525,33 +526,32 @@ onUnmounted(() => {
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
 }
 
 .btn-primary {
-  background-color: #ffc494;
-  color: #7b7474;
-  box-shadow: 0 2px 8px rgba(255, 196, 148, 0.3);
+  background: var(--gradient-primary);
+  color: white;
+  box-shadow: 0 2px 8px var(--color-primary-20);
 }
 
 .btn-primary:hover {
-  background-color: #ffc494;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 196, 148, 0.4);
+  box-shadow: 0 4px 12px var(--color-primary-20);
 }
 
 .btn-secondary {
   background-color: transparent;
-  color: #f79545;
-  border: 1px solid #f79545;
+  color: var(--color-primary-light);
+  border: 1px solid var(--color-primary-light);
 }
 
 .btn-secondary:hover {
-  background-color: #ffc494;
-  color: #7b7474;
-  border-color: #ffc494;
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 196, 148, 0.4);
+  box-shadow: 0 4px 12px var(--color-primary-20);
 }
 
 /* 关于我们弹窗样式 */
@@ -580,7 +580,7 @@ onUnmounted(() => {
 }
 
 .about-modal {
-  background: white;
+  background: rgba(61, 79, 47, 0.95);
   border-radius: 20px;
   width: 50%;
   max-width: 600px;
@@ -609,9 +609,9 @@ onUnmounted(() => {
   background: none;
   border: none;
   font-size: 32px;
-  color: #999;
+  color: #D4CFC7;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
   z-index: 10;
   width: 40px;
   height: 40px;
@@ -622,8 +622,8 @@ onUnmounted(() => {
 }
 
 .about-modal-close:hover {
-  color: #f79545;
-  background: rgba(247, 149, 69, 0.1);
+  color: var(--color-primary);
+  background: var(--color-primary-10);
   transform: rotate(90deg);
 }
 
@@ -634,9 +634,9 @@ onUnmounted(() => {
 }
 
 .about-modal-content h2 {
-  font-family: 'Noto Serif SC', serif;
+  font-family: var(--font-display);
   font-size: 32px;
-  color: #333;
+  color: #F5F0E8;
   text-align: center;
   margin-bottom: 30px;
   position: relative;
@@ -651,7 +651,7 @@ onUnmounted(() => {
   transform: translateX(-50%);
   width: 60px;
   height: 3px;
-  background: linear-gradient(90deg, #f79545, #ffc494);
+  background: var(--gradient-primary);
   border-radius: 2px;
 }
 
@@ -665,14 +665,14 @@ onUnmounted(() => {
 
 .about-section h3 {
   font-size: 18px;
-  color: #f79545;
+  color: #F5F0E8;
   margin-bottom: 10px;
   font-weight: 600;
 }
 
 .about-section p {
   font-size: 15px;
-  color: #666;
+  color: #D4CFC7;
   line-height: 1.8;
 }
 
@@ -683,7 +683,7 @@ onUnmounted(() => {
 
 .about-section li {
   font-size: 15px;
-  color: #666;
+  color: #D4CFC7;
   line-height: 1.8;
   padding-left: 20px;
   position: relative;
@@ -697,12 +697,12 @@ onUnmounted(() => {
   top: 10px;
   width: 8px;
   height: 8px;
-  background: linear-gradient(135deg, #f79545, #ffc494);
+  background: var(--gradient-primary);
   border-radius: 50%;
 }
 
 .contact-info {
-  color: #f79545 !important;
+  color: #F5F0E8 !important;
   font-weight: 500;
 }
 

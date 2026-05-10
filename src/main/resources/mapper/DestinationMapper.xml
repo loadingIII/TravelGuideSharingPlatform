@@ -15,18 +15,6 @@
         <result column="popularity_score" property="popularityScore"/>
     </resultMap>
 
-    <resultMap id="DestinationShowcaseResultMap" type="com.travel.pojo.model.DestinationShowcase">
-        <id column="id" property="id"/>
-        <result column="destination_id" property="destinationId"/>
-        <result column="section" property="section"/>
-        <result column="display_title" property="displayTitle"/>
-        <result column="display_subtitle" property="displaySubtitle"/>
-        <result column="display_description" property="displayDescription"/>
-        <result column="display_image_url" property="displayImageUrl"/>
-        <result column="display_rating" property="displayRating"/>
-        <result column="sort_order" property="sortOrder"/>
-        <result column="is_active" property="isActive"/>
-    </resultMap>
 
     <sql id="DestinationWhere">
         <where>
@@ -62,14 +50,6 @@
         SELECT id, name, country, city, description, cover_image_url, rating_avg, guides_count, travelers_count, popularity_score
         FROM destinations
         WHERE id = #{id}
-    </select>
-
-    <select id="listShowcasesBySection" resultMap="DestinationShowcaseResultMap">
-        SELECT id, destination_id, section, display_title, display_subtitle, display_description, display_image_url, display_rating, sort_order, is_active
-        FROM destination_showcases
-        WHERE section = #{section} AND is_active = 1
-        ORDER BY sort_order ASC, id DESC
-        LIMIT #{limit}
     </select>
 
     <select id="searchDestinations" resultMap="DestinationResultMap">

@@ -41,6 +41,7 @@ public class AdminUserServiceImpl implements AdminAuthService {
     @Value("${admin.remember-secret:TravelAdminSecret2024!}")
     private String hmacSecret;
 
+    //TODO service需要写好注释,提高代码质量
     @Override
     public boolean login(String username, String password, HttpSession session) {
         AdminUser admin = adminUserMapper.selectByUsername(username);

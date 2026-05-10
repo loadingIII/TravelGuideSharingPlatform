@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 处理旅游目的地相关的操作，如目的地列表查询、目的地详情、目的地下的攻略列表等
  */
 @RestController
-@RequestMapping("/destinations")
+@RequestMapping("/api/destinations")
 @RequiredArgsConstructor
 public class DestinationController {
     private final DestinationService destinationService;

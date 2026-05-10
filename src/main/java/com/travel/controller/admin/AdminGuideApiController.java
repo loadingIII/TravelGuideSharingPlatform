@@ -2,7 +2,7 @@ package com.travel.controller.admin;
 
 import com.travel.common.ApiResponse;
 import com.travel.common.PageResult;
-import com.travel.pojo.model.GuideBudgetItem;
+import com.travel.pojo.model.GuideItineraryDay;
 import com.travel.pojo.model.GuideSummary;
 import com.travel.service.AdminGuideService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,7 +34,7 @@ public class AdminGuideApiController {
     }
 
     @GetMapping("/{id}/itinerary")
-    public ApiResponse<Map<String, Object>> itinerary(@PathVariable Long id) {
+    public ApiResponse<List<GuideItineraryDay>> itinerary(@PathVariable Long id) {
         return ApiResponse.success(adminGuideService.getItinerary(id));
     }
 
@@ -43,10 +43,7 @@ public class AdminGuideApiController {
         return ApiResponse.success(adminGuideService.getTips(id));
     }
 
-    @GetMapping("/{id}/budget")
-    public ApiResponse<List<GuideBudgetItem>> budget(@PathVariable Long id) {
-        return ApiResponse.success(adminGuideService.getBudget(id));
-    }
+
 
     @GetMapping("/{id}/tags")
     public ApiResponse<?> guideTags(@PathVariable Long id) {
@@ -86,19 +83,6 @@ public class AdminGuideApiController {
                                         HttpServletRequest request) {
         try {
             adminGuideService.updateTips(id, body, session, request);
-            return ApiResponse.success();
-        } catch (RuntimeException e) {
-            return ApiResponse.fail("NOT_FOUND", e.getMessage());
-        }
-    }
-
-    @PutMapping("/{id}/budget")
-    public ApiResponse<Void> updateBudget(@PathVariable Long id,
-                                          @RequestBody Map<String, Object> body,
-                                          HttpSession session,
-                                          HttpServletRequest request) {
-        try {
-            adminGuideService.updateBudget(id, body, session, request);
             return ApiResponse.success();
         } catch (RuntimeException e) {
             return ApiResponse.fail("NOT_FOUND", e.getMessage());

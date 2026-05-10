@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+/**
+ * 旅行故事管理控制器（管理员端）
+ * 提供故事的 CRUD、审核等接口
+ */
 @RestController
 @RequestMapping("/admin/stories")
 @RequiredArgsConstructor
@@ -18,12 +22,23 @@ public class AdminStoryApiController {
 
     private final AdminStoryService adminStoryService;
 
+    /**
+     * 分页查询故事列表
+     *
+     * @param page   页码，默认1
+     * @param status 审核状态筛选（可选）
+     */
     @GetMapping
     public ApiResponse<PageResult<GuideStoryVO>> list(@RequestParam(defaultValue = "1") int page,
                                                       @RequestParam(required = false) Integer status) {
         return ApiResponse.success(adminStoryService.listStories(page, status));
     }
 
+    /**
+     * 获取故事详情
+     *
+     * @param id 故事ID
+     */
     @GetMapping("/{id}")
     public ApiResponse<GuideStoryVO> detail(@PathVariable Long id) {
         GuideStoryVO story = adminStoryService.getStoryDetail(id);
@@ -31,6 +46,14 @@ public class AdminStoryApiController {
         return ApiResponse.success(story);
     }
 
+    /**
+     * 更新故事内容
+     *
+     * @param id      故事ID
+     * @param body    更新的字段
+     * @param session HTTP会话
+     * @param request HTTP请求
+     */
     @PutMapping("/{id}")
     public ApiResponse<Void> update(@PathVariable Long id,
                                     @RequestBody Map<String, Object> body,
@@ -44,6 +67,13 @@ public class AdminStoryApiController {
         }
     }
 
+    /**
+     * 新建故事
+     *
+     * @param body    故事数据
+     * @param session HTTP会话
+     * @param request HTTP请求
+     */
     @PostMapping
     public ApiResponse<Void> create(@RequestBody Map<String, Object> body,
                                     HttpSession session,
@@ -52,6 +82,14 @@ public class AdminStoryApiController {
         return ApiResponse.success();
     }
 
+    /**
+     * 审核故事
+     *
+     * @param id      故事ID
+     * @param body    含action字段（approve/reject/down）
+     * @param session HTTP会话
+     * @param request HTTP请求
+     */
     @PostMapping("/{id}/audit")
     public ApiResponse<Void> audit(@PathVariable Long id,
                                    @RequestBody Map<String, String> body,
@@ -66,6 +104,13 @@ public class AdminStoryApiController {
         }
     }
 
+    /**
+     * 删除故事
+     *
+     * @param id      故事ID
+     * @param session HTTP会话
+     * @param request HTTP请求
+     */
     @DeleteMapping("/{id}")
     public ApiResponse<Void> delete(@PathVariable Long id,
                                     HttpSession session,

@@ -2,7 +2,6 @@ package com.travel.service;
 
 import com.travel.common.PageResult;
 import com.travel.pojo.vo.DestinationItemVO;
-import com.travel.pojo.vo.ShowcaseItemVO;
 
 
 import java.util.List;
@@ -32,15 +31,6 @@ public interface DestinationService {
      * @return 目的地详细信息
      */
     DestinationItemVO getDestination(Long id);
-
-    /**
-     * 获取指定分类的展示列表
-     *
-     * @param section 分类：recommended（推荐）、popular（热门）、inspiration（灵感）
-     * @param limit   返回数量
-     * @return 展示项列表
-     */
-    List<ShowcaseItemVO> listShowcasesBySection(String section, int limit);
 
     /**
      * 搜索目的地
