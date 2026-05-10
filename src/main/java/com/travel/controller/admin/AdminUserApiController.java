@@ -7,7 +7,6 @@ import com.travel.mapper.UserProfileMapper;
 import com.travel.pojo.model.User;
 import com.travel.pojo.model.UserProfile;
 import com.travel.pojo.dto.ReviewResult;
-import com.travel.service.AdminAuthService;
 import com.travel.service.AuditLogService;
 import com.travel.service.ReviewService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +24,6 @@ public class AdminUserApiController {
 
     private final UserMapper userMapper;
     private final UserProfileMapper userProfileMapper;
-    private final AdminAuthService adminAuthService;
     private final AuditLogService auditLogService;
     private final ReviewService reviewService;
     private static final int PAGE_SIZE = 10;
