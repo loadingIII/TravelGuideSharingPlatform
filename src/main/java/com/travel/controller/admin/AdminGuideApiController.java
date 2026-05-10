@@ -2,16 +2,15 @@ package com.travel.controller.admin;
 
 import com.travel.common.ApiResponse;
 import com.travel.common.PageResult;
-import com.travel.mapper.AdminLogMapper;
-import com.travel.mapper.GuideMapper;
-import com.travel.pojo.model.AdminLog;
+import com.travel.pojo.model.GuideBudgetItem;
 import com.travel.pojo.model.GuideSummary;
-import com.travel.service.AdminAuthService;
+import com.travel.service.AdminGuideService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -19,24 +18,99 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AdminGuideApiController {
 
-    private final GuideMapper guideMapper;
-    private final AdminLogMapper adminLogMapper;
-    private final AdminAuthService adminAuthService;
-    private static final int PAGE_SIZE = 10;
+    private final AdminGuideService adminGuideService;
 
     @GetMapping
     public ApiResponse<PageResult<GuideSummary>> list(@RequestParam(defaultValue = "1") int page,
                                                       @RequestParam(required = false) Integer status) {
-        int offset = (page - 1) * PAGE_SIZE;
-        long total = guideMapper.countAll(status);
-        return ApiResponse.success(PageResult.of(guideMapper.selectPage(offset, PAGE_SIZE, status), page, PAGE_SIZE, total));
+        return ApiResponse.success(adminGuideService.listGuides(page, status));
     }
 
     @GetMapping("/{id}")
     public ApiResponse<GuideSummary> detail(@PathVariable Long id) {
-        GuideSummary guide = guideMapper.selectById(id);
+        GuideSummary guide = adminGuideService.getGuideDetail(id);
         if (guide == null) return ApiResponse.fail("NOT_FOUND", "攻略不存在");
         return ApiResponse.success(guide);
+    }
+
+    @GetMapping("/{id}/itinerary")
+    public ApiResponse<Map<String, Object>> itinerary(@PathVariable Long id) {
+        return ApiResponse.success(adminGuideService.getItinerary(id));
+    }
+
+    @GetMapping("/{id}/tips")
+    public ApiResponse<Map<String, Object>> tips(@PathVariable Long id) {
+        return ApiResponse.success(adminGuideService.getTips(id));
+    }
+
+    @GetMapping("/{id}/budget")
+    public ApiResponse<List<GuideBudgetItem>> budget(@PathVariable Long id) {
+        return ApiResponse.success(adminGuideService.getBudget(id));
+    }
+
+    @GetMapping("/{id}/tags")
+    public ApiResponse<?> guideTags(@PathVariable Long id) {
+        return ApiResponse.success(adminGuideService.getGuideTags(id));
+    }
+
+    @PutMapping("/{id}")
+    public ApiResponse<Void> update(@PathVariable Long id,
+                                    @RequestBody Map<String, Object> body,
+                                    HttpSession session,
+                                    HttpServletRequest request) {
+        try {
+            adminGuideService.updateGuide(id, body, session, request);
+            return ApiResponse.success();
+        } catch (RuntimeException e) {
+            return ApiResponse.fail("NOT_FOUND", e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}/itinerary")
+    public ApiResponse<Void> updateItinerary(@PathVariable Long id,
+                                             @RequestBody Map<String, Object> body,
+                                             HttpSession session,
+                                             HttpServletRequest request) {
+        try {
+            adminGuideService.updateItinerary(id, body, session, request);
+            return ApiResponse.success();
+        } catch (RuntimeException e) {
+            return ApiResponse.fail("NOT_FOUND", e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}/tips")
+    public ApiResponse<Void> updateTips(@PathVariable Long id,
+                                        @RequestBody Map<String, Object> body,
+                                        HttpSession session,
+                                        HttpServletRequest request) {
+        try {
+            adminGuideService.updateTips(id, body, session, request);
+            return ApiResponse.success();
+        } catch (RuntimeException e) {
+            return ApiResponse.fail("NOT_FOUND", e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}/budget")
+    public ApiResponse<Void> updateBudget(@PathVariable Long id,
+                                          @RequestBody Map<String, Object> body,
+                                          HttpSession session,
+                                          HttpServletRequest request) {
+        try {
+            adminGuideService.updateBudget(id, body, session, request);
+            return ApiResponse.success();
+        } catch (RuntimeException e) {
+            return ApiResponse.fail("NOT_FOUND", e.getMessage());
+        }
+    }
+
+    @PostMapping
+    public ApiResponse<Void> create(@RequestBody Map<String, Object> body,
+                                    HttpSession session,
+                                    HttpServletRequest request) {
+        adminGuideService.createGuide(body, session, request);
+        return ApiResponse.success();
     }
 
     @PostMapping("/{id}/audit")
@@ -44,51 +118,20 @@ public class AdminGuideApiController {
                                    @RequestBody Map<String, String> body,
                                    HttpSession session,
                                    HttpServletRequest request) {
-        String action = body.get("action");
-        GuideSummary guide = guideMapper.selectById(id);
-        if (guide == null) return ApiResponse.fail("NOT_FOUND", "攻略不存在");
-
-        Integer newStatus;
-        String detail;
-        switch (action) {
-            case "approve" -> { newStatus = 1; detail = "审核通过"; }
-            case "reject" -> { newStatus = 2; detail = "审核拒绝"; }
-            case "down" -> { newStatus = 3; detail = "下架"; }
-            default -> { newStatus = null; detail = null; }
+        try {
+            adminGuideService.auditGuide(id, body.get("action"), session, request);
+            return ApiResponse.success();
+        } catch (RuntimeException e) {
+            if (e.getMessage().contains("不存在")) return ApiResponse.fail("NOT_FOUND", e.getMessage());
+            return ApiResponse.fail("INVALID_ACTION", e.getMessage());
         }
-
-        if (newStatus == null) return ApiResponse.fail("INVALID_ACTION", "无效的操作");
-
-        guideMapper.updateStatus(id, newStatus);
-        logOperation(session, request, "AUDIT", "GUIDE", id, detail + ": " + guide.getTitle());
-        return ApiResponse.success();
     }
 
     @DeleteMapping("/{id}")
     public ApiResponse<Void> delete(@PathVariable Long id,
                                     HttpSession session,
                                     HttpServletRequest request) {
-        guideMapper.deleteById(id);
-        logOperation(session, request, "DELETE", "GUIDE", id, "删除攻略");
+        adminGuideService.deleteGuide(id, session, request);
         return ApiResponse.success();
-    }
-
-    private void logOperation(HttpSession session, HttpServletRequest request,
-                              String action, String targetType, Long targetId, String detail) {
-        try {
-            Map<String, Object> admin = adminAuthService.getCurrentAdmin(session);
-            if (admin == null) return;
-            AdminLog log = new AdminLog();
-            log.setAdminId((Long) admin.get("id"));
-            log.setAdminUsername((String) admin.get("username"));
-            log.setAction(action);
-            log.setTargetType(targetType);
-            log.setTargetId(targetId);
-            log.setDetail(detail);
-            log.setIpAddress(request.getRemoteAddr());
-            adminLogMapper.insert(log);
-        } catch (Exception e) {
-            // 日志记录失败不影响业务操作
-        }
     }
 }
