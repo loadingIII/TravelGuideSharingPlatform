@@ -2,11 +2,10 @@ package com.travel.controller.admin;
 
 import com.travel.common.ApiResponse;
 import com.travel.common.PageResult;
-import com.travel.mapper.AdminLogMapper;
 import com.travel.mapper.DestinationMapper;
-import com.travel.pojo.model.AdminLog;
+import com.travel.mapper.GuideMapper;
 import com.travel.pojo.model.Destination;
-import com.travel.service.AdminAuthService;
+import com.travel.service.AuditLogService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +19,8 @@ import java.util.Map;
 public class AdminDestinationApiController {
 
     private final DestinationMapper destinationMapper;
-    private final AdminLogMapper adminLogMapper;
-    private final AdminAuthService adminAuthService;
+    private final GuideMapper guideMapper;
+    private final AuditLogService auditLogService;
     private static final int PAGE_SIZE = 10;
 
     @GetMapping
@@ -38,6 +37,15 @@ public class AdminDestinationApiController {
         return ApiResponse.success(dest);
     }
 
+    @PostMapping
+    public ApiResponse<Void> create(@RequestBody Destination destination,
+                                    HttpSession session,
+                                    HttpServletRequest request) {
+        destinationMapper.insert(destination);
+        auditLogService.log(session, request, "CREATE", "DESTINATION", destination.getId(), "新增目的地: " + destination.getName());
+        return ApiResponse.success();
+    }
+
     @PutMapping("/{id}")
     public ApiResponse<Void> update(@PathVariable Long id,
                                     @RequestBody Map<String, Object> body,
@@ -47,7 +55,7 @@ public class AdminDestinationApiController {
             (String) body.get("name"), (String) body.get("country"),
             (String) body.get("city"), (String) body.get("description"),
             (String) body.get("coverImageUrl"));
-        logOperation(session, request, "UPDATE", "DESTINATION", id, "修改目的地");
+        auditLogService.log(session, request, "UPDATE", "DESTINATION", id, "修改目的地");
         return ApiResponse.success();
     }
 
@@ -55,27 +63,12 @@ public class AdminDestinationApiController {
     public ApiResponse<Void> delete(@PathVariable Long id,
                                     HttpSession session,
                                     HttpServletRequest request) {
-        destinationMapper.deleteById(id);
-        logOperation(session, request, "DELETE", "DESTINATION", id, "删除目的地");
-        return ApiResponse.success();
-    }
-
-    private void logOperation(HttpSession session, HttpServletRequest request,
-                              String action, String targetType, Long targetId, String detail) {
-        try {
-            Map<String, Object> admin = adminAuthService.getCurrentAdmin(session);
-            if (admin == null) return;
-            AdminLog log = new AdminLog();
-            log.setAdminId((Long) admin.get("id"));
-            log.setAdminUsername((String) admin.get("username"));
-            log.setAction(action);
-            log.setTargetType(targetType);
-            log.setTargetId(targetId);
-            log.setDetail(detail);
-            log.setIpAddress(request.getRemoteAddr());
-            adminLogMapper.insert(log);
-        } catch (Exception e) {
-            // 日志记录失败不影响业务操作
+        long guideCount = guideMapper.countGuidesByDestination(id);
+        if (guideCount > 0) {
+            return ApiResponse.fail("HAS_GUIDES", "该目的地下有 " + guideCount + " 条攻略，请先删除攻略后再删除目的地");
         }
+        destinationMapper.deleteById(id);
+        auditLogService.log(session, request, "DELETE", "DESTINATION", id, "删除目的地");
+        return ApiResponse.success();
     }
 }
