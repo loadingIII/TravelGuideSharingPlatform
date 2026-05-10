@@ -232,7 +232,7 @@
           body: formData
         });
         const data = await res.json();
-        if (data.code === 200 || data.code === 0) {
+        if (data.code === 200 || data.code === 0 || data.code === 'OK') {
           window.location.href = '/admin/index.html';
         } else {
           errorMsg.textContent = data.message || '登录失败';
