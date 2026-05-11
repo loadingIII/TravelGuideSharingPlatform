@@ -1,17 +1,13 @@
 package com.travel.controller.user;
 
-import com.travel.common.ApiResponse;
-import com.travel.common.PageResult;
+import com.travel.pojo.common.ApiResponse;
+import com.travel.pojo.common.PageResult;
 import com.travel.pojo.dto.CreateCommentDTO;
 import com.travel.pojo.dto.CreateStoryDTO;
 import com.travel.pojo.dto.UpdateStoryDTO;
 import com.travel.pojo.model.StoryComment;
 import com.travel.pojo.vo.GuideStoryVO;
-import com.travel.mapper.StoryCommentMapper;
-import com.travel.mapper.UserProfileMapper;
-import com.travel.pojo.model.UserProfile;
 import com.travel.security.RequireLogin;
-import com.travel.security.UserContext;
 import com.travel.service.GuideStoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class GuideStorysController {
 
     private final GuideStoryService guideStoryService;
-    private final StoryCommentMapper storyCommentMapper;
-    private final UserProfileMapper userProfileMapper;
 
     /**
      * 根据ID查询旅行者故事
@@ -101,18 +95,7 @@ public class GuideStorysController {
     @RequireLogin
     @PostMapping("/{storyId}/comments")
     public ApiResponse<Long> addStoryComment(@PathVariable("storyId") Long storyId, @Valid @RequestBody CreateCommentDTO dto) {
-        Long userId = UserContext.requireUserId();
-        UserProfile profile = userProfileMapper.selectByUserId(userId);
-        StoryComment comment = new StoryComment();
-        comment.setStoryId(storyId);
-        comment.setUserId(userId);
-        comment.setContent(dto.getContent());
-        comment.setParentCommentId(dto.getParentCommentId());
-        comment.setAuthorName(profile != null ? profile.getNickname() : "用户");
-        comment.setAuthorAvatarUrl(profile != null ? profile.getAvatarUrl() : null);
-        storyCommentMapper.insertComment(comment);
-        storyCommentMapper.incrementCommentsCount(storyId);
-        return ApiResponse.success(comment.getId());
+        return ApiResponse.success(guideStoryService.addStoryComment(storyId, dto));
     }
 
     @GetMapping("/{storyId}/comments")
@@ -120,11 +103,6 @@ public class GuideStorysController {
             @PathVariable("storyId") Long storyId,
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
-        int safePage = page == null || page < 1 ? 1 : page;
-        int safePageSize = pageSize == null || pageSize < 1 ? 10 : Math.min(pageSize, 50);
-        int offset = (safePage - 1) * safePageSize;
-        var list = storyCommentMapper.selectByStoryId(storyId, offset, safePageSize);
-        long total = storyCommentMapper.countByStoryId(storyId);
-        return ApiResponse.success(PageResult.of(list, safePage, safePageSize, total));
+        return ApiResponse.success(guideStoryService.listStoryComments(storyId, page, pageSize));
     }
 }

@@ -49,19 +49,6 @@
         <result column="status" property="status"/>
     </resultMap>
 
-    <sql id="GuideSummaryColumns">
-        SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode,
-        g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status,
-        d.name AS destination_name,
-        up.nickname AS author_name,
-        up.avatar_url AS author_avatar_url
-    </sql>
-
-    <sql id="GuideSummaryJoins">
-        FROM guides g
-        LEFT JOIN destinations d ON d.id = g.destination_id
-        LEFT JOIN user_profiles up ON up.user_id = g.author_id
-    </sql>
 
     <sql id="GuideSummaryWhere">
         <where>
@@ -81,8 +68,14 @@
     </sql>
 
     <select id="listGuides" resultMap="GuideSummaryResultMap">
-        <include refid="GuideSummaryColumns"/>
-        <include refid="GuideSummaryJoins"/>
+        SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode,
+        g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status,
+        d.name AS destination_name,
+        up.nickname AS author_name,
+        up.avatar_url AS author_avatar_url
+        FROM guides g
+        LEFT JOIN destinations d ON d.id = g.destination_id
+        LEFT JOIN user_profiles up ON up.user_id = g.author_id
         <include refid="GuideSummaryWhere"/>
         <choose>
             <when test="sort == 'hot'">
@@ -102,8 +95,14 @@
     </select>
 
     <select id="listGuidesByDestination" resultMap="GuideSummaryResultMap">
-        <include refid="GuideSummaryColumns"/>
-        <include refid="GuideSummaryJoins"/>
+        SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode,
+        g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status,
+        d.name AS destination_name,
+        up.nickname AS author_name,
+        up.avatar_url AS author_avatar_url
+        FROM guides g
+        LEFT JOIN destinations d ON d.id = g.destination_id
+        LEFT JOIN user_profiles up ON up.user_id = g.author_id
         WHERE g.publish_status = 'published'
           AND g.destination_id = #{destinationId}
         ORDER BY g.published_at DESC, g.id DESC
@@ -118,9 +117,14 @@
     </select>
 
     <select id="selectGuideDetail" resultMap="GuideDetailResultMap">
-        <include refid="GuideSummaryColumns"/>,
-        g.content_html
-        <include refid="GuideSummaryJoins"/>
+        SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.content_html, g.cover_image_url, g.location_text, g.scope, g.travel_mode,
+        g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status,
+        d.name AS destination_name,
+        up.nickname AS author_name,
+        up.avatar_url AS author_avatar_url
+        FROM guides g
+        LEFT JOIN destinations d ON d.id = g.destination_id
+        LEFT JOIN user_profiles up ON up.user_id = g.author_id
         WHERE g.id = #{guideId}
           AND g.publish_status = 'published'
     </select>
@@ -132,33 +136,43 @@
         ORDER BY day_no ASC
     </select>
 
-    
-
-    
-
-    
-
-    
-
     <select id="listCommunityPicks" resultMap="GuideSummaryResultMap">
-        <include refid="GuideSummaryColumns"/>
-        <include refid="GuideSummaryJoins"/>
+        SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode,
+        g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status,
+        d.name AS destination_name,
+        up.nickname AS author_name,
+        up.avatar_url AS author_avatar_url
+        FROM guides g
+        LEFT JOIN destinations d ON d.id = g.destination_id
+        LEFT JOIN user_profiles up ON up.user_id = g.author_id
         WHERE g.publish_status = 'published'
         ORDER BY g.likes_count DESC, g.views_count DESC, g.id DESC
         LIMIT #{limit}
     </select>
 
     <select id="listTopGuidesByLikes" resultMap="GuideSummaryResultMap">
-        <include refid="GuideSummaryColumns"/>
-        <include refid="GuideSummaryJoins"/>
+        SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode,
+        g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status,
+        d.name AS destination_name,
+        up.nickname AS author_name,
+        up.avatar_url AS author_avatar_url
+        FROM guides g
+        LEFT JOIN destinations d ON d.id = g.destination_id
+        LEFT JOIN user_profiles up ON up.user_id = g.author_id
         WHERE g.publish_status = 'published'
         ORDER BY g.likes_count DESC, g.id DESC
         LIMIT #{limit}
     </select>
 
     <select id="searchGuides" resultMap="GuideSummaryResultMap">
-        <include refid="GuideSummaryColumns"/>
-        <include refid="GuideSummaryJoins"/>
+        SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode,
+        g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status,
+        d.name AS destination_name,
+        up.nickname AS author_name,
+        up.avatar_url AS author_avatar_url
+        FROM guides g
+        LEFT JOIN destinations d ON d.id = g.destination_id
+        LEFT JOIN user_profiles up ON up.user_id = g.author_id
         WHERE g.publish_status = 'published'
           AND (g.title LIKE CONCAT('%', #{query}, '%')
                OR g.summary LIKE CONCAT('%', #{query}, '%')
@@ -166,6 +180,128 @@
         ORDER BY g.likes_count DESC, g.id DESC
         LIMIT #{limit}
     </select>
+
+    <select id="selectPage" resultMap="GuideSummaryResultMap">
+        SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode,
+        g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status,
+        d.name AS destination_name,
+        up.nickname AS author_name,
+        up.avatar_url AS author_avatar_url
+        FROM guides g
+        LEFT JOIN destinations d ON d.id = g.destination_id
+        LEFT JOIN user_profiles up ON up.user_id = g.author_id
+        <where>
+            <if test="status != null">
+                AND g.status = #{status}
+            </if>
+        </where>
+        ORDER BY g.published_at DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="countAll" resultType="long">
+        SELECT COUNT(*)
+        FROM guides g
+        <where>
+            <if test="status != null">
+                AND g.status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectById" resultMap="GuideSummaryResultMap">
+        SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode,
+        g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status,
+        d.name AS destination_name,
+        up.nickname AS author_name,
+        up.avatar_url AS author_avatar_url
+        FROM guides g
+        LEFT JOIN destinations d ON d.id = g.destination_id
+        LEFT JOIN user_profiles up ON up.user_id = g.author_id
+        WHERE g.id = #{id}
+    </select>
+
+    <select id="selectByAuthorId" resultMap="GuideSummaryResultMap">
+        SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode,
+        g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status,
+        d.name AS destination_name,
+        up.nickname AS author_name,
+        up.avatar_url AS author_avatar_url
+        FROM guides g
+        LEFT JOIN destinations d ON d.id = g.destination_id
+        LEFT JOIN user_profiles up ON up.user_id = g.author_id
+        WHERE g.author_id = #{authorId}
+        ORDER BY g.created_at DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="countByAuthorId" resultType="long">
+        SELECT COUNT(*)
+        FROM guides
+        WHERE author_id = #{authorId}
+    </select>
+
+    <select id="selectByIds" resultMap="GuideSummaryResultMap">
+        SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode,
+        g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status,
+        d.name AS destination_name,
+        up.nickname AS author_name,
+        up.avatar_url AS author_avatar_url
+        FROM guides g
+        LEFT JOIN destinations d ON d.id = g.destination_id
+        LEFT JOIN user_profiles up ON up.user_id = g.author_id
+        WHERE g.id IN
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        ORDER BY g.created_at DESC
+    </select>
+
+    <insert id="insertFull" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO guides (destination_id, author_id, title, summary, content_html, cover_image_url,
+            location_text, scope, travel_mode, days, budget_total, published_at, status, publish_status)
+        VALUES (#{destinationId}, #{authorId}, #{title}, #{summary}, #{contentHtml}, #{coverImageUrl},
+            #{locationText}, #{scope}, #{travelMode}, #{days}, #{budgetTotal}, #{publishedAt}, 0, 'published')
+    </insert>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO guides (destination_id, author_id, title, summary, content_html, cover_image_url, status, publish_status)
+        VALUES (#{destinationId}, #{authorId}, #{title}, #{summary}, #{contentHtml}, #{coverImageUrl}, #{status}, 'draft')
+    </insert>
+
+    <update id="updateGuide">
+        UPDATE guides SET title=#{title}, summary=#{summary} WHERE id=#{id}
+    </update>
+
+    <update id="updateGuideFull">
+        UPDATE guides SET title=#{title}, summary=#{summary}, content_html=#{contentHtml},
+            cover_image_url=#{coverImageUrl}, location_text=#{locationText}, scope=#{scope}, travel_mode=#{travelMode}
+        WHERE id=#{id}
+    </update>
+
+    <update id="updateGuideMetadata">
+        UPDATE guides SET title=#{title}, summary=#{summary},
+            content_html=#{contentHtml}, cover_image_url=#{coverImageUrl}, location_text=#{locationText},
+            scope=#{scope}, travel_mode=#{travelMode}
+        WHERE id=#{id}
+    </update>
+
+    <insert id="insertItineraryDay" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO guide_itinerary_days (guide_id, day_no, title, summary, sort_order)
+        VALUES (#{guideId}, #{dayNo}, #{title}, #{summary}, #{sortOrder})
+    </insert>
+
+    <delete id="deleteById">
+        DELETE FROM guides WHERE id = #{id}
+    </delete>
+
+    <update id="updateStatus">
+        UPDATE guides SET status=#{status} WHERE id=#{id}
+    </update>
+
+    <delete id="deleteItineraryDaysByGuideId">
+        DELETE FROM guide_itinerary_days WHERE guide_id = #{guideId}
+    </delete>
 
 </mapper>
 

@@ -1,7 +1,7 @@
 package com.travel.controller.admin;
 
-import com.travel.common.ApiResponse;
-import com.travel.common.PageResult;
+import com.travel.pojo.common.ApiResponse;
+import com.travel.pojo.common.PageResult;
 import com.travel.pojo.model.GuideComment;
 import com.travel.service.AdminCommentService;
 import jakarta.servlet.http.HttpServletRequest;

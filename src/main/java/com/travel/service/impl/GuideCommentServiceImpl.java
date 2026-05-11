@@ -1,7 +1,7 @@
 package com.travel.service.impl;
 
-import com.travel.common.exception.BusinessException;
-import com.travel.common.exception.ErrorCode;
+import com.travel.pojo.common.exception.BusinessException;
+import com.travel.pojo.common.exception.ErrorCode;
 import com.travel.mapper.GuideCommentMapper;
 import com.travel.mapper.GuideMapper;
 import com.travel.mapper.UserProfileMapper;
@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;

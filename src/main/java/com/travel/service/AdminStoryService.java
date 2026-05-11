@@ -1,6 +1,6 @@
 package com.travel.service;
 
-import com.travel.common.PageResult;
+import com.travel.pojo.common.PageResult;
 import com.travel.pojo.vo.GuideStoryVO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

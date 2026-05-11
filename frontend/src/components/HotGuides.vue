@@ -262,6 +262,28 @@
                 </div>
                 <input type="text" v-model="day.title" placeholder="行程标题，如：抵达东京 & 浅草寺">
                 <input type="text" v-model="day.description" placeholder="简短描述，如：感受传统日式文化">
+                <!-- 景点列表 -->
+                <div class="spots-list" v-if="day.spots && day.spots.length > 0">
+                  <div v-for="(spot, spotIdx) in day.spots" :key="spotIdx" class="spot-input-item">
+                    <input type="text" v-model="spot.name" placeholder="景点名称">
+                    <input type="text" v-model="spot.description" placeholder="景点描述">
+                    <div class="spot-row">
+                      <input type="text" v-model="spot.time" placeholder="时间 09:00">
+                      <input type="text" v-model="spot.duration" placeholder="时长 2小时">
+                    </div>
+                    <button class="remove-spot-btn" @click="removeSpot(index, spotIdx)">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <button class="add-spot-btn" @click="addSpot(index)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14"/>
+                  </svg>
+                  添加景点
+                </button>
               </div>
               <button class="add-day-btn" @click="addItineraryDay">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -322,16 +344,16 @@ const filterTags = [
 const showPublishModal = ref(false)
 const coverFileInput = ref(null)
 const coverPreview = ref('')
-const guideForm = reactive({ 
-  title: '', 
+const guideForm = reactive({
+  title: '',
   summary: '',
-  content: '', 
+  content: '',
   destinationName: '',
   coverImage: null,
-  scope: 'international', 
+  scope: 'international',
   travelMode: 'free',
   tags: '',
-  itinerary: [{ title: '', description: '' }]
+  itinerary: [{ title: '', description: '', spots: [] }]
 })
 
 const hotGuides = ref([])
@@ -445,11 +467,22 @@ const handleCoverUpload = (event) => {
 }
 
 const addItineraryDay = () => {
-  guideForm.itinerary.push({ title: '', description: '' })
+  guideForm.itinerary.push({ title: '', description: '', spots: [] })
 }
 
 const removeItineraryDay = (index) => {
   guideForm.itinerary.splice(index, 1)
+}
+
+const addSpot = (dayIndex) => {
+  if (!guideForm.itinerary[dayIndex].spots) {
+    guideForm.itinerary[dayIndex].spots = []
+  }
+  guideForm.itinerary[dayIndex].spots.push({ name: '', description: '', time: '', duration: '' })
+}
+
+const removeSpot = (dayIndex, spotIndex) => {
+  guideForm.itinerary[dayIndex].spots.splice(spotIndex, 1)
 }
 
 const publishGuide = async () => {
@@ -476,7 +509,12 @@ const publishGuide = async () => {
         dayNo: index + 1,
         title: day.title,
         summary: day.description,
-        spots: []
+        spots: (day.spots || []).filter(s => s.name.trim()).map(spot => ({
+          name: spot.name,
+          description: spot.description,
+          time: spot.time,
+          duration: spot.duration
+        }))
       }))
 
     // 构建标签数据
@@ -500,10 +538,10 @@ const publishGuide = async () => {
     const result = await request.post('/api/guides', guideData)
     if (result.code === 'OK' || result.code === 200) {
       showPublishModal.value = false
-      Object.assign(guideForm, { 
-        title: '', summary: '', content: '', destinationName: '', coverImage: null, 
-        scope: 'international', travelMode: 'free', tags: '', 
-        itinerary: [{ title: '', description: '' }] 
+      Object.assign(guideForm, {
+        title: '', summary: '', content: '', destinationName: '', coverImage: null,
+        scope: 'international', travelMode: 'free', tags: '',
+        itinerary: [{ title: '', description: '', spots: [] }]
       })
       coverPreview.value = ''
       currentPage.value = 1
@@ -1491,6 +1529,110 @@ onUnmounted(() => { if (observer) observer.disconnect() })
 .add-day-btn svg {
   width: 18px;
   height: 18px;
+}
+
+/* 景点列表样式 */
+.spots-list {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(255,255,255,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.spot-input-item {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 12px;
+  position: relative;
+}
+
+.spot-input-item input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  font-size: 13px;
+  background: rgba(255,255,255,0.04);
+  color: #F5F2ED;
+  margin-bottom: 8px;
+}
+
+.spot-input-item input:last-child {
+  margin-bottom: 0;
+}
+
+.spot-input-item input::placeholder {
+  color: #A8A29E;
+}
+
+.spot-input-item input:focus {
+  border-color: #F5F0E8;
+  outline: none;
+}
+
+.spot-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.spot-row input {
+  margin-bottom: 0;
+}
+
+.remove-spot-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(224,112,112,0.15);
+  border: none;
+  border-radius: 4px;
+  color: #E07070;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.remove-spot-btn:hover {
+  background: rgba(224,112,112,0.25);
+}
+
+.remove-spot-btn svg {
+  width: 12px;
+  height: 12px;
+}
+
+.add-spot-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px;
+  margin-top: 10px;
+  background: transparent;
+  border: 1px dashed rgba(255,255,255,0.15);
+  border-radius: 8px;
+  color: #A8A29E;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-spot-btn:hover {
+  border-color: rgba(245,240,232,0.3);
+  color: #D4CFC7;
+}
+
+.add-spot-btn svg {
+  width: 14px;
+  height: 14px;
 }
 
 .form-row {

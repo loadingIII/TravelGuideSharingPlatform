@@ -1,6 +1,6 @@
 package com.travel.service.impl;
 
-import com.travel.common.PageResult;
+import com.travel.pojo.common.PageResult;
 import com.travel.mapper.GuideMapper;
 import com.travel.pojo.dto.ReviewResult;
 import com.travel.pojo.model.GuideItineraryDay;
@@ -62,7 +62,7 @@ public class AdminGuideServiceImpl implements AdminGuideService {
         Map<String, Object> admin = adminAuthService.getCurrentAdmin(session);
         GuideSummary guide = new GuideSummary();
         guide.setDestinationId(body.get("destinationId") != null ? Long.valueOf(body.get("destinationId").toString()) : null);
-        guide.setAuthorId(admin != null ? (Long) admin.get("id") : null);
+        guide.setAuthorId(admin != null ? ((Number) admin.get("id")).longValue() : null);
         guide.setTitle((String) body.get("title"));
         guide.setSummary((String) body.get("summary"));
         guide.setContentHtml((String) body.get("contentHtml"));

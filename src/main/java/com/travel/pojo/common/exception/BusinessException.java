@@ -1,4 +1,4 @@
-package com.travel.common.exception;
+package com.travel.pojo.common.exception;
 
 import lombok.Getter;
 

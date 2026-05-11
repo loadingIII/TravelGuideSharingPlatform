@@ -1,6 +1,6 @@
 package com.travel.service.impl;
 
-import com.travel.common.PageResult;
+import com.travel.pojo.common.PageResult;
 import com.travel.mapper.GuideStoryMapper;
 import com.travel.pojo.dto.ReviewResult;
 import com.travel.pojo.vo.GuideStoryVO;

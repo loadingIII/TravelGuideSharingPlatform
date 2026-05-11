@@ -1,8 +1,10 @@
 package com.travel.service;
 
-import com.travel.common.PageResult;
+import com.travel.pojo.common.PageResult;
+import com.travel.pojo.dto.CreateCommentDTO;
 import com.travel.pojo.dto.CreateStoryDTO;
 import com.travel.pojo.dto.UpdateStoryDTO;
+import com.travel.pojo.model.StoryComment;
 import com.travel.pojo.vo.GuideStoryVO;
 
 /**
@@ -44,4 +46,8 @@ public interface GuideStoryService {
     void deleteStory(Long storyId);
 
     PageResult<GuideStoryVO> listMyStories(Integer page, Integer pageSize);
+
+    Long addStoryComment(Long storyId, CreateCommentDTO dto);
+
+    PageResult<StoryComment> listStoryComments(Long storyId, Integer page, Integer pageSize);
 }

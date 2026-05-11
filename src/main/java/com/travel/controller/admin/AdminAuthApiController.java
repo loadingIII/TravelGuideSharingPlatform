@@ -1,6 +1,6 @@
 package com.travel.controller.admin;
 
-import com.travel.common.ApiResponse;
+import com.travel.pojo.common.ApiResponse;
 import com.travel.service.AdminAuthService;
 import com.travel.service.AuditLogService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -52,7 +52,7 @@ public class AdminAuthApiController {
         if (remember) {
             Map<String, Object> admin = adminAuthService.getCurrentAdmin(session);
             if (admin != null) {
-                adminAuthService.setRememberCookie(response, (Long) admin.get("id"));
+                adminAuthService.setRememberCookie(response, ((Number) admin.get("id")).longValue());
             }
         }
         auditLogService.log(session, request, "LOGIN", "ADMIN", null, "管理员登录");

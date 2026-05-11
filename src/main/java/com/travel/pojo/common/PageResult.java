@@ -1,4 +1,4 @@
-package com.travel.common;
+package com.travel.pojo.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

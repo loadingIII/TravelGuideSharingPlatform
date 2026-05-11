@@ -1,17 +1,29 @@
 package com.travel.service.impl;
 
+import com.travel.pojo.common.PageResult;
 import com.travel.pojo.dto.UpdateProfileDTO;
+import com.travel.pojo.vo.GuideListItemVO;
 import com.travel.pojo.vo.UserMeVO;
 import com.travel.security.UserContext;
-import com.travel.common.exception.BusinessException;
-import com.travel.common.exception.ErrorCode;
+import com.travel.pojo.common.exception.BusinessException;
+import com.travel.pojo.common.exception.ErrorCode;
 
+import com.travel.pojo.model.GuideComment;
+import com.travel.pojo.model.GuideSummary;
 import com.travel.pojo.model.User;
 import com.travel.pojo.model.UserProfile;
+import com.travel.mapper.GuideCommentMapper;
+import com.travel.mapper.GuideFavoriteMapper;
+import com.travel.mapper.GuideLikeMapper;
+import com.travel.mapper.GuideMapper;
 import com.travel.mapper.UserMapper;
 import com.travel.mapper.UserProfileMapper;
 import com.travel.service.UserService;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.BeanUtils;
+
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +41,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final UserProfileMapper profileMapper;
+    private final GuideCommentMapper guideCommentMapper;
+    private final GuideLikeMapper guideLikeMapper;
+    private final GuideFavoriteMapper guideFavoriteMapper;
+    private final GuideMapper guideMapper;
 
     /**
      * 获取当前登录用户信息
@@ -115,11 +131,59 @@ public class UserServiceImpl implements UserService {
         return getByUserId(userId);
     }
 
+    @Override
+    public PageResult<GuideComment> listMyComments(int page, int pageSize) {
+        Long userId = UserContext.requireUserId();
+        // 页码处理
+        page = Math.max(page, 1);
+        pageSize = pageSize < 1 ? 10 : Math.min(pageSize, 50);
+
+        int offset = (page - 1) * pageSize;
+        var list = guideCommentMapper.selectByUserId(userId, offset, pageSize);
+        long total = guideCommentMapper.countByUserId(userId);
+        return PageResult.of(list, page, pageSize, total);
+    }
+
+    @Override
+    public PageResult<GuideListItemVO> listMyLikedGuides(int page, int pageSize) {
+        Long userId = UserContext.requireUserId();
+        page = Math.max(page, 1);
+        pageSize = pageSize < 1 ? 10 : Math.min(pageSize, 50);
+
+        int offset = (page - 1) * pageSize;
+        var guideIds = guideLikeMapper.selectLikedGuideIds(userId, offset, pageSize);
+        long total = guideLikeMapper.countByUserId(userId);
+        List<GuideSummary> list = guideIds.isEmpty() ? List.of() : guideMapper.selectByIds(guideIds);
+        return PageResult.of(toGuideListItemVOs(list), page, pageSize, total);
+    }
+
+    @Override
+    public PageResult<GuideListItemVO> listMyFavoriteGuides(int page, int pageSize) {
+        Long userId = UserContext.requireUserId();
+        page = Math.max(page, 1);
+        pageSize = pageSize < 1 ? 10 : Math.min(pageSize, 50);
+
+        int offset = (page - 1) * pageSize;
+        var guideIds = guideFavoriteMapper.selectFavoritedGuideIds(userId, offset, pageSize);
+        long total = guideFavoriteMapper.countByUserId(userId);
+        List<GuideSummary> list = guideIds.isEmpty() ? List.of() : guideMapper.selectByIds(guideIds);
+        return PageResult.of(toGuideListItemVOs(list), page, pageSize, total);
+    }
+
+    private List<GuideListItemVO> toGuideListItemVOs(List<GuideSummary> list) {
+        return list.stream().map(g -> {
+            GuideListItemVO vo = new GuideListItemVO();
+            BeanUtils.copyProperties(g, vo);
+            return vo;
+        }).toList();
+    }
+
     /**
      * 将数据库实体转换为 API 响应对象
      * 处理 UserProfile 为 null 的情况（新注册用户可能还没有资料）
      */
     private UserMeVO toMeResponse(User user, UserProfile profile) {
+        //将User,UserProfile转换成UserMeVO
         return UserMeVO.builder()
                 .id(user.getId())
                 .username(user.getUsername())

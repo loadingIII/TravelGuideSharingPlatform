@@ -1,6 +1,8 @@
-package com.travel.common.exception;
+package com.travel.handler;
 
-import com.travel.common.ApiResponse;
+import com.travel.pojo.common.ApiResponse;
+import com.travel.pojo.common.exception.BusinessException;
+import com.travel.pojo.common.exception.ErrorCode;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;

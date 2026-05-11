@@ -1,4 +1,4 @@
-package com.travel.common.exception;
+package com.travel.pojo.common.exception;
 
 public final class ErrorCode {
     public static final String VALIDATION_ERROR = "VALIDATION_ERROR";

@@ -1,6 +1,6 @@
 package com.travel.service;
 
-import com.travel.common.PageResult;
+import com.travel.pojo.common.PageResult;
 import com.travel.pojo.model.GuideItineraryDay;
 import com.travel.pojo.model.GuideSummary;
 import jakarta.servlet.http.HttpServletRequest;

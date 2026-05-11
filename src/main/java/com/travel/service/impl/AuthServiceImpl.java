@@ -6,8 +6,8 @@ import com.travel.pojo.vo.AuthTokenVO;
 import com.travel.pojo.vo.UserMeVO;
 import com.travel.security.JwtTokenService;
 import com.travel.security.LoginUser;
-import com.travel.common.exception.BusinessException;
-import com.travel.common.exception.ErrorCode;
+import com.travel.pojo.common.exception.BusinessException;
+import com.travel.pojo.common.exception.ErrorCode;
 
 import com.travel.pojo.model.User;
 import com.travel.pojo.model.UserProfile;

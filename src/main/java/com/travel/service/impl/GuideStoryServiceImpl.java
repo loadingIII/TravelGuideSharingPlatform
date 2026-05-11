@@ -1,11 +1,16 @@
 package com.travel.service.impl;
 
-import com.travel.common.PageResult;
-import com.travel.common.exception.BusinessException;
-import com.travel.common.exception.ErrorCode;
+import com.travel.pojo.common.PageResult;
+import com.travel.pojo.common.exception.BusinessException;
+import com.travel.pojo.common.exception.ErrorCode;
 import com.travel.mapper.GuideStoryMapper;
+import com.travel.mapper.StoryCommentMapper;
+import com.travel.mapper.UserProfileMapper;
+import com.travel.pojo.dto.CreateCommentDTO;
 import com.travel.pojo.dto.CreateStoryDTO;
 import com.travel.pojo.dto.UpdateStoryDTO;
+import com.travel.pojo.model.StoryComment;
+import com.travel.pojo.model.UserProfile;
 import com.travel.pojo.vo.GuideStoryVO;
 import com.travel.service.GuideStoryService;
 import com.travel.security.UserContext;
@@ -31,6 +36,8 @@ import java.util.List;
 public class GuideStoryServiceImpl implements GuideStoryService {
 
     private final GuideStoryMapper guideStoryMapper;
+    private final StoryCommentMapper storyCommentMapper;
+    private final UserProfileMapper userProfileMapper;
 
     /**
      * 根据ID查询旅行者故事
@@ -107,6 +114,32 @@ public class GuideStoryServiceImpl implements GuideStoryService {
             throw new BusinessException(ErrorCode.NOT_FOUND, "故事不存在");
         }
         guideStoryMapper.updateContent(storyId, dto.getContent());
+    }
+
+    @Override
+    public Long addStoryComment(Long storyId, CreateCommentDTO dto) {
+        Long userId = UserContext.requireUserId();
+        UserProfile profile = userProfileMapper.selectByUserId(userId);
+        StoryComment comment = new StoryComment();
+        comment.setStoryId(storyId);
+        comment.setUserId(userId);
+        comment.setContent(dto.getContent());
+        comment.setParentCommentId(dto.getParentCommentId());
+        comment.setAuthorName(profile != null ? profile.getNickname() : "用户");
+        comment.setAuthorAvatarUrl(profile != null ? profile.getAvatarUrl() : null);
+        storyCommentMapper.insertComment(comment);
+        storyCommentMapper.incrementCommentsCount(storyId);
+        return comment.getId();
+    }
+
+    @Override
+    public PageResult<StoryComment> listStoryComments(Long storyId, Integer page, Integer pageSize) {
+        int safePage = normalizePage(page);
+        int safePageSize = normalizePageSize(pageSize);
+        int offset = (safePage - 1) * safePageSize;
+        var list = storyCommentMapper.selectByStoryId(storyId, offset, safePageSize);
+        long total = storyCommentMapper.countByStoryId(storyId);
+        return PageResult.of(list, safePage, safePageSize, total);
     }
 
     /** 页码安全处理：null 或小于1 时默认为1 */

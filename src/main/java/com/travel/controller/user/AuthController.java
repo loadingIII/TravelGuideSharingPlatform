@@ -1,6 +1,6 @@
 package com.travel.controller.user;
 
-import com.travel.common.ApiResponse;
+import com.travel.pojo.common.ApiResponse;
 
 import com.travel.pojo.dto.AuthLoginDTO;
 import com.travel.pojo.dto.AuthRegisterDTO;

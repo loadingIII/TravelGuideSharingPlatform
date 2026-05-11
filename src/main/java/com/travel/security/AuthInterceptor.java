@@ -1,7 +1,7 @@
 package com.travel.security;
 
-import com.travel.common.exception.BusinessException;
-import com.travel.common.exception.ErrorCode;
+import com.travel.pojo.common.exception.BusinessException;
+import com.travel.pojo.common.exception.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

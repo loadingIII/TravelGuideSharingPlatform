@@ -1,17 +1,19 @@
 package com.travel.service.impl;
 
-import com.travel.common.PageResult;
-import com.travel.common.exception.BusinessException;
-import com.travel.common.exception.ErrorCode;
+import com.travel.pojo.common.PageResult;
+import com.travel.pojo.common.exception.BusinessException;
+import com.travel.pojo.common.exception.ErrorCode;
 
 import com.travel.pojo.dto.CreateGuideDTO;
 import com.travel.pojo.dto.UpdateGuideDTO;
 import com.travel.pojo.model.GuideDetail;
 import com.travel.pojo.model.GuideItineraryDay;
+import com.travel.pojo.model.GuideItinerarySpot;
 import com.travel.pojo.model.GuideSummary;
 import com.travel.pojo.model.UserProfile;
 import com.travel.pojo.model.Destination;
 import com.travel.mapper.GuideMapper;
+import com.travel.mapper.GuideItinerarySpotMapper;
 import com.travel.mapper.UserProfileMapper;
 import com.travel.mapper.DestinationMapper;
 import com.travel.pojo.vo.GuideDetailVO;
@@ -26,12 +28,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class GuideServiceImpl implements GuideService {
     private final GuideMapper guideMapper;
+    private final GuideItinerarySpotMapper spotMapper;
     private final UserProfileMapper userProfileMapper;
     private final DestinationMapper destinationMapper;
     private final TagService tagService;
@@ -44,6 +46,7 @@ public class GuideServiceImpl implements GuideService {
         }
 
         List<GuideItineraryDay> itineraryDays = guideMapper.listItineraryDays(guideId);
+        List<GuideItinerarySpot> allSpots = spotMapper.listByGuideId(guideId);
 
         return GuideDetailVO.builder()
                 .id(detail.getId())
@@ -66,16 +69,29 @@ public class GuideServiceImpl implements GuideService {
                 .commentsCount(detail.getCommentsCount())
                 .favoritesCount(detail.getFavoritesCount())
                 .publishedAt(detail.getPublishedAt())
-                .itinerary(itineraryDays.stream().map(this::toItineraryDay).toList())
+                .itinerary(itineraryDays.stream().map(day -> toItineraryDay(day, allSpots)).toList())
                 .build();
     }
 
-    private GuideDetailVO.ItineraryDay toItineraryDay(GuideItineraryDay day) {
+    private GuideDetailVO.ItineraryDay toItineraryDay(GuideItineraryDay day, List<GuideItinerarySpot> allSpots) {
+        List<GuideDetailVO.ItineraryDay.Spot> spots = allSpots.stream()
+                .filter(s -> s.getDayNo().equals(day.getDayNo()))
+                .map(s -> GuideDetailVO.ItineraryDay.Spot.builder()
+                        .id(s.getId())
+                        .name(s.getName())
+                        .description(s.getDescription())
+                        .imageUrl(s.getImageUrl())
+                        .time(s.getTime())
+                        .duration(s.getDuration())
+                        .build())
+                .toList();
+
         return GuideDetailVO.ItineraryDay.builder()
                 .id(day.getId())
                 .dayNo(day.getDayNo())
                 .title(day.getTitle())
                 .summary(day.getSummary())
+                .spots(spots)
                 .build();
     }
 
@@ -128,11 +144,13 @@ public class GuideServiceImpl implements GuideService {
         List<GuideListItemVO> list = guideMapper.selectByAuthorId(userId, offset, safePageSize)
                 .stream()
                 .map(this::toGuideListItem)
-                .toList();
+                .toList();// 将 GuideSummary 转换为 GuideListItemVO
+        // 获取总数
         long total = guideMapper.countByAuthorId(userId);
         return PageResult.of(list, safePage, safePageSize, total);
     }
 
+    // 将 GuideSummary 转换为 GuideListItemVO
     private GuideListItemVO toGuideListItem(GuideSummary entity) {
         return GuideListItemVO.builder()
                 .id(entity.getId())
@@ -156,11 +174,11 @@ public class GuideServiceImpl implements GuideService {
                 .publishedAt(entity.getPublishedAt())
                 .build();
     }
-
+    // 页码和页大小校验
     private int normalizePage(Integer page) {
         return page == null || page < 1 ? 1 : page;
     }
-
+    // 页大小校验
     private int normalizePageSize(Integer pageSize) {
         if (pageSize == null || pageSize < 1) return 10;
         return Math.min(pageSize, 50);
@@ -217,6 +235,24 @@ public class GuideServiceImpl implements GuideService {
                 day.setSummary(dayDTO.getSummary());
                 day.setSortOrder(daySort++);
                 guideMapper.insertItineraryDay(day);
+
+                if (dayDTO.getSpots() != null && !dayDTO.getSpots().isEmpty()) {
+                    List<GuideItinerarySpot> spots = new java.util.ArrayList<>();
+                    int spotSort = 1;
+                    for (CreateGuideDTO.SpotDTO spotDTO : dayDTO.getSpots()) {
+                        GuideItinerarySpot spot = new GuideItinerarySpot();
+                        spot.setGuideId(guideId);
+                        spot.setDayNo(dayDTO.getDayNo());
+                        spot.setName(spotDTO.getName());
+                        spot.setDescription(spotDTO.getDescription());
+                        spot.setImageUrl(spotDTO.getImageUrl());
+                        spot.setTime(spotDTO.getTime());
+                        spot.setDuration(spotDTO.getDuration());
+                        spot.setSortOrder(spotSort++);
+                        spots.add(spot);
+                    }
+                    spotMapper.batchInsert(spots);
+                }
             }
         }
 
@@ -274,6 +310,7 @@ public class GuideServiceImpl implements GuideService {
             throw new BusinessException(ErrorCode.FORBIDDEN, "无权删除此攻略");
         }
 
+        spotMapper.deleteByGuideId(guideId);
         guideMapper.deleteItineraryDaysByGuideId(guideId);
         tagService.syncGuideTags(guideId, null);
         guideMapper.deleteById(guideId);

@@ -1,7 +1,10 @@
 package com.travel.service;
 
 
+import com.travel.pojo.common.PageResult;
 import com.travel.pojo.dto.UpdateProfileDTO;
+import com.travel.pojo.model.GuideComment;
+import com.travel.pojo.vo.GuideListItemVO;
 import com.travel.pojo.vo.UserMeVO;
 
 /**
@@ -32,4 +35,16 @@ public interface UserService {
      * @return 更新后的用户信息
      */
     UserMeVO updateCurrentUserProfile(UpdateProfileDTO request);
+
+    /**
+     * 分页获取当前登录用户的评论
+     * @param page
+     * @param pageSize
+     * @return `
+     */
+    PageResult<GuideComment> listMyComments(int page, int pageSize);
+
+    PageResult<GuideListItemVO> listMyLikedGuides(int page, int pageSize);
+
+    PageResult<GuideListItemVO> listMyFavoriteGuides(int page, int pageSize);
 }

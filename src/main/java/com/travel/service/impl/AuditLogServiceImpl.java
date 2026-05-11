@@ -7,10 +7,12 @@ import com.travel.service.AuditLogService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuditLogServiceImpl implements AuditLogService {
@@ -25,7 +27,7 @@ public class AuditLogServiceImpl implements AuditLogService {
             Map<String, Object> admin = adminAuthService.getCurrentAdmin(session);
             if (admin == null) return;
             AdminLog log = new AdminLog();
-            log.setAdminId((Long) admin.get("id"));
+            log.setAdminId(((Number) admin.get("id")).longValue());
             log.setAdminUsername((String) admin.get("username"));
             log.setAction(action);
             log.setTargetType(targetType);
@@ -34,7 +36,7 @@ public class AuditLogServiceImpl implements AuditLogService {
             log.setIpAddress(request.getRemoteAddr());
             adminLogMapper.insert(log);
         } catch (Exception e) {
-            // 日志记录失败不影响业务操作
+            log.warn("审计日志记录失败: action={}, targetType={}, targetId={}", action, targetType, targetId, e);
         }
     }
 }

@@ -19,11 +19,11 @@
               <div class="stats">
                 <span class="stat-item">
                   <svg class="stat-icon likes-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5C22 12.27 18.6 15.36 13.45 20.03L12 21.35Z" fill="url(#detailHeartGradient)" stroke="#e85a5a" stroke-width="1.5"/>
+                    <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5C22 12.27 18.6 15.36 13.45 20.03L12 21.35Z" fill="url(#detailHeartGradient)" stroke="#e07070" stroke-width="1.5"/>
                     <defs>
                       <linearGradient id="detailHeartGradient" x1="12" y1="3" x2="12" y2="21.35" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#ff9a9e"/>
-                        <stop offset="1" stop-color="#f79545"/>
+                        <stop stop-color="#e07070"/>
+                        <stop offset="1" stop-color="#e07070"/>
                       </linearGradient>
                     </defs>
                   </svg>
@@ -31,29 +31,29 @@
                 </span>
                 <span class="stat-item">
                   <svg class="stat-icon views-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 5C7 5 2.73 8.11 1 12C2.73 15.89 7 19 12 19C17 19 21.27 15.89 23 12C21.27 8.11 17 5 12 5Z" fill="#e8e8e8" stroke="#999" stroke-width="1.5"/>
-                    <circle cx="12" cy="12" r="4" fill="#fff" stroke="#999" stroke-width="1.5"/>
-                    <circle cx="12" cy="12" r="2" fill="#f79545"/>
+                    <path d="M12 5C7 5 2.73 8.11 1 12C2.73 15.89 7 19 12 19C17 19 21.27 15.89 23 12C21.27 8.11 17 5 12 5Z" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+                    <circle cx="12" cy="12" r="4" fill="rgba(255,255,255,0.8)" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+                    <circle cx="12" cy="12" r="2" fill="#F5F0E8"/>
                   </svg>
                   <span>{{ guide.views }}</span>
                 </span>
                 <span class="stat-item">
                   <svg class="stat-icon comments-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z" fill="#f8f8f8" stroke="#7aa1c5" stroke-width="1.5"/>
-                    <circle cx="8" cy="10" r="1.5" fill="#7aa1c5"/>
-                    <circle cx="12" cy="10" r="1.5" fill="#7aa1c5"/>
-                    <circle cx="16" cy="10" r="1.5" fill="#7aa1c5"/>
-                    <path d="M6 14H18" stroke="#7aa1c5" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+                    <circle cx="8" cy="10" r="1.5" fill="rgba(255,255,255,0.6)"/>
+                    <circle cx="12" cy="10" r="1.5" fill="rgba(255,255,255,0.6)"/>
+                    <circle cx="16" cy="10" r="1.5" fill="rgba(255,255,255,0.6)"/>
+                    <path d="M6 14H18" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round"/>
                   </svg>
                   <span>{{ guide.comments.length }}</span>
                 </span>
                 <span class="stat-item">
                   <svg class="stat-icon date-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="3" y="4" width="18" height="18" rx="2" fill="#f8f8f8" stroke="#999" stroke-width="1.5"/>
-                    <path d="M16 2V6" stroke="#999" stroke-width="1.5" stroke-linecap="round"/>
-                    <path d="M8 2V6" stroke="#999" stroke-width="1.5" stroke-linecap="round"/>
-                    <path d="M3 10H21" stroke="#999" stroke-width="1.5"/>
-                    <circle cx="12" cy="15" r="2" fill="#f79545"/>
+                    <rect x="3" y="4" width="18" height="18" rx="2" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+                    <path d="M16 2V6" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M8 2V6" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M3 10H21" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+                    <circle cx="12" cy="15" r="2" fill="#F5F0E8"/>
                   </svg>
                   <span>{{ guide.publishDate }}</span>
                 </span>
@@ -64,7 +64,7 @@
       </div>
       <div class="header-wave">
         <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#f8f6f3"/>
+          <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#3D4F2F"/>
         </svg>
       </div>
     </header>
@@ -114,18 +114,18 @@
                           <div class="spot-meta">
                             <span class="time">
                               <svg class="meta-icon time-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="12" cy="12" r="9" fill="#f0f7ff" stroke="#4a90d9" stroke-width="1.5"/>
-                                <path d="M12 7V12L15 15" stroke="#4a90d9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <circle cx="12" cy="12" r="1.5" fill="#4a90d9"/>
+                                <circle cx="12" cy="12" r="9" fill="rgba(245,240,232,0.1)" stroke="#F5F0E8" stroke-width="1.5"/>
+                                <path d="M12 7V12L15 15" stroke="#F5F0E8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="12" cy="12" r="1.5" fill="#F5F0E8"/>
                               </svg>
                               {{ spot.time }}
                             </span>
                             <span class="duration">
                               <svg class="meta-icon duration-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="12" cy="12" r="9" fill="#f5fff5" stroke="#5cb85c" stroke-width="1.5"/>
-                                <path d="M12 7V12L14 14" stroke="#5cb85c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M7 12H9" stroke="#5cb85c" stroke-width="1.5" stroke-linecap="round"/>
-                                <path d="M15 12H17" stroke="#5cb85c" stroke-width="1.5" stroke-linecap="round"/>
+                                <circle cx="12" cy="12" r="9" fill="rgba(245,240,232,0.1)" stroke="#D4CFC7" stroke-width="1.5"/>
+                                <path d="M12 7V12L14 14" stroke="#D4CFC7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M7 12H9" stroke="#D4CFC7" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M15 12H17" stroke="#D4CFC7" stroke-width="1.5" stroke-linecap="round"/>
                               </svg>
                               {{ spot.duration }}
                             </span>
@@ -141,7 +141,7 @@
             <!-- 详细内容 -->
             <section class="content-section">
               <h2>详细攻略</h2>
-              <div class="rich-content" v-html="guide.content"></div>
+              <div class="rich-content" v-html="sanitizedContent"></div>
             </section>
 
             <!-- 实用信息 -->
@@ -160,47 +160,47 @@
             <!-- 互动区 -->
             <section class="interaction-section">
               <div class="action-buttons">
-                <button 
-                  class="action-btn like-btn" 
+                <button
+                  class="action-btn like-btn"
                   :class="{ active: isLiked }"
                   @click="toggleLike"
                 >
                   <svg class="btn-icon like-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5C22 12.27 18.6 15.36 13.45 20.03L12 21.35Z" :fill="isLiked ? 'url(#btnHeartGradient)' : '#f8f8f8'" :stroke="isLiked ? '#e85a5a' : '#999'" stroke-width="1.5"/>
+                    <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5C22 12.27 18.6 15.36 13.45 20.03L12 21.35Z" :fill="isLiked ? 'url(#btnHeartGradient)' : 'rgba(255,255,255,0.1)'" :stroke="isLiked ? '#e07070' : 'rgba(255,255,255,0.4)'" stroke-width="1.5"/>
                   </svg>
                   <span class="btn-text">{{ guide.likes + (isLiked ? 1 : 0) }}</span>
                 </button>
                 <button class="action-btn collect-btn" :class="{ active: isCollected }" @click="toggleCollect">
                   <svg class="btn-icon collect-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 5C5 3.89543 5.89543 3 7 3H17C18.1046 3 19 3.89543 19 5V21L12 17.5L5 21V5Z" :fill="isCollected ? '#fff8e7' : '#f8f8f8'" :stroke="isCollected ? '#f5a623' : '#999'" stroke-width="1.5"/>
-                    <path d="M12 7V13" :stroke="isCollected ? '#f5a623' : '#999'" stroke-width="1.5" stroke-linecap="round" v-if="!isCollected"/>
-                    <path d="M9 10H15" :stroke="isCollected ? '#f5a623' : '#999'" stroke-width="1.5" stroke-linecap="round" v-if="!isCollected"/>
-                    <path d="M9 10L11 12L15 8" stroke="#f5a623" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" v-if="isCollected"/>
+                    <path d="M5 5C5 3.89543 5.89543 3 7 3H17C18.1046 3 19 3.89543 19 5V21L12 17.5L5 21V5Z" :fill="isCollected ? 'rgba(245,240,232,0.2)' : 'rgba(255,255,255,0.1)'" :stroke="isCollected ? '#F5F0E8' : 'rgba(255,255,255,0.4)'" stroke-width="1.5"/>
+                    <path d="M12 7V13" :stroke="isCollected ? '#F5F0E8' : 'rgba(255,255,255,0.4)'" stroke-width="1.5" stroke-linecap="round" v-if="!isCollected"/>
+                    <path d="M9 10H15" :stroke="isCollected ? '#F5F0E8' : 'rgba(255,255,255,0.4)'" stroke-width="1.5" stroke-linecap="round" v-if="!isCollected"/>
+                    <path d="M9 10L11 12L15 8" stroke="#F5F0E8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" v-if="isCollected"/>
                   </svg>
                   <span class="btn-text">{{ isCollected ? '已收藏' : '收藏' }}</span>
                 </button>
                 <button class="action-btn share-btn" @click="showShareModal = true">
                   <svg class="btn-icon share-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="18" cy="5" r="3" fill="#e8f4fc" stroke="#4a90d9" stroke-width="1.5"/>
-                    <circle cx="6" cy="12" r="3" fill="#fff5f5" stroke="#e85a5a" stroke-width="1.5"/>
-                    <circle cx="18" cy="19" r="3" fill="#f0f7e6" stroke="#5cb85c" stroke-width="1.5"/>
-                    <path d="M8.59 13.51L15.42 17.49" stroke="#999" stroke-width="1.5" stroke-linecap="round"/>
-                    <path d="M15.41 6.51L8.59 10.49" stroke="#999" stroke-width="1.5" stroke-linecap="round"/>
+                    <circle cx="18" cy="5" r="3" fill="rgba(245,240,232,0.15)" stroke="#F5F0E8" stroke-width="1.5"/>
+                    <circle cx="6" cy="12" r="3" fill="rgba(245,240,232,0.1)" stroke="#D4CFC7" stroke-width="1.5"/>
+                    <circle cx="18" cy="19" r="3" fill="rgba(245,240,232,0.15)" stroke="#F5F0E8" stroke-width="1.5"/>
+                    <path d="M8.59 13.51L15.42 17.49" stroke="#A8A29E" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M15.41 6.51L8.59 10.49" stroke="#A8A29E" stroke-width="1.5" stroke-linecap="round"/>
                   </svg>
                   <span class="btn-text">分享</span>
                 </button>
               </div>
               <defs>
                 <linearGradient id="btnHeartGradient" x1="12" y1="3" x2="12" y2="21.35" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#ff9a9e"/>
-                  <stop offset="1" stop-color="#f79545"/>
+                  <stop stop-color="#e07070"/>
+                  <stop offset="1" stop-color="#e07070"/>
                 </linearGradient>
               </defs>
             </section>
 
             <!-- 评论区 -->
             <section class="comments-section">
-              <h2>评论 ({{ comments.length }})</h2>
+              <h2>评论 ({{ guide.comments.length }})</h2>
               <div class="comment-form">
                 <img :src="currentUser.avatar" alt="我的头像" class="user-avatar">
                 <div class="input-area">
@@ -216,8 +216,8 @@
                 </div>
               </div>
               <div class="comments-list">
-                <div 
-                  v-for="comment in comments" 
+                <div
+                  v-for="comment in guide.comments"
                   :key="comment.id"
                   class="comment-item"
                 >
@@ -235,7 +235,7 @@
                         @click="toggleCommentLike(comment)"
                       >
                         <svg class="action-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5C22 12.27 18.6 15.36 13.45 20.03L12 21.35Z" :fill="comment.isLiked ? 'url(#commentHeartGradient)' : 'none'" stroke="#999" stroke-width="1.5"/>
+                          <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5C22 12.27 18.6 15.36 13.45 20.03L12 21.35Z" :fill="comment.isLiked ? 'url(#commentHeartGradient)' : 'none'" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
                         </svg>
                         {{ comment.likesCount }}
                       </button>
@@ -262,7 +262,7 @@
                               @click="toggleCommentLike(reply)"
                             >
                               <svg class="action-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5C22 12.27 18.6 15.36 13.45 20.03L12 21.35Z" :fill="reply.isLiked ? 'url(#replyHeartGradient)' : 'none'" stroke="#999" stroke-width="1.5"/>
+                                <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5C22 12.27 18.6 15.36 13.45 20.03L12 21.35Z" :fill="reply.isLiked ? 'url(#replyHeartGradient)' : 'none'" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
                               </svg>
                               {{ reply.likesCount }}
                             </button>
@@ -275,12 +275,12 @@
               </div>
               <defs>
                 <linearGradient id="commentHeartGradient" x1="12" y1="3" x2="12" y2="21.35" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#ff9a9e"/>
-                  <stop offset="1" stop-color="#f79545"/>
+                  <stop stop-color="#e07070"/>
+                  <stop offset="1" stop-color="#e07070"/>
                 </linearGradient>
                 <linearGradient id="replyHeartGradient" x1="12" y1="3" x2="12" y2="21.35" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#ff9a9e"/>
-                  <stop offset="1" stop-color="#f79545"/>
+                  <stop stop-color="#e07070"/>
+                  <stop offset="1" stop-color="#e07070"/>
                 </linearGradient>
               </defs>
             </section>
@@ -381,7 +381,13 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted, watch } from 'vue'
+import request from '../utils/request'
+import DOMPurify from 'dompurify'
+
+const props = defineProps({
+  guideId: { type: [Number, String], default: null }
+})
 
 const emit = defineEmits(['back-to-community', 'view-guide'])
 
@@ -396,7 +402,6 @@ const newComment = ref('')
 const showShareModal = ref(false)
 
 // 评论相关
-const comments = ref([])
 const replyingTo = ref(null)
 const isLoadingComments = ref(false)
 
@@ -409,6 +414,16 @@ const currentUser = reactive({
 
 // 热门标签
 const hotTags = ['日本', '京都', '赏樱', '自由行', '美食', '摄影', '穷游', '蜜月']
+
+// 净化后的HTML内容（防止XSS攻击）
+const sanitizedContent = computed(() => {
+  return DOMPurify.sanitize(guide.content, {
+    ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+                   'ul', 'ol', 'li', 'a', 'img', 'blockquote', 'pre', 'code', 'table',
+                   'thead', 'tbody', 'tr', 'th', 'td', 'div', 'span'],
+    ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'target', 'rel']
+  })
+})
 
 // 返回社区
 const goBack = () => {
@@ -465,11 +480,10 @@ const formatTime = (timeStr) => {
 const loadComments = async () => {
   isLoadingComments.value = true
   try {
-    const response = await fetch(`/api/guides/comments/${guide.id}`)
-    const result = await response.json()
+    const result = await request.get(`/api/guides/comments/${guide.id}`)
     if (result.code === 'OK') {
       // 为每条评论添加 isLiked 状态
-      comments.value = (result.data || []).map(comment => ({
+      guide.comments = (result.data || []).map(comment => ({
         ...comment,
         isLiked: false,
         replies: (comment.replies || []).map(reply => ({
@@ -481,7 +495,7 @@ const loadComments = async () => {
   } catch (error) {
     console.error('加载评论失败:', error)
     // 使用模拟数据
-    comments.value = [
+    guide.comments = [
       {
         id: 1,
         guideId: 101,
@@ -548,7 +562,7 @@ const submitComment = async () => {
   
   if (replyingTo.value) {
     // 添加到回复列表
-    const parentComment = comments.value.find(c => c.id === replyingTo.value.id)
+    const parentComment = guide.comments.find(c => c.id === replyingTo.value.id)
     if (parentComment) {
       if (!parentComment.replies) parentComment.replies = []
       parentComment.replies.push(newCommentData)
@@ -556,7 +570,7 @@ const submitComment = async () => {
     replyingTo.value = null
   } else {
     // 添加到评论列表顶部
-    comments.value.unshift(newCommentData)
+    guide.comments.unshift(newCommentData)
   }
   
   newComment.value = ''
@@ -592,190 +606,98 @@ const searchByTag = (tag) => {
   console.log('搜索标签:', tag)
 }
 
-// 页面加载时获取评论
+// 攻略数据
+const guide = reactive({
+  id: null,
+  title: '',
+  description: '',
+  coverImage: '',
+  location: '',
+  author: '',
+  authorAvatar: '',
+  authorLevel: '',
+  authorGuides: 0,
+  authorFollowers: 0,
+  authorLikes: 0,
+  likes: 0,
+  views: 0,
+  publishDate: '',
+  tags: [],
+  itinerary: [],
+  content: '',
+  tips: [],
+  budget: { total: 0, breakdown: {} },
+  comments: [],
+  relatedGuides: []
+})
+
+const isLoading = ref(false)
+
+// 从API获取攻略详情
+const fetchGuideData = async (id) => {
+  if (!id) return
+  isLoading.value = true
+  try {
+    const result = await request.get(`/api/guides/${id}`)
+    if (result.code === 200 || result.code === 'OK') {
+      const data = result.data
+      guide.id = data.id
+      guide.title = data.title
+      guide.description = data.summary || ''
+      guide.coverImage = data.coverImageUrl || '/img/富士山.jpg'
+      guide.location = data.locationText || ''
+      guide.author = data.authorName || ''
+      guide.authorAvatar = data.authorAvatarUrl || '/img/头像1.jpg'
+      guide.authorLevel = '旅行家'
+      guide.authorGuides = 0
+      guide.authorFollowers = 0
+      guide.authorLikes = 0
+      guide.likes = data.likesCount || 0
+      guide.views = data.viewsCount || 0
+      guide.publishDate = data.publishedAt ? new Date(data.publishedAt).toLocaleDateString('zh-CN') : ''
+      guide.tags = []
+      guide.content = data.contentHtml || ''
+      guide.itinerary = (data.itinerary || []).map(day => ({
+        day: day.dayNo,
+        title: day.title,
+        summary: day.summary,
+        spots: (day.spots || []).map(spot => ({
+          name: spot.name,
+          description: spot.description,
+          time: spot.time,
+          duration: spot.duration,
+          image: spot.imageUrl || '/img/富士山.jpg'
+        }))
+      }))
+      guide.tips = [
+        { icon: '最佳', category: '最佳时间', items: ['提前规划行程', '关注天气预报'] },
+        { icon: '货币', category: '货币消费', items: ['提前兑换货币', '准备零钱'] },
+        { icon: '天气', category: '天气穿着', items: ['查看目的地天气', '准备合适衣物'] },
+        { icon: '网络', category: '网络通讯', items: ['租借随身WiFi', '下载离线地图'] }
+      ]
+      guide.budget = { total: 0, breakdown: {} }
+      guide.relatedGuides = []
+    }
+  } catch (error) {
+    console.error('获取攻略详情失败:', error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+// 页面加载时
 onMounted(() => {
+  if (props.guideId) {
+    fetchGuideData(props.guideId)
+  }
   loadComments()
 })
 
-// 攻略数据
-const guide = reactive({
-  id: 1,
-  title: '日本京都赏樱完全指南',
-  description: '京都作为日本最具历史文化底蕴的城市之一，每年春天樱花盛开时，整个城市仿佛披上了一层粉色的轻纱。本攻略将带你深入探索京都最美的赏樱地点，分享实用的行程规划和避坑指南，让你的樱花之旅不留遗憾。',
-  coverImage: '/img/富士山.jpg',
-  location: '日本·京都',
-  author: '樱花小仙女',
-  authorAvatar: '/img/头像1.jpg',
-  authorLevel: '资深旅行家',
-  authorGuides: 28,
-  authorFollowers: 12580,
-  authorLikes: 56800,
-  likes: 2341,
-  views: 12580,
-  publishDate: '2024-03-15',
-  tags: ['日本', '京都', '赏樱', '自由行', '春季', '摄影'],
-  itinerary: [
-    {
-      day: 1,
-      title: '抵达京都，初探古都',
-      summary: '关西机场入境，乘坐Haruka特急前往京都，下午游览伏见稻荷大社',
-      spots: [
-        {
-          name: '关西国际机场',
-          description: '办理入境手续，购买ICOCA卡和Haruka特急车票',
-          time: '09:00',
-          duration: '2小时',
-          image: '/img/富士山.jpg'
-        },
-        {
-          name: '伏见稻荷大社',
-          description: '千本鸟居是京都最具代表性的景观之一，建议傍晚时分前往，光线最佳',
-          time: '16:00',
-          duration: '2.5小时',
-          image: '/img/富士山.jpg'
-        }
-      ]
-    },
-    {
-      day: 2,
-      title: '经典赏樱路线',
-      summary: '清水寺、二年坂三年坂、八坂神社，感受京都最经典的樱花美景',
-      spots: [
-        {
-          name: '清水寺',
-          description: '世界文化遗产，舞台悬空而建，樱花季节景色绝美',
-          time: '08:00',
-          duration: '3小时',
-          image: '/img/富士山.jpg'
-        },
-        {
-          name: '哲学之道',
-          description: '长约2公里的樱花隧道，是京都最著名的赏樱步道',
-          time: '14:00',
-          duration: '2小时',
-          image: '/img/富士山.jpg'
-        }
-      ]
-    },
-    {
-      day: 3,
-      title: '岚山深度游',
-      summary: '乘坐岚山小火车，游览竹林小径和天龙寺',
-      spots: [
-        {
-          name: '岚山小火车',
-          description: '沿着保津峡行驶，沿途风景如画，樱花季节更是美不胜收',
-          time: '09:30',
-          duration: '1小时',
-          image: '/img/富士山.jpg'
-        },
-        {
-          name: '竹林小径',
-          description: '岚山最著名的景点，漫步其中仿佛进入另一个世界',
-          time: '11:00',
-          duration: '1.5小时',
-          image: '/img/富士山.jpg'
-        }
-      ]
-    }
-  ],
-  content: `
-    <h3>最佳赏樱时间</h3>
-    <p>京都的樱花通常在3月下旬至4月上旬盛开，具体时间会因当年气候而有所变化。2024年的预计满开日期是4月1日左右。建议出发前关注日本气象协会的樱花预报。</p>
-    
-    <h3>交通指南</h3>
-    <p>京都的公共交通非常便利，建议购买「京都巴士一日券」或「地下铁・巴士一日券」。如果要去岚山，可以乘坐JR嵯峨野线到嵯峨岚山站。</p>
-    
-    <h3>住宿推荐</h3>
-    <p>京都站周边交通便利，适合初次到访的游客；祇园・东山区可以体验传统日式旅馆；岚山地区适合想要远离喧嚣的旅行者。</p>
-    
-    <h3>美食推荐</h3>
-    <p>京都料理以精致著称，推荐尝试怀石料理、汤豆腐、抹茶甜点。锦市场是品尝当地小吃的好去处。</p>
-    
-    <h3>拍照技巧</h3>
-    <p>清晨和傍晚的光线最适合拍摄樱花，可以利用古建筑作为背景，营造日式美学氛围。记得带上长焦镜头，可以拍出压缩感很强的樱花隧道效果。</p>
-  `,
-  tips: [
-    {
-      icon: '最佳',
-      category: '最佳时间',
-      items: ['3月下旬至4月上旬', '避开周末和节假日', '清晨人最少']
-    },
-    {
-      icon: '货币',
-      category: '货币消费',
-      items: ['提前兑换日元', '大部分地方可刷卡', '准备零钱乘公交']
-    },
-    {
-      icon: '天气',
-      category: '天气穿着',
-      items: ['春季早晚温差大', '准备轻便外套', '舒适的步行鞋']
-    },
-    {
-      icon: '网络',
-      category: '网络通讯',
-      items: ['租借随身WiFi', '购买日本SIM卡', '下载Google翻译']
-    }
-  ],
-  budget: {
-    total: 8000,
-    breakdown: {
-      transport: { label: '交通', amount: 2000, percentage: 25 },
-      accommodation: { label: '住宿', amount: 3000, percentage: 37.5 },
-      food: { label: '餐饮', amount: 2000, percentage: 25 },
-      tickets: { label: '门票', amount: 600, percentage: 7.5 },
-      shopping: { label: '购物', amount: 400, percentage: 5 }
-    }
-  },
-  comments: [
-    {
-      id: 1,
-      author: '旅行达人',
-      avatar: '/img/头像2.png',
-      content: '写得太详细了！正好计划明年去京都赏樱，收藏了！',
-      time: '2小时前',
-      likes: 45,
-      isLiked: false
-    },
-    {
-      id: 2,
-      author: '摄影爱好者',
-      avatar: '/img/头像3.png',
-      content: '清水寺的照片拍得太美了，请问是用什么相机拍的？',
-      time: '5小时前',
-      likes: 23,
-      isLiked: true
-    },
-    {
-      id: 3,
-      author: '背包客小王',
-      avatar: '/img/头像1.jpg',
-      content: '预算部分很实用，对于穷游党来说很有帮助！',
-      time: '昨天',
-      likes: 18,
-      isLiked: false
-    }
-  ],
-  relatedGuides: [
-    {
-      id: 2,
-      title: '东京7日深度游攻略',
-      image: '/img/富士山.jpg',
-      views: 8900
-    },
-    {
-      id: 3,
-      title: '大阪美食地图',
-      image: '/img/富士山.jpg',
-      views: 6700
-    },
-    {
-      id: 4,
-      title: '北海道冬季滑雪指南',
-      image: '/img/富士山.jpg',
-      views: 5400
-    }
-  ]
+// 监听guideId变化
+watch(() => props.guideId, (newId) => {
+  if (newId) {
+    fetchGuideData(newId)
+  }
 })
 </script>
 
@@ -783,7 +705,7 @@ const guide = reactive({
 /* 页面整体样式 */
 .guide-detail-page {
   min-height: 100vh;
-  background-color: #f8f6f3;
+  background-color: #3D4F2F;
   font-family: 'Noto Sans SC', sans-serif;
 }
 
@@ -851,11 +773,12 @@ const guide = reactive({
 .location-tag {
   display: inline-block;
   padding: 8px 20px;
-  background: linear-gradient(135deg, #f79545 0%, #ffc494 100%);
-  color: white;
+  background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
+  color: #2F3D24;
   border-radius: 20px;
   font-size: 14px;
   margin-bottom: 20px;
+  font-weight: 600;
 }
 
 .header-info h1 {
@@ -952,6 +875,13 @@ const guide = reactive({
   width: 100%;
 }
 
+.header-wave {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+}
+
 /* 主要内容区 */
 .detail-content {
   padding: 40px 0 80px;
@@ -965,27 +895,28 @@ const guide = reactive({
 
 /* 文章主体 */
 .article-main section {
-  background: white;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 20px;
   padding: 35px;
   margin-bottom: 30px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 }
 
 .article-main h2 {
   font-family: 'Noto Serif SC', serif;
   font-size: 26px;
-  color: #333;
+  color: #F5F0E8;
   margin-bottom: 25px;
   padding-left: 15px;
-  border-left: 4px solid #f79545;
+  border-left: 4px solid #F5F0E8;
 }
 
 /* 简介区 */
 .intro-text {
   font-size: 16px;
   line-height: 1.8;
-  color: #555;
+  color: #D4CFC7;
   margin-bottom: 20px;
 }
 
@@ -997,8 +928,8 @@ const guide = reactive({
 
 .tag {
   padding: 8px 18px;
-  background: rgba(247, 149, 69, 0.1);
-  color: #f79545;
+  background: rgba(245, 240, 232, 0.1);
+  color: #F5F0E8;
   border-radius: 20px;
   font-size: 14px;
   cursor: pointer;
@@ -1006,8 +937,8 @@ const guide = reactive({
 }
 
 .tag:hover {
-  background: #f79545;
-  color: white;
+  background: #F5F0E8;
+  color: #2F3D24;
 }
 
 /* 行程时间线 */
@@ -1022,7 +953,7 @@ const guide = reactive({
   top: 0;
   bottom: 0;
   width: 2px;
-  background: linear-gradient(to bottom, #f79545, #ffc494);
+  background: linear-gradient(to bottom, #F5F0E8, rgba(245, 240, 232, 0.3));
 }
 
 .timeline-item {
@@ -1034,7 +965,7 @@ const guide = reactive({
 }
 
 .timeline-item:hover {
-  background: rgba(247, 149, 69, 0.02);
+  background: rgba(245, 240, 232, 0.05);
 }
 
 .timeline-marker {
@@ -1048,9 +979,9 @@ const guide = reactive({
 .day-num {
   display: inline-block;
   padding: 8px 16px;
-  background: white;
-  border: 2px solid #f79545;
-  color: #f79545;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(245, 240, 232, 0.3);
+  color: #F5F0E8;
   border-radius: 20px;
   font-size: 14px;
   font-weight: 600;
@@ -1059,8 +990,9 @@ const guide = reactive({
 
 .timeline-item.active .day-num,
 .timeline-item:hover .day-num {
-  background: #f79545;
-  color: white;
+  background: #F5F0E8;
+  color: #2F3D24;
+  border-color: #F5F0E8;
 }
 
 .timeline-content {
@@ -1070,12 +1002,12 @@ const guide = reactive({
 
 .timeline-content h3 {
   font-size: 20px;
-  color: #333;
+  color: #F5F0E8;
   margin-bottom: 8px;
 }
 
 .timeline-content > p {
-  color: #666;
+  color: #D4CFC7;
   font-size: 15px;
   margin-bottom: 15px;
 }
@@ -1083,7 +1015,7 @@ const guide = reactive({
 .day-details {
   margin-top: 20px;
   padding-top: 20px;
-  border-top: 1px dashed #eee;
+  border-top: 1px dashed rgba(255, 255, 255, 0.15);
   animation: slideDown 0.3s ease;
 }
 
@@ -1102,7 +1034,7 @@ const guide = reactive({
   display: flex;
   gap: 20px;
   padding: 20px;
-  background: #faf8f5;
+  background: rgba(245, 240, 232, 0.05);
   border-radius: 15px;
   margin-bottom: 15px;
 }
@@ -1117,13 +1049,13 @@ const guide = reactive({
 
 .spot-info h4 {
   font-size: 17px;
-  color: #333;
+  color: #F5F0E8;
   margin-bottom: 8px;
 }
 
 .spot-info p {
   font-size: 14px;
-  color: #666;
+  color: #D4CFC7;
   line-height: 1.6;
   margin-bottom: 10px;
 }
@@ -1132,7 +1064,7 @@ const guide = reactive({
   display: flex;
   gap: 20px;
   font-size: 13px;
-  color: #999;
+  color: #A8A29E;
 }
 
 .spot-meta .time,
@@ -1145,7 +1077,7 @@ const guide = reactive({
 
 .spot-meta .time:hover,
 .spot-meta .duration:hover {
-  color: #666;
+  color: #F5F0E8;
   transform: translateY(-1px);
 }
 
@@ -1162,23 +1094,23 @@ const guide = reactive({
 }
 
 .spot-meta .time:hover .time-icon {
-  filter: drop-shadow(0 3px 4px rgba(74, 144, 217, 0.25));
+  filter: drop-shadow(0 3px 4px rgba(245, 240, 232, 0.25));
 }
 
 .spot-meta .duration:hover .duration-icon {
-  filter: drop-shadow(0 3px 4px rgba(92, 184, 92, 0.25));
+  filter: drop-shadow(0 3px 4px rgba(212, 207, 199, 0.25));
 }
 
 /* 详细内容 */
 .rich-content {
   font-size: 16px;
   line-height: 1.9;
-  color: #444;
+  color: #D4CFC7;
 }
 
 .rich-content h3 {
   font-size: 22px;
-  color: #333;
+  color: #F5F0E8;
   margin: 30px 0 15px;
   font-family: 'Noto Serif SC', serif;
 }
@@ -1196,9 +1128,9 @@ const guide = reactive({
 
 .tip-card {
   padding: 25px;
-  background: linear-gradient(135deg, rgba(247, 149, 69, 0.05) 0%, rgba(255, 196, 148, 0.05) 100%);
+  background: rgba(245, 240, 232, 0.05);
   border-radius: 15px;
-  border: 1px solid rgba(247, 149, 69, 0.1);
+  border: 1px solid rgba(245, 240, 232, 0.15);
 }
 
 .tip-icon {
@@ -1208,7 +1140,7 @@ const guide = reactive({
 
 .tip-card h3 {
   font-size: 18px;
-  color: #333;
+  color: #F5F0E8;
   margin-bottom: 15px;
   border: none;
   padding: 0;
@@ -1221,7 +1153,7 @@ const guide = reactive({
 
 .tip-card li {
   font-size: 14px;
-  color: #666;
+  color: #D4CFC7;
   padding: 6px 0;
   padding-left: 20px;
   position: relative;
@@ -1231,7 +1163,7 @@ const guide = reactive({
   content: '•';
   position: absolute;
   left: 0;
-  color: #f79545;
+  color: #F5F0E8;
   font-weight: bold;
 }
 
@@ -1245,9 +1177,9 @@ const guide = reactive({
 .total-budget {
   text-align: center;
   padding: 30px 40px;
-  background: linear-gradient(135deg, #f79545 0%, #ffc494 100%);
+  background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
   border-radius: 20px;
-  color: white;
+  color: #2F3D24;
   flex-shrink: 0;
 }
 
@@ -1300,20 +1232,20 @@ const guide = reactive({
 .budget-label {
   width: 60px;
   font-size: 14px;
-  color: #666;
+  color: #D4CFC7;
 }
 
 .budget-bar {
   flex: 1;
   height: 10px;
-  background: #f0f0f0;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 5px;
   overflow: hidden;
 }
 
 .budget-fill {
   height: 100%;
-  background: linear-gradient(90deg, #f79545, #ffc494);
+  background: linear-gradient(90deg, #F5F0E8, #FAF8F5);
   border-radius: 5px;
   transition: width 0.5s ease;
 }
@@ -1322,7 +1254,7 @@ const guide = reactive({
   width: 70px;
   text-align: right;
   font-size: 14px;
-  color: #333;
+  color: #F5F0E8;
   font-weight: 500;
 }
 
@@ -1342,28 +1274,27 @@ const guide = reactive({
   align-items: center;
   gap: 8px;
   padding: 12px 28px;
-  border: 2px solid #e8e8e8;
-  background: white;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 25px;
   font-size: 15px;
-  color: #666;
+  color: #D4CFC7;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .action-btn:hover {
-  border-color: #f79545;
-  color: #f79545;
+  border-color: #F5F0E8;
+  color: #F5F0E8;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(247, 149, 69, 0.15);
+  box-shadow: 0 4px 12px rgba(245, 240, 232, 0.15);
 }
 
 .action-btn.active {
-  background: linear-gradient(135deg, #f79545 0%, #ffc494 100%);
-  border-color: #f79545;
-  color: white;
-  box-shadow: 0 4px 15px rgba(247, 149, 69, 0.3);
+  background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
+  border-color: #F5F0E8;
+  color: #2F3D24;
+  box-shadow: 0 4px 15px rgba(245, 240, 232, 0.3);
 }
 
 .action-btn.active .btn-icon {
@@ -1381,15 +1312,15 @@ const guide = reactive({
 }
 
 .like-icon {
-  filter: drop-shadow(0 2px 3px rgba(232, 90, 90, 0.15));
+  filter: drop-shadow(0 2px 3px rgba(224, 112, 112, 0.15));
 }
 
 .collect-icon {
-  filter: drop-shadow(0 2px 3px rgba(245, 166, 35, 0.15));
+  filter: drop-shadow(0 2px 3px rgba(245, 240, 232, 0.15));
 }
 
 .share-icon {
-  filter: drop-shadow(0 2px 3px rgba(74, 144, 217, 0.15));
+  filter: drop-shadow(0 2px 3px rgba(245, 240, 232, 0.15));
 }
 
 .action-btn.active .like-icon {
@@ -1406,7 +1337,7 @@ const guide = reactive({
   gap: 15px;
   margin-bottom: 30px;
   padding-bottom: 30px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .user-avatar {
@@ -1415,6 +1346,7 @@ const guide = reactive({
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .input-area {
@@ -1424,34 +1356,41 @@ const guide = reactive({
 .input-area textarea {
   width: 100%;
   padding: 15px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid rgba(255, 255, 255, 0.15);
   border-radius: 15px;
   font-size: 15px;
   resize: vertical;
   min-height: 100px;
   margin-bottom: 10px;
   transition: border-color 0.3s ease;
+  background: rgba(255, 255, 255, 0.06);
+  color: #F5F0E8;
 }
 
 .input-area textarea:focus {
   outline: none;
-  border-color: #f79545;
+  border-color: #F5F0E8;
+}
+
+.input-area textarea::placeholder {
+  color: #A8A29E;
 }
 
 .submit-btn {
   padding: 12px 30px;
-  background: linear-gradient(135deg, #f79545 0%, #ffc494 100%);
-  color: white;
+  background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
+  color: #2F3D24;
   border: none;
   border-radius: 25px;
   font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .submit-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(247, 149, 69, 0.4);
+  box-shadow: 0 6px 20px rgba(245, 240, 232, 0.4);
 }
 
 .comments-list {
@@ -1471,6 +1410,7 @@ const guide = reactive({
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
+  border: 2px solid rgba(255, 255, 255, 0.15);
 }
 
 .comment-content {
@@ -1486,17 +1426,17 @@ const guide = reactive({
 
 .commenter-name {
   font-weight: 600;
-  color: #333;
+  color: #F5F0E8;
 }
 
 .comment-time {
   font-size: 13px;
-  color: #999;
+  color: #A8A29E;
 }
 
 .comment-text {
   font-size: 15px;
-  color: #555;
+  color: #D4CFC7;
   line-height: 1.7;
   margin-bottom: 10px;
 }
@@ -1509,7 +1449,7 @@ const guide = reactive({
 .comment-action {
   background: none;
   border: none;
-  color: #999;
+  color: #A8A29E;
   font-size: 13px;
   cursor: pointer;
   transition: color 0.3s ease;
@@ -1517,7 +1457,7 @@ const guide = reactive({
 
 .comment-action:hover,
 .comment-action.active {
-  color: #f79545;
+  color: #F5F0E8;
 }
 
 .comment-action.like-action {
@@ -1538,25 +1478,25 @@ const guide = reactive({
 }
 
 .comment-action.like-action.active {
-  color: #e85a5a;
+  color: #e07070;
 }
 
 .comment-action.like-action.active .action-icon path {
-  stroke: #e85a5a;
+  stroke: #e07070;
 }
 
 /* 回复列表 */
 .replies-list {
   margin-top: 15px;
   padding-left: 20px;
-  border-left: 2px solid #f0f0f0;
+  border-left: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .reply-item {
   display: flex;
   gap: 12px;
   padding: 15px 0;
-  border-bottom: 1px solid #f5f5f5;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .reply-item:last-child {
@@ -1569,6 +1509,7 @@ const guide = reactive({
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
+  border: 2px solid rgba(255, 255, 255, 0.15);
 }
 
 .reply-content {
@@ -1585,17 +1526,17 @@ const guide = reactive({
 .reply-name {
   font-weight: 600;
   font-size: 14px;
-  color: #333;
+  color: #F5F0E8;
 }
 
 .reply-time {
   font-size: 12px;
-  color: #999;
+  color: #A8A29E;
 }
 
 .reply-text {
   font-size: 14px;
-  color: #555;
+  color: #D4CFC7;
   line-height: 1.6;
   margin-bottom: 8px;
 }
@@ -1615,8 +1556,8 @@ const guide = reactive({
 
 .cancel-btn {
   padding: 10px 20px;
-  background: #f5f5f5;
-  color: #666;
+  background: rgba(255, 255, 255, 0.08);
+  color: #D4CFC7;
   border: none;
   border-radius: 20px;
   font-size: 14px;
@@ -1625,15 +1566,15 @@ const guide = reactive({
 }
 
 .cancel-btn:hover {
-  background: #e8e8e8;
-  color: #333;
+  background: rgba(255, 255, 255, 0.15);
+  color: #F5F0E8;
 }
 
 /* 加载状态 */
 .loading-comments {
   text-align: center;
   padding: 40px;
-  color: #999;
+  color: #A8A29E;
 }
 
 /* 侧边栏 */
@@ -1644,17 +1585,18 @@ const guide = reactive({
 }
 
 .sidebar-card {
-  background: white;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 20px;
   padding: 25px;
   margin-bottom: 25px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 }
 
 .sidebar-card h3 {
   font-family: 'Noto Serif SC', serif;
   font-size: 20px;
-  color: #333;
+  color: #F5F0E8;
   margin-bottom: 20px;
 }
 
@@ -1671,18 +1613,19 @@ const guide = reactive({
   height: 70px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #f79545;
+  border: 3px solid #F5F0E8;
 }
 
 .author-info h3 {
   font-size: 18px;
   margin-bottom: 5px;
+  color: #F5F0E8;
 }
 
 .author-level {
   font-size: 13px;
-  color: #f79545;
-  background: rgba(247, 149, 69, 0.1);
+  color: #F5F0E8;
+  background: rgba(245, 240, 232, 0.15);
   padding: 4px 12px;
   border-radius: 12px;
 }
@@ -1691,8 +1634,8 @@ const guide = reactive({
   display: flex;
   justify-content: space-around;
   padding: 20px 0;
-  border-top: 1px solid #f0f0f0;
-  border-bottom: 1px solid #f0f0f0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   margin-bottom: 20px;
 }
 
@@ -1704,35 +1647,35 @@ const guide = reactive({
   display: block;
   font-size: 20px;
   font-weight: 700;
-  color: #333;
+  color: #F5F0E8;
 }
 
 .stat-label {
   font-size: 13px;
-  color: #999;
+  color: #A8A29E;
 }
 
 .follow-btn {
   width: 100%;
   padding: 12px;
-  background: linear-gradient(135deg, #f79545 0%, #ffc494 100%);
-  color: white;
+  background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
+  color: #2F3D24;
   border: none;
   border-radius: 25px;
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .follow-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(247, 149, 69, 0.4);
+  box-shadow: 0 6px 20px rgba(245, 240, 232, 0.4);
 }
 
 .follow-btn.following {
-  background: #e0e0e0;
-  color: #666;
+  background: rgba(255, 255, 255, 0.1);
+  color: #A8A29E;
 }
 
 /* 相关攻略 */
@@ -1752,7 +1695,7 @@ const guide = reactive({
 }
 
 .related-item:hover {
-  background: #faf8f5;
+  background: rgba(245, 240, 232, 0.08);
 }
 
 .related-item img {
@@ -1765,7 +1708,7 @@ const guide = reactive({
 
 .related-info h4 {
   font-size: 15px;
-  color: #333;
+  color: #F5F0E8;
   margin-bottom: 5px;
   line-height: 1.4;
   display: -webkit-box;
@@ -1776,7 +1719,7 @@ const guide = reactive({
 
 .related-info span {
   font-size: 12px;
-  color: #999;
+  color: #A8A29E;
 }
 
 /* 热门标签 */
@@ -1788,17 +1731,17 @@ const guide = reactive({
 
 .tag-item {
   padding: 8px 16px;
-  background: #f5f5f5;
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 20px;
   font-size: 13px;
-  color: #666;
+  color: #D4CFC7;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .tag-item:hover {
-  background: #f79545;
-  color: white;
+  background: #F5F0E8;
+  color: #2F3D24;
 }
 
 /* 分享模态框 */
@@ -1808,16 +1751,17 @@ const guide = reactive({
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(8px);
 }
 
 .share-modal {
-  background: white;
+  background: #3D4F2F;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 24px;
   padding: 30px;
   width: 90%;
@@ -1846,13 +1790,14 @@ const guide = reactive({
 .modal-header h3 {
   font-size: 22px;
   font-family: 'Noto Serif SC', serif;
+  color: #F5F0E8;
 }
 
 .close-btn {
   background: none;
   border: none;
   font-size: 28px;
-  color: #999;
+  color: #A8A29E;
   cursor: pointer;
 }
 
@@ -1868,7 +1813,7 @@ const guide = reactive({
   align-items: center;
   gap: 10px;
   padding: 25px;
-  background: #f8f8f8;
+  background: rgba(255, 255, 255, 0.08);
   border: none;
   border-radius: 16px;
   cursor: pointer;
@@ -1876,7 +1821,7 @@ const guide = reactive({
 }
 
 .share-option:hover {
-  background: #f0f0f0;
+  background: rgba(255, 255, 255, 0.15);
   transform: translateY(-3px);
 }
 
@@ -1886,7 +1831,7 @@ const guide = reactive({
 
 .share-option span:last-child {
   font-size: 14px;
-  color: #666;
+  color: #D4CFC7;
 }
 
 /* 响应式设计 */

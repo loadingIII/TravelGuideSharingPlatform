@@ -39,5 +39,17 @@ public class GuideDetailVO {
         private Integer dayNo;
         private String title;
         private String summary;
+        private List<Spot> spots;
+
+        @Getter
+        @Builder
+        public static class Spot {
+            private Long id;
+            private String name;
+            private String description;
+            private String imageUrl;
+            private String time;
+            private String duration;
+        }
     }
 }

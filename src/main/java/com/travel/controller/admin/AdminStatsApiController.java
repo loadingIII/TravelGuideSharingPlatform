@@ -1,6 +1,6 @@
 package com.travel.controller.admin;
 
-import com.travel.common.ApiResponse;
+import com.travel.pojo.common.ApiResponse;
 import com.travel.service.StatsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

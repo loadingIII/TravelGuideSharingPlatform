@@ -1,8 +1,8 @@
 package com.travel.service.impl;
 
-import com.travel.common.PageResult;
-import com.travel.common.exception.BusinessException;
-import com.travel.common.exception.ErrorCode;
+import com.travel.pojo.common.PageResult;
+import com.travel.pojo.common.exception.BusinessException;
+import com.travel.pojo.common.exception.ErrorCode;
 import com.travel.mapper.DestinationMapper;
 import com.travel.pojo.model.Destination;
 import com.travel.pojo.vo.DestinationItemVO;
