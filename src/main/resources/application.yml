@@ -4,11 +4,13 @@ server:
 spring:
   application:
     name: TravelProject
+  profiles:
+    active: local
   datasource:
+    username: ${mysql.username}
+    password: ${mysql.password}
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/travel_guide_platform?useSSL=false&serverTimezone=UTC&autoReconnect=true
-    username: root
-    password: 123321
+    url: ${mysql.url}
     hikari:
       maximum-pool-size: 10
       minimum-idle: 5
@@ -22,12 +24,11 @@ spring:
       max-file-size: 10MB
       max-request-size: 50MB
   jackson:
-    default-property-inclusion: non_null # JSON处理时忽略非空字段
+    default-property-inclusion: non_null
   mvc:
     view:
       prefix: /WEB-INF/views/
       suffix: .jsp
-
 
 logging:
   level:
@@ -36,6 +37,7 @@ logging:
         mapper: debug
         service: info
         controller: info
+
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.travel.entity
@@ -44,11 +46,10 @@ mybatis:
 
 app:
   jwt:
-    secret: 6a701ec8714c4e99af80e7329adf06475b26d01c4a0502c48a71d86e76b6d6e9
+    secret: ${jwt.secret}
     access-expire-minutes: 120
   oss:
-    endpoint: oss-cn-guangzhou.aliyuncs.com
-    access-key-id: LTAI5tBzVgNNNNNfJq8XD9jy
-    access-key-secret: KzoUlxO4YmDxDZne5nviJVjnr3ri9P
-    bucket-name: travel-shared-platform
-#    bucket-name: web-talis-0717
+    endpoint: ${oss.endpoint}
+    access-key-id: ${oss.access-key-id}
+    access-key-secret: ${oss.access-key-secret}
+    bucket-name: ${oss.bucket-name}
