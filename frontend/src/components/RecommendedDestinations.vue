@@ -13,6 +13,7 @@
           :class="{ 'hovered': hoverCard === destination.name }"
           @mouseenter="hoverCard = destination.name"
           @mouseleave="hoverCard = null"
+          @click="viewDestinationDetail(destination)"
         >
           <div class="card-image-wrapper">
             <img :src="destination.image" :alt="destination.alt" loading="lazy">
@@ -29,6 +30,7 @@
 import { ref, onMounted } from 'vue'
 import request from '../utils/request'
 
+const emit = defineEmits(['view-destination-detail'])
 const hoverCard = ref(null)
 const destinations = ref([])
 const loading = ref(true)
@@ -55,6 +57,10 @@ const fetchDestinations = async () => {
   } finally {
     loading.value = false
   }
+}
+
+const viewDestinationDetail = (destination) => {
+  emit('view-destination-detail', destination)
 }
 
 onMounted(() => {

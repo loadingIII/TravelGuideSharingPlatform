@@ -62,11 +62,6 @@
           </div>
         </div>
       </div>
-      <div class="header-wave">
-        <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#3D4F2F"/>
-        </svg>
-      </div>
     </header>
 
     <!-- 主要内容区 -->
@@ -165,37 +160,45 @@
                   :class="{ active: isLiked }"
                   @click="toggleLike"
                 >
-                  <svg class="btn-icon like-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5C22 12.27 18.6 15.36 13.45 20.03L12 21.35Z" :fill="isLiked ? 'url(#btnHeartGradient)' : 'rgba(255,255,255,0.1)'" :stroke="isLiked ? '#e07070' : 'rgba(255,255,255,0.4)'" stroke-width="1.5"/>
+                  <svg class="btn-icon like-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5C22 12.27 18.6 15.36 13.45 20.03L12 21.35Z" :fill="isLiked ? '#E07070' : 'none'" :stroke="isLiked ? 'none' : 'var(--color-primary)'" :stroke-width="isLiked ? 0 : 1.5"/>
                   </svg>
-                  <span class="btn-text">{{ guide.likes + (isLiked ? 1 : 0) }}</span>
+                  <span class="btn-text">{{ guide.likes }}</span>
                 </button>
                 <button class="action-btn collect-btn" :class="{ active: isCollected }" @click="toggleCollect">
                   <svg class="btn-icon collect-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 5C5 3.89543 5.89543 3 7 3H17C18.1046 3 19 3.89543 19 5V21L12 17.5L5 21V5Z" :fill="isCollected ? 'rgba(245,240,232,0.2)' : 'rgba(255,255,255,0.1)'" :stroke="isCollected ? '#F5F0E8' : 'rgba(255,255,255,0.4)'" stroke-width="1.5"/>
-                    <path d="M12 7V13" :stroke="isCollected ? '#F5F0E8' : 'rgba(255,255,255,0.4)'" stroke-width="1.5" stroke-linecap="round" v-if="!isCollected"/>
-                    <path d="M9 10H15" :stroke="isCollected ? '#F5F0E8' : 'rgba(255,255,255,0.4)'" stroke-width="1.5" stroke-linecap="round" v-if="!isCollected"/>
-                    <path d="M9 10L11 12L15 8" stroke="#F5F0E8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" v-if="isCollected"/>
+                    <path d="M5 5C5 3.89543 5.89543 3 7 3H17C18.1046 3 19 3.89543 19 5V21L12 17.5L5 21V5Z" :fill="isCollected ? 'rgba(91,140,62,0.15)' : 'rgba(91,140,62,0.1)'" :stroke="isCollected ? 'var(--color-primary)' : 'var(--color-primary)'" stroke-width="1.5"/>
+                    <path d="M12 7V13" :stroke="isCollected ? 'var(--color-primary)' : 'var(--color-primary)'" stroke-width="1.5" stroke-linecap="round" v-if="!isCollected"/>
+                    <path d="M9 10H15" :stroke="isCollected ? 'var(--color-primary)' : 'var(--color-primary)'" stroke-width="1.5" stroke-linecap="round" v-if="!isCollected"/>
+                    <path d="M9 10L11 12L15 8" stroke="var(--color-primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" v-if="isCollected"/>
                   </svg>
                   <span class="btn-text">{{ isCollected ? '已收藏' : '收藏' }}</span>
                 </button>
                 <button class="action-btn share-btn" @click="showShareModal = true">
                   <svg class="btn-icon share-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="18" cy="5" r="3" fill="rgba(245,240,232,0.15)" stroke="#F5F0E8" stroke-width="1.5"/>
-                    <circle cx="6" cy="12" r="3" fill="rgba(245,240,232,0.1)" stroke="#D4CFC7" stroke-width="1.5"/>
-                    <circle cx="18" cy="19" r="3" fill="rgba(245,240,232,0.15)" stroke="#F5F0E8" stroke-width="1.5"/>
-                    <path d="M8.59 13.51L15.42 17.49" stroke="#A8A29E" stroke-width="1.5" stroke-linecap="round"/>
-                    <path d="M15.41 6.51L8.59 10.49" stroke="#A8A29E" stroke-width="1.5" stroke-linecap="round"/>
+                    <circle cx="18" cy="5" r="3" fill="rgba(91,140,62,0.1)" stroke="var(--color-primary)" stroke-width="1.5"/>
+                    <circle cx="6" cy="12" r="3" fill="rgba(91,140,62,0.1)" stroke="var(--color-primary)" stroke-width="1.5"/>
+                    <circle cx="18" cy="19" r="3" fill="rgba(91,140,62,0.1)" stroke="var(--color-primary)" stroke-width="1.5"/>
+                    <path d="M8.59 13.51L15.42 17.49" stroke="var(--color-primary)" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M15.41 6.51L8.59 10.49" stroke="var(--color-primary)" stroke-width="1.5" stroke-linecap="round"/>
                   </svg>
                   <span class="btn-text">分享</span>
                 </button>
+                <button v-if="currentUser.id && guide.authorId === currentUser.id" class="action-btn edit-btn" @click="openEditModal">
+                  <svg class="btn-icon edit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                  </svg>
+                  <span class="btn-text">编辑</span>
+                </button>
+                <button v-if="currentUser.id && guide.authorId === currentUser.id" class="action-btn delete-btn" @click="deleteGuide">
+                  <svg class="btn-icon delete-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                  </svg>
+                  <span class="btn-text">删除</span>
+                </button>
               </div>
-              <defs>
-                <linearGradient id="btnHeartGradient" x1="12" y1="3" x2="12" y2="21.35" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#e07070"/>
-                  <stop offset="1" stop-color="#e07070"/>
-                </linearGradient>
-              </defs>
             </section>
 
             <!-- 评论区 -->
@@ -231,15 +234,16 @@
                     <div class="comment-actions">
                       <button 
                         class="comment-action like-action" 
-                        :class="{ active: comment.isLiked }"
+                        :class="{ active: comment.liked }"
                         @click="toggleCommentLike(comment)"
                       >
                         <svg class="action-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5C22 12.27 18.6 15.36 13.45 20.03L12 21.35Z" :fill="comment.isLiked ? 'url(#commentHeartGradient)' : 'none'" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+                          <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5C22 12.27 18.6 15.36 13.45 20.03L12 21.35Z" :fill="comment.liked ? '#E07070' : 'none'" :stroke="comment.liked ? 'none' : '#E07070'" stroke-width="1.5"/>
                         </svg>
                         {{ comment.likesCount }}
                       </button>
                       <button class="comment-action reply-action" @click="replyTo(comment)">回复</button>
+                      <button v-if="currentUser.id && comment.userId === currentUser.id" class="comment-action delete-action" @click="deleteComment(comment.id)">删除</button>
                     </div>
                     <!-- 回复列表 -->
                     <div v-if="comment.replies && comment.replies.length > 0" class="replies-list">
@@ -258,14 +262,15 @@
                           <div class="reply-actions">
                             <button 
                               class="comment-action like-action" 
-                              :class="{ active: reply.isLiked }"
+                              :class="{ active: reply.liked }"
                               @click="toggleCommentLike(reply)"
                             >
                               <svg class="action-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5C22 12.27 18.6 15.36 13.45 20.03L12 21.35Z" :fill="reply.isLiked ? 'url(#replyHeartGradient)' : 'none'" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+                                <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5C22 12.27 18.6 15.36 13.45 20.03L12 21.35Z" :fill="reply.liked ? '#E07070' : 'none'" :stroke="reply.liked ? 'none' : '#E07070'" stroke-width="1.5"/>
                               </svg>
                               {{ reply.likesCount }}
                             </button>
+                            <button v-if="currentUser.id && reply.userId === currentUser.id" class="comment-action delete-action" @click="deleteComment(reply.id)">删除</button>
                           </div>
                         </div>
                       </div>
@@ -311,9 +316,10 @@
                   <span class="stat-label">获赞</span>
                 </div>
               </div>
-              <button class="follow-btn" :class="{ following: isFollowing }" @click="toggleFollow">
+              <button v-if="!currentUser.id || guide.authorId !== currentUser.id" class="follow-btn" :class="{ following: isFollowing }" @click="toggleFollow">
                 {{ isFollowing ? '已关注' : '+ 关注' }}
               </button>
+              <div v-else class="self-badge">这是你的攻略</div>
             </div>
 
             <!-- 相关攻略 -->
@@ -377,12 +383,59 @@
         </div>
       </div>
     </div>
+
+    <!-- 编辑攻略弹窗 -->
+    <div class="modal-overlay" v-if="showEditModal" @click.self="showEditModal = false">
+      <div class="modal-content edit-modal">
+        <div class="modal-header">
+          <h3>编辑攻略</h3>
+          <button class="close-btn" @click="showEditModal = false">&times;</button>
+        </div>
+        <div class="edit-modal-body">
+          <div class="form-group">
+            <label>标题</label>
+            <input v-model="editForm.title" class="form-input" placeholder="攻略标题" />
+          </div>
+          <div class="form-group">
+            <label>摘要</label>
+            <textarea v-model="editForm.summary" class="form-input" rows="3" placeholder="攻略摘要"></textarea>
+          </div>
+          <div class="form-group">
+            <label>地点</label>
+            <input v-model="editForm.locationText" class="form-input" placeholder="目的地" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>范围</label>
+              <select v-model="editForm.scope" class="form-input">
+                <option value="domestic">国内游</option>
+                <option value="international">出境游</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>旅行方式</label>
+              <select v-model="editForm.travelMode" class="form-input">
+                <option value="free">自由行</option>
+                <option value="group">跟团游</option>
+                <option value="family">亲子游</option>
+                <option value="honeymoon">蜜月游</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="edit-modal-footer">
+          <button class="cancel-btn" @click="showEditModal = false">取消</button>
+          <button class="submit-btn" @click="submitEditGuide">保存修改</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, reactive, computed, onMounted, watch } from 'vue'
-import request from '../utils/request'
+import request, { triggerAuthError } from '../utils/request'
+import { getCookie } from '../utils/cookie'
 import DOMPurify from 'dompurify'
 
 const props = defineProps({
@@ -400,6 +453,18 @@ const isCollected = ref(false)
 const isFollowing = ref(false)
 const newComment = ref('')
 const showShareModal = ref(false)
+const showEditModal = ref(false)
+const editForm = reactive({
+  title: '',
+  summary: '',
+  content: '',
+  coverImageUrl: '',
+  locationText: '',
+  scope: '',
+  travelMode: '',
+  tagNames: []
+})
+const hotTags = ref([])
 
 // 评论相关
 const replyingTo = ref(null)
@@ -407,13 +472,25 @@ const isLoadingComments = ref(false)
 
 // 当前用户信息
 const currentUser = reactive({
-  avatar: '/img/头像1.jpg',
-  id: 1,
-  nickname: '我'
+  avatar: '/img/avatar-default.png',
+  id: null,
+  nickname: ''
 })
 
-// 热门标签
-const hotTags = ['日本', '京都', '赏樱', '自由行', '美食', '摄影', '穷游', '蜜月']
+const fetchCurrentUser = async () => {
+  const token = getCookie('token')
+  if (!token) return
+  try {
+    const result = await request.get('/api/users/me')
+    if (result.code === 'OK' && result.data) {
+      currentUser.id = result.data.id
+      currentUser.nickname = result.data.nickname || '用户'
+      currentUser.avatar = result.data.avatarUrl || '/img/avatar-default.png'
+    }
+  } catch (err) {
+    console.error('获取用户信息失败:', err)
+  }
+}
 
 // 净化后的HTML内容（防止XSS攻击）
 const sanitizedContent = computed(() => {
@@ -435,19 +512,100 @@ const goToGuide = (guideId) => {
   emit('view-guide', guideId)
 }
 
+// 获取点赞状态
+const fetchLikeStatus = async (guideId) => {
+  try {
+    const result = await request.get(`/api/guides/${guideId}/like`)
+    if (result.code === 'OK' || result.code === 200) {
+      isLiked.value = result.data.liked
+      guide.likes = result.data.likesCount
+    }
+  } catch (error) {
+    // 未登录时接口返回401，默认未点赞
+  }
+}
+
 // 点赞
-const toggleLike = () => {
-  isLiked.value = !isLiked.value
+const toggleLike = async () => {
+  const token = getCookie('token')
+  if (!token) {
+    triggerAuthError()
+    return
+  }
+  try {
+    const result = isLiked.value
+      ? await request.delete(`/api/guides/${guide.id}/like`)
+      : await request.post(`/api/guides/${guide.id}/like`)
+    if (result.code === 'OK' || result.code === 200) {
+      isLiked.value = result.data.liked
+      guide.likes = result.data.likesCount
+    }
+  } catch (error) {
+    console.error('点赞操作失败:', error)
+  }
 }
 
 // 收藏
-const toggleCollect = () => {
-  isCollected.value = !isCollected.value
+const fetchFavoriteStatus = async (guideId) => {
+  try {
+    const result = await request.get(`/api/guides/${guideId}/favorite`)
+    if (result.code === 'OK') {
+      isCollected.value = result.data.favorited
+      guide.favoritesCount = result.data.favoritesCount
+    }
+  } catch (error) {
+    // 未登录时返回401，默认未收藏
+  }
+}
+
+const toggleCollect = async () => {
+  const token = getCookie('token')
+  if (!token) {
+    triggerAuthError()
+    return
+  }
+  try {
+    const result = isCollected.value
+      ? await request.delete(`/api/guides/${guide.id}/favorite`)
+      : await request.post(`/api/guides/${guide.id}/favorite`)
+    if (result.code === 'OK') {
+      isCollected.value = result.data.favorited
+      guide.favoritesCount = result.data.favoritesCount
+    }
+  } catch (error) {
+    console.error('收藏操作失败:', error)
+  }
 }
 
 // 关注作者
-const toggleFollow = () => {
-  isFollowing.value = !isFollowing.value
+const fetchFollowStatus = async () => {
+  try {
+    const result = await request.get(`/api/users/${guide.authorId}/follow`)
+    if (result.code === 'OK') {
+      isFollowing.value = result.data.following
+    }
+  } catch (error) {
+    // 未登录默认未关注
+  }
+}
+
+const toggleFollow = async () => {
+  const token = getCookie('token')
+  if (!token) {
+    triggerAuthError()
+    return
+  }
+  try {
+    const result = isFollowing.value
+      ? await request.delete(`/api/users/${guide.authorId}/follow`)
+      : await request.post(`/api/users/${guide.authorId}/follow`)
+    if (result.code === 'OK') {
+      isFollowing.value = result.data.following
+      guide.authorFollowers = result.data.followersCount
+    }
+  } catch (error) {
+    console.error('关注操作失败:', error)
+  }
 }
 
 // 格式化时间
@@ -482,13 +640,10 @@ const loadComments = async () => {
   try {
     const result = await request.get(`/api/guides/comments/${guide.id}`)
     if (result.code === 'OK') {
-      // 为每条评论添加 isLiked 状态
       guide.comments = (result.data || []).map(comment => ({
         ...comment,
-        isLiked: false,
         replies: (comment.replies || []).map(reply => ({
-          ...reply,
-          isLiked: false
+          ...reply
         }))
       }))
     }
@@ -544,36 +699,59 @@ const loadComments = async () => {
 // 提交评论
 const submitComment = async () => {
   if (!newComment.value.trim()) return
-  
-  // 这里应该调用API提交评论
-  const newCommentData = {
-    id: Date.now(),
-    guideId: guide.id,
-    userId: currentUser.id,
-    nickname: currentUser.nickname,
-    avatarUrl: currentUser.avatar,
-    content: newComment.value,
-    parentCommentId: replyingTo.value ? replyingTo.value.id : null,
-    likesCount: 0,
-    createdAt: new Date().toISOString(),
-    isLiked: false,
-    replies: []
+
+  const token = getCookie('token')
+  if (!token) {
+    triggerAuthError()
+    return
   }
-  
-  if (replyingTo.value) {
-    // 添加到回复列表
-    const parentComment = guide.comments.find(c => c.id === replyingTo.value.id)
-    if (parentComment) {
-      if (!parentComment.replies) parentComment.replies = []
-      parentComment.replies.push(newCommentData)
+
+  try {
+    const result = await request.post(`/api/guides/${guide.id}/comments`, {
+      content: newComment.value,
+      parentCommentId: replyingTo.value ? replyingTo.value.id : null
+    })
+    if (result.code === 'OK') {
+      const newCommentData = {
+        ...result.data,
+        isLiked: false,
+        replies: []
+      }
+
+      if (replyingTo.value) {
+        const parentComment = guide.comments.find(c => c.id === replyingTo.value.id)
+        if (parentComment) {
+          if (!parentComment.replies) parentComment.replies = []
+          parentComment.replies.push(newCommentData)
+        }
+        replyingTo.value = null
+      } else {
+        guide.comments.unshift(newCommentData)
+      }
+
+      newComment.value = ''
     }
-    replyingTo.value = null
-  } else {
-    // 添加到评论列表顶部
-    guide.comments.unshift(newCommentData)
+  } catch (error) {
+    console.error('提交评论失败:', error)
+    alert('评论提交失败，请稍后重试')
   }
-  
-  newComment.value = ''
+}
+
+// 删除评论
+const deleteComment = async (commentId) => {
+  if (!confirm('确定删除该评论？')) return
+  try {
+    const result = await request.delete(`/api/guides/comments/${commentId}`)
+    if (result.code === 'OK') {
+      guide.comments = guide.comments.map(c => ({
+        ...c,
+        replies: (c.replies || []).filter(r => r.id !== commentId)
+      })).filter(c => c.id !== commentId)
+    }
+  } catch (error) {
+    console.error('删除评论失败:', error)
+    alert('删除评论失败')
+  }
 }
 
 // 取消回复
@@ -584,9 +762,23 @@ const cancelReply = () => {
 
 // 评论点赞
 const toggleCommentLike = async (comment) => {
-  comment.isLiked = !comment.isLiked
-  comment.likesCount += comment.isLiked ? 1 : -1
-  // 这里应该调用API
+  const token = getCookie('token')
+  if (!token) {
+    triggerAuthError()
+    return
+  }
+
+  try {
+    const result = comment.liked
+      ? await request.delete(`/api/guides/comments/${comment.id}/like`)
+      : await request.post(`/api/guides/comments/${comment.id}/like`)
+    if (result.code === 'OK') {
+      comment.liked = result.data.liked
+      comment.likesCount = result.data.likesCount
+    }
+  } catch (error) {
+    console.error('评论点赞操作失败:', error)
+  }
 }
 
 // 回复评论
@@ -606,6 +798,65 @@ const searchByTag = (tag) => {
   console.log('搜索标签:', tag)
 }
 
+// 编辑攻略
+const openEditModal = () => {
+  editForm.title = guide.title
+  editForm.summary = guide.description
+  editForm.content = guide.content
+  editForm.coverImageUrl = guide.coverImage
+  editForm.locationText = guide.location
+  editForm.scope = guide.scope || ''
+  editForm.travelMode = guide.travelMode || ''
+  showEditModal.value = true
+}
+
+const submitEditGuide = async () => {
+  try {
+    const result = await request.put(`/api/guides/${guide.id}`, {
+      title: editForm.title,
+      summary: editForm.summary,
+      contentHtml: editForm.content,
+      coverImageUrl: editForm.coverImageUrl,
+      locationText: editForm.locationText,
+      scope: editForm.scope,
+      travelMode: editForm.travelMode
+    })
+    if (result.code === 'OK') {
+      showEditModal.value = false
+      fetchGuideData(guide.id)
+    }
+  } catch (error) {
+    console.error('编辑攻略失败:', error)
+    alert('编辑攻略失败')
+  }
+}
+
+// 删除攻略
+const deleteGuide = async () => {
+  if (!confirm('确定删除该攻略？此操作不可恢复！')) return
+  try {
+    const result = await request.delete(`/api/guides/${guide.id}`)
+    if (result.code === 'OK') {
+      emit('back-to-community')
+    }
+  } catch (error) {
+    console.error('删除攻略失败:', error)
+    alert('删除攻略失败')
+  }
+}
+
+// 获取热门标签
+const fetchHotTags = async () => {
+  try {
+    const result = await request.get('/api/tags/hot')
+    if (result.code === 'OK' && result.data) {
+      hotTags.value = result.data.map(t => t.name)
+    }
+  } catch (error) {
+    console.error('获取热门标签失败:', error)
+  }
+}
+
 // 攻略数据
 const guide = reactive({
   id: null,
@@ -613,6 +864,7 @@ const guide = reactive({
   description: '',
   coverImage: '',
   location: '',
+  authorId: null,
   author: '',
   authorAvatar: '',
   authorLevel: '',
@@ -637,6 +889,7 @@ const isLoading = ref(false)
 const fetchGuideData = async (id) => {
   if (!id) return
   isLoading.value = true
+  isLiked.value = false
   try {
     const result = await request.get(`/api/guides/${id}`)
     if (result.code === 200 || result.code === 'OK') {
@@ -646,12 +899,13 @@ const fetchGuideData = async (id) => {
       guide.description = data.summary || ''
       guide.coverImage = data.coverImageUrl || '/img/富士山.jpg'
       guide.location = data.locationText || ''
+      guide.authorId = data.authorId
       guide.author = data.authorName || ''
       guide.authorAvatar = data.authorAvatarUrl || '/img/头像1.jpg'
-      guide.authorLevel = '旅行家'
-      guide.authorGuides = 0
-      guide.authorFollowers = 0
-      guide.authorLikes = 0
+      guide.authorLevel = data.authorLevel || '旅行家'
+      guide.authorGuides = data.authorGuidesCount || 0
+      guide.authorFollowers = data.authorFollowersCount || 0
+      guide.authorLikes = data.authorLikedCount || 0
       guide.likes = data.likesCount || 0
       guide.views = data.viewsCount || 0
       guide.publishDate = data.publishedAt ? new Date(data.publishedAt).toLocaleDateString('zh-CN') : ''
@@ -669,6 +923,7 @@ const fetchGuideData = async (id) => {
           image: spot.imageUrl || '/img/富士山.jpg'
         }))
       }))
+      console.log('行程数据:', JSON.stringify(guide.itinerary, null, 2))
       guide.tips = [
         { icon: '最佳', category: '最佳时间', items: ['提前规划行程', '关注天气预报'] },
         { icon: '货币', category: '货币消费', items: ['提前兑换货币', '准备零钱'] },
@@ -683,14 +938,19 @@ const fetchGuideData = async (id) => {
   } finally {
     isLoading.value = false
   }
+  fetchLikeStatus(id)
+  fetchFavoriteStatus(id)
+  fetchFollowStatus()
+  loadComments()
 }
 
 // 页面加载时
 onMounted(() => {
+  fetchCurrentUser()
+  fetchHotTags()
   if (props.guideId) {
     fetchGuideData(props.guideId)
   }
-  loadComments()
 })
 
 // 监听guideId变化
@@ -705,7 +965,7 @@ watch(() => props.guideId, (newId) => {
 /* 页面整体样式 */
 .guide-detail-page {
   min-height: 100vh;
-  background-color: #3D4F2F;
+  background-color: var(--color-bg-primary);
   font-family: 'Noto Sans SC', sans-serif;
 }
 
@@ -730,7 +990,7 @@ watch(() => props.guideId, (newId) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.6) 100%);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.1) 40%, rgba(0, 0, 0, 0.1) 60%, var(--color-bg-primary) 100%);
 }
 
 .header-content {
@@ -767,14 +1027,14 @@ watch(() => props.guideId, (newId) => {
 
 .header-info {
   margin-top: auto;
-  padding-bottom: 40px;
+  padding-bottom: 60px;
 }
 
 .location-tag {
   display: inline-block;
   padding: 8px 20px;
   background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
-  color: #2F3D24;
+  color: var(--color-text-primary);
   border-radius: 20px;
   font-size: 14px;
   margin-bottom: 20px;
@@ -786,7 +1046,7 @@ watch(() => props.guideId, (newId) => {
   font-size: 48px;
   color: white;
   margin-bottom: 20px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 2px 2px 4px rgba(45, 58, 30, 0.3);
   letter-spacing: 2px;
 }
 
@@ -840,7 +1100,7 @@ watch(() => props.guideId, (newId) => {
   width: 18px;
   height: 18px;
   transition: all 0.3s ease;
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0 2px 3px rgba(45, 58, 30, 0.2));
 }
 
 .stat-item:hover .stat-icon {
@@ -863,24 +1123,6 @@ watch(() => props.guideId, (newId) => {
   filter: drop-shadow(0 3px 6px rgba(200, 200, 200, 0.4));
 }
 
-.header-wave {
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-}
-
-.header-wave svg {
-  display: block;
-  width: 100%;
-}
-
-.header-wave {
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-}
 
 /* 主要内容区 */
 .detail-content {
@@ -895,9 +1137,8 @@ watch(() => props.guideId, (newId) => {
 
 /* 文章主体 */
 .article-main section {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
   border-radius: 20px;
   padding: 35px;
   margin-bottom: 30px;
@@ -906,7 +1147,7 @@ watch(() => props.guideId, (newId) => {
 .article-main h2 {
   font-family: 'Noto Serif SC', serif;
   font-size: 26px;
-  color: #F5F0E8;
+  color: var(--color-text-primary);
   margin-bottom: 25px;
   padding-left: 15px;
   border-left: 4px solid #F5F0E8;
@@ -916,7 +1157,7 @@ watch(() => props.guideId, (newId) => {
 .intro-text {
   font-size: 16px;
   line-height: 1.8;
-  color: #D4CFC7;
+  color: var(--color-text-muted);
   margin-bottom: 20px;
 }
 
@@ -928,8 +1169,8 @@ watch(() => props.guideId, (newId) => {
 
 .tag {
   padding: 8px 18px;
-  background: rgba(245, 240, 232, 0.1);
-  color: #F5F0E8;
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--color-text-primary);
   border-radius: 20px;
   font-size: 14px;
   cursor: pointer;
@@ -938,7 +1179,7 @@ watch(() => props.guideId, (newId) => {
 
 .tag:hover {
   background: #F5F0E8;
-  color: #2F3D24;
+  color: var(--color-text-primary);
 }
 
 /* 行程时间线 */
@@ -953,7 +1194,7 @@ watch(() => props.guideId, (newId) => {
   top: 0;
   bottom: 0;
   width: 2px;
-  background: linear-gradient(to bottom, #F5F0E8, rgba(245, 240, 232, 0.3));
+  background: linear-gradient(to bottom, var(--color-primary), var(--color-primary-light));
 }
 
 .timeline-item {
@@ -965,7 +1206,7 @@ watch(() => props.guideId, (newId) => {
 }
 
 .timeline-item:hover {
-  background: rgba(245, 240, 232, 0.05);
+  background: rgba(255, 255, 255, 0.4);
 }
 
 .timeline-marker {
@@ -979,9 +1220,9 @@ watch(() => props.guideId, (newId) => {
 .day-num {
   display: inline-block;
   padding: 8px 16px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(245, 240, 232, 0.3);
-  color: #F5F0E8;
+  background: rgba(255, 255, 255, 0.6);
+  border: 2px solid var(--color-card-border);
+  color: var(--color-text-secondary);
   border-radius: 20px;
   font-size: 14px;
   font-weight: 600;
@@ -990,9 +1231,9 @@ watch(() => props.guideId, (newId) => {
 
 .timeline-item.active .day-num,
 .timeline-item:hover .day-num {
-  background: #F5F0E8;
-  color: #2F3D24;
-  border-color: #F5F0E8;
+  background: var(--color-primary);
+  color: #FFFFFF;
+  border-color: var(--color-primary);
 }
 
 .timeline-content {
@@ -1002,12 +1243,12 @@ watch(() => props.guideId, (newId) => {
 
 .timeline-content h3 {
   font-size: 20px;
-  color: #F5F0E8;
+  color: var(--color-text-primary);
   margin-bottom: 8px;
 }
 
 .timeline-content > p {
-  color: #D4CFC7;
+  color: var(--color-text-muted);
   font-size: 15px;
   margin-bottom: 15px;
 }
@@ -1015,7 +1256,7 @@ watch(() => props.guideId, (newId) => {
 .day-details {
   margin-top: 20px;
   padding-top: 20px;
-  border-top: 1px dashed rgba(255, 255, 255, 0.15);
+  border-top: 1px dashed var(--color-border-light);
   animation: slideDown 0.3s ease;
 }
 
@@ -1034,7 +1275,7 @@ watch(() => props.guideId, (newId) => {
   display: flex;
   gap: 20px;
   padding: 20px;
-  background: rgba(245, 240, 232, 0.05);
+  background: rgba(255, 255, 255, 0.5);
   border-radius: 15px;
   margin-bottom: 15px;
 }
@@ -1049,13 +1290,13 @@ watch(() => props.guideId, (newId) => {
 
 .spot-info h4 {
   font-size: 17px;
-  color: #F5F0E8;
+  color: var(--color-text-primary);
   margin-bottom: 8px;
 }
 
 .spot-info p {
   font-size: 14px;
-  color: #D4CFC7;
+  color: var(--color-text-muted);
   line-height: 1.6;
   margin-bottom: 10px;
 }
@@ -1064,7 +1305,7 @@ watch(() => props.guideId, (newId) => {
   display: flex;
   gap: 20px;
   font-size: 13px;
-  color: #A8A29E;
+  color: var(--color-text-muted);
 }
 
 .spot-meta .time,
@@ -1077,7 +1318,7 @@ watch(() => props.guideId, (newId) => {
 
 .spot-meta .time:hover,
 .spot-meta .duration:hover {
-  color: #F5F0E8;
+  color: var(--color-primary);
   transform: translateY(-1px);
 }
 
@@ -1085,7 +1326,7 @@ watch(() => props.guideId, (newId) => {
   width: 15px;
   height: 15px;
   transition: all 0.3s ease;
-  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.08));
+  filter: drop-shadow(0 2px 2px rgba(45, 58, 30, 0.08));
 }
 
 .spot-meta .time:hover .meta-icon,
@@ -1094,7 +1335,7 @@ watch(() => props.guideId, (newId) => {
 }
 
 .spot-meta .time:hover .time-icon {
-  filter: drop-shadow(0 3px 4px rgba(245, 240, 232, 0.25));
+  filter: drop-shadow(0 3px 4px rgba(45, 58, 30, 0.1));
 }
 
 .spot-meta .duration:hover .duration-icon {
@@ -1105,12 +1346,12 @@ watch(() => props.guideId, (newId) => {
 .rich-content {
   font-size: 16px;
   line-height: 1.9;
-  color: #D4CFC7;
+  color: var(--color-text-muted);
 }
 
 .rich-content h3 {
   font-size: 22px;
-  color: #F5F0E8;
+  color: var(--color-text-primary);
   margin: 30px 0 15px;
   font-family: 'Noto Serif SC', serif;
 }
@@ -1128,9 +1369,9 @@ watch(() => props.guideId, (newId) => {
 
 .tip-card {
   padding: 25px;
-  background: rgba(245, 240, 232, 0.05);
+  background: rgba(255, 255, 255, 0.4);
   border-radius: 15px;
-  border: 1px solid rgba(245, 240, 232, 0.15);
+  border: 1px solid var(--color-card-border);
 }
 
 .tip-icon {
@@ -1140,7 +1381,7 @@ watch(() => props.guideId, (newId) => {
 
 .tip-card h3 {
   font-size: 18px;
-  color: #F5F0E8;
+  color: var(--color-text-primary);
   margin-bottom: 15px;
   border: none;
   padding: 0;
@@ -1153,7 +1394,7 @@ watch(() => props.guideId, (newId) => {
 
 .tip-card li {
   font-size: 14px;
-  color: #D4CFC7;
+  color: var(--color-text-muted);
   padding: 6px 0;
   padding-left: 20px;
   position: relative;
@@ -1163,7 +1404,7 @@ watch(() => props.guideId, (newId) => {
   content: '•';
   position: absolute;
   left: 0;
-  color: #F5F0E8;
+  color: var(--color-text-primary);
   font-weight: bold;
 }
 
@@ -1179,7 +1420,7 @@ watch(() => props.guideId, (newId) => {
   padding: 30px 40px;
   background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
   border-radius: 20px;
-  color: #2F3D24;
+  color: var(--color-text-primary);
   flex-shrink: 0;
 }
 
@@ -1232,7 +1473,7 @@ watch(() => props.guideId, (newId) => {
 .budget-label {
   width: 60px;
   font-size: 14px;
-  color: #D4CFC7;
+  color: var(--color-text-muted);
 }
 
 .budget-bar {
@@ -1254,7 +1495,7 @@ watch(() => props.guideId, (newId) => {
   width: 70px;
   text-align: right;
   font-size: 14px;
-  color: #F5F0E8;
+  color: var(--color-text-primary);
   font-weight: 500;
 }
 
@@ -1274,31 +1515,31 @@ watch(() => props.guideId, (newId) => {
   align-items: center;
   gap: 8px;
   padding: 12px 28px;
-  border: 2px solid rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid var(--color-card-border);
+  background: var(--color-card-bg);
   border-radius: 25px;
   font-size: 15px;
-  color: #D4CFC7;
+  color: var(--color-text-secondary);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .action-btn:hover {
-  border-color: #F5F0E8;
-  color: #F5F0E8;
+  border-color: var(--color-primary);
+  color: var(--color-text-primary);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(245, 240, 232, 0.15);
+  box-shadow: 0 4px 12px rgba(45, 58, 30, 0.08);
 }
 
 .action-btn.active {
-  background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
-  border-color: #F5F0E8;
-  color: #2F3D24;
-  box-shadow: 0 4px 15px rgba(245, 240, 232, 0.3);
+  background: var(--color-bg-secondary);
+  border-color: var(--color-primary);
+  color: var(--color-primary-dark);
+  box-shadow: 0 4px 15px rgba(45, 58, 30, 0.1);
 }
 
 .action-btn.active .btn-icon {
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(0 2px 3px rgba(45, 58, 30, 0.1));
 }
 
 .btn-icon {
@@ -1312,19 +1553,19 @@ watch(() => props.guideId, (newId) => {
 }
 
 .like-icon {
-  filter: drop-shadow(0 2px 3px rgba(224, 112, 112, 0.15));
+  filter: drop-shadow(0 2px 3px rgba(224, 112, 112, 0.2));
 }
 
 .collect-icon {
-  filter: drop-shadow(0 2px 3px rgba(245, 240, 232, 0.15));
+  filter: drop-shadow(0 2px 3px rgba(45, 58, 30, 0.08));
 }
 
 .share-icon {
-  filter: drop-shadow(0 2px 3px rgba(245, 240, 232, 0.15));
+  filter: drop-shadow(0 2px 3px rgba(45, 58, 30, 0.08));
 }
 
 .action-btn.active .like-icon {
-  filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.3));
+  filter: drop-shadow(0 2px 4px rgba(224, 112, 112, 0.3));
 }
 
 .btn-text {
@@ -1337,7 +1578,7 @@ watch(() => props.guideId, (newId) => {
   gap: 15px;
   margin-bottom: 30px;
   padding-bottom: 30px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--color-card-border);
 }
 
 .user-avatar {
@@ -1346,7 +1587,7 @@ watch(() => props.guideId, (newId) => {
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid var(--color-card-border);
 }
 
 .input-area {
@@ -1364,22 +1605,22 @@ watch(() => props.guideId, (newId) => {
   margin-bottom: 10px;
   transition: border-color 0.3s ease;
   background: rgba(255, 255, 255, 0.06);
-  color: #F5F0E8;
+  color: var(--color-text-primary);
 }
 
 .input-area textarea:focus {
   outline: none;
-  border-color: #F5F0E8;
+  border-color: var(--color-primary);
 }
 
 .input-area textarea::placeholder {
-  color: #A8A29E;
+  color: var(--color-text-muted);
 }
 
 .submit-btn {
   padding: 12px 30px;
   background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
-  color: #2F3D24;
+  color: var(--color-text-primary);
   border: none;
   border-radius: 25px;
   font-size: 15px;
@@ -1390,7 +1631,7 @@ watch(() => props.guideId, (newId) => {
 
 .submit-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(245, 240, 232, 0.4);
+  box-shadow: 0 6px 20px rgba(45, 58, 30, 0.12);
 }
 
 .comments-list {
@@ -1426,17 +1667,17 @@ watch(() => props.guideId, (newId) => {
 
 .commenter-name {
   font-weight: 600;
-  color: #F5F0E8;
+  color: var(--color-text-primary);
 }
 
 .comment-time {
   font-size: 13px;
-  color: #A8A29E;
+  color: var(--color-text-muted);
 }
 
 .comment-text {
   font-size: 15px;
-  color: #D4CFC7;
+  color: var(--color-text-muted);
   line-height: 1.7;
   margin-bottom: 10px;
 }
@@ -1449,7 +1690,7 @@ watch(() => props.guideId, (newId) => {
 .comment-action {
   background: none;
   border: none;
-  color: #A8A29E;
+  color: var(--color-text-muted);
   font-size: 13px;
   cursor: pointer;
   transition: color 0.3s ease;
@@ -1457,7 +1698,7 @@ watch(() => props.guideId, (newId) => {
 
 .comment-action:hover,
 .comment-action.active {
-  color: #F5F0E8;
+  color: var(--color-text-primary);
 }
 
 .comment-action.like-action {
@@ -1478,11 +1719,11 @@ watch(() => props.guideId, (newId) => {
 }
 
 .comment-action.like-action.active {
-  color: #e07070;
+  color: #E07070;
 }
 
 .comment-action.like-action.active .action-icon path {
-  stroke: #e07070;
+  stroke: #E07070;
 }
 
 /* 回复列表 */
@@ -1526,17 +1767,17 @@ watch(() => props.guideId, (newId) => {
 .reply-name {
   font-weight: 600;
   font-size: 14px;
-  color: #F5F0E8;
+  color: var(--color-text-primary);
 }
 
 .reply-time {
   font-size: 12px;
-  color: #A8A29E;
+  color: var(--color-text-muted);
 }
 
 .reply-text {
   font-size: 14px;
-  color: #D4CFC7;
+  color: var(--color-text-muted);
   line-height: 1.6;
   margin-bottom: 8px;
 }
@@ -1556,8 +1797,8 @@ watch(() => props.guideId, (newId) => {
 
 .cancel-btn {
   padding: 10px 20px;
-  background: rgba(255, 255, 255, 0.08);
-  color: #D4CFC7;
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-muted);
   border: none;
   border-radius: 20px;
   font-size: 14px;
@@ -1566,15 +1807,15 @@ watch(() => props.guideId, (newId) => {
 }
 
 .cancel-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
-  color: #F5F0E8;
+  background: var(--color-card-border);
+  color: var(--color-text-primary);
 }
 
 /* 加载状态 */
 .loading-comments {
   text-align: center;
   padding: 40px;
-  color: #A8A29E;
+  color: var(--color-text-muted);
 }
 
 /* 侧边栏 */
@@ -1585,9 +1826,9 @@ watch(() => props.guideId, (newId) => {
 }
 
 .sidebar-card {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--color-card-border);
   border-radius: 20px;
   padding: 25px;
   margin-bottom: 25px;
@@ -1596,7 +1837,7 @@ watch(() => props.guideId, (newId) => {
 .sidebar-card h3 {
   font-family: 'Noto Serif SC', serif;
   font-size: 20px;
-  color: #F5F0E8;
+  color: var(--color-text-primary);
   margin-bottom: 20px;
 }
 
@@ -1613,19 +1854,19 @@ watch(() => props.guideId, (newId) => {
   height: 70px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #F5F0E8;
+  border: 3px solid var(--color-primary);
 }
 
 .author-info h3 {
   font-size: 18px;
   margin-bottom: 5px;
-  color: #F5F0E8;
+  color: var(--color-text-primary);
 }
 
 .author-level {
   font-size: 13px;
-  color: #F5F0E8;
-  background: rgba(245, 240, 232, 0.15);
+  color: var(--color-primary-dark);
+  background: var(--color-bg-tertiary);
   padding: 4px 12px;
   border-radius: 12px;
 }
@@ -1634,8 +1875,8 @@ watch(() => props.guideId, (newId) => {
   display: flex;
   justify-content: space-around;
   padding: 20px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--color-card-border);
+  border-bottom: 1px solid var(--color-card-border);
   margin-bottom: 20px;
 }
 
@@ -1647,19 +1888,19 @@ watch(() => props.guideId, (newId) => {
   display: block;
   font-size: 20px;
   font-weight: 700;
-  color: #F5F0E8;
+  color: var(--color-text-primary);
 }
 
 .stat-label {
   font-size: 13px;
-  color: #A8A29E;
+  color: var(--color-text-muted);
 }
 
 .follow-btn {
   width: 100%;
   padding: 12px;
-  background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
-  color: #2F3D24;
+  background: var(--gradient-secondary);
+  color: #FFFFFF;
   border: none;
   border-radius: 25px;
   font-size: 15px;
@@ -1670,12 +1911,22 @@ watch(() => props.guideId, (newId) => {
 
 .follow-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(245, 240, 232, 0.4);
+  box-shadow: 0 6px 20px rgba(45, 58, 30, 0.12);
 }
 
 .follow-btn.following {
-  background: rgba(255, 255, 255, 0.1);
-  color: #A8A29E;
+  background: var(--color-bg-tertiary);
+  color: var(--color-primary-dark);
+}
+
+.self-badge {
+  width: 100%;
+  padding: 12px;
+  text-align: center;
+  background: var(--color-bg-secondary);
+  color: var(--color-text-muted);
+  border-radius: 12px;
+  font-size: 14px;
 }
 
 /* 相关攻略 */
@@ -1695,7 +1946,7 @@ watch(() => props.guideId, (newId) => {
 }
 
 .related-item:hover {
-  background: rgba(245, 240, 232, 0.08);
+  background: var(--color-bg-secondary);
 }
 
 .related-item img {
@@ -1708,7 +1959,7 @@ watch(() => props.guideId, (newId) => {
 
 .related-info h4 {
   font-size: 15px;
-  color: #F5F0E8;
+  color: var(--color-text-primary);
   margin-bottom: 5px;
   line-height: 1.4;
   display: -webkit-box;
@@ -1719,7 +1970,7 @@ watch(() => props.guideId, (newId) => {
 
 .related-info span {
   font-size: 12px;
-  color: #A8A29E;
+  color: var(--color-text-muted);
 }
 
 /* 热门标签 */
@@ -1731,17 +1982,17 @@ watch(() => props.guideId, (newId) => {
 
 .tag-item {
   padding: 8px 16px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--color-bg-tertiary);
   border-radius: 20px;
   font-size: 13px;
-  color: #D4CFC7;
+  color: var(--color-text-secondary);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .tag-item:hover {
-  background: #F5F0E8;
-  color: #2F3D24;
+  background: var(--color-primary);
+  color: #FFFFFF;
 }
 
 /* 分享模态框 */
@@ -1751,7 +2002,7 @@ watch(() => props.guideId, (newId) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(45, 58, 30, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1760,7 +2011,7 @@ watch(() => props.guideId, (newId) => {
 }
 
 .share-modal {
-  background: #3D4F2F;
+  background: var(--color-primary);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 24px;
   padding: 30px;
@@ -1790,14 +2041,14 @@ watch(() => props.guideId, (newId) => {
 .modal-header h3 {
   font-size: 22px;
   font-family: 'Noto Serif SC', serif;
-  color: #F5F0E8;
+  color: var(--color-text-primary);
 }
 
 .close-btn {
   background: none;
   border: none;
   font-size: 28px;
-  color: #A8A29E;
+  color: var(--color-text-muted);
   cursor: pointer;
 }
 
@@ -1831,7 +2082,136 @@ watch(() => props.guideId, (newId) => {
 
 .share-option span:last-child {
   font-size: 14px;
-  color: #D4CFC7;
+  color: var(--color-text-muted);
+}
+
+/* 编辑/删除按钮 */
+.edit-btn {
+  color: var(--color-primary) !important;
+}
+
+.delete-btn {
+  color: #e07070 !important;
+}
+
+.edit-btn:hover .btn-icon {
+  transform: scale(1.1);
+}
+
+.delete-btn:hover .btn-icon {
+  transform: scale(1.1);
+}
+
+/* 编辑弹窗 */
+.edit-modal {
+  max-width: 560px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.edit-modal .modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.edit-modal .modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.edit-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+}
+
+.edit-modal-body .form-group {
+  margin-bottom: 16px;
+}
+
+.edit-modal-body .form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin-bottom: 6px;
+}
+
+.edit-modal-body .form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.edit-modal-body .form-row .form-group {
+  flex: 1;
+}
+
+.edit-modal-body .form-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.edit-modal-body .form-input:focus {
+  border-color: var(--color-primary);
+}
+
+.edit-modal-body textarea.form-input {
+  resize: vertical;
+}
+
+.edit-modal-body select.form-input {
+  cursor: pointer;
+}
+
+.edit-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 24px 20px;
+  border-top: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.edit-modal-footer .cancel-btn {
+  padding: 10px 20px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.edit-modal-footer .submit-btn {
+  padding: 10px 20px;
+  background: var(--color-primary);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.edit-modal-footer .submit-btn:hover {
+  opacity: 0.85;
 }
 
 /* 响应式设计 */

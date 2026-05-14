@@ -34,8 +34,9 @@
       <div class="register-card">
         <div class="header">
           <div class="logo">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M4 20c0-3.314 3.582-6 8-6s8 2.686 8 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
             </svg>
           </div>
           <h1>注册新账户</h1>
@@ -274,7 +275,7 @@ const closeSuccessModal = () => {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: linear-gradient(135deg, #2F3D24 0%, #3D4F2F 50%, #2F3D24 100%);
+  background: linear-gradient(135deg, #E8F2E0 0%, #F5FAF0 50%, #E8F2E0 100%);
   position: relative;
   overflow: hidden;
 }
@@ -319,14 +320,14 @@ const closeSuccessModal = () => {
 }
 
 .register-card {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.85);
   border-radius: 24px;
   padding: 48px 40px;
   box-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.2),
-    0 8px 40px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+    0 4px 20px rgba(45, 58, 30, 0.08),
+    0 8px 40px rgba(45, 58, 30, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(200, 221, 184, 0.5);
   position: relative;
   overflow: hidden;
   backdrop-filter: blur(20px);
@@ -355,26 +356,28 @@ const closeSuccessModal = () => {
   width: 64px;
   height: 64px;
   margin: 0 auto 20px;
-  background: var(--gradient-primary);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(245, 240, 232, 0.3);
   position: relative;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
 }
 
-@keyframes logoFloat {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  25% { transform: translateY(-3px) rotate(1deg); }
-  75% { transform: translateY(-2px) rotate(-1deg); }
+.logo:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.1);
 }
 
 .logo svg {
   width: 32px;
   height: 32px;
-  fill: white;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+  color: var(--color-primary);
 }
 
 .header h1 {
@@ -496,14 +499,13 @@ const closeSuccessModal = () => {
   font-size: 15px;
   font-weight: 500;
   letter-spacing: 3px;
-  color: white;
-  background: var(--gradient-primary);
-  border: none;
+  color: #FFFFFF;
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
   border-radius: 20px;
   cursor: pointer;
   transition: all 0.3s ease;
   animation: fadeIn 0.6s ease-out 0.4s backwards;
-  box-shadow: 0 2px 8px rgba(245, 240, 232, 0.3);
 }
 
 .submit-btn:disabled {
@@ -514,7 +516,9 @@ const closeSuccessModal = () => {
 
 .submit-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(245, 240, 232, 0.4);
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+  box-shadow: 0 4px 12px rgba(91, 140, 62, 0.3);
 }
 
 .info-text {
@@ -616,16 +620,16 @@ const closeSuccessModal = () => {
 }
 
 .modal-content {
-  background: rgba(61, 79, 47, 0.95);
+  background: rgba(255, 255, 255, 0.98);
   border-radius: 24px;
   padding: 48px 40px;
   text-align: center;
   max-width: 360px;
   width: 100%;
   box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.3),
-    0 0 0 1px rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+    0 20px 60px rgba(45, 58, 30, 0.12),
+    0 0 0 1px rgba(200, 221, 184, 0.3);
+  border: 1px solid rgba(200, 221, 184, 0.5);
   animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -696,18 +700,19 @@ const closeSuccessModal = () => {
   font-size: 15px;
   font-weight: 500;
   letter-spacing: 2px;
-  color: white;
-  background: var(--gradient-primary);
-  border: none;
+  color: #FFFFFF;
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
   border-radius: 16px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(245, 240, 232, 0.3);
 }
 
 .modal-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(245, 240, 232, 0.4);
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+  box-shadow: 0 6px 20px rgba(91, 140, 62, 0.3);
 }
 
 .modal-btn:active {

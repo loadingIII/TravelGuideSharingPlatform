@@ -3,8 +3,7 @@
     <!-- 沉浸式页面头部 -->
     <header class="hero-header">
       <div class="hero-bg">
-        <img src="/img/埃菲尔铁塔.jpg" alt="埃菲尔铁塔" class="hero-image">
-        <div class="hero-overlay"></div>
+        <div class="hero-gradient"></div>
         <div class="hero-grain"></div>
       </div>
       <div class="hero-content">
@@ -25,20 +24,15 @@
               <circle cx="11" cy="11" r="8"/>
               <path d="M21 21l-4.35-4.35"/>
             </svg>
-            <input 
-              type="text" 
-              v-model="searchQuery" 
+            <input
+              type="text"
+              v-model="searchQuery"
               placeholder="搜索目的地..."
               @keyup.enter="handleSearch"
             >
             <button class="search-btn" @click="handleSearch">探索</button>
           </div>
         </div>
-      </div>
-      <div class="hero-wave">
-        <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 100L48 94C96 88 192 76 288 70C384 64 480 64 576 68C672 72 768 80 864 82C960 84 1056 80 1152 74C1248 68 1344 60 1392 56L1440 52V100H0Z" fill="#3D4F2F"/>
-        </svg>
       </div>
     </header>
 
@@ -304,7 +298,7 @@ onMounted(() => fetchDestinations())
 <style scoped>
 .destination-guides-page {
   min-height: 100vh;
-  background-color: #3D4F2F;
+  background-color: var(--color-bg-primary);
   font-family: var(--font-body);
 }
 
@@ -317,8 +311,8 @@ onMounted(() => fetchDestinations())
 /* Hero Header */
 .hero-header {
   position: relative;
-  height: 70vh;
-  min-height: 480px;
+  height: 45vh;
+  min-height: 320px;
   overflow: hidden;
   display: flex;
   align-items: flex-end;
@@ -327,43 +321,29 @@ onMounted(() => fetchDestinations())
 .hero-bg {
   position: absolute;
   inset: 0;
+  background-image: url('/img/back3.png');
+  background-size: cover;
+  background-position: center;
 }
 
-.hero-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(1.05);
-  animation: heroZoom 20s ease-in-out infinite alternate;
-}
-
-@keyframes heroZoom {
-  0% { transform: scale(1.05); }
-  100% { transform: scale(1.15); }
-}
-
-.hero-overlay {
+.hero-gradient {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(0,0,0,0.1) 0%,
-    rgba(0,0,0,0.3) 40%,
-    rgba(0,0,0,0.75) 100%
-  );
+  background:
+    linear-gradient(to bottom, rgba(45, 58, 30, 0.25) 0%, rgba(45, 58, 30, 0.45) 100%);
 }
 
 .hero-grain {
   position: absolute;
   inset: 0;
-  opacity: 0.15;
+  opacity: 0.12;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
 }
 
 .hero-content {
   position: relative;
   z-index: 2;
-  padding: 40px 60px 60px;
+  padding: 40px 60px 48px;
   max-width: 1400px;
   margin: 0 auto;
   width: 100%;
@@ -396,14 +376,14 @@ onMounted(() => fetchDestinations())
 }
 
 .hero-text {
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .hero-tag {
   display: inline-block;
   padding: 6px 16px;
   background: linear-gradient(135deg, #F5F0E8, #FAF8F5);
-  color: #2F3D24;
+  color: var(--color-text-primary);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 3px;
@@ -418,7 +398,7 @@ onMounted(() => fetchDestinations())
   margin: 0 0 16px;
   line-height: 1.1;
   letter-spacing: -1px;
-  text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  text-shadow: 0 4px 20px rgba(45, 58, 30, 0.3);
 }
 
 .hero-text p {
@@ -474,7 +454,7 @@ onMounted(() => fetchDestinations())
 .search-btn {
   padding: 12px 28px;
   background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
-  color: #2F3D24;
+  color: var(--color-text-primary);
   border: none;
   border-radius: 30px;
   font-size: 15px;
@@ -488,18 +468,7 @@ onMounted(() => fetchDestinations())
   box-shadow: 0 4px 15px rgba(245,240,232,0.3);
 }
 
-.hero-wave {
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  z-index: 3;
-}
 
-.hero-wave svg {
-  display: block;
-  width: 100%;
-}
 
 /* Region Section */
 .region-section {
@@ -527,10 +496,10 @@ onMounted(() => fetchDestinations())
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.6);
+  border: 1px solid var(--color-card-border);
   border-radius: 30px;
-  color: #D4CFC7;
+  color: var(--color-text-secondary);
   font-size: 15px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -539,15 +508,15 @@ onMounted(() => fetchDestinations())
 }
 
 .region-chip:hover {
-  background: rgba(255,255,255,0.1);
-  border-color: rgba(245,240,232,0.3);
-  color: #F5F2ED;
+  background: rgba(255,255,255,0.9);
+  border-color: var(--color-primary);
+  color: var(--color-primary-dark);
 }
 
 .region-chip.active {
-  background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
-  border-color: #F5F0E8;
-  color: #2F3D24;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #FFFFFF;
 }
 
 /* Destinations Section */
@@ -594,7 +563,7 @@ onMounted(() => fetchDestinations())
   align-items: center;
   justify-content: center;
   padding: 100px 20px;
-  color: #D4CFC7;
+  color: var(--color-text-muted);
 }
 
 .error-icon-wrap {
@@ -618,7 +587,7 @@ onMounted(() => fetchDestinations())
   margin-top: 20px;
   padding: 12px 32px;
   background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
-  color: #2F3D24;
+  color: var(--color-text-primary);
   border: none;
   border-radius: 30px;
   font-size: 14px;
@@ -648,7 +617,7 @@ onMounted(() => fetchDestinations())
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.5);
   border-radius: 24px;
   margin-bottom: 20px;
 }
@@ -691,7 +660,7 @@ onMounted(() => fetchDestinations())
 
 .destination-card:hover {
   transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+  box-shadow: 0 24px 60px rgba(45, 58, 30, 0.4);
 }
 
 /* Card Variations */
@@ -720,7 +689,7 @@ onMounted(() => fetchDestinations())
     180deg,
     transparent 0%,
     transparent 40%,
-    rgba(0,0,0,0.85) 100%
+    rgba(45, 58, 30, 0.85) 100%
   );
 }
 
@@ -757,7 +726,7 @@ onMounted(() => fetchDestinations())
   align-items: center;
   gap: 6px;
   padding: 8px 14px;
-  background: rgba(0,0,0,0.5);
+  background: rgba(45, 58, 30, 0.5);
   backdrop-filter: blur(8px);
   border-radius: 20px;
   color: #ffd700;
@@ -845,7 +814,7 @@ onMounted(() => fetchDestinations())
   gap: 8px;
   padding: 10px 20px;
   background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
-  color: #2F3D24;
+  color: var(--color-text-primary);
   border-radius: 30px;
   font-size: 14px;
   font-weight: 600;
@@ -878,11 +847,11 @@ onMounted(() => fetchDestinations())
   align-items: center;
   gap: 8px;
   padding: 12px 20px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.5);
+  border: 1px solid var(--color-card-border);
   border-radius: 30px;
   font-size: 14px;
-  color: #D4CFC7;
+  color: var(--color-text-muted);
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -895,7 +864,7 @@ onMounted(() => fetchDestinations())
 .page-btn:hover:not(:disabled) {
   background: rgba(255,255,255,0.1);
   border-color: rgba(245,240,232,0.3);
-  color: #F5F2ED;
+  color: var(--color-text-primary);
 }
 
 .page-btn:disabled {
@@ -942,7 +911,7 @@ onMounted(() => fetchDestinations())
   .card-1 { grid-column: span 2; }
   
   .hero-content {
-    padding: 40px;
+    padding: 32px 40px 40px;
   }
   
   .hero-search {
@@ -960,7 +929,7 @@ onMounted(() => fetchDestinations())
   }
   
   .hero-content {
-    padding: 24px;
+    padding: 24px 24px 32px;
   }
   
   .region-scroll {

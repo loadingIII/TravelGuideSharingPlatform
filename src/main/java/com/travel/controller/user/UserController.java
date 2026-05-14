@@ -41,6 +41,27 @@ public class UserController {
         return ApiResponse.success(userService.getCurrentUser());
     }
 
+    @GetMapping("/{id}")
+    public ApiResponse<UserMeVO> getUserProfile(@PathVariable("id") Long id) {
+        return ApiResponse.success(userService.getByUserId(id));
+    }
+
+    @GetMapping("/{id}/guides")
+    public ApiResponse<PageResult<GuideListItemVO>> userGuides(
+            @PathVariable("id") Long id,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
+        return ApiResponse.success(guideService.listGuidesByAuthor(id, page, pageSize));
+    }
+
+    @GetMapping("/{id}/stories")
+    public ApiResponse<PageResult<GuideStoryVO>> userStories(
+            @PathVariable("id") Long id,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
+        return ApiResponse.success(guideStoryService.getStoriesByUserId(id, page, pageSize));
+    }
+
     /**
      * 更新当前用户资料
      * 修改当前登录用户的个人资料信息，如昵称、头像、简介等

@@ -2,6 +2,7 @@ package com.travel.service.impl;
 
 import com.travel.pojo.common.exception.BusinessException;
 import com.travel.pojo.common.exception.ErrorCode;
+import com.travel.mapper.GuideCommentLikeMapper;
 import com.travel.mapper.GuideCommentMapper;
 import com.travel.mapper.GuideMapper;
 import com.travel.mapper.UserProfileMapper;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -36,6 +38,7 @@ public class GuideCommentServiceImpl implements GuideCommentService {
     private final GuideCommentMapper guideCommentMapper;
     private final GuideMapper guideMapper;
     private final UserProfileMapper userProfileMapper;
+    private final GuideCommentLikeMapper guideCommentLikeMapper;
 
     /**
      * 获取攻略的评论树形列表
@@ -50,15 +53,24 @@ public class GuideCommentServiceImpl implements GuideCommentService {
         // 1. 查询所有评论（扁平列表，包含评论者昵称和头像）
         List<GuideComment> allComments = guideCommentMapper.listByGuideId(guideId);
 
-        // 2. 按 parentCommentId 分组：key=null 的是一级评论，key=评论ID 的是该评论的回复
+        // 2. 获取当前用户已点赞的评论ID集合（未登录则为空）
+        Long currentUserId = UserContext.requireUserId();
+        Set<Long> likedCommentIds = currentUserId != null
+                ? allComments.stream()
+                        .map(GuideComment::getId)
+                        .filter(id -> guideCommentLikeMapper.exists(id, currentUserId) > 0)
+                        .collect(Collectors.toSet())
+                : Collections.emptySet();
+
+        // 3. 按 parentCommentId 分组：key=null 的是一级评论，key=评论ID 的是该评论的回复
         Map<Long, List<GuideComment>> replyGroup = allComments.stream()
                 .filter(c -> c.getParentCommentId() != null)
                 .collect(Collectors.groupingBy(GuideComment::getParentCommentId));
 
-        // 3. 筛选出一级评论，组装树形结构返回
+        // 4. 筛选出一级评论，组装树形结构返回
         return allComments.stream()
                 .filter(c -> c.getParentCommentId() == null)
-                .map(c -> toCommentVO(c, replyGroup))
+                .map(c -> toCommentVO(c, replyGroup, likedCommentIds))
                 .toList();
     }
 
@@ -92,6 +104,7 @@ public class GuideCommentServiceImpl implements GuideCommentService {
                 .parentCommentId(dto.getParentCommentId())
                 .likesCount(0)
                 .createdAt(comment.getCreatedAt())
+                .liked(false)
                 .replies(null)
                 .build();
     }
@@ -109,11 +122,11 @@ public class GuideCommentServiceImpl implements GuideCommentService {
     /**
      * 将数据库实体转换为 VO，并挂载该评论的回复列表
      */
-    private GuideCommentVO toCommentVO(GuideComment comment, Map<Long, List<GuideComment>> replyGroup) {
+    private GuideCommentVO toCommentVO(GuideComment comment, Map<Long, List<GuideComment>> replyGroup, Set<Long> likedCommentIds) {
         // 获取该评论下的所有回复，如果没有则返回空列表
         List<GuideComment> replies = replyGroup.getOrDefault(comment.getId(), Collections.emptyList());
         List<GuideCommentVO> replyVOs = replies.stream()
-                .map(this::toCommentVOWithoutReplies)
+                .map(r -> toCommentVOWithoutReplies(r, likedCommentIds))
                 .toList();
 
         return GuideCommentVO.builder()
@@ -126,6 +139,7 @@ public class GuideCommentServiceImpl implements GuideCommentService {
                 .parentCommentId(comment.getParentCommentId())
                 .likesCount(comment.getLikesCount())
                 .createdAt(comment.getCreatedAt())
+                .liked(likedCommentIds.contains(comment.getId()))
                 .replies(replyVOs)
                 .build();
     }
@@ -133,7 +147,7 @@ public class GuideCommentServiceImpl implements GuideCommentService {
     /**
      * 将数据库实体转换为 VO（不带回复列表，用于二级回复）
      */
-    private GuideCommentVO toCommentVOWithoutReplies(GuideComment comment) {
+    private GuideCommentVO toCommentVOWithoutReplies(GuideComment comment, Set<Long> likedCommentIds) {
         return GuideCommentVO.builder()
                 .id(comment.getId())
                 .guideId(comment.getGuideId())
@@ -144,6 +158,7 @@ public class GuideCommentServiceImpl implements GuideCommentService {
                 .parentCommentId(comment.getParentCommentId())
                 .likesCount(comment.getLikesCount())
                 .createdAt(comment.getCreatedAt())
+                .liked(likedCommentIds.contains(comment.getId()))
                 .replies(null)
                 .build();
     }

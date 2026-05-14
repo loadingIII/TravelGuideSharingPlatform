@@ -53,8 +53,10 @@ public interface GuideCommentMapper {
     int incrementCommentsCount(@Param("guideId") Long guideId);
 
     @Select("SELECT c.id, c.guide_id, c.user_id, c.content, c.parent_comment_id, " +
-            "c.likes_count, c.status, c.created_at, c.author_name, c.author_avatar_url " +
+            "c.likes_count, c.status, c.created_at, c.author_name, c.author_avatar_url, " +
+            "g.title AS guide_title " +
             "FROM guide_comments c " +
+            "LEFT JOIN guides g ON c.guide_id = g.id " +
             "WHERE c.user_id = #{userId} AND c.is_deleted = 0 " +
             "ORDER BY c.created_at DESC LIMIT #{offset}, #{pageSize}")
     List<GuideComment> selectByUserId(@Param("userId") Long userId, @Param("offset") int offset, @Param("pageSize") int pageSize);

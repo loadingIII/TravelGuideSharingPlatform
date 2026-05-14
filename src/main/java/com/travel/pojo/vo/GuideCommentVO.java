@@ -23,6 +23,9 @@ public class GuideCommentVO {
     private Integer likesCount;
     private LocalDateTime createdAt;
 
+    /** 当前登录用户是否已点赞 */
+    private boolean liked;
+
     /** 子回复列表（仅一级评论携带） */
     private List<GuideCommentVO> replies;
 }

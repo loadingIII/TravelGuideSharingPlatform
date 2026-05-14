@@ -69,6 +69,14 @@
               <span class="stat-value">{{ stats.likes }}</span>
               <span class="stat-label">获赞</span>
             </div>
+            <div class="stat-item clickable" @click="showFollowList('followers')">
+              <span class="stat-value">{{ stats.followers }}</span>
+              <span class="stat-label">粉丝</span>
+            </div>
+            <div class="stat-item clickable" @click="showFollowList('following')">
+              <span class="stat-value">{{ stats.following }}</span>
+              <span class="stat-label">关注</span>
+            </div>
           </div>
 
           <div class="user-menu">
@@ -255,8 +263,8 @@
           <div class="content-list">
             <div v-for="comment in myComments" :key="comment.id" class="content-card comment-card">
               <div class="comment-header">
-                <span class="comment-target">评论了攻略《{{ comment.guide_title }}》</span>
-                <span class="comment-time">{{ formatDate(comment.created_at) }}</span>
+                <span class="comment-target">评论了攻略《{{ comment.guideTitle || '未知攻略' }}》</span>
+                <span class="comment-time">{{ formatDate(comment.createdAt) }}</span>
               </div>
               <p class="comment-content">{{ comment.content }}</p>
               <div class="comment-footer">
@@ -404,20 +412,120 @@
         <div class="edit-modal-body">
           <div class="edit-field">
             <label>标题</label>
-            <input type="text" v-model="editingGuide.title" placeholder="攻略标题">
+            <input type="text" v-model="editingGuide.title" placeholder="给你的攻略起个吸引人的标题">
           </div>
           <div class="edit-field">
             <label>简介</label>
-            <input type="text" v-model="editingGuide.summary" placeholder="一句话描述">
+            <input type="text" v-model="editingGuide.summary" placeholder="一句话描述你的攻略亮点">
+          </div>
+          <div class="edit-form-row">
+            <div class="edit-field">
+              <label>目的地</label>
+              <input type="text" v-model="editingGuide.locationText" placeholder="如：东京、巴黎、清迈">
+            </div>
+            <div class="edit-field">
+              <label>封面图片</label>
+              <div class="edit-upload-area" @click="triggerEditCoverUpload">
+                <img v-if="editCoverPreview || editingGuide.coverImageUrl" :src="editCoverPreview || editingGuide.coverImageUrl" class="edit-cover-preview">
+                <div v-else class="edit-upload-placeholder">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
+                  <span>点击上传封面图片</span>
+                </div>
+                <input type="file" ref="editCoverInput" accept="image/*" style="display: none" @change="handleEditCoverUpload">
+              </div>
+            </div>
+          </div>
+          <div class="edit-form-row">
+            <div class="edit-field">
+              <label>旅行范围</label>
+              <select v-model="editingGuide.scope">
+                <option value="international">出境游</option>
+                <option value="domestic">国内游</option>
+              </select>
+            </div>
+            <div class="edit-field">
+              <label>旅行方式</label>
+              <select v-model="editingGuide.travelMode">
+                <option value="free">自由行</option>
+                <option value="group">跟团游</option>
+                <option value="family">亲子游</option>
+                <option value="honeymoon">蜜月游</option>
+              </select>
+            </div>
           </div>
           <div class="edit-field">
-            <label>详细内容</label>
-            <RichEditor v-model="editingGuide.contentHtml" placeholder="攻略内容" />
+            <label>行程概览</label>
+            <div class="edit-itinerary-list">
+              <div v-for="(day, index) in editingGuide.itineraryDays" :key="index" class="edit-itinerary-item">
+                <div class="edit-itinerary-header">
+                  <span class="edit-day-badge">Day {{ day.dayNo }}</span>
+                  <button class="edit-remove-btn" @click="removeEditDay(index)" v-if="editingGuide.itineraryDays.length > 1">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                  </button>
+                </div>
+                <input type="text" v-model="day.title" placeholder="行程标题，如：抵达东京 & 浅草寺">
+                <input type="text" v-model="day.summary" placeholder="简短描述，如：感受传统日式文化">
+                <div class="edit-spots-list" v-if="day.spots && day.spots.length > 0">
+                  <div v-for="(spot, sIdx) in day.spots" :key="sIdx" class="edit-spot-item">
+                    <div class="edit-spot-top">
+                      <div class="edit-spot-img-upload" @click="triggerEditSpotImg(index, sIdx)">
+                        <img v-if="spot.imageUrl" :src="spot.imageUrl" class="edit-spot-img-preview">
+                        <div v-else class="edit-spot-img-placeholder">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                          </svg>
+                          <span>图片</span>
+                        </div>
+                      </div>
+                      <div class="edit-spot-fields">
+                        <input type="text" v-model="spot.name" placeholder="景点名称">
+                        <input type="text" v-model="spot.description" placeholder="景点描述">
+                        <div class="edit-spot-row">
+                          <input type="text" v-model="spot.time" placeholder="时间 09:00">
+                          <input type="text" v-model="spot.duration" placeholder="时长 2小时">
+                        </div>
+                      </div>
+                    </div>
+                    <button class="edit-remove-spot" @click="removeEditSpot(index, sIdx)">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                    </button>
+                  </div>
+                </div>
+                <button class="edit-add-spot" @click="addEditSpot(index)">+ 添加景点</button>
+              </div>
+              <button class="edit-add-day" @click="addEditDay">+ 添加一天</button>
+            </div>
+          </div>
+          <div class="edit-field">
+            <label>详细攻略</label>
+            <RichEditor v-model="editingGuide.contentHtml" placeholder="分享你的详细旅行经历、攻略心得..." />
           </div>
         </div>
         <div class="edit-modal-footer">
           <button class="btn-cancel" @click="showEditModal = false">取消</button>
           <button class="btn-save" @click="saveGuide">保存</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 粉丝/关注列表弹窗 -->
+    <div class="modal-overlay" v-if="showFollowModal" @click.self="closeFollowModal">
+      <div class="modal-content follow-modal">
+        <div class="modal-header">
+          <h3>{{ followListType === 'followers' ? '粉丝' : '关注' }}</h3>
+          <button class="close-btn" @click="closeFollowModal">&times;</button>
+        </div>
+        <div class="follow-modal-body">
+          <div v-if="followListLoading" class="loading">加载中...</div>
+          <div v-else-if="followList.length === 0" class="empty">暂无数据</div>
+          <div v-else class="follow-list">
+            <div v-for="user in followList" :key="user.userId" class="follow-item" @click="viewPublicProfile(user.userId)">
+              <img :src="user.avatarUrl || '/img/avatar-default.png'" class="follow-avatar">
+              <span class="follow-name">{{ user.nickname || '用户' }}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -440,7 +548,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['back', 'update-user'])
+const emit = defineEmits(['back', 'update-user', 'view-my-guides', 'view-public-profile'])
 
 // 当前选中的标签页
 const currentTab = ref('profile')
@@ -490,7 +598,9 @@ const favoriteTabs = [
 const stats = reactive({
   guides: 0,
   stories: 0,
-  likes: 0
+  likes: 0,
+  followers: 0,
+  following: 0
 })
 
 // 表单数据
@@ -519,6 +629,39 @@ const myStories = ref([])
 const myComments = ref([])
 const likedGuides = ref([])
 const savedStories = ref([])
+
+// 粉丝/关注
+const showFollowModal = ref(false)
+const followListType = ref('followers')
+const followList = ref([])
+const followListLoading = ref(false)
+
+const showFollowList = async (type) => {
+  followListType.value = type
+  followList.value = []
+  showFollowModal.value = true
+  followListLoading.value = true
+  try {
+    const res = await request.get(`/api/users/${props.userInfo?.id}/follow${type === 'followers' ? 'ers' : 'ing'}`)
+    if (res.code === 'OK') {
+      followList.value = res.data || []
+    }
+  } catch (err) {
+    console.error('加载关注列表失败:', err)
+  } finally {
+    followListLoading.value = false
+  }
+}
+
+const closeFollowModal = () => {
+  showFollowModal.value = false
+  followList.value = []
+}
+
+const viewPublicProfile = (userId) => {
+  closeFollowModal()
+  emit('view-public-profile', userId)
+}
 
 // 返回上一页
 const goBack = () => {
@@ -593,12 +736,10 @@ const saveProfile = async () => {
   try {
     // 构建请求数据，包含表单信息和头像地址
     const profileData = {
-      username: formData.username,
       nickname: formData.nickname,
-      phone: formData.phone,
-      email: formData.email,
+      email: formData.email || null,
       bio: formData.bio,
-      avatarUrl: props.userInfo.avatar // 包含当前头像地址，注意字段名与后端一致
+      avatarUrl: props.userInfo.avatar
     }
 
     const res = await request.put('/api/users/me/profile', profileData)
@@ -629,7 +770,31 @@ const editGuide = async (id) => {
   try {
     const res = await request.get(`/api/guides/${id}`)
     if (res.code === 'OK' || res.code === 200) {
-      editingGuide.value = res.data
+      const d = res.data
+      editingGuide.value = {
+        id: d.id,
+        title: d.title || '',
+        summary: d.summary || '',
+        contentHtml: d.contentHtml || '',
+        coverImageUrl: d.coverImageUrl || '',
+        locationText: d.locationText || '',
+        scope: d.scope || 'international',
+        travelMode: d.travelMode || 'free',
+        itineraryDays: (d.itinerary || []).map(day => ({
+          dayNo: day.dayNo,
+          title: day.title || '',
+          summary: day.summary || '',
+          spots: (day.spots || []).map(spot => ({
+            name: spot.name || '',
+            description: spot.description || '',
+            imageUrl: spot.imageUrl || '',
+            _imageFile: null,
+            time: spot.time || '',
+            duration: spot.duration || ''
+          }))
+        }))
+      }
+      editCoverPreview.value = ''
       showEditModal.value = true
     }
   } catch (err) {
@@ -639,22 +804,118 @@ const editGuide = async (id) => {
 
 const showEditModal = ref(false)
 const editingGuide = ref(null)
+const editCoverPreview = ref('')
+const editCoverInput = ref(null)
+
+const triggerEditCoverUpload = () => editCoverInput.value?.click()
+const handleEditCoverUpload = (event) => {
+  const file = event.target.files[0]
+  if (file) {
+    editingGuide.value._coverFile = file
+    editCoverPreview.value = URL.createObjectURL(file)
+  }
+}
+
+const addEditDay = () => {
+  const lastDay = editingGuide.value.itineraryDays
+  editingGuide.value.itineraryDays.push({
+    dayNo: lastDay.length + 1,
+    title: '',
+    summary: '',
+    spots: []
+  })
+}
+
+const removeEditDay = (index) => {
+  editingGuide.value.itineraryDays.splice(index, 1)
+}
+
+const addEditSpot = (dayIndex) => {
+  editingGuide.value.itineraryDays[dayIndex].spots.push({
+    name: '', description: '', imageUrl: '', _imageFile: null, time: '', duration: ''
+  })
+}
+
+const removeEditSpot = (dayIndex, spotIndex) => {
+  editingGuide.value.itineraryDays[dayIndex].spots.splice(spotIndex, 1)
+}
+
+const triggerEditSpotImg = (dayIndex, spotIndex) => {
+  const input = document.createElement('input')
+  input.type = 'file'
+  input.accept = 'image/*'
+  input.onchange = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      editingGuide.value.itineraryDays[dayIndex].spots[spotIndex]._imageFile = file
+      editingGuide.value.itineraryDays[dayIndex].spots[spotIndex].imageUrl = URL.createObjectURL(file)
+    }
+  }
+  input.click()
+}
 
 const saveGuide = async () => {
   const g = editingGuide.value
   if (!g.title?.trim()) { toast.warning('请输入标题'); return }
   try {
+    // 上传封面图片
+    let coverImageUrl = g.coverImageUrl
+    if (g._coverFile) {
+      const fd = new FormData()
+      fd.append('file', g._coverFile)
+      const uploadRes = await request.post('/api/files/upload', fd, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+      if (uploadRes.code === 'OK' || uploadRes.code === 200) {
+        coverImageUrl = uploadRes.data
+      }
+    }
+
+    // 重新编号 dayNo，上传景点图片
+    const itineraryDays = []
+    for (const day of g.itineraryDays.filter(d => d.title?.trim())) {
+      const spots = []
+      for (const spot of (day.spots || []).filter(s => s.name?.trim())) {
+        let spotImageUrl = spot.imageUrl || null
+        if (spot._imageFile) {
+          const fd = new FormData()
+          fd.append('file', spot._imageFile)
+          const res = await request.post('/api/files/upload', fd, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+          })
+          if (res.code === 'OK' || res.code === 200) {
+            spotImageUrl = res.data
+          }
+        }
+        spots.push({
+          name: spot.name,
+          description: spot.description,
+          imageUrl: spotImageUrl,
+          time: spot.time,
+          duration: spot.duration
+        })
+      }
+      itineraryDays.push({
+        dayNo: itineraryDays.length + 1,
+        title: day.title,
+        summary: day.summary,
+        spots
+      })
+    }
+
     const res = await request.put(`/api/guides/${g.id}`, {
       title: g.title,
       summary: g.summary,
       contentHtml: g.contentHtml,
-      coverImageUrl: g.coverImageUrl,
+      coverImageUrl: coverImageUrl,
+      locationText: g.locationText,
       scope: g.scope,
-      travelMode: g.travelMode
+      travelMode: g.travelMode,
+      itineraryDays: itineraryDays
     })
     if (res.code === 'OK' || res.code === 200) {
       showEditModal.value = false
-      await fetchMyData()
+      await loadMyData()
       toast.success('攻略已更新')
     }
   } catch (err) {
@@ -747,12 +1008,13 @@ const unsaveStory = async (id) => {
 // 加载我的数据
 const loadMyData = async () => {
   try {
-    const [guidesRes, storiesRes, commentsRes, likedRes, favoritedRes] = await Promise.all([
+    const [guidesRes, storiesRes, commentsRes, likedRes, favoritedRes, userRes] = await Promise.all([
       request.get('/api/users/me/guides?page=1&pageSize=50'),
       request.get('/api/users/me/stories?page=1&pageSize=50'),
       request.get('/api/users/me/comments?page=1&pageSize=50'),
       request.get('/api/users/me/liked-guides?page=1&pageSize=50'),
-      request.get('/api/users/me/favorite-guides?page=1&pageSize=50')
+      request.get('/api/users/me/favorite-guides?page=1&pageSize=50'),
+      request.get('/api/users/me')
     ])
 
     if (guidesRes.data?.list) {
@@ -773,6 +1035,13 @@ const loadMyData = async () => {
       savedStories.value = favoritedRes.data.list
     }
     stats.likes = myGuides.value.reduce((sum, g) => sum + (g.likesCount || 0), 0)
+    if (userRes.code === 'OK' && userRes.data) {
+      stats.followers = userRes.data.followersCount || 0
+    }
+    const followingRes = await request.get(`/api/users/${userRes.data?.id}/following`).catch(() => null)
+    if (followingRes?.code === 'OK') {
+      stats.following = followingRes.data?.length || 0
+    }
   } catch (err) {
     console.error('加载用户数据失败:', err)
   }
@@ -786,14 +1055,14 @@ onMounted(() => {
 <style scoped>
 .user-profile-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #3D4F2F 0%, #2C3A22 100%);
+  background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-tertiary) 100%);
 }
 
 /* 顶部导航 */
 .profile-header {
-  background: rgba(255, 255, 255, 0.08);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  background: var(--color-card-bg);
+  border-bottom: 1px solid var(--color-card-border);
+  box-shadow: 0 2px 10px rgba(45, 58, 30, 0.06);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -814,14 +1083,14 @@ onMounted(() => {
   gap: 8px;
   background: none;
   border: none;
-  color: #D4CFC7;
+  color: var(--color-text-muted);
   cursor: pointer;
   font-size: 14px;
   transition: all 0.3s ease;
 }
 
 .back-btn:hover {
-  color: #F5F0E8;
+  color: var(--color-primary);
 }
 
 .back-btn svg {
@@ -832,7 +1101,7 @@ onMounted(() => {
 .page-title {
   font-size: 20px;
   font-weight: 600;
-  color: #F5F2ED;
+  color: var(--color-text-primary);
   font-family: var(--font-display);
 }
 
@@ -858,8 +1127,8 @@ onMounted(() => {
 }
 
 .user-card {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
   border-radius: 20px;
   padding: 30px;
 }
@@ -881,7 +1150,7 @@ onMounted(() => {
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
-  background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
+  background: var(--color-bg-tertiary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -900,8 +1169,8 @@ onMounted(() => {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #F5F0E8;
-  border: 3px solid #3D4F2F;
+  background: var(--color-primary);
+  border: 3px solid var(--color-card-bg);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -911,7 +1180,7 @@ onMounted(() => {
 
 .edit-avatar-btn:hover {
   transform: scale(1.1);
-  background: #E8E2DA;
+  background: var(--color-primary-dark);
 }
 
 /* 头像可点击状态 */
@@ -936,13 +1205,13 @@ onMounted(() => {
 .user-name {
   font-size: 20px;
   font-weight: 600;
-  color: #F5F2ED;
+  color: var(--color-text-primary);
   margin-bottom: 5px;
 }
 
 .user-role {
   font-size: 14px;
-  color: #A8A29E;
+  color: var(--color-text-muted);
 }
 
 /* 统计 */
@@ -950,8 +1219,8 @@ onMounted(() => {
   display: flex;
   justify-content: space-around;
   padding: 20px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid var(--color-card-border);
+  border-bottom: 1px solid var(--color-card-border);
   margin-bottom: 20px;
 }
 
@@ -965,12 +1234,12 @@ onMounted(() => {
 .stat-value {
   font-size: 20px;
   font-weight: 700;
-  color: #F5F0E8;
+  color: var(--color-text-primary);
 }
 
 .stat-label {
   font-size: 12px;
-  color: #A8A29E;
+  color: var(--color-text-muted);
 }
 
 /* 菜单 */
@@ -990,7 +1259,7 @@ onMounted(() => {
   background: transparent;
   cursor: pointer;
   transition: all 0.3s ease;
-  color: #D4CFC7;
+  color: var(--color-text-muted);
   font-size: 14px;
 }
 
@@ -1000,13 +1269,13 @@ onMounted(() => {
 }
 
 .menu-item:hover {
-  background: rgba(245, 240, 232, 0.1);
-  color: #F5F0E8;
+  background: var(--color-bg-secondary);
+  color: var(--color-primary);
 }
 
 .menu-item.active {
-  background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
-  color: #2F3D24;
+  background: var(--color-primary);
+  color: #FFFFFF;
 }
 
 /* 内容区域 */
@@ -1015,8 +1284,8 @@ onMounted(() => {
 }
 
 .content-section {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
   border-radius: 20px;
   padding: 30px;
 }
@@ -1027,29 +1296,29 @@ onMounted(() => {
   align-items: center;
   margin-bottom: 25px;
   padding-bottom: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid var(--color-card-border);
 }
 
 .section-header h3 {
   font-size: 18px;
   font-weight: 600;
-  color: #F5F2ED;
+  color: var(--color-text-primary);
 }
 
 .edit-btn {
   padding: 8px 20px;
   border-radius: 20px;
-  border: 1px solid #F5F0E8;
+  border: 1px solid var(--color-primary);
   background: transparent;
-  color: #F5F0E8;
+  color: var(--color-primary);
   cursor: pointer;
   font-size: 14px;
   transition: all 0.3s ease;
 }
 
 .edit-btn:hover {
-  background: #F5F0E8;
-  color: white;
+  background: var(--color-primary);
+  color: #FFFFFF;
 }
 
 /* 表单 */
@@ -1068,7 +1337,7 @@ onMounted(() => {
 .form-group label {
   font-size: 14px;
   font-weight: 500;
-  color: #D4CFC7;
+  color: var(--color-text-muted);
 }
 
 .form-group input,
@@ -1078,7 +1347,7 @@ onMounted(() => {
   border-radius: 12px;
   font-size: 14px;
   background: rgba(255, 255, 255, 0.08);
-  color: #F5F2ED;
+  color: var(--color-text-primary);
   transition: all 0.3s ease;
   font-family: inherit;
 }
@@ -1125,7 +1394,7 @@ onMounted(() => {
 
 .btn-primary {
   background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
-  color: #2F3D24;
+  color: var(--color-text-primary);
 }
 
 .btn-primary:hover {
@@ -1135,7 +1404,7 @@ onMounted(() => {
 
 .btn-secondary {
   background: rgba(255, 255, 255, 0.08);
-  color: #D4CFC7;
+  color: var(--color-text-muted);
 }
 
 .btn-secondary:hover {
@@ -1153,7 +1422,7 @@ onMounted(() => {
   border-radius: 20px;
   border: none;
   background: rgba(255, 255, 255, 0.08);
-  color: #D4CFC7;
+  color: var(--color-text-muted);
   cursor: pointer;
   font-size: 13px;
   transition: all 0.3s ease;
@@ -1165,7 +1434,7 @@ onMounted(() => {
 
 .filter-tab.active {
   background: #F5F0E8;
-  color: #2F3D24;
+  color: var(--color-text-primary);
 }
 
 /* 内容列表 */
@@ -1179,17 +1448,17 @@ onMounted(() => {
   display: flex;
   gap: 20px;
   padding: 20px 24px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--color-card-bg);
   border-radius: 16px;
   transition: all 0.3s ease;
   position: relative;
-  border: 1px solid transparent;
+  border: 1px solid var(--color-card-border);
 }
 
 .content-card:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  background: var(--color-card-bg-hover);
+  border-color: var(--color-card-border);
+  box-shadow: 0 4px 20px rgba(45, 58, 30, 0.1);
   transform: translateY(-2px);
 }
 
@@ -1199,7 +1468,7 @@ onMounted(() => {
   border-radius: 12px;
   overflow: hidden;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(45, 58, 30, 0.2);
 }
 
 .card-image img {
@@ -1224,7 +1493,7 @@ onMounted(() => {
 .card-title {
   font-size: 16px;
   font-weight: 600;
-  color: #F5F2ED;
+  color: var(--color-text-primary);
   margin-bottom: 10px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1233,12 +1502,12 @@ onMounted(() => {
 }
 
 .content-card:hover .card-title {
-  color: #F5F0E8;
+  color: var(--color-primary-dark);
 }
 
 .card-desc {
   font-size: 13px;
-  color: #D4CFC7;
+  color: var(--color-text-muted);
   line-height: 1.7;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1294,7 +1563,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  color: #D4CFC7;
+  color: var(--color-text-muted);
 }
 
 .action-btn svg {
@@ -1333,7 +1602,7 @@ onMounted(() => {
 
 .story-content {
   font-size: 14px;
-  color: #F5F2ED;
+  color: var(--color-text-primary);
   line-height: 1.8;
   margin-bottom: 16px;
   padding-right: 50px;
@@ -1362,7 +1631,7 @@ onMounted(() => {
   width: 100px;
   height: 100px;
   border-radius: 10px;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.4) 100%);
+  background: linear-gradient(135deg, rgba(45, 58, 30, 0.6) 0%, rgba(45, 58, 30, 0.4) 100%);
   color: white;
   display: flex;
   align-items: center;
@@ -1374,7 +1643,7 @@ onMounted(() => {
 }
 
 .more-images:hover {
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 100%);
+  background: linear-gradient(135deg, rgba(45, 58, 30, 0.7) 0%, rgba(45, 58, 30, 0.5) 100%);
 }
 
 .story-author,
@@ -1392,13 +1661,13 @@ onMounted(() => {
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 8px rgba(45, 58, 30, 0.2);
 }
 
 .story-author span,
 .card-author span {
   font-size: 13px;
-  color: #D4CFC7;
+  color: var(--color-text-muted);
   font-weight: 500;
 }
 
@@ -1433,18 +1702,18 @@ onMounted(() => {
 
 .comment-target {
   font-size: 13px;
-  color: #F5F0E8;
+  color: var(--color-text-muted);
   font-weight: 500;
 }
 
 .comment-time {
   font-size: 12px;
-  color: #A8A29E;
+  color: var(--color-text-muted);
 }
 
 .comment-content {
   font-size: 14px;
-  color: #F5F2ED;
+  color: var(--color-text-primary);
   line-height: 1.8;
   margin-bottom: 16px;
   padding-right: 40px;
@@ -1466,18 +1735,18 @@ onMounted(() => {
   align-items: center;
   gap: 6px;
   font-size: 13px;
-  color: #A8A29E;
+  color: var(--color-text-muted);
   transition: all 0.3s ease;
 }
 
 .comment-stats .stat-item svg {
   width: 16px;
   height: 16px;
-  color: #F5F0E8;
+  color: var(--color-text-muted);
 }
 
 .comment-stats .stat-item:hover {
-  color: #F5F0E8;
+  color: var(--color-primary);
 }
 
 .comment-card .card-actions {
@@ -1495,7 +1764,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   padding: 60px 20px;
-  color: #A8A29E;
+  color: var(--color-text-muted);
 }
 
 .empty-state svg {
@@ -1517,7 +1786,7 @@ onMounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(45, 58, 30, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1555,7 +1824,7 @@ onMounted(() => {
   height: 100%;
   object-fit: contain;
   border-radius: 12px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 20px 60px rgba(45, 58, 30, 0.4);
 }
 
 .preview-avatar-placeholder {
@@ -1566,7 +1835,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 20px 60px rgba(45, 58, 30, 0.4);
 }
 
 .preview-avatar-placeholder svg {
@@ -1605,6 +1874,10 @@ onMounted(() => {
 /* 响应式 */
 @media (max-width: 768px) {
   .profile-container {
+    grid-template-columns: 1fr;
+  }
+
+  .edit-form-row {
     grid-template-columns: 1fr;
   }
 
@@ -1660,10 +1933,15 @@ onMounted(() => {
 }
 
 /* 编辑弹窗 */
+@keyframes modalSlide {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(45, 58, 30, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1673,14 +1951,14 @@ onMounted(() => {
 }
 
 .edit-modal {
-  background: #3D4F2F;
-  border: 1px solid rgba(255,255,255,0.12);
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
   border-radius: 20px;
-  width: 90%;
-  max-width: 560px;
-  max-height: 80vh;
+  width: 94%;
+  max-width: 860px;
+  max-height: 88vh;
   overflow-y: auto;
-  box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+  box-shadow: 0 24px 80px rgba(45, 58, 30, 0.2);
   animation: modalSlide 0.25s ease;
 }
 
@@ -1689,13 +1967,13 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 24px 28px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid var(--color-card-border);
 }
 
 .edit-modal-header h3 {
   font-size: 20px;
   font-weight: 600;
-  color: #F5F2ED;
+  color: var(--color-text-primary);
   font-family: var(--font-display);
 }
 
@@ -1705,17 +1983,17 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255,255,255,0.08);
+  background: var(--color-bg-tertiary);
   border: none;
   border-radius: 50%;
-  color: #A8A29E;
+  color: var(--color-text-muted);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .edit-close:hover {
-  background: rgba(255,255,255,0.15);
-  color: #F5F2ED;
+  background: var(--color-card-border);
+  color: var(--color-text-primary);
 }
 
 .edit-close svg {
@@ -1735,7 +2013,7 @@ onMounted(() => {
   display: block;
   font-size: 14px;
   font-weight: 600;
-  color: #D4CFC7;
+  color: var(--color-text-secondary);
   margin-bottom: 8px;
 }
 
@@ -1743,19 +2021,19 @@ onMounted(() => {
 .edit-field textarea {
   width: 100%;
   padding: 12px 16px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-card-border);
   border-radius: 10px;
   font-size: 15px;
-  color: #F5F2ED;
+  color: var(--color-text-primary);
   outline: none;
   transition: all 0.2s ease;
 }
 
 .edit-field input:focus,
 .edit-field textarea:focus {
-  border-color: rgba(245,240,232,0.4);
-  box-shadow: 0 0 0 3px rgba(245,240,232,0.08);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(91,140,62,0.1);
 }
 
 .edit-field textarea {
@@ -1764,43 +2042,428 @@ onMounted(() => {
   font-family: var(--font-body);
 }
 
+.edit-field select {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-card-border);
+  border-radius: 10px;
+  font-size: 15px;
+  color: var(--color-text-primary);
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B8A52' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+}
+
+.edit-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.edit-upload-area {
+  border: 2px dashed var(--color-card-border);
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.edit-upload-area:hover {
+  border-color: var(--color-primary);
+  background: var(--color-bg-secondary);
+}
+
+.edit-upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-muted);
+}
+
+.edit-upload-placeholder svg {
+  width: 32px;
+  height: 32px;
+}
+
+.edit-upload-placeholder span {
+  font-size: 13px;
+}
+
+.edit-cover-preview {
+  width: 100%;
+  max-height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.edit-itinerary-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.edit-itinerary-item {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-card-border);
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.edit-itinerary-item input {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--color-card-border);
+  border-radius: 7px;
+  font-size: 13px;
+  background: var(--color-card-bg);
+  color: var(--color-text-primary);
+  margin-bottom: 8px;
+  outline: none;
+}
+
+.edit-itinerary-item input:last-child {
+  margin-bottom: 0;
+}
+
+.edit-itinerary-item input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.edit-itinerary-item input:focus {
+  border-color: var(--color-primary);
+}
+
+.edit-itinerary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.edit-day-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: var(--color-primary);
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+.edit-remove-btn {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(224,112,112,0.12);
+  border: none;
+  border-radius: 6px;
+  color: #E07070;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.edit-remove-btn:hover {
+  background: rgba(224,112,112,0.25);
+}
+
+.edit-remove-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.edit-spots-list {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--color-card-border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.edit-spot-item {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: 7px;
+  padding: 10px;
+  position: relative;
+}
+
+.edit-spot-top {
+  display: flex;
+  gap: 10px;
+}
+
+.edit-spot-img-upload {
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+  border: 2px dashed var(--color-card-border);
+  border-radius: 7px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.edit-spot-img-upload:hover {
+  border-color: var(--color-primary);
+}
+
+.edit-spot-img-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.edit-spot-img-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: var(--color-text-muted);
+}
+
+.edit-spot-img-placeholder svg {
+  width: 22px;
+  height: 22px;
+}
+
+.edit-spot-img-placeholder span {
+  font-size: 10px;
+}
+
+.edit-spot-fields {
+  flex: 1;
+  min-width: 0;
+}
+
+.edit-spot-fields input {
+  margin-bottom: 6px;
+}
+
+.edit-spot-fields input:last-child {
+  margin-bottom: 0;
+}
+
+.edit-spot-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.edit-spot-row input {
+  margin-bottom: 0;
+}
+
+.edit-remove-spot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(224,112,112,0.12);
+  border: none;
+  border-radius: 4px;
+  color: #E07070;
+  cursor: pointer;
+}
+
+.edit-remove-spot svg {
+  width: 12px;
+  height: 12px;
+}
+
+.edit-add-spot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 7px;
+  margin-top: 8px;
+  background: transparent;
+  border: 1px dashed var(--color-card-border);
+  border-radius: 7px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-add-spot:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.edit-add-day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  background: transparent;
+  border: 2px dashed var(--color-card-border);
+  border-radius: 10px;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-add-day:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-bg-secondary);
+}
+
 .edit-modal-footer {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
   padding: 20px 28px;
-  border-top: 1px solid rgba(255,255,255,0.1);
+  border-top: 1px solid var(--color-card-border);
 }
 
 .edit-modal-footer .btn-cancel {
   padding: 10px 24px;
-  background: rgba(255,255,255,0.08);
+  background: var(--color-bg-tertiary);
   border: none;
   border-radius: 10px;
   font-size: 14px;
-  color: #D4CFC7;
+  color: var(--color-text-muted);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .edit-modal-footer .btn-cancel:hover {
-  background: rgba(255,255,255,0.15);
+  background: var(--color-card-border);
 }
 
 .edit-modal-footer .btn-save {
   padding: 10px 28px;
-  background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
+  background: var(--gradient-secondary);
   border: none;
   border-radius: 10px;
   font-size: 14px;
   font-weight: 600;
-  color: #2F3D24;
+  color: #FFFFFF;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .edit-modal-footer .btn-save:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(245,240,232,0.3);
+  box-shadow: 0 4px 15px rgba(45,58,30,0.2);
+}
+
+/* 粉丝/关注列表弹窗 */
+.follow-modal {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: 20px;
+  width: 90%;
+  max-width: 420px;
+  max-height: 70vh;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(45, 58, 30, 0.2);
+  animation: modalSlide 0.25s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.follow-modal .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--color-card-border);
+}
+
+.follow-modal .modal-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-family: var(--font-display);
+  margin: 0;
+}
+
+.follow-modal .close-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-secondary);
+  border: none;
+  border-radius: 8px;
+  font-size: 20px;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.follow-modal .close-btn:hover {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-primary);
+}
+
+.follow-modal-body {
+  overflow-y: auto;
+  flex: 1;
+  padding: 8px 0;
+}
+
+.follow-modal-body .loading,
+.follow-modal-body .empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.follow-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.follow-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 24px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.follow-item:hover {
+  background: var(--color-bg-secondary);
+}
+
+.follow-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--color-card-border);
+}
+
+.follow-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-text-primary);
 }
 </style>

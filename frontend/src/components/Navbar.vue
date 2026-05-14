@@ -114,8 +114,8 @@ const menuItems = [
 ]
 
 const navbarStyle = computed(() => ({
-  backgroundColor: scrollY.value > 100 ? 'rgba(61, 79, 47, 0.95)' : 'rgba(61, 79, 47, 0.9)',
-  boxShadow: scrollY.value > 100 ? '0 2px 10px rgba(0, 0, 0, 0.2)' : '0 2px 4px rgba(0, 0, 0, 0.15)'
+  backgroundColor: scrollY.value > 100 ? 'rgba(255, 255, 255, 0.95)' : 'rgba(255, 255, 255, 0.9)',
+  boxShadow: scrollY.value > 100 ? '0 2px 10px rgba(45, 58, 30, 0.1)' : '0 2px 4px rgba(45, 58, 30, 0.06)'
 }))
 
 const iconStyles = computed(() => {
@@ -231,7 +231,7 @@ onUnmounted(() => {
 
 <style scoped>
 .navbar {
-  background: rgba(61, 79, 47, 0.95);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   box-shadow: var(--shadow-sm);
@@ -253,13 +253,12 @@ onUnmounted(() => {
 .navbar-brand a {
   font-size: 26px;
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--color-primary-dark);
   text-decoration: none;
   font-family: var(--font-display);
   letter-spacing: 3px;
   position: relative;
   padding: 5px 0;
-  text-shadow: 1px 1px 2px rgba(212, 118, 58, 0.3);
   transition: all var(--transition-normal);
 }
 
@@ -280,8 +279,7 @@ onUnmounted(() => {
 }
 
 .navbar-brand a:hover {
-  color: var(--color-primary-dark);
-  text-shadow: 2px 2px 4px rgba(212, 118, 58, 0.4);
+  color: var(--color-primary);
 }
 
 .navbar-toggle {
@@ -300,7 +298,7 @@ onUnmounted(() => {
   display: block;
   width: 100%;
   height: 3px;
-  background-color: var(--color-text-primary);
+  background-color: var(--color-text-secondary);
   border-radius: 1.5px;
   transition: all var(--transition-normal);
 }
@@ -329,7 +327,7 @@ onUnmounted(() => {
 }
 
 .navbar-menu a {
-  color: var(--color-text-primary);
+  color: var(--color-text-secondary);
   text-decoration: none;
   font-weight: 500;
   transition: all var(--transition-normal);
@@ -337,12 +335,12 @@ onUnmounted(() => {
 }
 
 .navbar-menu li.active a {
-  color: var(--color-primary);
+  color: var(--color-primary-dark);
   font-weight: 600;
 }
 
 .navbar-menu a:hover {
-  color: var(--color-primary);
+  color: var(--color-primary-dark);
 }
 
 .navbar-actions {
@@ -357,9 +355,9 @@ onUnmounted(() => {
   align-items: center;
   gap: 12px;
   padding: 8px 16px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.1) 100%);
+  background: linear-gradient(135deg, var(--color-primary-10) 0%, var(--color-primary-10) 100%);
   border-radius: 50px;
-  border: 1px solid var(--color-primary-20);
+  border: 1px solid var(--color-card-border);
   box-shadow: 
     0 4px 15px rgba(0, 0, 0, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -403,12 +401,12 @@ onUnmounted(() => {
   height: 36px;
   border-radius: 50%;
   overflow: hidden;
-  background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 50%, var(--color-primary-dark) 100%);
+  background: linear-gradient(135deg, var(--color-bg-tertiary) 0%, var(--color-card-border) 50%, var(--color-bg-tertiary) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 
+  box-shadow:
     0 3px 8px var(--color-primary-20),
     0 0 0 3px var(--color-primary-10);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -452,7 +450,7 @@ onUnmounted(() => {
 .user-name {
   font-size: 14px;
   font-weight: 600;
-  color: var(--color-text-primary);
+  color: var(--color-text-secondary);
   max-width: 120px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -462,7 +460,7 @@ onUnmounted(() => {
 }
 
 .user-info:hover .user-name {
-  color: var(--color-primary);
+  color: var(--color-primary-dark);
 }
 
 .logout-btn {
@@ -493,7 +491,7 @@ onUnmounted(() => {
 .logout-btn svg {
   width: 16px;
   height: 16px;
-  color: var(--color-primary);
+  color: var(--color-text-secondary);
   transition: all var(--transition-normal);
   position: relative;
   z-index: 1;
@@ -520,38 +518,32 @@ onUnmounted(() => {
 .btn {
   display: inline-block;
   padding: 8px 20px;
-  border: none;
+  border: 1px solid var(--color-card-border);
   border-radius: 20px;
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
+  color: var(--color-text-secondary);
+  background: var(--color-card-bg);
+  backdrop-filter: blur(4px);
   transition: all var(--transition-normal);
 }
 
-.btn-primary {
-  background: var(--gradient-primary);
-  color: white;
-  box-shadow: 0 2px 8px var(--color-primary-20);
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px var(--color-primary-20);
-}
-
-.btn-secondary {
-  background-color: transparent;
-  color: var(--color-primary-light);
-  border: 1px solid var(--color-primary-light);
-}
-
-.btn-secondary:hover {
-  background-color: var(--color-primary);
+.btn:hover {
+  background: var(--color-primary);
   color: white;
   border-color: var(--color-primary);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px var(--color-primary-20);
+  box-shadow: 0 4px 12px rgba(91, 140, 62, 0.2);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  margin-left: 8px;
 }
 
 /* 关于我们弹窗样式 */
@@ -580,13 +572,13 @@ onUnmounted(() => {
 }
 
 .about-modal {
-  background: rgba(61, 79, 47, 0.95);
+  background: rgba(255, 255, 255, 0.98);
   border-radius: 20px;
   width: 50%;
   max-width: 600px;
   max-height: 80vh;
   position: relative;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 60px rgba(45, 58, 30, 0.15);
   animation: slideIn 0.3s ease;
   overflow: hidden;
 }
@@ -609,7 +601,7 @@ onUnmounted(() => {
   background: none;
   border: none;
   font-size: 32px;
-  color: #D4CFC7;
+  color: var(--color-text-muted);
   cursor: pointer;
   transition: all var(--transition-normal);
   z-index: 10;
@@ -636,7 +628,7 @@ onUnmounted(() => {
 .about-modal-content h2 {
   font-family: var(--font-display);
   font-size: 32px;
-  color: #F5F0E8;
+  color: var(--color-text-primary);
   text-align: center;
   margin-bottom: 30px;
   position: relative;
@@ -665,14 +657,14 @@ onUnmounted(() => {
 
 .about-section h3 {
   font-size: 18px;
-  color: #F5F0E8;
+  color: var(--color-text-primary);
   margin-bottom: 10px;
   font-weight: 600;
 }
 
 .about-section p {
   font-size: 15px;
-  color: #D4CFC7;
+  color: var(--color-text-secondary);
   line-height: 1.8;
 }
 
@@ -683,7 +675,7 @@ onUnmounted(() => {
 
 .about-section li {
   font-size: 15px;
-  color: #D4CFC7;
+  color: var(--color-text-secondary);
   line-height: 1.8;
   padding-left: 20px;
   position: relative;
@@ -702,7 +694,7 @@ onUnmounted(() => {
 }
 
 .contact-info {
-  color: #F5F0E8 !important;
+  color: var(--color-text-primary) !important;
   font-weight: 500;
 }
 
@@ -722,8 +714,8 @@ onUnmounted(() => {
     top: 100%;
     left: 0;
     right: 0;
-    background-color: #f8f6f3;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: #FFFFFF;
+    box-shadow: 0 2px 10px rgba(45, 58, 30, 0.08);
     padding: 20px;
     display: none;
     z-index: 999;

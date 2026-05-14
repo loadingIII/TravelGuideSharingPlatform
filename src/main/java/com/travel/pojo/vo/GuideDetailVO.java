@@ -16,6 +16,10 @@ public class GuideDetailVO {
     private Long authorId;
     private String authorName;
     private String authorAvatarUrl;
+    private String authorLevel;
+    private Integer authorGuidesCount;
+    private Integer authorFollowersCount;
+    private Integer authorLikedCount;
     private String title;
     private String summary;
     private String contentHtml;
@@ -31,6 +35,7 @@ public class GuideDetailVO {
     private Integer favoritesCount;
     private LocalDateTime publishedAt;
     private List<ItineraryDay> itinerary;
+    private List<GuideListItemVO> relatedGuides;
 
     @Getter
     @Builder

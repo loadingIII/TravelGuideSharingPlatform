@@ -3,8 +3,7 @@
     <!-- 沉浸式页面头部 -->
     <header class="hero-header">
       <div class="hero-bg">
-        <img src="/img/富士山.jpg" alt="富士山" class="hero-image">
-        <div class="hero-overlay"></div>
+        <div class="hero-gradient"></div>
         <div class="hero-grain"></div>
       </div>
       <div class="hero-content">
@@ -19,11 +18,6 @@
           <h1>旅行者故事</h1>
           <p>分享旅途中的精彩瞬间与难忘经历</p>
         </div>
-      </div>
-      <div class="hero-wave">
-        <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 100L48 94C96 88 192 76 288 70C384 64 480 64 576 68C672 72 768 80 864 82C960 84 1056 80 1152 74C1248 68 1344 60 1392 56L1440 52V100H0Z" fill="#3D4F2F"/>
-        </svg>
       </div>
     </header>
 
@@ -266,11 +260,65 @@
       <div class="preview-counter">{{ currentPreviewIndex + 1 }} / {{ previewImageList.length }}</div>
     </div>
   </div>
+
+  <!-- 故事评论弹窗 -->
+  <div class="modal-overlay" v-if="showCommentsModal" @click.self="closeCommentsModal">
+    <div class="modal-content comment-modal">
+      <div class="modal-header">
+        <h3>评论 · {{ selectedStory?.author }}</h3>
+        <button class="close-btn" @click="closeCommentsModal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="comment-modal-body">
+        <div v-if="storyCommentsLoading" class="loading-state">
+          <div class="loader"><div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div></div>
+          <p>加载评论中...</p>
+        </div>
+        <div v-else-if="storyComments.length === 0" class="empty-state">
+          <p>暂无评论，来说点什么吧</p>
+        </div>
+        <div v-else class="comments-list">
+          <div v-for="comment in storyComments" :key="comment.id" class="comment-item">
+            <div class="comment-header">
+              <span class="commenter-name">{{ comment.authorName || '匿名用户' }}</span>
+              <span class="comment-time">{{ formatTime(comment.createdAt) }}</span>
+            </div>
+            <p class="comment-text">{{ comment.content }}</p>
+            <div class="comment-actions">
+              <button
+                class="comment-action like-action"
+                :class="{ active: storyCommentLiked[comment.id] }"
+                @click="toggleStoryCommentLike(comment)"
+              >
+                <svg class="action-icon" viewBox="0 0 24 24" fill="none">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" :fill="storyCommentLiked[comment.id] ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+                {{ comment.likesCount || 0 }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="comment-modal-footer">
+        <textarea
+          v-model="storyCommentText"
+          placeholder="写下你的评论..."
+          rows="2"
+          @keydown.ctrl.enter="submitStoryComment"
+        ></textarea>
+        <button class="submit-btn" @click="submitStoryComment" :disabled="!storyCommentText.trim()">发表</button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import request from '../utils/request'
+import request, { triggerAuthError } from '../utils/request'
+import { getCookie } from '../utils/cookie'
 
 const emit = defineEmits(['back-to-home'])
 
@@ -283,6 +331,16 @@ const showPublishModal = ref(false)
 const newStoryContent = ref('')
 const previewImages = ref([])
 const fileInput = ref(null)
+
+// 故事评论
+const showCommentsModal = ref(false)
+const selectedStory = ref(null)
+const storyComments = ref([])
+const storyCommentText = ref('')
+const storyCommentsLoading = ref(false)
+const storyCommentsPage = ref(1)
+const storyCommentsTotal = ref(0)
+const storyCommentLiked = ref({})
 
 const previewImageList = ref([])
 const currentPreviewIndex = ref(0)
@@ -403,11 +461,84 @@ const toggleLike = async (story) => {
       }
     }
   } catch (err) {
-    alert('请先登录后再点赞')
+    triggerAuthError()
   }
 }
 
-const showComments = (story) => alert(`查看 ${story.author} 的故事评论 (${story.comments}条)`)
+const showComments = async (story) => {
+  selectedStory.value = story
+  storyComments.value = []
+  storyCommentsPage.value = 1
+  showCommentsModal.value = true
+  await loadStoryComments()
+}
+
+const loadStoryComments = async () => {
+  if (!selectedStory.value) return
+  storyCommentsLoading.value = true
+  storyCommentLiked.value = {}
+  try {
+    const result = await request.get(`/api/stories/${selectedStory.value.id}/comments?page=${storyCommentsPage.value}&pageSize=10`)
+    if (result.code === 'OK') {
+      storyComments.value = result.data.list || []
+      storyCommentsTotal.value = result.data.total || 0
+      selectedStory.value.comments = storyCommentsTotal.value
+    }
+  } catch (err) {
+    console.error('加载故事评论失败:', err)
+  } finally {
+    storyCommentsLoading.value = false
+  }
+}
+
+const toggleStoryCommentLike = async (comment) => {
+  const token = getCookie('token')
+  if (!token) {
+    triggerAuthError()
+    return
+  }
+  try {
+    const liked = storyCommentLiked.value[comment.id]
+    const result = liked
+      ? await request.delete(`/api/stories/comments/${comment.id}/like`)
+      : await request.post(`/api/stories/comments/${comment.id}/like`)
+    if (result.code === 'OK') {
+      storyCommentLiked.value[comment.id] = result.data.liked
+      comment.likesCount = result.data.likesCount
+    }
+  } catch (err) {
+    console.error('评论点赞操作失败:', err)
+  }
+}
+
+const submitStoryComment = async () => {
+  if (!storyCommentText.value.trim() || !selectedStory.value) return
+  const token = getCookie('token')
+  if (!token) {
+    triggerAuthError()
+    return
+  }
+  try {
+    const result = await request.post(`/api/stories/${selectedStory.value.id}/comments`, {
+      content: storyCommentText.value
+    })
+    if (result.code === 'OK') {
+      storyCommentText.value = ''
+      await loadStoryComments()
+    }
+  } catch (err) {
+    console.error('提交故事评论失败:', err)
+    alert('评论提交失败，请稍后重试')
+  }
+}
+
+const closeCommentsModal = () => {
+  showCommentsModal.value = false
+  selectedStory.value = null
+  storyComments.value = []
+  storyCommentText.value = ''
+}
+
 const shareStory = (story) => alert(`分享 ${story.author} 的故事`)
 
 const changePage = (page) => {
@@ -445,7 +576,7 @@ const publishStory = async () => {
       alert('故事发布成功！')
     }
   } catch (err) {
-    alert('请先登录后再发布故事')
+    triggerAuthError()
   }
 }
 
@@ -477,7 +608,7 @@ onMounted(() => fetchStories())
 <style scoped>
 .traveler-stories-page {
   min-height: 100vh;
-  background-color: #3D4F2F;
+  background-color: var(--color-bg-primary);
   font-family: var(--font-body);
 }
 
@@ -490,8 +621,8 @@ onMounted(() => fetchStories())
 /* Hero Header */
 .hero-header {
   position: relative;
-  height: 60vh;
-  min-height: 400px;
+  height: 45vh;
+  min-height: 320px;
   overflow: hidden;
   display: flex;
   align-items: flex-end;
@@ -500,43 +631,29 @@ onMounted(() => fetchStories())
 .hero-bg {
   position: absolute;
   inset: 0;
+  background-image: url('/img/back2.png');
+  background-size: cover;
+  background-position: center;
 }
 
-.hero-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(1.05);
-  animation: heroZoom 20s ease-in-out infinite alternate;
-}
-
-@keyframes heroZoom {
-  0% { transform: scale(1.05); }
-  100% { transform: scale(1.15); }
-}
-
-.hero-overlay {
+.hero-gradient {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(0,0,0,0.1) 0%,
-    rgba(0,0,0,0.3) 40%,
-    rgba(0,0,0,0.7) 100%
-  );
+  background:
+    linear-gradient(to bottom, rgba(45, 58, 30, 0.25) 0%, rgba(45, 58, 30, 0.45) 100%);
 }
 
 .hero-grain {
   position: absolute;
   inset: 0;
-  opacity: 0.15;
+  opacity: 0.12;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
 }
 
 .hero-content {
   position: relative;
   z-index: 2;
-  padding: 40px 60px 60px;
+  padding: 40px 60px 48px;
   max-width: 900px;
   margin: 0 auto;
   width: 100%;
@@ -576,7 +693,7 @@ onMounted(() => fetchStories())
   display: inline-block;
   padding: 6px 16px;
   background: linear-gradient(135deg, #F5F0E8, #FAF8F5);
-  color: #2F3D24;
+  color: var(--color-text-primary);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 3px;
@@ -591,7 +708,7 @@ onMounted(() => fetchStories())
   margin: 0 0 16px;
   line-height: 1.1;
   letter-spacing: -1px;
-  text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  text-shadow: 0 4px 20px rgba(45, 58, 30, 0.3);
 }
 
 .hero-text p {
@@ -600,19 +717,6 @@ onMounted(() => fetchStories())
   max-width: 400px;
   line-height: 1.6;
   margin: 0;
-}
-
-.hero-wave {
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  z-index: 3;
-}
-
-.hero-wave svg {
-  display: block;
-  width: 100%;
 }
 
 /* Stories Section */
@@ -659,7 +763,7 @@ onMounted(() => fetchStories())
   align-items: center;
   justify-content: center;
   padding: 100px 20px;
-  color: #D4CFC7;
+  color: var(--color-text-muted);
 }
 
 .error-icon-wrap {
@@ -683,7 +787,7 @@ onMounted(() => fetchStories())
   margin-top: 20px;
   padding: 12px 32px;
   background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
-  color: #2F3D24;
+  color: var(--color-text-primary);
   border: none;
   border-radius: 30px;
   font-size: 14px;
@@ -713,7 +817,7 @@ onMounted(() => fetchStories())
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.5);
   border-radius: 24px;
   margin-bottom: 20px;
 }
@@ -731,7 +835,7 @@ onMounted(() => fetchStories())
 }
 
 .story-card {
-  background: rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.5);
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 24px;
   overflow: hidden;
@@ -750,7 +854,7 @@ onMounted(() => fetchStories())
 
 .story-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  box-shadow: 0 20px 60px rgba(45, 58, 30, 0.3);
   border-color: rgba(245,240,232,0.2);
 }
 
@@ -804,7 +908,7 @@ onMounted(() => fetchStories())
 .author-name span {
   font-size: 15px;
   font-weight: 600;
-  color: #F5F2ED;
+  color: var(--color-text-primary);
 }
 
 .vip-badge {
@@ -834,7 +938,7 @@ onMounted(() => fetchStories())
 
 .more-btn:hover {
   background: rgba(255,255,255,0.1);
-  color: #F5F2ED;
+  color: var(--color-text-primary);
 }
 
 .more-btn svg {
@@ -849,7 +953,7 @@ onMounted(() => fetchStories())
 
 .story-text {
   font-size: 15px;
-  color: #D4CFC7;
+  color: var(--color-text-muted);
   line-height: 1.75;
   margin: 0;
   letter-spacing: 0.01em;
@@ -892,7 +996,7 @@ onMounted(() => fetchStories())
 .gallery-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(45, 58, 30, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -913,7 +1017,7 @@ onMounted(() => fetchStories())
 .more-count {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(45, 58, 30, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -949,8 +1053,8 @@ onMounted(() => fetchStories())
 }
 
 .action-btn:hover {
-  background: rgba(255,255,255,0.08);
-  color: #F5F2ED;
+  background: rgba(255,255,255,0.6);
+  color: var(--color-text-primary);
 }
 
 .action-icon {
@@ -1054,11 +1158,11 @@ onMounted(() => fetchStories())
   align-items: center;
   gap: 8px;
   padding: 12px 20px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.5);
+  border: 1px solid var(--color-card-border);
   border-radius: 30px;
   font-size: 14px;
-  color: #D4CFC7;
+  color: var(--color-text-muted);
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -1071,7 +1175,7 @@ onMounted(() => fetchStories())
 .page-btn:hover:not(:disabled) {
   background: rgba(255,255,255,0.1);
   border-color: rgba(245,240,232,0.3);
-  color: #F5F2ED;
+  color: var(--color-text-primary);
 }
 
 .page-btn:disabled {
@@ -1108,7 +1212,7 @@ onMounted(() => fetchStories())
   gap: 10px;
   padding: 16px 28px;
   background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
-  color: #2F3D24;
+  color: var(--color-text-primary);
   border: none;
   border-radius: 50px;
   font-size: 15px;
@@ -1133,7 +1237,7 @@ onMounted(() => fetchStories())
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.7);
+  background: rgba(45, 58, 30, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1148,14 +1252,14 @@ onMounted(() => fetchStories())
 }
 
 .modal-content {
-  background: #3D4F2F;
-  border: 1px solid rgba(255,255,255,0.12);
+  background: var(--color-primary);
+  border: 1px solid var(--color-card-border);
   border-radius: 24px;
   width: 90%;
   max-width: 560px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+  box-shadow: 0 24px 80px rgba(45, 58, 30, 0.4);
   animation: modalSlideUp 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
@@ -1175,7 +1279,7 @@ onMounted(() => fetchStories())
 .modal-header h3 {
   font-size: 24px;
   font-weight: 600;
-  color: #F5F2ED;
+  color: var(--color-text-primary);
   font-family: var(--font-display);
 }
 
@@ -1185,7 +1289,7 @@ onMounted(() => fetchStories())
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.6);
   border: none;
   border-radius: 50%;
   color: #A8A29E;
@@ -1195,7 +1299,7 @@ onMounted(() => fetchStories())
 
 .close-btn:hover {
   background: rgba(255,255,255,0.15);
-  color: #F5F2ED;
+  color: var(--color-text-primary);
 }
 
 .close-btn svg {
@@ -1215,18 +1319,18 @@ onMounted(() => fetchStories())
   display: block;
   font-size: 14px;
   font-weight: 600;
-  color: #D4CFC7;
+  color: var(--color-text-muted);
   margin-bottom: 10px;
 }
 
 .form-group textarea {
   width: 100%;
   padding: 14px 18px;
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid var(--color-card-border);
   border-radius: 12px;
   font-size: 15px;
-  background: rgba(255,255,255,0.06);
-  color: #F5F2ED;
+  background: rgba(255,255,255,0.5);
+  color: var(--color-text-primary);
   transition: all 0.3s ease;
   outline: none;
   resize: vertical;
@@ -1260,7 +1364,7 @@ onMounted(() => fetchStories())
 .upload-area:hover {
   border-color: rgba(245,240,232,0.4);
   background: rgba(255,255,255,0.04);
-  color: #D4CFC7;
+  color: var(--color-text-muted);
 }
 
 .upload-area svg {
@@ -1298,7 +1402,7 @@ onMounted(() => fetchStories())
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,0.6);
+  background: rgba(45, 58, 30, 0.6);
   color: white;
   border: none;
   border-radius: 50%;
@@ -1325,13 +1429,13 @@ onMounted(() => fetchStories())
   border: 1px solid rgba(255,255,255,0.2);
   border-radius: 30px;
   font-size: 15px;
-  color: #D4CFC7;
+  color: var(--color-text-muted);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .btn-ghost:hover {
-  background: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.6);
   border-color: rgba(255,255,255,0.3);
 }
 
@@ -1345,7 +1449,7 @@ onMounted(() => fetchStories())
   border-radius: 30px;
   font-size: 15px;
   font-weight: 600;
-  color: #2F3D24;
+  color: var(--color-text-primary);
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -1364,7 +1468,7 @@ onMounted(() => fetchStories())
 .image-preview-modal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.95);
+  background: rgba(45, 58, 30, 0.95);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1445,16 +1549,181 @@ onMounted(() => fetchStories())
   left: 50%;
   transform: translateX(-50%);
   padding: 8px 20px;
-  background: rgba(0,0,0,0.6);
+  background: rgba(45, 58, 30, 0.6);
   border-radius: 20px;
   color: white;
   font-size: 14px;
 }
 
+/* 故事评论弹窗 */
+.comment-modal {
+  max-width: 520px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.comment-modal .modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.comment-modal .modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.comment-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 24px;
+  min-height: 200px;
+}
+
+.comment-modal-body .loading-state,
+.comment-modal-body .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--color-text-tertiary);
+  font-size: 14px;
+}
+
+.comment-modal-body .comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.comment-modal-body .comment-item {
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.comment-modal-body .comment-item:last-child {
+  border-bottom: none;
+}
+
+.comment-modal-body .comment-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.comment-modal-body .commenter-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.comment-modal-body .comment-time {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+}
+
+.comment-modal-body .comment-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  word-break: break-word;
+}
+
+.comment-modal-footer {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 16px 24px 20px;
+  border-top: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.comment-modal-footer textarea {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  font-size: 14px;
+  font-family: inherit;
+  resize: none;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.comment-modal-footer textarea:focus {
+  border-color: var(--color-primary);
+}
+
+.comment-modal-footer .submit-btn {
+  padding: 10px 20px;
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.2s;
+}
+
+.comment-modal-footer .submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.comment-modal-footer .submit-btn:not(:disabled):hover {
+  opacity: 0.85;
+}
+
+.comment-modal-body .comment-actions {
+  margin-top: 8px;
+}
+
+.comment-modal-body .comment-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-tertiary);
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.comment-modal-body .comment-action:hover {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+}
+
+.comment-modal-body .like-action.active {
+  color: #e07070;
+}
+
+.comment-modal-body .like-action .action-icon {
+  width: 16px;
+  height: 16px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .hero-content {
-    padding: 24px;
+    padding: 24px 24px 32px;
   }
   
   .story-card {

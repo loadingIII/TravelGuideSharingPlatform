@@ -45,8 +45,27 @@ public class GuideServiceImpl implements GuideService {
             throw new BusinessException(ErrorCode.NOT_FOUND, "攻略不存在");
         }
 
+        guideMapper.incrementViewsCount(guideId);
+
         List<GuideItineraryDay> itineraryDays = guideMapper.listItineraryDays(guideId);
         List<GuideItinerarySpot> allSpots = spotMapper.listByGuideId(guideId);
+
+        UserProfile authorProfile = userProfileMapper.selectByUserId(detail.getAuthorId());
+        Integer authorGuidesCount = authorProfile != null ? authorProfile.getGuidesCount() : 0;
+        Integer authorFollowersCount = authorProfile != null ? authorProfile.getFollowersCount() : 0;
+        Integer authorLikedCount = authorProfile != null ? authorProfile.getLikesReceivedCount() : 0;
+        String authorLevel;
+        if (authorGuidesCount >= 5) authorLevel = "金牌旅行家";
+        else if (authorGuidesCount >= 3) authorLevel = "资深旅行家";
+        else if (authorGuidesCount >= 1) authorLevel = "旅行达人";
+        else authorLevel = "旅行新人";
+
+        List<GuideListItemVO> relatedGuides = guideMapper.listGuidesByDestination(detail.getDestinationId(), 0, 4)
+                .stream()
+                .filter(g -> !g.getId().equals(guideId))
+                .map(this::toGuideListItem)
+                .limit(4)
+                .toList();
 
         return GuideDetailVO.builder()
                 .id(detail.getId())
@@ -55,6 +74,10 @@ public class GuideServiceImpl implements GuideService {
                 .authorId(detail.getAuthorId())
                 .authorName(detail.getAuthorName())
                 .authorAvatarUrl(detail.getAuthorAvatarUrl())
+                .authorLevel(authorLevel)
+                .authorGuidesCount(authorGuidesCount)
+                .authorFollowersCount(authorFollowersCount)
+                .authorLikedCount(authorLikedCount)
                 .title(detail.getTitle())
                 .summary(detail.getSummary())
                 .contentHtml(detail.getContentHtml())
@@ -147,6 +170,19 @@ public class GuideServiceImpl implements GuideService {
                 .toList();// 将 GuideSummary 转换为 GuideListItemVO
         // 获取总数
         long total = guideMapper.countByAuthorId(userId);
+        return PageResult.of(list, safePage, safePageSize, total);
+    }
+
+    @Override
+    public PageResult<GuideListItemVO> listGuidesByAuthor(Long authorId, Integer page, Integer pageSize) {
+        int safePage = normalizePage(page);
+        int safePageSize = normalizePageSize(pageSize);
+        int offset = (safePage - 1) * safePageSize;
+        List<GuideListItemVO> list = guideMapper.selectByAuthorId(authorId, offset, safePageSize)
+                .stream()
+                .map(this::toGuideListItem)
+                .toList();
+        long total = guideMapper.countByAuthorId(authorId);
         return PageResult.of(list, safePage, safePageSize, total);
     }
 
@@ -290,8 +326,45 @@ public class GuideServiceImpl implements GuideService {
                 dto.getContentHtml(), dto.getCoverImageUrl(), dto.getLocationText(),
                 dto.getScope(), dto.getTravelMode());
 
-        if (dto.getTagIds() != null) {
+        // 更新行程
+        if (dto.getItineraryDays() != null) {
+            spotMapper.deleteByGuideId(guideId);
+            guideMapper.deleteItineraryDaysByGuideId(guideId);
+            int daySort = 1;
+            for (CreateGuideDTO.ItineraryDayDTO dayDTO : dto.getItineraryDays()) {
+                GuideItineraryDay day = new GuideItineraryDay();
+                day.setGuideId(guideId);
+                day.setDayNo(dayDTO.getDayNo());
+                day.setTitle(dayDTO.getTitle());
+                day.setSummary(dayDTO.getSummary());
+                day.setSortOrder(daySort++);
+                guideMapper.insertItineraryDay(day);
+
+                if (dayDTO.getSpots() != null && !dayDTO.getSpots().isEmpty()) {
+                    List<GuideItinerarySpot> spots = new java.util.ArrayList<>();
+                    int spotSort = 1;
+                    for (CreateGuideDTO.SpotDTO spotDTO : dayDTO.getSpots()) {
+                        GuideItinerarySpot spot = new GuideItinerarySpot();
+                        spot.setGuideId(guideId);
+                        spot.setDayNo(dayDTO.getDayNo());
+                        spot.setName(spotDTO.getName());
+                        spot.setDescription(spotDTO.getDescription());
+                        spot.setImageUrl(spotDTO.getImageUrl());
+                        spot.setTime(spotDTO.getTime());
+                        spot.setDuration(spotDTO.getDuration());
+                        spot.setSortOrder(spotSort++);
+                        spots.add(spot);
+                    }
+                    spotMapper.batchInsert(spots);
+                }
+            }
+        }
+
+        // 更新标签
+        if (dto.getTagIds() != null && !dto.getTagIds().isEmpty()) {
             tagService.syncGuideTags(guideId, dto.getTagIds());
+        } else if (dto.getTagNames() != null && !dto.getTagNames().isEmpty()) {
+            tagService.syncGuideTagsByName(guideId, dto.getTagNames());
         }
     }
 

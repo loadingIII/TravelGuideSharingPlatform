@@ -18,6 +18,7 @@
           @mouseenter="hoverCard = guide.id"
           @mouseleave="hoverCard = null"
           :class="{ 'hovered': hoverCard === guide.id }"
+          @click="viewGuideDetail(guide.id)"
         >
           <div class="reviewer-info">
             <img :src="guide.authorAvatarUrl || '/img/默认头像.png'" :alt="guide.authorName + '的头像'" loading="lazy">
@@ -98,7 +99,7 @@ const hoverCard = ref(null)
 const guides = ref([])
 const loading = ref(true)
 const error = ref(null)
-const emit = defineEmits(['view-community'])
+const emit = defineEmits(['view-community', 'view-guide-detail', 'switch-page'])
 
 // 格式化数字（超过1000显示为1k）
 const formatNumber = (num) => {
@@ -126,6 +127,10 @@ const fetchTopGuides = async () => {
   } finally {
     loading.value = false
   }
+}
+
+const viewGuideDetail = (guideId) => {
+  emit('view-guide-detail', guideId)
 }
 
 const viewMore = () => {

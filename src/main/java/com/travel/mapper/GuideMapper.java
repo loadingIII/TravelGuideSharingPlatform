@@ -6,6 +6,7 @@ import com.travel.pojo.model.GuideSummary;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -253,4 +254,7 @@ public interface GuideMapper {
      * @return 影响行数
      */
     int deleteItineraryDaysByGuideId(@Param("guideId") Long guideId);
+
+    @Update("UPDATE guides SET views_count = views_count + 1 WHERE id = #{guideId}")
+    int incrementViewsCount(@Param("guideId") Long guideId);
 }

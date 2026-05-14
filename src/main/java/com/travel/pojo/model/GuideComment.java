@@ -19,4 +19,6 @@ public class GuideComment {
     private String authorName;
     /** 评论者头像（关联查询） */
     private String authorAvatarUrl;
+    /** 关联攻略标题（关联查询） */
+    private String guideTitle;
 }

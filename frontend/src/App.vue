@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <Navbar
-      v-if="currentPage === 'home' || currentPage === 'hot-guides' || currentPage === 'traveler-stories' || currentPage === 'destination-guides' || currentPage === 'destination-detail'"
+      v-if="currentPage === 'home' || currentPage === 'hot-guides' || currentPage === 'traveler-stories' || currentPage === 'destination-guides' || currentPage === 'destination-detail' || currentPage === 'my-guides'"
       @switch-page="switchPage"
       :user-info="userInfo"
       :current-page="currentPage"
@@ -10,8 +10,8 @@
     />
     <main v-if="currentPage === 'home'">
       <HeroSection @search="handleSearch" />
-      <RecommendedDestinations />
-      <CustomerReviews @switch-page="switchPage" />
+      <RecommendedDestinations @view-destination-detail="viewDestinationDetail" />
+      <CustomerReviews @switch-page="switchPage" @view-guide-detail="viewGuideDetail" />
     </main>
     <Footer v-if="currentPage === 'home'" />
 
@@ -50,6 +50,19 @@
       :user-info="userInfo"
       @back="switchPage('home')"
       @update-user="handleUpdateUser"
+      @view-my-guides="switchPage('my-guides')"
+      @view-public-profile="viewPublicProfile"
+    />
+    <PublicProfile
+      v-if="currentPage === 'public-profile'"
+      :user-id="currentPublicUserId"
+      @back="switchPage('user-profile')"
+      @view-guide="viewGuideDetail"
+    />
+    <MyGuides
+      v-if="currentPage === 'my-guides'"
+      @back="switchPage('home')"
+      @view-guide-detail="viewGuideDetail"
     />
     <Toast ref="toastRef" />
   </div>
@@ -58,6 +71,7 @@
 <script setup>
 import { ref, onMounted, provide } from 'vue'
 import { getCookie, removeCookie, setCookie } from './utils/cookie'
+import { setOnAuthError } from './utils/request'
 import Navbar from './components/Navbar.vue'
 import HeroSection from './components/HeroSection.vue'
 import RecommendedDestinations from './components/RecommendedDestinations.vue'
@@ -72,11 +86,14 @@ import TravelerStories from './components/TravelerStories.vue'
 import DestinationGuides from './components/DestinationGuides.vue'
 import DestinationDetail from './components/DestinationDetail.vue'
 import UserProfile from './components/UserProfile.vue'
+import PublicProfile from './components/PublicProfile.vue'
+import MyGuides from './components/MyGuides.vue'
 import Toast from './components/Toast.vue'
 
 const currentPage = ref('home')
 const currentGuideId = ref(null)
 const currentDestinationId = ref(null)
+const currentPublicUserId = ref(null)
 const searchQuery = ref('')
 const userInfo = ref(null)
 const toastRef = ref(null)
@@ -94,6 +111,10 @@ const switchPage = (page) => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
+setOnAuthError(() => {
+  switchPage('login')
+})
+
 const viewGuideDetail = (guideId) => {
   currentGuideId.value = guideId
   switchPage('guide-detail')
@@ -102,6 +123,11 @@ const viewGuideDetail = (guideId) => {
 const viewDestinationDetail = (dest) => {
   currentDestinationId.value = dest.id
   switchPage('destination-detail')
+}
+
+const viewPublicProfile = (userId) => {
+  currentPublicUserId.value = userId
+  switchPage('public-profile')
 }
 
 const handleSearch = (query) => {

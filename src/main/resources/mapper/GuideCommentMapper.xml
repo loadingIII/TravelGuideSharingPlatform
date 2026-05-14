@@ -9,14 +9,14 @@
                up.avatar_url AS author_avatar_url
         FROM guide_comments gc
         LEFT JOIN user_profiles up ON up.user_id = gc.user_id
-        WHERE gc.guide_id = #{guideId}
+        WHERE gc.guide_id = #{guideId} AND gc.is_deleted = 0
         ORDER BY gc.created_at ASC
     </select>
 
     <select id="countByGuideId" resultType="long">
         SELECT COUNT(1)
         FROM guide_comments
-        WHERE guide_id = #{guideId}
+        WHERE guide_id = #{guideId} AND is_deleted = 0
     </select>
 
 </mapper>

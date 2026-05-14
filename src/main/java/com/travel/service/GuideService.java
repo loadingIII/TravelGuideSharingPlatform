@@ -80,4 +80,6 @@ public interface GuideService {
     void deleteGuide(Long guideId);
 
     PageResult<GuideListItemVO> listMyGuides(Integer page, Integer pageSize);
+
+    PageResult<GuideListItemVO> listGuidesByAuthor(Long authorId, Integer page, Integer pageSize);
 }

@@ -57,6 +57,9 @@ public interface UserMapper {
                    @Param("phone") String phone, @Param("email") String email,
                    @Param("status") Integer status);
 
+    @Update("UPDATE users SET email=#{email} WHERE id=#{id}")
+    int updateUserEmail(@Param("id") Long id, @Param("email") String email);
+
     @Update("UPDATE users SET status=#{status} WHERE id=#{id}")
     int updateStatus(@Param("id") Long id, @Param("status") Integer status);
 

@@ -3,8 +3,7 @@
     <!-- 沉浸式页面头部 -->
     <header class="hero-header">
       <div class="hero-bg">
-        <img src="/img/悉尼歌剧院.jpg" alt="悉尼歌剧院" class="hero-image">
-        <div class="hero-overlay"></div>
+        <div class="hero-gradient"></div>
         <div class="hero-grain"></div>
       </div>
       <div class="hero-content">
@@ -35,32 +34,27 @@
             <span class="stat-label">旅行者</span>
           </div>
         </div>
-      </div>
-      <div class="hero-wave">
-        <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 100L48 94C96 88 192 76 288 70C384 64 480 64 576 68C672 72 768 80 864 82C960 84 1056 80 1152 74C1248 68 1344 60 1392 56L1440 52V100H0Z" fill="#3D4F2F"/>
-        </svg>
-      </div>
-    </header>
-
-    <!-- 搜索和筛选区 -->
-    <section class="filter-section">
-      <div class="container">
-        <div class="search-wrapper">
+        <div class="hero-search">
           <div class="search-box">
             <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="11" cy="11" r="8"/>
               <path d="M21 21l-4.35-4.35"/>
             </svg>
-            <input 
-              type="text" 
-              v-model="searchQuery" 
+            <input
+              type="text"
+              v-model="searchQuery"
               placeholder="搜索目的地、攻略..."
               @keyup.enter="handleSearch"
             >
             <button class="search-btn" @click="handleSearch">搜索</button>
           </div>
         </div>
+      </div>
+    </header>
+
+    <!-- 搜索和筛选区 -->
+    <section class="filter-section">
+      <div class="container">
         <div class="filter-scroll">
           <button 
             v-for="tag in filterTags" 
@@ -71,6 +65,18 @@
           >
             <span>{{ tag.label }}</span>
           </button>
+          <div class="sort-group">
+            <button
+              class="sort-btn"
+              :class="{ active: currentSort === 'latest' }"
+              @click="currentSort = 'latest'; currentPage = 1; fetchHotGuides()"
+            >最新</button>
+            <button
+              class="sort-btn"
+              :class="{ active: currentSort === 'hot' }"
+              @click="currentSort = 'hot'; currentPage = 1; fetchHotGuides()"
+            >最热</button>
+          </div>
         </div>
       </div>
     </section>
@@ -130,7 +136,6 @@
               </div>
             </div>
             <div class="card-body">
-              <div class="card-category">攻略精选</div>
               <h3>{{ guide.title }}</h3>
               <p>{{ guide.description }}</p>
               <div class="card-footer">
@@ -139,8 +144,8 @@
                   <span>{{ guide.author }}</span>
                 </div>
                 <div class="engagement">
-                  <span class="eng-item">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
+                  <span class="eng-item like-eng-item" :class="{ liked: guide.isLiked }" @click.stop="toggleGuideLike(guide)">
+                    <svg viewBox="0 0 24 24" :fill="guide.isLiked ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="2">
                       <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                     </svg>
                     {{ guide.likes }}
@@ -265,11 +270,24 @@
                 <!-- 景点列表 -->
                 <div class="spots-list" v-if="day.spots && day.spots.length > 0">
                   <div v-for="(spot, spotIdx) in day.spots" :key="spotIdx" class="spot-input-item">
-                    <input type="text" v-model="spot.name" placeholder="景点名称">
-                    <input type="text" v-model="spot.description" placeholder="景点描述">
-                    <div class="spot-row">
-                      <input type="text" v-model="spot.time" placeholder="时间 09:00">
-                      <input type="text" v-model="spot.duration" placeholder="时长 2小时">
+                    <div class="spot-top-row">
+                      <div class="spot-image-upload" @click="triggerSpotUpload(index, spotIdx)">
+                        <img v-if="spot.imageUrl" :src="spot.imageUrl" class="spot-image-preview">
+                        <div v-else class="spot-image-placeholder">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                          </svg>
+                          <span>景点图片</span>
+                        </div>
+                      </div>
+                      <div class="spot-fields">
+                        <input type="text" v-model="spot.name" placeholder="景点名称（必填）" required>
+                        <input type="text" v-model="spot.description" placeholder="景点描述">
+                        <div class="spot-row">
+                          <input type="text" v-model="spot.time" placeholder="时间 09:00">
+                          <input type="text" v-model="spot.duration" placeholder="时长 2小时">
+                        </div>
+                      </div>
                     </div>
                     <button class="remove-spot-btn" @click="removeSpot(index, spotIdx)">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -328,6 +346,7 @@ const emit = defineEmits(['back-to-home', 'view-guide-detail', 'switch-page'])
 
 const searchQuery = ref('')
 const currentFilter = ref('all')
+const currentSort = ref('latest')
 const currentPage = ref(1)
 const totalPages = ref(1)
 
@@ -373,7 +392,14 @@ const fetchHotGuides = async (isLoadMore = false) => {
   error.value = null
   
   try {
-    const params = `page=${currentPage.value}&pageSize=12${searchQuery.value ? `&keyword=${encodeURIComponent(searchQuery.value)}` : ''}`
+    const scopeValues = { domestic: 'domestic', international: 'international' }
+    const travelModeValues = { free: 'free', group: 'group', family: 'family', honeymoon: 'honeymoon' }
+    const scope = scopeValues[currentFilter.value] || ''
+    const travelMode = travelModeValues[currentFilter.value] || ''
+    let params = `page=${currentPage.value}&pageSize=12&sort=${currentSort.value}`
+    if (searchQuery.value) params += `&keyword=${encodeURIComponent(searchQuery.value)}`
+    if (scope) params += `&scope=${scope}`
+    if (travelMode) params += `&travelMode=${travelMode}`
     const result = await request.get(`/api/guides/page?${params}`)
     if (result.code === 200 || result.code === 'OK') {
       if (result.data && result.data.list && result.data.list.length > 0) {
@@ -386,7 +412,8 @@ const fetchHotGuides = async (isLoadMore = false) => {
           author: item.authorName,
           authorAvatar: item.authorAvatarUrl,
           likes: item.likesCount,
-          views: item.viewsCount
+          views: item.viewsCount,
+          isLiked: false
         }))
         if (isLoadMore) {
           hotGuides.value = [...hotGuides.value, ...newGuides]
@@ -429,6 +456,27 @@ const setupInfiniteScroll = () => {
 
 const goBack = () => emit('back-to-home')
 const viewGuideDetail = (guideId) => emit('view-guide-detail', guideId)
+
+const toggleGuideLike = async (guide) => {
+  const token = getCookie('token')
+  if (!token) {
+    if (confirm('请先登录后再点赞，是否前往登录？')) {
+      emit('switch-page', 'login')
+    }
+    return
+  }
+  try {
+    const result = guide.isLiked
+      ? await request.delete(`/api/guides/${guide.id}/like`)
+      : await request.post(`/api/guides/${guide.id}/like`)
+    if (result.code === 'OK' || result.code === 200) {
+      guide.isLiked = result.data.liked
+      guide.likes = result.data.likesCount
+    }
+  } catch (error) {
+    console.error('点赞失败:', error)
+  }
+}
 
 const handleSearch = () => {
   currentPage.value = 1
@@ -478,16 +526,39 @@ const addSpot = (dayIndex) => {
   if (!guideForm.itinerary[dayIndex].spots) {
     guideForm.itinerary[dayIndex].spots = []
   }
-  guideForm.itinerary[dayIndex].spots.push({ name: '', description: '', time: '', duration: '' })
+  guideForm.itinerary[dayIndex].spots.push({ name: '', description: '', time: '', duration: '', imageUrl: '', imageFile: null })
 }
 
 const removeSpot = (dayIndex, spotIndex) => {
   guideForm.itinerary[dayIndex].spots.splice(spotIndex, 1)
 }
 
+const triggerSpotUpload = (dayIndex, spotIndex) => {
+  const input = document.createElement('input')
+  input.type = 'file'
+  input.accept = 'image/*'
+  input.onchange = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      guideForm.itinerary[dayIndex].spots[spotIndex].imageFile = file
+      guideForm.itinerary[dayIndex].spots[spotIndex].imageUrl = URL.createObjectURL(file)
+    }
+  }
+  input.click()
+}
+
 const publishGuide = async () => {
   if (!guideForm.title.trim()) { toast.warning('请输入攻略标题'); return }
   if (!guideForm.destinationName.trim()) { toast.warning('请输入目的地'); return }
+  for (let i = 0; i < guideForm.itinerary.length; i++) {
+    const day = guideForm.itinerary[i]
+    for (const spot of (day.spots || [])) {
+      if (!spot.name.trim()) {
+        toast.warning(`第${i + 1}天有景点名称未填写，请补充`)
+        return
+      }
+    }
+  }
   try {
     // 先上传封面图片
     let coverImageUrl = null
@@ -502,20 +573,38 @@ const publishGuide = async () => {
       }
     }
 
-    // 构建行程数据
-    const itineraryDays = guideForm.itinerary
-      .filter(d => d.title.trim())
-      .map((day, index) => ({
-        dayNo: index + 1,
-        title: day.title,
-        summary: day.description,
-        spots: (day.spots || []).filter(s => s.name.trim()).map(spot => ({
+    // 构建行程数据（上传景点图片）
+    const itineraryDays = []
+    for (let i = 0; i < guideForm.itinerary.length; i++) {
+      const day = guideForm.itinerary[i]
+      const spots = []
+      for (const spot of (day.spots || [])) {
+        let spotImageUrl = null
+        if (spot.imageFile) {
+          const fd = new FormData()
+          fd.append('file', spot.imageFile)
+          const res = await request.post('/api/files/upload', fd, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+          })
+          if (res.code === 'OK' || res.code === 200) {
+            spotImageUrl = res.data
+          }
+        }
+        spots.push({
           name: spot.name,
           description: spot.description,
+          imageUrl: spotImageUrl,
           time: spot.time,
           duration: spot.duration
-        }))
-      }))
+        })
+      }
+      itineraryDays.push({
+        dayNo: i + 1,
+        title: day.title || `第${i + 1}天`,
+        summary: day.description,
+        spots
+      })
+    }
 
     // 构建标签数据
     const tagNames = guideForm.tags 
@@ -572,7 +661,7 @@ onUnmounted(() => { if (observer) observer.disconnect() })
 <style scoped>
 .hot-guides-page {
   min-height: 100vh;
-  background-color: #3D4F2F;
+  background-color: var(--color-bg-primary);
   font-family: var(--font-body);
 }
 
@@ -585,8 +674,8 @@ onUnmounted(() => { if (observer) observer.disconnect() })
 /* Hero Header */
 .hero-header {
   position: relative;
-  height: 75vh;
-  min-height: 500px;
+  height: 45vh;
+  min-height: 320px;
   overflow: hidden;
   display: flex;
   align-items: flex-end;
@@ -595,43 +684,29 @@ onUnmounted(() => { if (observer) observer.disconnect() })
 .hero-bg {
   position: absolute;
   inset: 0;
+  background-image: url('/img/back1.png');
+  background-size: cover;
+  background-position: center;
 }
 
-.hero-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(1.05);
-  animation: heroZoom 20s ease-in-out infinite alternate;
-}
-
-@keyframes heroZoom {
-  0% { transform: scale(1.05); }
-  100% { transform: scale(1.15); }
-}
-
-.hero-overlay {
+.hero-gradient {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(0,0,0,0.1) 0%,
-    rgba(0,0,0,0.3) 40%,
-    rgba(0,0,0,0.7) 100%
-  );
+  background:
+    linear-gradient(to bottom, rgba(45, 58, 30, 0.3) 0%, rgba(45, 58, 30, 0.5) 100%);
 }
 
 .hero-grain {
   position: absolute;
   inset: 0;
-  opacity: 0.15;
+  opacity: 0.12;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
 }
 
 .hero-content {
   position: relative;
   z-index: 2;
-  padding: 40px 60px 60px;
+  padding: 40px 60px 48px;
   max-width: 1400px;
   margin: 0 auto;
   width: 100%;
@@ -664,14 +739,14 @@ onUnmounted(() => { if (observer) observer.disconnect() })
 }
 
 .hero-text {
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .hero-tag {
   display: inline-block;
   padding: 6px 16px;
   background: linear-gradient(135deg, #F5F0E8, #FAF8F5);
-  color: #2F3D24;
+  color: var(--color-text-primary);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 3px;
@@ -686,7 +761,7 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   margin: 0 0 16px;
   line-height: 1.1;
   letter-spacing: -1px;
-  text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  text-shadow: 0 4px 20px rgba(45,58,30,0.3);
 }
 
 .hero-text p {
@@ -732,19 +807,6 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   background: rgba(255,255,255,0.2);
 }
 
-.hero-wave {
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  z-index: 3;
-}
-
-.hero-wave svg {
-  display: block;
-  width: 100%;
-}
-
 /* Filter Section */
 .filter-section {
   padding: 32px 0;
@@ -752,33 +814,33 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   z-index: 4;
 }
 
-.search-wrapper {
-  margin-bottom: 24px;
+.hero-search {
+  max-width: 560px;
+  margin-top: 8px;
 }
 
 .search-box {
   display: flex;
   align-items: center;
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 6px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
+  padding: 8px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.25);
   border-radius: 50px;
   transition: all 0.3s ease;
 }
 
 .search-box:focus-within {
-  background: rgba(255,255,255,0.12);
-  border-color: rgba(245,240,232,0.4);
-  box-shadow: 0 0 0 4px rgba(245,240,232,0.1);
+  background: rgba(255,255,255,0.2);
+  border-color: rgba(245,240,232,0.5);
+  box-shadow: 0 0 0 4px rgba(245,240,232,0.15);
 }
 
 .search-icon {
   width: 20px;
   height: 20px;
   margin-left: 16px;
-  color: #A8A29E;
+  color: rgba(255,255,255,0.7);
 }
 
 .search-box input {
@@ -787,21 +849,21 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   background: transparent;
   border: none;
   font-size: 15px;
-  color: #F5F2ED;
+  color: white;
   outline: none;
 }
 
 .search-box input::placeholder {
-  color: #A8A29E;
+  color: rgba(255,255,255,0.6);
 }
 
 .search-btn {
   padding: 12px 28px;
   background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
-  color: #2F3D24;
+  color: var(--color-text-primary);
   border: none;
   border-radius: 30px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -831,10 +893,10 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   align-items: center;
   gap: 8px;
   padding: 10px 20px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.6);
+  border: 1px solid var(--color-card-border);
   border-radius: 30px;
-  color: #D4CFC7;
+  color: var(--color-text-secondary);
   font-size: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -843,15 +905,46 @@ onUnmounted(() => { if (observer) observer.disconnect() })
 }
 
 .filter-chip:hover {
-  background: rgba(255,255,255,0.1);
-  border-color: rgba(245,240,232,0.3);
-  color: #F5F2ED;
+  background: rgba(255,255,255,0.9);
+  border-color: var(--color-primary);
+  color: var(--color-primary-dark);
 }
 
 .filter-chip.active {
-  background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
-  border-color: #F5F0E8;
-  color: #2F3D24;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #FFFFFF;
+}
+
+.sort-group {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.sort-btn {
+  padding: 8px 16px;
+  background: rgba(255,255,255,0.4);
+  border: 1px solid var(--color-card-border);
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sort-btn:first-child {
+  border-radius: 20px 0 0 20px;
+}
+
+.sort-btn:last-child {
+  border-radius: 0 20px 20px 0;
+}
+
+.sort-btn.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
 }
 
 /* Guides Section */
@@ -898,7 +991,7 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   align-items: center;
   justify-content: center;
   padding: 100px 20px;
-  color: #D4CFC7;
+  color: var(--color-text-muted);
 }
 
 .error-icon-wrap {
@@ -922,7 +1015,7 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   margin-top: 20px;
   padding: 12px 32px;
   background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
-  color: #2F3D24;
+  color: var(--color-text-primary);
   border: none;
   border-radius: 30px;
   font-size: 14px;
@@ -952,7 +1045,7 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.5);
   border-radius: 24px;
   margin-bottom: 20px;
 }
@@ -992,7 +1085,7 @@ onUnmounted(() => { if (observer) observer.disconnect() })
 
 .magazine-card:hover {
   transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  box-shadow: 0 20px 60px rgba(45,58,30,0.4);
   z-index: 10;
 }
 
@@ -1068,19 +1161,6 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   opacity: 1;
 }
 
-.card-category {
-  display: inline-block;
-  padding: 4px 12px;
-  background: rgba(245,240,232,0.9);
-  color: #2F3D24;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  border-radius: 4px;
-  margin-bottom: 12px;
-  text-transform: uppercase;
-}
-
 .card-body h3 {
   font-family: var(--font-display);
   font-size: 22px;
@@ -1144,6 +1224,20 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   color: rgba(255,255,255,0.7);
 }
 
+.eng-item.like-eng-item {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.eng-item.like-eng-item:hover {
+  color: #e07070;
+  transform: scale(1.1);
+}
+
+.eng-item.like-eng-item.liked {
+  color: #e07070;
+}
+
 .eng-item svg {
   width: 14px;
   height: 14px;
@@ -1201,7 +1295,7 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   gap: 10px;
   padding: 16px 28px;
   background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
-  color: #2F3D24;
+  color: var(--color-text-primary);
   border: none;
   border-radius: 50px;
   font-size: 15px;
@@ -1241,15 +1335,15 @@ onUnmounted(() => { if (observer) observer.disconnect() })
 }
 
 .modal-content {
-  background: #3D4F2F;
-  border: 1px solid rgba(255,255,255,0.12);
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
   border-radius: 20px;
   width: 96%;
   max-width: 960px;
   height: 90vh;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+  box-shadow: 0 24px 80px rgba(45,58,30,0.2);
   animation: modalSlideUp 0.35s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
@@ -1263,14 +1357,14 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   justify-content: space-between;
   align-items: center;
   padding: 20px 32px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid var(--color-card-border);
   flex-shrink: 0;
 }
 
 .modal-header h3 {
   font-size: 24px;
   font-weight: 600;
-  color: #F5F2ED;
+  color: var(--color-text-primary);
   font-family: var(--font-display);
 }
 
@@ -1280,17 +1374,17 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255,255,255,0.08);
+  background: var(--color-bg-tertiary);
   border: none;
   border-radius: 50%;
-  color: #A8A29E;
+  color: var(--color-text-muted);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .close-btn:hover {
-  background: rgba(255,255,255,0.15);
-  color: #F5F2ED;
+  background: var(--color-card-border);
+  color: var(--color-text-primary);
 }
 
 .close-btn svg {
@@ -1333,7 +1427,7 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   display: block;
   font-size: 14px;
   font-weight: 600;
-  color: #D4CFC7;
+  color: var(--color-text-secondary);
   margin-bottom: 10px;
 }
 
@@ -1342,37 +1436,37 @@ onUnmounted(() => { if (observer) observer.disconnect() })
 .form-group select {
   width: 100%;
   padding: 14px 18px;
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid var(--color-card-border);
   border-radius: 12px;
   font-size: 15px;
-  background: rgba(255,255,255,0.06);
-  color: #F5F2ED;
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
   transition: all 0.3s ease;
   outline: none;
   cursor: pointer;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23A8A29E' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B8A52' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 16px center;
   padding-right: 40px;
 }
 
 .form-group select option {
-  background: #3D4F2F;
-  color: #F5F2ED;
+  background: var(--color-card-bg);
+  color: var(--color-text-primary);
   padding: 12px;
 }
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-  color: #A8A29E;
+  color: var(--color-text-muted);
 }
 
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
-  border-color: #F5F0E8;
-  box-shadow: 0 0 0 3px rgba(245,240,232,0.1);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(91,140,62,0.1);
 }
 
 .form-group textarea {
@@ -1386,7 +1480,7 @@ onUnmounted(() => { if (observer) observer.disconnect() })
 
 /* 上传区域 */
 .upload-area {
-  border: 2px dashed rgba(255,255,255,0.2);
+  border: 2px dashed var(--color-card-border);
   border-radius: 12px;
   padding: 24px;
   text-align: center;
@@ -1396,8 +1490,8 @@ onUnmounted(() => { if (observer) observer.disconnect() })
 }
 
 .upload-area:hover {
-  border-color: rgba(245,240,232,0.4);
-  background: rgba(255,255,255,0.04);
+  border-color: var(--color-primary);
+  background: var(--color-bg-secondary);
 }
 
 .upload-placeholder {
@@ -1405,7 +1499,7 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  color: #A8A29E;
+  color: var(--color-text-muted);
 }
 
 .upload-placeholder svg {
@@ -1432,8 +1526,8 @@ onUnmounted(() => { if (observer) observer.disconnect() })
 }
 
 .itinerary-item {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-card-border);
   border-radius: 12px;
   padding: 16px;
 }
@@ -1448,8 +1542,8 @@ onUnmounted(() => { if (observer) observer.disconnect() })
 .day-badge {
   display: inline-block;
   padding: 4px 12px;
-  background: rgba(245,240,232,0.15);
-  color: #F5F0E8;
+  background: var(--color-primary);
+  color: #FFFFFF;
   font-size: 12px;
   font-weight: 600;
   border-radius: 6px;
@@ -1482,11 +1576,11 @@ onUnmounted(() => { if (observer) observer.disconnect() })
 .itinerary-item input {
   width: 100%;
   padding: 10px 14px;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid var(--color-card-border);
   border-radius: 8px;
   font-size: 14px;
-  background: rgba(255,255,255,0.06);
-  color: #F5F2ED;
+  background: var(--color-card-bg);
+  color: var(--color-text-primary);
   transition: all 0.3s ease;
   outline: none;
   margin-bottom: 8px;
@@ -1497,12 +1591,12 @@ onUnmounted(() => { if (observer) observer.disconnect() })
 }
 
 .itinerary-item input::placeholder {
-  color: #A8A29E;
+  color: var(--color-text-muted);
 }
 
 .itinerary-item input:focus {
-  border-color: #F5F0E8;
-  box-shadow: 0 0 0 2px rgba(245,240,232,0.1);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(91,140,62,0.1);
 }
 
 .add-day-btn {
@@ -1512,18 +1606,18 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   gap: 8px;
   padding: 12px;
   background: transparent;
-  border: 2px dashed rgba(255,255,255,0.2);
+  border: 2px dashed var(--color-card-border);
   border-radius: 12px;
-  color: #A8A29E;
+  color: var(--color-text-muted);
   font-size: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .add-day-btn:hover {
-  border-color: rgba(245,240,232,0.4);
-  color: #D4CFC7;
-  background: rgba(255,255,255,0.04);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-bg-secondary);
 }
 
 .add-day-btn svg {
@@ -1535,15 +1629,15 @@ onUnmounted(() => { if (observer) observer.disconnect() })
 .spots-list {
   margin-top: 12px;
   padding-top: 12px;
-  border-top: 1px dashed rgba(255,255,255,0.1);
+  border-top: 1px dashed var(--color-card-border);
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
 .spot-input-item {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
   border-radius: 8px;
   padding: 12px;
   position: relative;
@@ -1552,11 +1646,11 @@ onUnmounted(() => { if (observer) observer.disconnect() })
 .spot-input-item input {
   width: 100%;
   padding: 8px 12px;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid var(--color-card-border);
   border-radius: 6px;
   font-size: 13px;
-  background: rgba(255,255,255,0.04);
-  color: #F5F2ED;
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
   margin-bottom: 8px;
 }
 
@@ -1565,12 +1659,63 @@ onUnmounted(() => { if (observer) observer.disconnect() })
 }
 
 .spot-input-item input::placeholder {
-  color: #A8A29E;
+  color: var(--color-text-muted);
 }
 
 .spot-input-item input:focus {
-  border-color: #F5F0E8;
+  border-color: var(--color-primary);
   outline: none;
+}
+
+.spot-top-row {
+  display: flex;
+  gap: 12px;
+}
+
+.spot-image-upload {
+  width: 90px;
+  height: 90px;
+  flex-shrink: 0;
+  border: 2px dashed var(--color-card-border);
+  border-radius: 8px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.spot-image-upload:hover {
+  border-color: var(--color-primary);
+}
+
+.spot-image-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.spot-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--color-text-muted);
+}
+
+.spot-image-placeholder svg {
+  width: 24px;
+  height: 24px;
+}
+
+.spot-image-placeholder span {
+  font-size: 11px;
+}
+
+.spot-fields {
+  flex: 1;
+  min-width: 0;
 }
 
 .spot-row {
@@ -1617,17 +1762,17 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   padding: 8px;
   margin-top: 10px;
   background: transparent;
-  border: 1px dashed rgba(255,255,255,0.15);
+  border: 1px dashed var(--color-card-border);
   border-radius: 8px;
-  color: #A8A29E;
+  color: var(--color-text-muted);
   font-size: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .add-spot-btn:hover {
-  border-color: rgba(245,240,232,0.3);
-  color: #D4CFC7;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 .add-spot-btn svg {
@@ -1646,24 +1791,24 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   justify-content: flex-end;
   gap: 12px;
   padding: 16px 32px;
-  border-top: 1px solid rgba(255,255,255,0.1);
+  border-top: 1px solid var(--color-card-border);
   flex-shrink: 0;
 }
 
 .btn-ghost {
   padding: 12px 24px;
   background: transparent;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid var(--color-card-border);
   border-radius: 30px;
   font-size: 15px;
-  color: #D4CFC7;
+  color: var(--color-text-muted);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .btn-ghost:hover {
-  background: rgba(255,255,255,0.08);
-  border-color: rgba(255,255,255,0.3);
+  background: var(--color-bg-tertiary);
+  border-color: var(--color-card-border);
 }
 
 .btn-accent {
@@ -1671,12 +1816,12 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   align-items: center;
   gap: 8px;
   padding: 12px 28px;
-  background: linear-gradient(135deg, #F5F0E8 0%, #FAF8F5 100%);
+  background: var(--gradient-secondary);
   border: none;
   border-radius: 30px;
   font-size: 15px;
   font-weight: 600;
-  color: #2F3D24;
+  color: #FFFFFF;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -1688,7 +1833,7 @@ onUnmounted(() => { if (observer) observer.disconnect() })
 
 .btn-accent:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(245,240,232,0.4);
+  box-shadow: 0 8px 25px rgba(45,58,30,0.2);
 }
 
 /* Responsive */
@@ -1712,7 +1857,7 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   .card-3, .card-4, .card-5 { grid-column: span 1; grid-row: span 1; }
   
   .hero-content {
-    padding: 40px;
+    padding: 32px 40px 40px;
   }
   
   .hero-stats {
@@ -1736,7 +1881,7 @@ onUnmounted(() => { if (observer) observer.disconnect() })
   }
   
   .hero-content {
-    padding: 24px;
+    padding: 24px 24px 32px;
   }
   
   .hero-stats {

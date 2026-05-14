@@ -89,14 +89,10 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(ErrorCode.UNAUTHORIZED, "请先登录");
         }
 
-        // 更新 User 表的邮箱字段
-        if (request.getEmail() != null) {
-            // 先查询当前用户信息
-            User currentUser = userMapper.selectById(userId);
-            if (currentUser != null) {
-                userMapper.updateUser(userId, currentUser.getUsername(), 
-                    currentUser.getPhone(), request.getEmail(), currentUser.getStatus());
-            }
+        // 更新 User 表的邮箱字段（空字符串视为 null，避免唯一约束冲突）
+        String email = request.getEmail();
+        if (email != null && !email.trim().isEmpty()) {
+            userMapper.updateUserEmail(userId, email.trim());
         }
 
         // 查询是否已有用户资料记录
