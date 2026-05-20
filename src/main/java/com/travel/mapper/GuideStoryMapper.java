@@ -94,4 +94,10 @@ public interface GuideStoryMapper {
 
     @Delete("DELETE FROM traveler_story_images WHERE story_id = #{storyId}")
     int deleteImagesByStoryId(@Param("storyId") Long storyId);
+
+    @Update("UPDATE traveler_stories SET comments_count = (SELECT COUNT(*) FROM traveler_story_comments c WHERE c.story_id = traveler_stories.id AND c.is_deleted = 0)")
+    int correctCommentsCount();
+
+    @Update("UPDATE traveler_stories SET likes_count = (SELECT COUNT(*) FROM traveler_story_likes sl WHERE sl.story_id = traveler_stories.id)")
+    int correctLikesCount();
 }

@@ -206,12 +206,13 @@ public interface GuideMapper {
      * @param locationText 地点文本
      * @param scope        范围
      * @param travelMode   旅行方式
+     * @param days         行程天数
      * @return 影响行数
      */
     int updateGuideFull(@Param("id") Long id, @Param("title") String title, @Param("summary") String summary,
                         @Param("contentHtml") String contentHtml, @Param("coverImageUrl") String coverImageUrl,
                         @Param("locationText") String locationText, @Param("scope") String scope,
-                        @Param("travelMode") String travelMode);
+                        @Param("travelMode") String travelMode, @Param("days") Integer days);
 
     /**
      * 更新攻略元数据（标题、摘要、内容、图片、地点、范围、旅行方式）
@@ -257,4 +258,16 @@ public interface GuideMapper {
 
     @Update("UPDATE guides SET views_count = views_count + 1 WHERE id = #{guideId}")
     int incrementViewsCount(@Param("guideId") Long guideId);
+
+    @Update("UPDATE guides g SET comments_count = (SELECT COUNT(*) FROM guide_comments gc WHERE gc.guide_id = g.id AND gc.is_deleted = 0) WHERE g.id = #{guideId}")
+    int correctCommentsCountByGuideId(@Param("guideId") Long guideId);
+
+    @Update("UPDATE guides g SET comments_count = (SELECT COUNT(*) FROM guide_comments gc WHERE gc.guide_id = g.id AND gc.is_deleted = 0)")
+    int correctCommentsCount();
+
+    @Update("UPDATE guides g SET likes_count = (SELECT COUNT(*) FROM guide_likes gl WHERE gl.guide_id = g.id)")
+    int correctLikesCount();
+
+    @Update("UPDATE guides g SET favorites_count = (SELECT COUNT(*) FROM guide_favorites gf WHERE gf.guide_id = g.id)")
+    int correctFavoritesCount();
 }

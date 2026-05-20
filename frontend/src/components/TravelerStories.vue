@@ -65,11 +65,12 @@
             @mouseenter="hoverStory = story.id"
             @mouseleave="hoverStory = null"
             :class="{ hovered: hoverStory === story.id }"
+            @click="viewStoryDetail(story)"
           >
             <!-- 作者头部 -->
             <div class="story-author">
               <div class="author-avatar">
-                <img :src="story.avatar" :alt="story.author">
+                <img :src="story.avatar || defaultAvatar" :alt="story.author" @error="e => e.target.src = defaultAvatar">
                 <div class="vip-ring" v-if="story.isVip"></div>
               </div>
               <div class="author-meta">
@@ -134,7 +135,7 @@
                 <span>{{ formatNumber(story.likes) }}</span>
               </button>
               
-              <button class="action-btn comment-btn" @click.stop="showComments(story)">
+              <button class="action-btn comment-btn" @click.stop="viewStoryDetail(story)">
                 <div class="action-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
@@ -261,58 +262,6 @@
     </div>
   </div>
 
-  <!-- 故事评论弹窗 -->
-  <div class="modal-overlay" v-if="showCommentsModal" @click.self="closeCommentsModal">
-    <div class="modal-content comment-modal">
-      <div class="modal-header">
-        <h3>评论 · {{ selectedStory?.author }}</h3>
-        <button class="close-btn" @click="closeCommentsModal">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M18 6L6 18M6 6l12 12"/>
-          </svg>
-        </button>
-      </div>
-      <div class="comment-modal-body">
-        <div v-if="storyCommentsLoading" class="loading-state">
-          <div class="loader"><div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div></div>
-          <p>加载评论中...</p>
-        </div>
-        <div v-else-if="storyComments.length === 0" class="empty-state">
-          <p>暂无评论，来说点什么吧</p>
-        </div>
-        <div v-else class="comments-list">
-          <div v-for="comment in storyComments" :key="comment.id" class="comment-item">
-            <div class="comment-header">
-              <span class="commenter-name">{{ comment.authorName || '匿名用户' }}</span>
-              <span class="comment-time">{{ formatTime(comment.createdAt) }}</span>
-            </div>
-            <p class="comment-text">{{ comment.content }}</p>
-            <div class="comment-actions">
-              <button
-                class="comment-action like-action"
-                :class="{ active: storyCommentLiked[comment.id] }"
-                @click="toggleStoryCommentLike(comment)"
-              >
-                <svg class="action-icon" viewBox="0 0 24 24" fill="none">
-                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" :fill="storyCommentLiked[comment.id] ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="1.5"/>
-                </svg>
-                {{ comment.likesCount || 0 }}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="comment-modal-footer">
-        <textarea
-          v-model="storyCommentText"
-          placeholder="写下你的评论..."
-          rows="2"
-          @keydown.ctrl.enter="submitStoryComment"
-        ></textarea>
-        <button class="submit-btn" @click="submitStoryComment" :disabled="!storyCommentText.trim()">发表</button>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script setup>
@@ -320,27 +269,20 @@ import { ref, onMounted } from 'vue'
 import request, { triggerAuthError } from '../utils/request'
 import { getCookie } from '../utils/cookie'
 
-const emit = defineEmits(['back-to-home'])
+const emit = defineEmits(['back-to-home', 'view-story-detail'])
 
 const currentPage = ref(1)
 const totalPages = ref(1)
 const hoverStory = ref(null)
 const animatingLike = ref(null)
 
+const defaultAvatar = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80"><rect width="80" height="80" fill="%23E8E4DE" rx="40"/><text x="40" y="48" text-anchor="middle" font-size="32" fill="%23A8A29E" font-family="sans-serif">?</text></svg>')
+
 const showPublishModal = ref(false)
 const newStoryContent = ref('')
 const previewImages = ref([])
+const fileImages = ref([])
 const fileInput = ref(null)
-
-// 故事评论
-const showCommentsModal = ref(false)
-const selectedStory = ref(null)
-const storyComments = ref([])
-const storyCommentText = ref('')
-const storyCommentsLoading = ref(false)
-const storyCommentsPage = ref(1)
-const storyCommentsTotal = ref(0)
-const storyCommentLiked = ref({})
 
 const previewImageList = ref([])
 const currentPreviewIndex = ref(0)
@@ -442,6 +384,10 @@ const formatTime = (timestamp) => {
 
 const goBack = () => emit('back-to-home')
 
+const viewStoryDetail = (story) => {
+  emit('view-story-detail', story.id)
+}
+
 const formatNumber = (num) => {
   if (num >= 10000) return (num / 10000).toFixed(1) + 'w'
   if (num >= 1000) return (num / 1000).toFixed(1) + 'k'
@@ -465,80 +411,6 @@ const toggleLike = async (story) => {
   }
 }
 
-const showComments = async (story) => {
-  selectedStory.value = story
-  storyComments.value = []
-  storyCommentsPage.value = 1
-  showCommentsModal.value = true
-  await loadStoryComments()
-}
-
-const loadStoryComments = async () => {
-  if (!selectedStory.value) return
-  storyCommentsLoading.value = true
-  storyCommentLiked.value = {}
-  try {
-    const result = await request.get(`/api/stories/${selectedStory.value.id}/comments?page=${storyCommentsPage.value}&pageSize=10`)
-    if (result.code === 'OK') {
-      storyComments.value = result.data.list || []
-      storyCommentsTotal.value = result.data.total || 0
-      selectedStory.value.comments = storyCommentsTotal.value
-    }
-  } catch (err) {
-    console.error('加载故事评论失败:', err)
-  } finally {
-    storyCommentsLoading.value = false
-  }
-}
-
-const toggleStoryCommentLike = async (comment) => {
-  const token = getCookie('token')
-  if (!token) {
-    triggerAuthError()
-    return
-  }
-  try {
-    const liked = storyCommentLiked.value[comment.id]
-    const result = liked
-      ? await request.delete(`/api/stories/comments/${comment.id}/like`)
-      : await request.post(`/api/stories/comments/${comment.id}/like`)
-    if (result.code === 'OK') {
-      storyCommentLiked.value[comment.id] = result.data.liked
-      comment.likesCount = result.data.likesCount
-    }
-  } catch (err) {
-    console.error('评论点赞操作失败:', err)
-  }
-}
-
-const submitStoryComment = async () => {
-  if (!storyCommentText.value.trim() || !selectedStory.value) return
-  const token = getCookie('token')
-  if (!token) {
-    triggerAuthError()
-    return
-  }
-  try {
-    const result = await request.post(`/api/stories/${selectedStory.value.id}/comments`, {
-      content: storyCommentText.value
-    })
-    if (result.code === 'OK') {
-      storyCommentText.value = ''
-      await loadStoryComments()
-    }
-  } catch (err) {
-    console.error('提交故事评论失败:', err)
-    alert('评论提交失败，请稍后重试')
-  }
-}
-
-const closeCommentsModal = () => {
-  showCommentsModal.value = false
-  selectedStory.value = null
-  storyComments.value = []
-  storyCommentText.value = ''
-}
-
 const shareStory = (story) => alert(`分享 ${story.author} 的故事`)
 
 const changePage = (page) => {
@@ -555,6 +427,7 @@ const handleFileChange = (event) => {
   const files = event.target.files
   if (files) {
     Array.from(files).forEach(file => {
+      fileImages.value.push(file)
       const reader = new FileReader()
       reader.onload = (e) => previewImages.value.push(e.target.result)
       reader.readAsDataURL(file)
@@ -562,18 +435,33 @@ const handleFileChange = (event) => {
   }
 }
 
-const removeImage = (index) => previewImages.value.splice(index, 1)
+const removeImage = (index) => {
+  previewImages.value.splice(index, 1)
+  fileImages.value.splice(index, 1)
+}
 
 const publishStory = async () => {
-  if (!newStoryContent.value.trim()) { alert('请输入故事内容'); return }
+  if (!newStoryContent.value.trim()) { return }
   try {
-    const result = await request.post('/api/stories', { content: newStoryContent.value, imageUrls: [] })
+    const imageUrls = []
+    if (fileImages.value.length > 0) {
+      for (const file of fileImages.value) {
+        const fd = new FormData()
+        fd.append('file', file)
+        const res = await request.post('/api/files/upload', fd)
+        if (res.code === 'OK' && res.data) imageUrls.push(res.data)
+      }
+    }
+    const result = await request.post('/api/stories', {
+      content: newStoryContent.value,
+      imageUrls
+    })
     if (result.code === 'OK') {
       showPublishModal.value = false
       newStoryContent.value = ''
       previewImages.value = []
+      fileImages.value = []
       fetchStories()
-      alert('故事发布成功！')
     }
   } catch (err) {
     triggerAuthError()
@@ -1252,8 +1140,8 @@ onMounted(() => fetchStories())
 }
 
 .modal-content {
-  background: var(--color-primary);
-  border: 1px solid var(--color-card-border);
+  background: #fff;
+  border: none;
   border-radius: 24px;
   width: 90%;
   max-width: 560px;
@@ -1273,14 +1161,15 @@ onMounted(() => fetchStories())
   justify-content: space-between;
   align-items: center;
   padding: 28px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
 }
 
 .modal-header h3 {
   font-size: 24px;
   font-weight: 600;
-  color: var(--color-text-primary);
+  color: #1a1a1a;
   font-family: var(--font-display);
+  margin: 0;
 }
 
 .close-btn {
@@ -1289,17 +1178,17 @@ onMounted(() => fetchStories())
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255,255,255,0.6);
+  background: #f0f0f0;
   border: none;
   border-radius: 50%;
-  color: #A8A29E;
+  color: #666;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .close-btn:hover {
-  background: rgba(255,255,255,0.15);
-  color: var(--color-text-primary);
+  background: #e0e0e0;
+  color: #333;
 }
 
 .close-btn svg {
@@ -1319,18 +1208,18 @@ onMounted(() => fetchStories())
   display: block;
   font-size: 14px;
   font-weight: 600;
-  color: var(--color-text-muted);
+  color: #666;
   margin-bottom: 10px;
 }
 
 .form-group textarea {
   width: 100%;
   padding: 14px 18px;
-  border: 1px solid var(--color-card-border);
+  border: 1px solid #e0e0e0;
   border-radius: 12px;
   font-size: 15px;
-  background: rgba(255,255,255,0.5);
-  color: var(--color-text-primary);
+  background: #f9f9f9;
+  color: #1a1a1a;
   transition: all 0.3s ease;
   outline: none;
   resize: vertical;
@@ -1343,28 +1232,30 @@ onMounted(() => fetchStories())
 }
 
 .form-group textarea:focus {
-  border-color: #F5F0E8;
-  box-shadow: 0 0 0 3px rgba(245,240,232,0.1);
+  border-color: #5a8f6a;
+  box-shadow: 0 0 0 3px rgba(90,143,106,0.1);
+  outline: none;
 }
 
 .upload-area {
-  border: 2px dashed rgba(255,255,255,0.2);
+  border: 2px dashed #d0d0d0;
   border-radius: 16px;
   padding: 40px;
   text-align: center;
-  color: #A8A29E;
+  color: #999;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
+  background: #f9f9f9;
 }
 
 .upload-area:hover {
-  border-color: rgba(245,240,232,0.4);
-  background: rgba(255,255,255,0.04);
-  color: var(--color-text-muted);
+  border-color: #5a8f6a;
+  background: rgba(90,143,106,0.04);
+  color: #666;
 }
 
 .upload-area svg {
@@ -1385,6 +1276,7 @@ onMounted(() => fetchStories())
   height: 80px;
   border-radius: 12px;
   overflow: hidden;
+  border: 2px solid #e0e0e0;
 }
 
 .preview-item img {
@@ -1420,23 +1312,23 @@ onMounted(() => fetchStories())
   justify-content: flex-end;
   gap: 12px;
   padding: 20px 28px;
-  border-top: 1px solid rgba(255,255,255,0.1);
+  border-top: 1px solid rgba(0,0,0,0.08);
 }
 
 .btn-ghost {
   padding: 12px 24px;
   background: transparent;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid #e0e0e0;
   border-radius: 30px;
   font-size: 15px;
-  color: var(--color-text-muted);
+  color: #666;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .btn-ghost:hover {
-  background: rgba(255,255,255,0.6);
-  border-color: rgba(255,255,255,0.3);
+  background: #f0f0f0;
+  border-color: #d0d0d0;
 }
 
 .btn-accent {

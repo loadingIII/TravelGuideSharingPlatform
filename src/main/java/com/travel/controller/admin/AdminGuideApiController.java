@@ -4,6 +4,7 @@ import com.travel.pojo.common.ApiResponse;
 import com.travel.pojo.common.PageResult;
 import com.travel.pojo.model.GuideItineraryDay;
 import com.travel.pojo.model.GuideSummary;
+import com.travel.security.RequireRole;
 import com.travel.service.AdminGuideService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -38,19 +39,13 @@ public class AdminGuideApiController {
         return ApiResponse.success(adminGuideService.getItinerary(id));
     }
 
-    @GetMapping("/{id}/tips")
-    public ApiResponse<Map<String, Object>> tips(@PathVariable Long id) {
-        return ApiResponse.success(adminGuideService.getTips(id));
-    }
-
-
-
     @GetMapping("/{id}/tags")
     public ApiResponse<?> guideTags(@PathVariable Long id) {
         return ApiResponse.success(adminGuideService.getGuideTags(id));
     }
 
     @PutMapping("/{id}")
+    @RequireRole({"ROOT", "ADMIN", "EDITOR"})
     public ApiResponse<Void> update(@PathVariable Long id,
                                     @RequestBody Map<String, Object> body,
                                     HttpSession session,
@@ -64,6 +59,7 @@ public class AdminGuideApiController {
     }
 
     @PutMapping("/{id}/itinerary")
+    @RequireRole({"ROOT", "ADMIN", "EDITOR"})
     public ApiResponse<Void> updateItinerary(@PathVariable Long id,
                                              @RequestBody Map<String, Object> body,
                                              HttpSession session,
@@ -76,20 +72,8 @@ public class AdminGuideApiController {
         }
     }
 
-    @PutMapping("/{id}/tips")
-    public ApiResponse<Void> updateTips(@PathVariable Long id,
-                                        @RequestBody Map<String, Object> body,
-                                        HttpSession session,
-                                        HttpServletRequest request) {
-        try {
-            adminGuideService.updateTips(id, body, session, request);
-            return ApiResponse.success();
-        } catch (RuntimeException e) {
-            return ApiResponse.fail("NOT_FOUND", e.getMessage());
-        }
-    }
-
     @PostMapping
+    @RequireRole({"ROOT", "ADMIN", "EDITOR"})
     public ApiResponse<Void> create(@RequestBody Map<String, Object> body,
                                     HttpSession session,
                                     HttpServletRequest request) {
@@ -98,6 +82,7 @@ public class AdminGuideApiController {
     }
 
     @PostMapping("/{id}/audit")
+    @RequireRole({"ROOT", "ADMIN", "EDITOR", "VIEWER"})
     public ApiResponse<Void> audit(@PathVariable Long id,
                                    @RequestBody Map<String, String> body,
                                    HttpSession session,
@@ -112,6 +97,7 @@ public class AdminGuideApiController {
     }
 
     @DeleteMapping("/{id}")
+    @RequireRole({"ROOT", "ADMIN", "EDITOR"})
     public ApiResponse<Void> delete(@PathVariable Long id,
                                     HttpSession session,
                                     HttpServletRequest request) {

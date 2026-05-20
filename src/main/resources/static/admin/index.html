@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>旅游管理后台</title>
+  <title>攻略后台管理</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet">
@@ -24,6 +24,7 @@
   <script src="js/pages/stories.js?v=2"></script>
   <script src="js/pages/destinations.js?v=2"></script>
   <script src="js/pages/comments.js?v=2"></script>
+  <script src="js/pages/staff.js?v=2"></script>
   <script>
     Router.register('/', params => { setupLayout('数据总览', ''); initDashboard(); });
     Router.register('/users', params => { setupLayout('用户管理', 'users'); initUsers(); });
@@ -42,6 +43,7 @@
     Router.register('/stories/edit/:id', params => { setupLayout('故事管理', 'stories'); initStoryEdit(params.id); });
     Router.register('/stories/create', params => { setupLayout('故事管理', 'stories'); initStoryCreate(); });
     Router.register('/users/edit/:id', params => { setupLayout('用户管理', 'users'); initUserEdit(params.id); });
+    Router.register('/staff', params => { setupLayout('员工管理', 'staff'); initStaff(); });
     Router.start();
   </script>
 </body>

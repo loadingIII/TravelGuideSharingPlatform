@@ -10,6 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.stream.Collectors;
 
@@ -40,6 +41,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DuplicateKeyException.class)
     public ApiResponse<Void> handleDuplicateKey(DuplicateKeyException ex) {
         return ApiResponse.fail(ErrorCode.VALIDATION_ERROR, "用户名、手机号或邮箱已存在");
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ApiResponse<Void> handleNoResource(NoResourceFoundException ex) {
+        return ApiResponse.fail("NOT_FOUND", "资源不存在");
     }
 
     @ExceptionHandler(Exception.class)

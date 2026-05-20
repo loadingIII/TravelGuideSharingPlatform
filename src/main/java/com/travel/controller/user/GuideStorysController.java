@@ -7,6 +7,7 @@ import com.travel.pojo.dto.CreateStoryDTO;
 import com.travel.pojo.dto.UpdateStoryDTO;
 import com.travel.pojo.model.StoryComment;
 import com.travel.pojo.vo.GuideStoryVO;
+import com.travel.pojo.vo.StoryCommentVO;
 import com.travel.security.RequireLogin;
 import com.travel.service.GuideStoryService;
 import jakarta.validation.Valid;
@@ -21,9 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * 旅行者故事控制器
- */
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/stories")
 @RequiredArgsConstructor
@@ -31,25 +31,11 @@ public class GuideStorysController {
 
     private final GuideStoryService guideStoryService;
 
-    /**
-     * 根据ID查询旅行者故事
-     *
-     * @param id 故事ID
-     * @return 故事详情
-     */
     @GetMapping("/{id}")
     public ApiResponse<GuideStoryVO> getStoryById(@PathVariable("id") Long id) {
         return ApiResponse.success(guideStoryService.getStoryById(id));
     }
 
-    /**
-     * 根据用户ID查询旅行者故事
-     *
-     * @param userId   用户ID
-     * @param page     页码（可选），默认第1页
-     * @param pageSize 每页数量（可选），默认5条
-     * @return 分页的故事列表
-     */
     @GetMapping("/user/{userId}")
     public ApiResponse<PageResult<GuideStoryVO>> getStoriesByUserId(
             @PathVariable("userId") Long userId,
@@ -58,13 +44,6 @@ public class GuideStorysController {
         return ApiResponse.success(guideStoryService.getStoriesByUserId(userId, page, pageSize));
     }
 
-    /**
-     * 分页查询旅行者故事
-     *
-     * @param page     页码（可选），默认第1页
-     * @param pageSize 每页数量（可选），默认5条
-     * @return 分页的故事列表
-     */
     @GetMapping("/page")
     public ApiResponse<PageResult<GuideStoryVO>> listStories(
             @RequestParam(value = "page", required = false) Integer page,
@@ -99,10 +78,14 @@ public class GuideStorysController {
     }
 
     @GetMapping("/{storyId}/comments")
-    public ApiResponse<PageResult<StoryComment>> listStoryComments(
-            @PathVariable("storyId") Long storyId,
-            @RequestParam(value = "page", required = false) Integer page,
-            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
-        return ApiResponse.success(guideStoryService.listStoryComments(storyId, page, pageSize));
+    public ApiResponse<List<StoryCommentVO>> listStoryComments(@PathVariable("storyId") Long storyId) {
+        return ApiResponse.success(guideStoryService.listStoryCommentsTree(storyId));
+    }
+
+    @RequireLogin
+    @DeleteMapping("/comments/{commentId}")
+    public ApiResponse<Void> deleteStoryComment(@PathVariable("commentId") Long commentId) {
+        guideStoryService.deleteStoryComment(commentId);
+        return ApiResponse.success();
     }
 }

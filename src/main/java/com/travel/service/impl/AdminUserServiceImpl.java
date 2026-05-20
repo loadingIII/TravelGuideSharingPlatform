@@ -61,7 +61,8 @@ public class AdminUserServiceImpl implements AdminAuthService {
         session.setAttribute(SESSION_KEY, Map.of(
                 "id", admin.getId(),
                 "username", admin.getUsername(),
-                "realName", admin.getRealName() != null ? admin.getRealName() : admin.getUsername()
+                "realName", admin.getRealName() != null ? admin.getRealName() : admin.getUsername(),
+                "role", admin.getRole() != null ? admin.getRole() : "EDITOR"
         ));
     }
 

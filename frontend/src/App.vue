@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <Navbar
-      v-if="currentPage === 'home' || currentPage === 'hot-guides' || currentPage === 'traveler-stories' || currentPage === 'destination-guides' || currentPage === 'destination-detail' || currentPage === 'my-guides'"
+      v-if="currentPage === 'home' || currentPage === 'hot-guides' || currentPage === 'traveler-stories' || currentPage === 'story-detail' || currentPage === 'destination-guides' || currentPage === 'destination-detail' || currentPage === 'my-guides'"
       @switch-page="switchPage"
       :user-info="userInfo"
       :current-page="currentPage"
@@ -33,6 +33,12 @@
     <TravelerStories
       v-if="currentPage === 'traveler-stories'"
       @back-to-home="switchPage('home')"
+      @view-story-detail="viewStoryDetail"
+    />
+    <StoryDetail
+      v-if="currentPage === 'story-detail'"
+      :story-id="currentStoryId"
+      @back="switchPage('traveler-stories')"
     />
     <DestinationGuides
       v-if="currentPage === 'destination-guides'"
@@ -88,11 +94,13 @@ import DestinationDetail from './components/DestinationDetail.vue'
 import UserProfile from './components/UserProfile.vue'
 import PublicProfile from './components/PublicProfile.vue'
 import MyGuides from './components/MyGuides.vue'
+import StoryDetail from './components/StoryDetail.vue'
 import Toast from './components/Toast.vue'
 
 const currentPage = ref('home')
 const currentGuideId = ref(null)
 const currentDestinationId = ref(null)
+const currentStoryId = ref(null)
 const currentPublicUserId = ref(null)
 const searchQuery = ref('')
 const userInfo = ref(null)
@@ -112,12 +120,19 @@ const switchPage = (page) => {
 }
 
 setOnAuthError(() => {
+  toastRef.value?.addToast('登录已过期，请重新登录', 'warning')
+  handleLogout()
   switchPage('login')
 })
 
 const viewGuideDetail = (guideId) => {
   currentGuideId.value = guideId
   switchPage('guide-detail')
+}
+
+const viewStoryDetail = (storyId) => {
+  currentStoryId.value = storyId
+  switchPage('story-detail')
 }
 
 const viewDestinationDetail = (dest) => {

@@ -22,7 +22,6 @@
                 <td>${u.status == 1 ? '正常' : '禁用'}</td>
                 <td>${u.createdAt}</td>
                 <td>
-                    <a href="${pageContext.request.contextPath}/admin/users/edit/${u.id}" class="btn btn-sm btn-primary">编辑</a>
                     <form method="post" action="${pageContext.request.contextPath}/admin/users/delete/${u.id}" style="display:inline" onsubmit="return confirm('确认删除？')">
                         <button type="submit" class="btn btn-sm btn-danger">删除</button>
                     </form>
