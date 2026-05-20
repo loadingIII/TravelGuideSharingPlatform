@@ -70,15 +70,37 @@ function renderSidebar(activeKey) {
       <span>${l.icon}</span> ${l.label}
     </a>`
   ).join('');
+
+  const systemLinks = [
+    { key: 'staff', label: '员工管理', icon: Icons.users }
+  ];
+  const systemHtml = systemLinks.map(l =>
+    `<a class="sidebar-link ${l.key === activeKey ? 'active' : ''}" href="#/${l.key}">
+      <span>${l.icon}</span> ${l.label}
+    </a>`
+  ).join('');
+
   return `
     <div class="sidebar-brand">
-      <div class="sidebar-brand-icon">T</div>
-      <div class="sidebar-brand-text">Travel Admin</div>
+      <div class="sidebar-brand-text">攻略后台管理</div>
     </div>
     <div class="sidebar-section">
-      <div class="sidebar-section-title">导航</div>
+      <div class="sidebar-section-title">内容管理</div>
     </div>
     <nav class="sidebar-nav">${navHtml}</nav>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">系统管理</div>
+    </div>
+    <nav class="sidebar-nav">${systemHtml}</nav>
+    <div class="sidebar-user" id="sidebarUser">
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-avatar" id="userAvatar">-</div>
+        <div class="sidebar-user-detail">
+          <div class="sidebar-user-name" id="userName">加载中...</div>
+          <div class="sidebar-user-role" id="userRole">-</div>
+        </div>
+      </div>
+    </div>
     <div class="sidebar-logout">
       <a class="sidebar-link" href="/admin/login.html">
         <span>${Icons.logout}</span> 退出登录
@@ -103,41 +125,29 @@ function renderPagination(page, totalPages, onPageClick) {
   return html;
 }
 
-/* Setup layout (sidebar + topbar + content) */
+/* Setup layout (sidebar + content) */
 function setupLayout(title, activeKey) {
   const app = document.getElementById('app');
   app.innerHTML = `
     <div class="sidebar" id="sidebar">${renderSidebar(activeKey)}</div>
     <div class="main">
-      <div class="topbar">
-        <div class="topbar-search">
-          ${Icons.search}
-          <input type="text" placeholder="搜索..." id="searchInput">
-        </div>
-        <div class="topbar-filters">
-          <span class="topbar-filter-chip active" data-filter="all">全部</span>
-          <span class="topbar-filter-chip" data-filter="users">用户</span>
-          <span class="topbar-filter-chip" data-filter="guides">攻略</span>
-          <span class="topbar-filter-chip" data-filter="stories">故事</span>
-        </div>
-        <div class="topbar-right">
-          <button class="topbar-icon-btn" title="通知">
-            ${Icons.bell}
-          </button>
-          <button class="topbar-icon-btn" title="设置">
-            ${Icons.settings}
-          </button>
-          <div class="topbar-avatar">A</div>
-        </div>
-      </div>
       <div class="content" id="content"><div class="loading">加载中...</div></div>
     </div>`;
+  loadUserInfo();
+}
 
-  // Add filter chip click handlers
-  document.querySelectorAll('.topbar-filter-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      document.querySelectorAll('.topbar-filter-chip').forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-    });
-  });
+const ROLE_LABEL = { ROOT: '超级管理员', ADMIN: '管理员', EDITOR: '编辑', VIEWER: '查看者' };
+
+async function loadUserInfo() {
+  try {
+    const me = await API.get('/admin/me');
+    const avatar = document.getElementById('userAvatar');
+    const name = document.getElementById('userName');
+    const role = document.getElementById('userRole');
+    if (avatar) avatar.textContent = (me.realName || me.username || '?')[0];
+    if (name) name.textContent = me.realName || me.username || '-';
+    if (role) role.textContent = ROLE_LABEL[me.role] || me.role || '-';
+  } catch (e) {
+    // silent
+  }
 }

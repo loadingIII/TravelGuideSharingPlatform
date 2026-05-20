@@ -31,6 +31,13 @@ spring:
       suffix: .jsp
 
 logging:
+  file:
+    name: logs/travel-project.log
+  logback:
+    rolling-policy:
+      max-history: 30
+      max-file-size: 10MB
+      file-name-pattern: ${LOG_FILE}.%d{yyyy-MM-dd}.%i
   level:
     com:
       travel:
@@ -47,7 +54,7 @@ mybatis:
 app:
   jwt:
     secret: ${jwt.secret}
-    access-expire-minutes: 120
+    access-expire-minutes: 10080
   oss:
     endpoint: ${oss.endpoint}
     access-key-id: ${oss.access-key-id}

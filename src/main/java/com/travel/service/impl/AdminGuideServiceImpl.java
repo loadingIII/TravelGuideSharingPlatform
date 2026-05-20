@@ -2,8 +2,10 @@ package com.travel.service.impl;
 
 import com.travel.pojo.common.PageResult;
 import com.travel.mapper.GuideMapper;
+import com.travel.mapper.GuideItinerarySpotMapper;
 import com.travel.pojo.dto.ReviewResult;
 import com.travel.pojo.model.GuideItineraryDay;
+import com.travel.pojo.model.GuideItinerarySpot;
 import com.travel.pojo.model.GuideSummary;
 import com.travel.service.AdminAuthService;
 import com.travel.service.AdminGuideService;
@@ -24,6 +26,7 @@ import java.util.Map;
 public class AdminGuideServiceImpl implements AdminGuideService {
 
     private final GuideMapper guideMapper;
+    private final GuideItinerarySpotMapper spotMapper;
     private final AdminAuthService adminAuthService;
     private final AuditLogService auditLogService;
     private final ReviewService reviewService;
@@ -48,16 +51,13 @@ public class AdminGuideServiceImpl implements AdminGuideService {
     }
 
     @Override
-    public Map<String, Object> getTips(Long id) {
-        return Map.of("categories", List.of(), "items", List.of());
-    }
-
-    @Override
     public Object getGuideTags(Long id) {
         return tagService.getTagsByGuideId(id);
     }
 
     @Override
+    @Transactional
+    @SuppressWarnings("unchecked")
     public void createGuide(Map<String, Object> body, HttpSession session, HttpServletRequest request) {
         Map<String, Object> admin = adminAuthService.getCurrentAdmin(session);
         GuideSummary guide = new GuideSummary();
@@ -69,7 +69,42 @@ public class AdminGuideServiceImpl implements AdminGuideService {
         guide.setCoverImageUrl((String) body.get("coverImageUrl"));
         guide.setStatus(0);
         guideMapper.insert(guide);
-        auditLogService.log(session, request, "CREATE", "GUIDE", guide.getId(), "新增攻略: " + guide.getTitle());
+        Long guideId = guide.getId();
+
+        List<Map<String, Object>> days = (List<Map<String, Object>>) body.get("days");
+        if (days != null) {
+            int daySort = 1;
+            for (Map<String, Object> dayData : days) {
+                GuideItineraryDay day = new GuideItineraryDay();
+                day.setGuideId(guideId);
+                day.setDayNo(dayData.get("dayNo") != null ? Integer.valueOf(dayData.get("dayNo").toString()) : daySort);
+                day.setTitle((String) dayData.get("title"));
+                day.setSummary((String) dayData.get("summary"));
+                day.setSortOrder(daySort++);
+                guideMapper.insertItineraryDay(day);
+
+                List<Map<String, Object>> spots = (List<Map<String, Object>>) dayData.get("spots");
+                if (spots != null && !spots.isEmpty()) {
+                    List<GuideItinerarySpot> spotList = new java.util.ArrayList<>();
+                    int spotSort = 1;
+                    for (Map<String, Object> spotData : spots) {
+                        GuideItinerarySpot spot = new GuideItinerarySpot();
+                        spot.setGuideId(guideId);
+                        spot.setDayNo(day.getDayNo());
+                        spot.setName((String) spotData.get("name"));
+                        spot.setDescription((String) spotData.get("description"));
+                        spot.setImageUrl((String) spotData.get("imageUrl"));
+                        spot.setTime((String) spotData.get("time"));
+                        spot.setDuration((String) spotData.get("duration"));
+                        spot.setSortOrder(spotSort++);
+                        spotList.add(spot);
+                    }
+                    spotMapper.batchInsert(spotList);
+                }
+            }
+        }
+
+        auditLogService.log(session, request, "CREATE", "GUIDE", guideId, "新增攻略: " + guide.getTitle());
     }
 
     @Override
@@ -112,15 +147,6 @@ public class AdminGuideServiceImpl implements AdminGuideService {
             }
         }
         auditLogService.log(session, request, "UPDATE", "GUIDE_ITINERARY", id, "更新行程安排");
-    }
-
-    @Override
-    @Transactional
-    @SuppressWarnings("unchecked")
-    public void updateTips(Long id, Map<String, Object> body, HttpSession session, HttpServletRequest request) {
-        GuideSummary guide = guideMapper.selectById(id);
-        if (guide == null) throw new RuntimeException("攻略不存在");
-        auditLogService.log(session, request, "UPDATE", "GUIDE_TIPS", id, "更新攻略贴士");
     }
 
     @Override

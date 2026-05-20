@@ -75,7 +75,7 @@
               <h2>攻略简介</h2>
               <p class="intro-text">{{ guide.description }}</p>
               <div class="tags">
-                <span v-for="tag in guide.tags" :key="tag" class="tag">{{ tag }}</span>
+                <span v-for="tag in guide.tags" :key="tag.id || tag" class="tag">{{ tag.name || tag }}</span>
               </div>
             </section>
 
@@ -137,19 +137,6 @@
             <section class="content-section">
               <h2>详细攻略</h2>
               <div class="rich-content" v-html="sanitizedContent"></div>
-            </section>
-
-            <!-- 实用信息 -->
-            <section class="tips-section">
-              <h2>实用信息</h2>
-              <div class="tips-grid">
-                <div class="tip-card" v-for="tip in guide.tips" :key="tip.category">
-                  <h3>{{ tip.category }}</h3>
-                  <ul>
-                    <li v-for="(item, idx) in tip.items" :key="idx">{{ item }}</li>
-                  </ul>
-                </div>
-              </div>
             </section>
 
             <!-- 互动区 -->
@@ -224,7 +211,7 @@
                   :key="comment.id"
                   class="comment-item"
                 >
-                  <img :src="comment.avatarUrl || '/img/avatar-default.png'" :alt="comment.nickname" class="commenter-avatar">
+                  <img :src="comment.avatarUrl || defaultAvatar" :alt="comment.nickname" class="commenter-avatar" @error="e => e.target.src = defaultAvatar">
                   <div class="comment-content">
                     <div class="comment-header">
                       <span class="commenter-name">{{ comment.nickname || '匿名用户' }}</span>
@@ -252,7 +239,7 @@
                         :key="reply.id"
                         class="reply-item"
                       >
-                        <img :src="reply.avatarUrl || '/img/avatar-default.png'" :alt="reply.nickname" class="reply-avatar">
+                        <img :src="reply.avatarUrl || defaultAvatar" :alt="reply.nickname" class="reply-avatar" @error="e => e.target.src = defaultAvatar">
                         <div class="reply-content">
                           <div class="reply-header">
                             <span class="reply-name">{{ reply.nickname || '匿名用户' }}</span>
@@ -386,35 +373,54 @@
 
     <!-- 编辑攻略弹窗 -->
     <div class="modal-overlay" v-if="showEditModal" @click.self="showEditModal = false">
-      <div class="modal-content edit-modal">
+      <div class="modal-content publish-modal">
         <div class="modal-header">
           <h3>编辑攻略</h3>
-          <button class="close-btn" @click="showEditModal = false">&times;</button>
+          <button class="close-btn" @click="showEditModal = false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+          </button>
         </div>
-        <div class="edit-modal-body">
+        <div class="modal-body">
           <div class="form-group">
             <label>标题</label>
-            <input v-model="editForm.title" class="form-input" placeholder="攻略标题" />
+            <input type="text" v-model="editForm.title" placeholder="给你的攻略起个吸引人的标题">
           </div>
           <div class="form-group">
-            <label>摘要</label>
-            <textarea v-model="editForm.summary" class="form-input" rows="3" placeholder="攻略摘要"></textarea>
-          </div>
-          <div class="form-group">
-            <label>地点</label>
-            <input v-model="editForm.locationText" class="form-input" placeholder="目的地" />
+            <label>简介</label>
+            <input type="text" v-model="editForm.summary" placeholder="一句话描述你的攻略亮点">
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label>范围</label>
-              <select v-model="editForm.scope" class="form-input">
-                <option value="domestic">国内游</option>
+              <label>目的地</label>
+              <input type="text" v-model="editForm.destinationName" placeholder="如：东京、巴黎、清迈">
+            </div>
+            <div class="form-group">
+              <label>封面图片</label>
+              <div class="upload-area" @click="triggerCoverUpload">
+                <img v-if="coverPreview" :src="coverPreview" class="cover-preview">
+                <div v-else class="upload-placeholder">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
+                  <span>点击上传封面图片</span>
+                </div>
+                <input type="file" ref="coverFileInput" accept="image/*" style="display: none" @change="handleCoverUpload">
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>旅行范围</label>
+              <select v-model="editForm.scope">
                 <option value="international">出境游</option>
+                <option value="domestic">国内游</option>
               </select>
             </div>
             <div class="form-group">
               <label>旅行方式</label>
-              <select v-model="editForm.travelMode" class="form-input">
+              <select v-model="editForm.travelMode">
                 <option value="free">自由行</option>
                 <option value="group">跟团游</option>
                 <option value="family">亲子游</option>
@@ -422,10 +428,80 @@
               </select>
             </div>
           </div>
+          <div class="form-group">
+            <label>标签（用逗号分隔）</label>
+            <input type="text" v-model="editForm.tags" placeholder="如：文化, 美食, 购物, 艺术">
+          </div>
+          <div class="form-group">
+            <label>行程概览</label>
+            <div class="itinerary-list">
+              <div v-for="(day, index) in editForm.itinerary" :key="index" class="itinerary-item">
+                <div class="itinerary-header">
+                  <span class="day-badge">Day {{ index + 1 }}</span>
+                  <button class="remove-day-btn" @click="removeItineraryDay(index)" v-if="editForm.itinerary.length > 1">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                  </button>
+                </div>
+                <input type="text" v-model="day.title" placeholder="行程标题，如：抵达东京 & 浅草寺">
+                <input type="text" v-model="day.description" placeholder="简短描述，如：感受传统日式文化">
+                <div class="spots-list" v-if="day.spots && day.spots.length > 0">
+                  <div v-for="(spot, spotIdx) in day.spots" :key="spotIdx" class="spot-input-item">
+                    <div class="spot-top-row">
+                      <div class="spot-image-upload" @click="triggerSpotUpload(index, spotIdx)">
+                        <img v-if="spot.imageUrl" :src="spot.imageUrl" class="spot-image-preview">
+                        <div v-else class="spot-image-placeholder">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                          </svg>
+                          <span>景点图片</span>
+                        </div>
+                      </div>
+                      <div class="spot-fields">
+                        <input type="text" v-model="spot.name" placeholder="景点名称（必填）" required>
+                        <input type="text" v-model="spot.description" placeholder="景点描述">
+                        <div class="spot-row">
+                          <input type="text" v-model="spot.time" placeholder="时间 09:00">
+                          <input type="text" v-model="spot.duration" placeholder="时长 2小时">
+                        </div>
+                      </div>
+                    </div>
+                    <button class="remove-spot-btn" @click="removeSpot(index, spotIdx)">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <button class="add-spot-btn" @click="addSpot(index)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14"/>
+                  </svg>
+                  添加景点
+                </button>
+              </div>
+              <button class="add-day-btn" @click="addItineraryDay">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 5v14M5 12h14"/>
+                </svg>
+                添加一天
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>详细攻略</label>
+            <RichEditor v-model="editForm.content" placeholder="分享你的详细旅行经历、攻略心得..." />
+          </div>
         </div>
-        <div class="edit-modal-footer">
-          <button class="cancel-btn" @click="showEditModal = false">取消</button>
-          <button class="submit-btn" @click="submitEditGuide">保存修改</button>
+        <div class="modal-footer">
+          <button class="btn-ghost" @click="showEditModal = false">取消</button>
+          <button class="btn-accent" @click="submitEditGuide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+            </svg>
+            保存
+          </button>
         </div>
       </div>
     </div>
@@ -433,10 +509,13 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, watch } from 'vue'
+import { ref, reactive, computed, onMounted, watch, inject } from 'vue'
 import request, { triggerAuthError } from '../utils/request'
 import { getCookie } from '../utils/cookie'
 import DOMPurify from 'dompurify'
+import RichEditor from './RichEditor.vue'
+
+const toast = inject('toast')
 
 const props = defineProps({
   guideId: { type: [Number, String], default: null }
@@ -454,21 +533,26 @@ const isFollowing = ref(false)
 const newComment = ref('')
 const showShareModal = ref(false)
 const showEditModal = ref(false)
+const coverFileInput = ref(null)
+const coverPreview = ref('')
 const editForm = reactive({
   title: '',
   summary: '',
   content: '',
-  coverImageUrl: '',
-  locationText: '',
-  scope: '',
-  travelMode: '',
-  tagNames: []
+  destinationName: '',
+  coverImage: null,
+  scope: 'domestic',
+  travelMode: 'free',
+  tags: '',
+  itinerary: [{ title: '', description: '', spots: [] }]
 })
 const hotTags = ref([])
 
 // 评论相关
 const replyingTo = ref(null)
 const isLoadingComments = ref(false)
+
+const defaultAvatar = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80"><rect width="80" height="80" fill="%23E8E4DE" rx="40"/><text x="40" y="48" text-anchor="middle" font-size="32" fill="%23A8A29E" font-family="sans-serif">?</text></svg>')
 
 // 当前用户信息
 const currentUser = reactive({
@@ -803,32 +887,146 @@ const openEditModal = () => {
   editForm.title = guide.title
   editForm.summary = guide.description
   editForm.content = guide.content
-  editForm.coverImageUrl = guide.coverImage
-  editForm.locationText = guide.location
-  editForm.scope = guide.scope || ''
-  editForm.travelMode = guide.travelMode || ''
+  editForm.destinationName = guide.location
+  editForm.coverImage = null
+  coverPreview.value = guide.coverImage || ''
+  editForm.scope = guide.scope || 'domestic'
+  editForm.travelMode = guide.travelMode || 'free'
+  editForm.tags = guide.tags ? guide.tags.join(', ') : ''
+  editForm.itinerary = guide.itinerary.map(day => ({
+    title: day.title || '',
+    description: day.summary || '',
+    spots: (day.spots || []).map(spot => ({
+      name: spot.name || '',
+      description: spot.description || '',
+      imageUrl: spot.image || '',
+      time: spot.time || '',
+      duration: spot.duration || '',
+      imageFile: null
+    }))
+  }))
+  if (editForm.itinerary.length === 0) {
+    editForm.itinerary = [{ title: '', description: '', spots: [] }]
+  }
   showEditModal.value = true
 }
 
 const submitEditGuide = async () => {
+  if (!editForm.title.trim()) { toast?.warning('请输入攻略标题'); return }
+  if (!editForm.destinationName.trim()) { toast?.warning('请输入目的地'); return }
+
   try {
+    // 上传封面图
+    let coverImageUrl = coverPreview.value || ''
+    if (editForm.coverImage) {
+      const fd = new FormData()
+      fd.append('file', editForm.coverImage)
+      const res = await request.post('/api/files/upload', fd)
+      if (res.code === 'OK' && res.data) coverImageUrl = res.data
+    }
+
+    // 构建行程数据
+    const itineraryDays = []
+    for (let i = 0; i < editForm.itinerary.length; i++) {
+      const day = editForm.itinerary[i]
+      const spots = []
+      for (const spot of (day.spots || [])) {
+        let spotImageUrl = spot.imageUrl || ''
+        if (spot.imageFile) {
+          const fd = new FormData()
+          fd.append('file', spot.imageFile)
+          const res = await request.post('/api/files/upload', fd)
+          if (res.code === 'OK' && res.data) spotImageUrl = res.data
+        }
+        spots.push({
+          name: spot.name,
+          description: spot.description,
+          imageUrl: spotImageUrl,
+          time: spot.time,
+          duration: spot.duration
+        })
+      }
+      itineraryDays.push({
+        dayNo: i + 1,
+        title: day.title || `第${i + 1}天`,
+        summary: day.description,
+        spots
+      })
+    }
+
+    const tagNames = editForm.tags
+      ? editForm.tags.split(',').map(t => t.trim()).filter(t => t)
+      : []
+
     const result = await request.put(`/api/guides/${guide.id}`, {
       title: editForm.title,
-      summary: editForm.summary,
+      summary: editForm.summary || editForm.content.substring(0, 200),
       contentHtml: editForm.content,
-      coverImageUrl: editForm.coverImageUrl,
-      locationText: editForm.locationText,
+      coverImageUrl: coverImageUrl,
+      locationText: editForm.destinationName,
       scope: editForm.scope,
-      travelMode: editForm.travelMode
+      travelMode: editForm.travelMode,
+      tagNames: tagNames,
+      itineraryDays: itineraryDays
     })
     if (result.code === 'OK') {
       showEditModal.value = false
       fetchGuideData(guide.id)
+      toast?.success('攻略修改成功')
+    } else {
+      toast?.error('修改失败：' + (result.message || '未知错误'))
     }
   } catch (error) {
     console.error('编辑攻略失败:', error)
-    alert('编辑攻略失败')
+    toast?.error('编辑攻略失败')
   }
+}
+
+// 封面图片上传
+const triggerCoverUpload = () => coverFileInput.value?.click()
+
+const handleCoverUpload = (event) => {
+  const file = event.target.files[0]
+  if (file) {
+    editForm.coverImage = file
+    const reader = new FileReader()
+    reader.onload = (e) => { coverPreview.value = e.target.result }
+    reader.readAsDataURL(file)
+  }
+}
+
+// 行程管理
+const addItineraryDay = () => {
+  editForm.itinerary.push({ title: '', description: '', spots: [] })
+}
+
+const removeItineraryDay = (index) => {
+  editForm.itinerary.splice(index, 1)
+}
+
+const addSpot = (dayIndex) => {
+  if (!editForm.itinerary[dayIndex].spots) {
+    editForm.itinerary[dayIndex].spots = []
+  }
+  editForm.itinerary[dayIndex].spots.push({ name: '', description: '', time: '', duration: '', imageUrl: '', imageFile: null })
+}
+
+const removeSpot = (dayIndex, spotIndex) => {
+  editForm.itinerary[dayIndex].spots.splice(spotIndex, 1)
+}
+
+const triggerSpotUpload = (dayIndex, spotIndex) => {
+  const input = document.createElement('input')
+  input.type = 'file'
+  input.accept = 'image/*'
+  input.onchange = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      editForm.itinerary[dayIndex].spots[spotIndex].imageFile = file
+      editForm.itinerary[dayIndex].spots[spotIndex].imageUrl = URL.createObjectURL(file)
+    }
+  }
+  input.click()
 }
 
 // 删除攻略
@@ -909,7 +1107,6 @@ const fetchGuideData = async (id) => {
       guide.likes = data.likesCount || 0
       guide.views = data.viewsCount || 0
       guide.publishDate = data.publishedAt ? new Date(data.publishedAt).toLocaleDateString('zh-CN') : ''
-      guide.tags = []
       guide.content = data.contentHtml || ''
       guide.itinerary = (data.itinerary || []).map(day => ({
         day: day.dayNo,
@@ -930,8 +1127,23 @@ const fetchGuideData = async (id) => {
         { icon: '天气', category: '天气穿着', items: ['查看目的地天气', '准备合适衣物'] },
         { icon: '网络', category: '网络通讯', items: ['租借随身WiFi', '下载离线地图'] }
       ]
-      guide.budget = { total: 0, breakdown: {} }
-      guide.relatedGuides = []
+      guide.budget = { total: data.budgetTotal || 0, breakdown: {} }
+      guide.relatedGuides = (data.relatedGuides || []).map(g => ({
+        id: g.id,
+        image: g.coverImageUrl || '/img/富士山.jpg',
+        title: g.title,
+        views: g.viewsCount || 0
+      }))
+
+      // 获取攻略标签
+      try {
+        const tagsResult = await request.get(`/api/guides/${id}/tags`)
+        if (tagsResult.code === 200 || tagsResult.code === 'OK') {
+          guide.tags = tagsResult.data || []
+        }
+      } catch (e) {
+        console.error('获取标签失败:', e)
+      }
     }
   } catch (error) {
     console.error('获取攻略详情失败:', error)
@@ -1358,54 +1570,6 @@ watch(() => props.guideId, (newId) => {
 
 .rich-content p {
   margin-bottom: 15px;
-}
-
-/* 实用信息 */
-.tips-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-}
-
-.tip-card {
-  padding: 25px;
-  background: rgba(255, 255, 255, 0.4);
-  border-radius: 15px;
-  border: 1px solid var(--color-card-border);
-}
-
-.tip-icon {
-  font-size: 32px;
-  margin-bottom: 12px;
-}
-
-.tip-card h3 {
-  font-size: 18px;
-  color: var(--color-text-primary);
-  margin-bottom: 15px;
-  border: none;
-  padding: 0;
-}
-
-.tip-card ul {
-  list-style: none;
-  padding: 0;
-}
-
-.tip-card li {
-  font-size: 14px;
-  color: var(--color-text-muted);
-  padding: 6px 0;
-  padding-left: 20px;
-  position: relative;
-}
-
-.tip-card li::before {
-  content: '•';
-  position: absolute;
-  left: 0;
-  color: var(--color-text-primary);
-  font-weight: bold;
 }
 
 /* 费用预算 */
@@ -2010,6 +2174,18 @@ watch(() => props.guideId, (newId) => {
   backdrop-filter: blur(8px);
 }
 
+.modal-content {
+  background: var(--color-bg-card, #fff);
+  border-radius: 20px;
+  width: 90%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  animation: modalSlideIn 0.3s ease;
+}
+
 .share-modal {
   background: var(--color-primary);
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -2102,16 +2278,18 @@ watch(() => props.guideId, (newId) => {
   transform: scale(1.1);
 }
 
-/* 编辑弹窗 */
-.edit-modal {
-  max-width: 560px;
-  max-height: 80vh;
+/* 编辑弹窗 - 发布攻略样式 */
+.publish-modal {
+  max-width: 680px;
+  max-height: 85vh;
   display: flex;
   flex-direction: column;
   padding: 0;
+  border-radius: 20px;
+  overflow: hidden;
 }
 
-.edit-modal .modal-header {
+.publish-modal .modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2120,24 +2298,24 @@ watch(() => props.guideId, (newId) => {
   flex-shrink: 0;
 }
 
-.edit-modal .modal-header h3 {
+.publish-modal .modal-header h3 {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
   color: var(--color-text-primary);
 }
 
-.edit-modal-body {
+.publish-modal .modal-body {
   flex: 1;
   overflow-y: auto;
   padding: 20px 24px;
 }
 
-.edit-modal-body .form-group {
+.publish-modal .form-group {
   margin-bottom: 16px;
 }
 
-.edit-modal-body .form-group label {
+.publish-modal .form-group label {
   display: block;
   font-size: 14px;
   font-weight: 500;
@@ -2145,16 +2323,19 @@ watch(() => props.guideId, (newId) => {
   margin-bottom: 6px;
 }
 
-.edit-modal-body .form-row {
+.publish-modal .form-row {
   display: flex;
   gap: 16px;
 }
 
-.edit-modal-body .form-row .form-group {
+.publish-modal .form-row .form-group {
   flex: 1;
 }
 
-.edit-modal-body .form-input {
+.publish-modal input[type="text"],
+.publish-modal input[type="file"],
+.publish-modal textarea,
+.publish-modal select {
   width: 100%;
   padding: 10px 14px;
   border: 1px solid var(--color-border);
@@ -2168,19 +2349,280 @@ watch(() => props.guideId, (newId) => {
   box-sizing: border-box;
 }
 
-.edit-modal-body .form-input:focus {
+.publish-modal input:focus,
+.publish-modal textarea:focus,
+.publish-modal select:focus {
   border-color: var(--color-primary);
 }
 
-.edit-modal-body textarea.form-input {
+.publish-modal textarea {
   resize: vertical;
 }
 
-.edit-modal-body select.form-input {
+.publish-modal select {
   cursor: pointer;
 }
 
-.edit-modal-footer {
+.upload-area {
+  border: 2px dashed var(--color-border);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--color-bg-secondary);
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-area:hover {
+  border-color: var(--color-primary);
+  background: rgba(91, 140, 62, 0.04);
+}
+
+.upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-muted);
+}
+
+.upload-placeholder svg {
+  width: 32px;
+  height: 32px;
+}
+
+.upload-placeholder span {
+  font-size: 13px;
+}
+
+.cover-preview {
+  max-width: 100%;
+  max-height: 120px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.itinerary-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.itinerary-item {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.itinerary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.day-badge {
+  background: var(--color-primary);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.remove-day-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: var(--color-text-muted);
+  transition: color 0.2s;
+}
+
+.remove-day-btn:hover {
+  color: #e07070;
+}
+
+.remove-day-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.itinerary-item input[type="text"] {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-bg-card, #fff);
+  color: var(--color-text-primary);
+  font-size: 13px;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.itinerary-item input:focus {
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+.spots-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.spot-input-item {
+  background: var(--color-bg-card, #fff);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 12px;
+  position: relative;
+}
+
+.spot-top-row {
+  display: flex;
+  gap: 12px;
+}
+
+.spot-image-upload {
+  width: 80px;
+  height: 80px;
+  border: 1px dashed var(--color-border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: border-color 0.2s;
+}
+
+.spot-image-upload:hover {
+  border-color: var(--color-primary);
+}
+
+.spot-image-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.spot-image-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-text-muted);
+}
+
+.spot-image-placeholder svg {
+  width: 20px;
+  height: 20px;
+}
+
+.spot-image-placeholder span {
+  font-size: 10px;
+}
+
+.spot-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.spot-fields input[type="text"] {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-bg-card, #fff);
+  color: var(--color-text-primary);
+  font-size: 13px;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.spot-fields input[type="text"]:focus {
+  border-color: var(--color-primary);
+}
+
+.spot-row {
+  display: flex;
+  gap: 8px;
+}
+
+.spot-row input {
+  flex: 1;
+}
+
+.remove-spot-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  color: var(--color-text-muted);
+}
+
+.remove-spot-btn:hover {
+  color: #e07070;
+}
+
+.remove-spot-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.add-spot-btn,
+.add-day-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: none;
+  border: 1px dashed var(--color-border);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  transition: all 0.2s;
+  margin-top: 8px;
+  width: 100%;
+  justify-content: center;
+}
+
+.add-spot-btn:hover,
+.add-day-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: rgba(91, 140, 62, 0.04);
+}
+
+.add-spot-btn svg,
+.add-day-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.add-day-btn {
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.publish-modal .modal-footer {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
@@ -2189,7 +2631,7 @@ watch(() => props.guideId, (newId) => {
   flex-shrink: 0;
 }
 
-.edit-modal-footer .cancel-btn {
+.btn-ghost {
   padding: 10px 20px;
   background: var(--color-bg-secondary);
   border: 1px solid var(--color-border);
@@ -2199,7 +2641,10 @@ watch(() => props.guideId, (newId) => {
   cursor: pointer;
 }
 
-.edit-modal-footer .submit-btn {
+.btn-accent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 10px 20px;
   background: var(--color-primary);
   border: none;
@@ -2208,10 +2653,16 @@ watch(() => props.guideId, (newId) => {
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+  transition: opacity 0.2s;
 }
 
-.edit-modal-footer .submit-btn:hover {
+.btn-accent:hover {
   opacity: 0.85;
+}
+
+.btn-accent svg {
+  width: 16px;
+  height: 16px;
 }
 
 /* 响应式设计 */
@@ -2233,10 +2684,6 @@ watch(() => props.guideId, (newId) => {
 
   .budget-summary {
     flex-direction: column;
-  }
-
-  .tips-grid {
-    grid-template-columns: 1fr;
   }
 }
 

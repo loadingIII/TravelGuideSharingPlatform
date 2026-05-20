@@ -3,7 +3,7 @@ async function initDashboard() {
   try {
     const stats = await API.get('/admin/stats');
     content.innerHTML = `
-      <div class="grid grid-4">
+      <div class="grid grid-5">
         <div class="card stat-card">
           <div class="stat-card-header">
             <div class="stat-card-icon blue">${Icons.users}</div>
@@ -31,6 +31,13 @@ async function initDashboard() {
           </div>
           <div class="stat-card-value">${stats.destinationCount}</div>
           <div class="stat-card-label">目的地总数</div>
+        </div>
+        <div class="card stat-card">
+          <div class="stat-card-header">
+            <div class="stat-card-icon orange">${Icons.users}</div>
+          </div>
+          <div class="stat-card-value">${stats.onlineUserCount ?? 0}</div>
+          <div class="stat-card-label">当前在线</div>
         </div>
       </div>
       <div class="dashboard-charts">

@@ -3,6 +3,7 @@ package com.travel.controller.admin;
 import com.travel.pojo.common.ApiResponse;
 import com.travel.pojo.common.PageResult;
 import com.travel.pojo.model.AdminUser;
+import com.travel.security.RequireRole;
 import com.travel.service.AdminAdminUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -19,11 +20,13 @@ public class AdminAdminUserController {
     private final AdminAdminUserService adminAdminUserService;
 
     @GetMapping
+    @RequireRole({"ROOT", "ADMIN"})
     public ApiResponse<PageResult<AdminUser>> list(@RequestParam(defaultValue = "1") int page) {
         return ApiResponse.success(adminAdminUserService.list(page));
     }
 
     @GetMapping("/{id}")
+    @RequireRole({"ROOT", "ADMIN"})
     public ApiResponse<AdminUser> detail(@PathVariable Long id) {
         AdminUser admin = adminAdminUserService.detail(id);
         if (admin == null) return ApiResponse.fail("NOT_FOUND", "管理员不存在");
@@ -31,6 +34,7 @@ public class AdminAdminUserController {
     }
 
     @PostMapping
+    @RequireRole("ROOT")
     public ApiResponse<Void> create(@RequestBody Map<String, Object> body,
                                     HttpSession session,
                                     HttpServletRequest request) {
@@ -45,6 +49,7 @@ public class AdminAdminUserController {
     }
 
     @PutMapping("/{id}")
+    @RequireRole({"ROOT", "ADMIN"})
     public ApiResponse<Void> update(@PathVariable Long id,
                                     @RequestBody Map<String, Object> body,
                                     HttpSession session,
@@ -54,10 +59,13 @@ public class AdminAdminUserController {
             return ApiResponse.success();
         } catch (IllegalArgumentException e) {
             return ApiResponse.fail("NOT_FOUND", e.getMessage());
+        } catch (IllegalStateException e) {
+            return ApiResponse.fail("FORBIDDEN", e.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
+    @RequireRole({"ROOT", "ADMIN"})
     public ApiResponse<Void> delete(@PathVariable Long id,
                                     HttpSession session,
                                     HttpServletRequest request) {

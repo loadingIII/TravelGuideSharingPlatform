@@ -48,6 +48,14 @@
             </div>
         </div>
     </div>
+    <div class="col-md-4">
+        <div class="card text-bg-danger">
+            <div class="card-body text-center">
+                <h2>${onlineUserCount}</h2>
+                <p class="mb-0">当前在线</p>
+            </div>
+        </div>
+    </div>
 </div>
 
 <jsp:include page="common/footer.jsp"/>

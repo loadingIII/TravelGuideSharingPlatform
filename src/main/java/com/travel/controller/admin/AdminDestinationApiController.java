@@ -3,6 +3,7 @@ package com.travel.controller.admin;
 import com.travel.pojo.common.ApiResponse;
 import com.travel.pojo.common.PageResult;
 import com.travel.pojo.model.Destination;
+import com.travel.security.RequireRole;
 import com.travel.service.AdminDestinationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -31,6 +32,7 @@ public class AdminDestinationApiController {
     }
 
     @PostMapping
+    @RequireRole({"ROOT", "ADMIN", "EDITOR"})
     public ApiResponse<Void> create(@RequestBody Destination destination,
                                     HttpSession session,
                                     HttpServletRequest request) {
@@ -39,6 +41,7 @@ public class AdminDestinationApiController {
     }
 
     @PutMapping("/{id}")
+    @RequireRole({"ROOT", "ADMIN", "EDITOR"})
     public ApiResponse<Void> update(@PathVariable Long id,
                                     @RequestBody Map<String, Object> body,
                                     HttpSession session,
@@ -48,6 +51,7 @@ public class AdminDestinationApiController {
     }
 
     @DeleteMapping("/{id}")
+    @RequireRole({"ROOT", "ADMIN", "EDITOR"})
     public ApiResponse<Void> delete(@PathVariable Long id,
                                     HttpSession session,
                                     HttpServletRequest request) {

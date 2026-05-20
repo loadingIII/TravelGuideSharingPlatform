@@ -53,14 +53,18 @@ public class GuideCommentServiceImpl implements GuideCommentService {
         // 1. 查询所有评论（扁平列表，包含评论者昵称和头像）
         List<GuideComment> allComments = guideCommentMapper.listByGuideId(guideId);
 
-        // 2. 获取当前用户已点赞的评论ID集合（未登录则为空）
+        // 2. 批量获取当前用户已点赞的评论ID集合（未登录则为空）
         Long currentUserId = UserContext.requireUserId();
-        Set<Long> likedCommentIds = currentUserId != null
-                ? allComments.stream()
-                        .map(GuideComment::getId)
-                        .filter(id -> guideCommentLikeMapper.exists(id, currentUserId) > 0)
-                        .collect(Collectors.toSet())
-                : Collections.emptySet();
+        Set<Long> likedCommentIds;
+        if (currentUserId != null && !allComments.isEmpty()) {
+            String commentIds = allComments.stream()
+                    .map(c -> c.getId().toString())
+                    .collect(Collectors.joining(","));
+            Set<Long> result = guideCommentLikeMapper.selectLikedCommentIdsByCommentIds(commentIds, currentUserId);
+            likedCommentIds = result != null ? result : Collections.emptySet();
+        } else {
+            likedCommentIds = Collections.emptySet();
+        }
 
         // 3. 按 parentCommentId 分组：key=null 的是一级评论，key=评论ID 的是该评论的回复
         Map<Long, List<GuideComment>> replyGroup = allComments.stream()
@@ -116,7 +120,18 @@ public class GuideCommentServiceImpl implements GuideCommentService {
         if (userId == null) {
             throw new BusinessException(ErrorCode.UNAUTHORIZED, "请先登录");
         }
+        Long commentUserId = guideCommentMapper.selectUserIdById(commentId);
+        if (commentUserId == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND, "评论不存在");
+        }
+        if (!commentUserId.equals(userId)) {
+            throw new BusinessException(ErrorCode.FORBIDDEN, "只能删除自己的评论");
+        }
+        Long guideId = guideCommentMapper.selectGuideIdById(commentId);
         guideCommentMapper.softDeleteById(commentId);
+        if (guideId != null) {
+            guideCommentMapper.decrementCommentsCount(guideId);
+        }
     }
 
     /**

@@ -3,6 +3,7 @@ package com.travel.controller.admin;
 import com.travel.pojo.common.ApiResponse;
 import com.travel.pojo.common.PageResult;
 import com.travel.pojo.model.StoryComment;
+import com.travel.security.RequireRole;
 import com.travel.service.AdminStoryCommentService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -25,6 +26,7 @@ public class AdminStoryCommentApiController {
     }
 
     @PostMapping("/{id}/audit")
+    @RequireRole({"ROOT", "ADMIN", "EDITOR", "VIEWER"})
     public ApiResponse<Void> audit(@PathVariable Long id,
                                    @RequestBody Map<String, String> body,
                                    HttpSession session,
@@ -38,6 +40,7 @@ public class AdminStoryCommentApiController {
     }
 
     @DeleteMapping("/{id}")
+    @RequireRole({"ROOT", "ADMIN", "EDITOR"})
     public ApiResponse<Void> delete(@PathVariable Long id,
                                     HttpSession session,
                                     HttpServletRequest request) {

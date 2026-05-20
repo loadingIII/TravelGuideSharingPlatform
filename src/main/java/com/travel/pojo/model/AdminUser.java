@@ -10,6 +10,7 @@ public class AdminUser {
     private String username;
     private String passwordHash;
     private String realName;
+    private String role;
     private Integer status;
     private LocalDateTime lastLoginAt;
     private LocalDateTime createdAt;

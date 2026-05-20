@@ -4,6 +4,7 @@ import com.travel.pojo.common.PageResult;
 import com.travel.pojo.common.exception.BusinessException;
 import com.travel.pojo.common.exception.ErrorCode;
 import com.travel.mapper.GuideStoryMapper;
+import com.travel.mapper.StoryCommentLikeMapper;
 import com.travel.mapper.StoryCommentMapper;
 import com.travel.mapper.UserProfileMapper;
 import com.travel.pojo.dto.CreateCommentDTO;
@@ -12,31 +13,25 @@ import com.travel.pojo.dto.UpdateStoryDTO;
 import com.travel.pojo.model.StoryComment;
 import com.travel.pojo.model.UserProfile;
 import com.travel.pojo.vo.GuideStoryVO;
+import com.travel.pojo.vo.StoryCommentVO;
 import com.travel.service.GuideStoryService;
 import com.travel.security.UserContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-/**
- * 旅行者故事服务实现类
- * 负责旅行者故事的查询和分页展示
- *
- * 旅行者故事是用户分享的旅行经历和感悟，与攻略（Guide）不同，
- * 故事更偏向个人叙事和情感分享，攻略更偏向实用信息和行程规划
- *
- * 核心功能：
- * - 根据ID查询单个故事
- * - 按用户ID分页查询（用于个人主页）
- * - 分页查询所有故事（用于故事列表页）
- */
 @Service
 @RequiredArgsConstructor
 public class GuideStoryServiceImpl implements GuideStoryService {
 
     private final GuideStoryMapper guideStoryMapper;
     private final StoryCommentMapper storyCommentMapper;
+    private final StoryCommentLikeMapper storyCommentLikeMapper;
     private final UserProfileMapper userProfileMapper;
 
     /**
@@ -48,6 +43,7 @@ public class GuideStoryServiceImpl implements GuideStoryService {
         if (story == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND, "故事不存在");
         }
+        story.setImages(guideStoryMapper.selectImageUrlsByStoryId(id));
         return story;
     }
 
@@ -61,6 +57,7 @@ public class GuideStoryServiceImpl implements GuideStoryService {
         int safePageSize = normalizePageSize(pageSize);
         int offset = (safePage - 1) * safePageSize;
         List<GuideStoryVO> list = guideStoryMapper.selectByUserId(userId, offset, safePageSize);
+        list.forEach(s -> s.setImages(guideStoryMapper.selectImageUrlsByStoryId(s.getId())));
         long total = guideStoryMapper.countByUserId(userId);
         return PageResult.of(list, safePage, safePageSize, total);
     }
@@ -75,6 +72,7 @@ public class GuideStoryServiceImpl implements GuideStoryService {
         int safePageSize = normalizePageSize(pageSize);
         int offset = (safePage - 1) * safePageSize;
         List<GuideStoryVO> list = guideStoryMapper.selectAll(offset, safePageSize, null);
+        list.forEach(s -> s.setImages(guideStoryMapper.selectImageUrlsByStoryId(s.getId())));
         long total = guideStoryMapper.countAll(null);
         return PageResult.of(list, safePage, safePageSize, total);
     }
@@ -93,6 +91,12 @@ public class GuideStoryServiceImpl implements GuideStoryService {
         story.setContent(dto.getContent());
         story.setStatus(0);
         guideStoryMapper.insert(story);
+
+        if (dto.getImageUrls() != null) {
+            for (int i = 0; i < dto.getImageUrls().size(); i++) {
+                guideStoryMapper.insertStoryImage(story.getId(), dto.getImageUrls().get(i), i);
+            }
+        }
         return story.getId();
     }
 
@@ -103,6 +107,11 @@ public class GuideStoryServiceImpl implements GuideStoryService {
         if (existing == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND, "故事不存在");
         }
+        if (!existing.getAuthorUserId().equals(userId)) {
+            throw new BusinessException(ErrorCode.FORBIDDEN, "只能删除自己的故事");
+        }
+        guideStoryMapper.deleteImagesByStoryId(storyId);
+        storyCommentMapper.deleteByStoryId(storyId);
         guideStoryMapper.deleteById(storyId);
     }
 
@@ -113,7 +122,17 @@ public class GuideStoryServiceImpl implements GuideStoryService {
         if (existing == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND, "故事不存在");
         }
+        if (!existing.getAuthorUserId().equals(userId)) {
+            throw new BusinessException(ErrorCode.FORBIDDEN, "只能编辑自己的故事");
+        }
         guideStoryMapper.updateContent(storyId, dto.getContent());
+
+        if (dto.getImageUrls() != null) {
+            guideStoryMapper.deleteImagesByStoryId(storyId);
+            for (int i = 0; i < dto.getImageUrls().size(); i++) {
+                guideStoryMapper.insertStoryImage(storyId, dto.getImageUrls().get(i), i);
+            }
+        }
     }
 
     @Override
@@ -140,6 +159,82 @@ public class GuideStoryServiceImpl implements GuideStoryService {
         var list = storyCommentMapper.selectByStoryId(storyId, offset, safePageSize);
         long total = storyCommentMapper.countByStoryId(storyId);
         return PageResult.of(list, safePage, safePageSize, total);
+    }
+
+    @Override
+    public List<StoryCommentVO> listStoryCommentsTree(Long storyId) {
+        Long currentUserId = UserContext.requireUserId();
+        List<StoryComment> allComments = storyCommentMapper.selectAllByStoryId(storyId);
+
+        Set<Long> likedCommentIds = currentUserId != null
+                ? allComments.stream()
+                        .map(StoryComment::getId)
+                        .filter(id -> storyCommentLikeMapper.exists(id, currentUserId) > 0)
+                        .collect(Collectors.toSet())
+                : Collections.emptySet();
+
+        Map<Long, List<StoryComment>> replyGroup = allComments.stream()
+                .filter(c -> c.getParentCommentId() != null)
+                .collect(Collectors.groupingBy(StoryComment::getParentCommentId));
+
+        return allComments.stream()
+                .filter(c -> c.getParentCommentId() == null)
+                .map(c -> toCommentVO(c, replyGroup, likedCommentIds))
+                .toList();
+    }
+
+    @Override
+    public void deleteStoryComment(Long commentId) {
+        Long userId = UserContext.requireUserId();
+        Long commentUserId = storyCommentMapper.selectUserIdById(commentId);
+        if (commentUserId == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND, "评论不存在");
+        }
+        if (!commentUserId.equals(userId)) {
+            throw new BusinessException(ErrorCode.FORBIDDEN, "只能删除自己的评论");
+        }
+        Long storyId = storyCommentMapper.selectStoryIdById(commentId);
+        storyCommentMapper.deleteById(commentId);
+        if (storyId != null) {
+            storyCommentMapper.decrementCommentsCount(storyId);
+        }
+    }
+
+    private StoryCommentVO toCommentVO(StoryComment comment, Map<Long, List<StoryComment>> replyGroup, Set<Long> likedCommentIds) {
+        List<StoryComment> replies = replyGroup.getOrDefault(comment.getId(), Collections.emptyList());
+        List<StoryCommentVO> replyVOs = replies.stream()
+                .map(r -> toCommentVOWithoutReplies(r, likedCommentIds))
+                .toList();
+
+        return StoryCommentVO.builder()
+                .id(comment.getId())
+                .storyId(comment.getStoryId())
+                .userId(comment.getUserId())
+                .nickname(comment.getAuthorName())
+                .avatarUrl(comment.getAuthorAvatarUrl())
+                .content(comment.getContent())
+                .parentCommentId(comment.getParentCommentId())
+                .likesCount(comment.getLikesCount())
+                .createdAt(comment.getCreatedAt())
+                .liked(likedCommentIds.contains(comment.getId()))
+                .replies(replyVOs)
+                .build();
+    }
+
+    private StoryCommentVO toCommentVOWithoutReplies(StoryComment comment, Set<Long> likedCommentIds) {
+        return StoryCommentVO.builder()
+                .id(comment.getId())
+                .storyId(comment.getStoryId())
+                .userId(comment.getUserId())
+                .nickname(comment.getAuthorName())
+                .avatarUrl(comment.getAuthorAvatarUrl())
+                .content(comment.getContent())
+                .parentCommentId(comment.getParentCommentId())
+                .likesCount(comment.getLikesCount())
+                .createdAt(comment.getCreatedAt())
+                .liked(likedCommentIds.contains(comment.getId()))
+                .replies(null)
+                .build();
     }
 
     /** 页码安全处理：null 或小于1 时默认为1 */

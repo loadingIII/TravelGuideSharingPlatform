@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>旅游管理后台</title>
+    <title>攻略后台管理</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body { margin: 0; padding: 0; background-color: #f8f9fa; }
@@ -26,7 +26,7 @@
 </head>
 <body>
 <div class="sidebar">
-    <h5>旅游管理后台</h5>
+    <h5>攻略后台管理</h5>
     <a href="${pageContext.request.contextPath}/admin" class="${empty param.active ? 'active' : ''}">仪表盘</a>
     <a href="${pageContext.request.contextPath}/admin/users" ${param.active == 'users' ? 'class="active"' : ''}>用户管理</a>
     <a href="${pageContext.request.contextPath}/admin/guides" ${param.active == 'guides' ? 'class="active"' : ''}>攻略管理</a>

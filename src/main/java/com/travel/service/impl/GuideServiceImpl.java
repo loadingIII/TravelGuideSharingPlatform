@@ -93,6 +93,7 @@ public class GuideServiceImpl implements GuideService {
                 .favoritesCount(detail.getFavoritesCount())
                 .publishedAt(detail.getPublishedAt())
                 .itinerary(itineraryDays.stream().map(day -> toItineraryDay(day, allSpots)).toList())
+                .relatedGuides(relatedGuides)
                 .build();
     }
 
@@ -254,7 +255,7 @@ public class GuideServiceImpl implements GuideService {
         guide.setScope(dto.getScope());
         guide.setTravelMode(dto.getTravelMode());
         guide.setDays(dto.getItineraryDays() != null ? dto.getItineraryDays().size() : 0);
-        guide.setBudgetTotal(BigDecimal.ZERO);
+        guide.setBudgetTotal(dto.getBudgetTotal() != null ? dto.getBudgetTotal() : BigDecimal.ZERO);
         guide.setPublishedAt(LocalDateTime.now());
         guide.setStatus(0);
 
@@ -322,9 +323,17 @@ public class GuideServiceImpl implements GuideService {
             throw new BusinessException(ErrorCode.FORBIDDEN, "无权编辑此攻略");
         }
 
+        Integer days = dto.getDays();
+        if (days == null && dto.getItineraryDays() != null) {
+            days = dto.getItineraryDays().size();
+        }
+        if (days == null) {
+            days = existing.getDays();
+        }
+
         guideMapper.updateGuideFull(guideId, dto.getTitle(), dto.getSummary(),
                 dto.getContentHtml(), dto.getCoverImageUrl(), dto.getLocationText(),
-                dto.getScope(), dto.getTravelMode());
+                dto.getScope(), dto.getTravelMode(), days);
 
         // 更新行程
         if (dto.getItineraryDays() != null) {

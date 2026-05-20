@@ -6,10 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-/**
- * 旅行者故事VO
- */
 @Data
 @Builder
 @NoArgsConstructor
@@ -21,6 +19,7 @@ public class GuideStoryVO {
     private String authorAvatarUrl;
     private Boolean isVip;
     private String content;
+    private List<String> images;
     private LocalDateTime publishedAt;
     private Integer likesCount;
     private Integer commentsCount;

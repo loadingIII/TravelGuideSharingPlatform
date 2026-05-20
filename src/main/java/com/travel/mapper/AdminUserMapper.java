@@ -18,8 +18,8 @@ public interface AdminUserMapper {
     int updateLastLoginAt(@Param("id") Long id);
 
     @Insert("""
-            INSERT INTO admin_users (username, password_hash, real_name, status)
-            VALUES (#{username}, #{passwordHash}, #{realName}, #{status})
+            INSERT INTO admin_users (username, password_hash, real_name, role, status)
+            VALUES (#{username}, #{passwordHash}, #{realName}, #{role}, #{status})
             """)
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insert(AdminUser adminUser);
@@ -30,8 +30,8 @@ public interface AdminUserMapper {
     @Select("SELECT COUNT(*) FROM admin_users")
     long countAll();
 
-    @Update("UPDATE admin_users SET real_name=#{realName}, status=#{status} WHERE id=#{id}")
-    int updateAdmin(@Param("id") Long id, @Param("realName") String realName, @Param("status") Integer status);
+    @Update("UPDATE admin_users SET real_name=#{realName}, role=#{role}, status=#{status} WHERE id=#{id}")
+    int updateAdmin(@Param("id") Long id, @Param("realName") String realName, @Param("role") String role, @Param("status") Integer status);
 
     @Update("UPDATE admin_users SET password_hash=#{passwordHash} WHERE id=#{id}")
     int updatePassword(@Param("id") Long id, @Param("passwordHash") String passwordHash);
