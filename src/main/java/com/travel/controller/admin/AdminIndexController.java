@@ -18,8 +18,8 @@ public class AdminIndexController {
     private final AdminAuthService adminAuthService;
     private final StatsService statsService;
 
-    @GetMapping("/")
-    public void rootRedirect(HttpSession session, HttpServletResponse response) throws IOException {
+    @GetMapping("/admin")
+    public void adminRedirect(HttpSession session, HttpServletResponse response) throws IOException {
         if (adminAuthService.isLoggedIn(session)) {
             response.sendRedirect("/admin/index.html");
         } else {
