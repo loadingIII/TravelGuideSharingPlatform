@@ -430,6 +430,23 @@ INSERT IGNORE INTO guide_itinerary_days (guide_id, day_no, title, summary, sort_
 (3, 5, '美功铁道市场', '观看火车穿过市场的奇景', 5),
 (3, 6, '返回 & 最后购物', '购买纪念品和特产', 6);
 
+CREATE TABLE IF NOT EXISTS guide_budget_items (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  guide_id BIGINT UNSIGNED NOT NULL,
+  category_code VARCHAR(50) NOT NULL,
+  category_name VARCHAR(100) NOT NULL,
+  amount DECIMAL(10,2) NOT NULL DEFAULT 0,
+  percentage DECIMAL(5,2) NULL,
+  sort_order INT NOT NULL DEFAULT 1,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_budget_items_guide (guide_id),
+  CONSTRAINT fk_budget_items_guide
+    FOREIGN KEY (guide_id) REFERENCES guides(id)
+    ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 INSERT IGNORE INTO guide_budget_items (guide_id, category_code, category_name, amount, percentage, sort_order) VALUES
 (1, 'flights', '机票', 5000.00, 33.33, 1),
 (1, 'accommodation', '住宿', 4500.00, 30.00, 2),
