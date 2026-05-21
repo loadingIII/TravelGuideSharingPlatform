@@ -1,25 +1,4 @@
 services:
-  mysql:
-    image: mysql:8
-    container_name: travel-mysql
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: travel_guide_platform
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql-data:/var/lib/mysql
-      - ./static/SqlData/init.sql:/docker-entrypoint-initdb.d/init.sql
-    command:
-      - --innodb-buffer-pool-size=64M
-      - --max-connections=20
-      - --table-open-cache=200
-      - --sort-buffer-size=256K
-      - --tmp-table-size=16M
-    networks:
-      - travel-network
-
   backend:
     build:
       context: ../../..
@@ -31,20 +10,9 @@ services:
     environment:
       mysql.username: root
       mysql.password: ${MYSQL_ROOT_PASSWORD}
-      mysql.url: jdbc:mysql://mysql:3306/travel_guide_platform?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&characterEncoding=utf-8
+      mysql.url: jdbc:mysql://${MYSQL_HOST}:3306/travel_guide_platform?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&characterEncoding=utf-8
       jwt.secret: ${JWT_SECRET}
       oss.endpoint: ${OSS_ENDPOINT}
       oss.access-key-id: ${OSS_ACCESS_KEY_ID}
       oss.access-key-secret: ${OSS_ACCESS_KEY_SECRET}
       oss.bucket-name: ${OSS_BUCKET_NAME}
-    depends_on:
-      - mysql
-    networks:
-      - travel-network
-
-volumes:
-  mysql-data:
-
-networks:
-  travel-network:
-    driver: bridge
