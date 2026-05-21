@@ -1,0 +1,84 @@
+:root {
+  /* 主色调 - 清新绿 */
+  --color-primary: #5B8C3E;
+  --color-primary-light: #7AAA5E;
+  --color-primary-dark: #3D6B2E;
+  --color-primary-10: rgba(91, 140, 62, 0.1);
+  --color-primary-20: rgba(91, 140, 62, 0.2);
+
+  /* 辅助色 - 深绿 */
+  --color-secondary: #3D6B2E;
+  --color-secondary-light: #5B8C3E;
+  --color-secondary-dark: #2A4F1E;
+  --color-secondary-10: rgba(61, 107, 46, 0.1);
+
+  /* 强调色 - 蓝绿 */
+  --color-accent: #6B9E8E;
+  --color-accent-light: #8AB8A8;
+  --color-accent-dark: #4A7E6E;
+  --color-accent-10: rgba(107, 158, 142, 0.1);
+
+  /* 中性色 - 深色文字 */
+  --color-text-primary: #1A2E0A;
+  --color-text-secondary: #3D5A28;
+  --color-text-muted: #6B8A52;
+  --color-text-light: #8FA87A;
+
+  /* 背景色 - 浅绿 */
+  --color-bg-primary: #E8F2E0;
+  --color-bg-secondary: #F5FAF0;
+  --color-bg-tertiary: #D8EAD0;
+  --color-bg-dark: #3A5A2A;
+
+  /* 卡片背景 - 白色 */
+  --color-card-bg: #FFFFFF;
+  --color-card-bg-hover: #F8FCF5;
+  --color-card-border: #C8DDB8;
+
+  /* 边框色 */
+  --color-border-light: #D8EAD0;
+  --color-border-medium: #C8DDB8;
+  --color-border-dark: #B0CCA0;
+
+  /* 功能色 */
+  --color-success: #5B8C3E;
+  --color-warning: #C8A840;
+  --color-error: #D06060;
+  --color-info: #6B9E8E;
+
+  /* 阴影 */
+  --shadow-sm: 0 2px 4px rgba(45, 58, 30, 0.06);
+  --shadow-md: 0 4px 12px rgba(45, 58, 30, 0.08);
+  --shadow-lg: 0 8px 24px rgba(45, 58, 30, 0.10);
+  --shadow-xl: 0 16px 48px rgba(45, 58, 30, 0.12);
+
+  /* 渐变 */
+  --gradient-primary: linear-gradient(135deg, #C8DDB8 0%, #E8F2E0 100%);
+  --gradient-secondary: linear-gradient(135deg, #3D6B2E 0%, #5B8C3E 100%);
+  --gradient-accent: linear-gradient(135deg, #4A7E6E 0%, #6B9E8E 100%);
+  --gradient-hero-fade: linear-gradient(to bottom, transparent 0%, #E8F2E0 100%);
+
+  /* 字体 */
+  --font-display: 'Noto Serif SC', serif;
+  --font-body: 'Noto Sans SC', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  /* 间距 */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 48px;
+
+  /* 圆角 */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* 过渡 */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.mapper.UserProfileMapper">
+
+    <resultMap id="BaseResultMap" type="com.travel.pojo.model.UserProfile">
+        <id property="userId" column="user_id"/>
+        <result property="nickname" column="nickname"/>
+        <result property="avatarUrl" column="avatar_url"/>
+        <result property="bio" column="bio"/>
+        <result property="isVip" column="is_vip"/>
+        <result property="guidesCount" column="guides_count"/>
+        <result property="followersCount" column="followers_count"/>
+        <result property="likesReceivedCount" column="likes_received_count"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        SELECT user_id, nickname, avatar_url, bio, is_vip,
+               guides_count, followers_count, likes_received_count,
+               created_at, updated_at
+        FROM user_profiles
+        WHERE user_id = #{userId}
+    </select>
+
+    <insert id="insert" parameterType="com.travel.pojo.model.UserProfile">
+        INSERT INTO user_profiles (user_id, nickname, avatar_url, bio, is_vip)
+        VALUES (#{userId}, #{nickname}, #{avatarUrl}, #{bio}, #{isVip})
+    </insert>
+
+    <update id="updateProfile" parameterType="com.travel.pojo.model.UserProfile">
+        UPDATE user_profiles
+        <set>
+            <if test="nickname != null and nickname != ''">nickname = #{nickname},</if>
+            <if test="avatarUrl != null and avatarUrl != ''">avatar_url = #{avatarUrl},</if>
+            <if test="bio != null and bio != ''">bio = #{bio},</if>
+        </set>
+        WHERE user_id = #{userId}
+    </update>
+
+</mapper>

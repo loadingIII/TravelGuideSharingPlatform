@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.mapper.GuideItinerarySpotMapper">
+
+    <select id="listByGuideId" resultType="com.travel.pojo.model.GuideItinerarySpot">
+        SELECT id, guide_id, day_no, name, description, image_url, time, duration, sort_order
+        FROM guide_itinerary_spots
+        WHERE guide_id = #{guideId}
+        ORDER BY day_no ASC, sort_order ASC
+    </select>
+
+    <select id="listByGuideIdAndDayNo" resultType="com.travel.pojo.model.GuideItinerarySpot">
+        SELECT id, guide_id, day_no, name, description, image_url, time, duration, sort_order
+        FROM guide_itinerary_spots
+        WHERE guide_id = #{guideId} AND day_no = #{dayNo}
+        ORDER BY sort_order ASC
+    </select>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO guide_itinerary_spots (guide_id, day_no, name, description, image_url, time, duration, sort_order)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.guideId}, #{item.dayNo}, #{item.name}, #{item.description}, #{item.imageUrl}, #{item.time}, #{item.duration}, #{item.sortOrder})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByGuideId">
+        DELETE FROM guide_itinerary_spots WHERE guide_id = #{guideId}
+    </delete>
+
+</mapper>
