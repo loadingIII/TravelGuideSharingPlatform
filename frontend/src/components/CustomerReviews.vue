@@ -21,7 +21,7 @@
           @click="viewGuideDetail(guide.id)"
         >
           <div class="reviewer-info">
-            <img :src="guide.authorAvatarUrl || '/img/默认头像.png'" :alt="guide.authorName + '的头像'" loading="lazy">
+            <img :src="guide.authorAvatarUrl || '/img/头像1.jpg'" :alt="guide.authorName + '的头像'" loading="lazy" @error="e => e.target.src = '/img/头像1.jpg'">
             <div class="author-meta">
               <h4>{{ guide.authorName }}</h4>
               <span class="destination-tag">{{ guide.destinationName }}</span>

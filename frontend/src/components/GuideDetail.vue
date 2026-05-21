@@ -13,7 +13,7 @@
             <h1>{{ guide.title }}</h1>
             <div class="header-meta">
               <div class="author">
-                <img :src="guide.authorAvatar" :alt="guide.author">
+                <img :src="guide.authorAvatar" :alt="guide.author" @error="e => e.target.src = '/img/头像1.jpg'">
                 <span>{{ guide.author }}</span>
               </div>
               <div class="stats">
@@ -102,7 +102,7 @@
                         :key="spotIndex"
                         class="spot-item"
                       >
-                        <img :src="spot.image" :alt="spot.name" loading="lazy">
+                        <img :src="spot.image" :alt="spot.name" loading="lazy" @error="e => e.target.src = '/img/富士山.jpg'">
                         <div class="spot-info">
                           <h4>{{ spot.name }}</h4>
                           <p>{{ spot.description }}</p>
@@ -192,7 +192,7 @@
             <section class="comments-section">
               <h2>评论 ({{ guide.comments.length }})</h2>
               <div class="comment-form">
-                <img :src="currentUser.avatar" alt="我的头像" class="user-avatar">
+                <img :src="currentUser.avatar" alt="我的头像" class="user-avatar" @error="e => e.target.src = '/img/头像1.jpg'">
                 <div class="input-area">
                   <textarea 
                     v-model="newComment" 
@@ -283,7 +283,7 @@
             <!-- 作者信息 -->
             <div class="sidebar-card author-card">
               <div class="author-header">
-                <img :src="guide.authorAvatar" :alt="guide.author" class="author-avatar-large">
+                <img :src="guide.authorAvatar" :alt="guide.author" class="author-avatar-large" @error="e => e.target.src = '/img/头像1.jpg'">
                 <div class="author-info">
                   <h3>{{ guide.author }}</h3>
                   <span class="author-level">{{ guide.authorLevel }}</span>
@@ -319,7 +319,7 @@
                   class="related-item"
                   @click="goToGuide(related.id)"
                 >
-                  <img :src="related.image" :alt="related.title" loading="lazy">
+                  <img :src="related.image" :alt="related.title" loading="lazy" @error="e => e.target.src = '/img/富士山.jpg'">
                   <div class="related-info">
                     <h4>{{ related.title }}</h4>
                     <span>{{ related.views }} 次浏览</span>

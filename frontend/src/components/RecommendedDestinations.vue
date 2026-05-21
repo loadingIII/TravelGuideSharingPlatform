@@ -16,7 +16,7 @@
           @click="viewDestinationDetail(destination)"
         >
           <div class="card-image-wrapper">
-            <img :src="destination.image" :alt="destination.alt" loading="lazy">
+            <img :src="destination.image" :alt="destination.alt" loading="lazy" @error="e => e.target.src = '/img/富士山.jpg'">
           </div>
           <h3>{{ destination.name }}</h3>
           <p>{{ destination.description }}</p>

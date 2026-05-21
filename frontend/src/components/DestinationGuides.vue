@@ -98,7 +98,7 @@
             @click="viewDestinationDetail(dest)"
           >
             <div class="card-visual">
-              <img :src="dest.image" :alt="dest.name" loading="lazy">
+              <img :src="dest.image" :alt="dest.name" loading="lazy" @error="e => e.target.src = '/img/富士山.jpg'">
               <div class="card-overlay"></div>
               <div class="card-shine"></div>
             </div>

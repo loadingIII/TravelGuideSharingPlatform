@@ -22,15 +22,6 @@ public class AdminAuthApiController {
     private final AdminAuthService adminAuthService;
     private final AuditLogService auditLogService;
 
-    @GetMapping
-    public void rootRedirect(HttpSession session, HttpServletResponse response) throws IOException {
-        if (adminAuthService.isLoggedIn(session)) {
-            response.sendRedirect("/admin/index.html");
-        } else {
-            response.sendRedirect("/admin/login.html");
-        }
-    }
-
     @GetMapping("/login")
     public void loginRedirect(HttpServletResponse response) throws IOException {
         response.sendRedirect("/admin/login.html");

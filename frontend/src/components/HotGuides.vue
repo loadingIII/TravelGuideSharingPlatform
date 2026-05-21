@@ -126,7 +126,7 @@
             @click="viewGuideDetail(guide.id)"
           >
             <div class="card-visual">
-              <img :src="guide.image" :alt="guide.title" loading="lazy">
+              <img :src="guide.image" :alt="guide.title" loading="lazy" @error="e => e.target.src = '/img/富士山.jpg'">
               <div class="card-shine"></div>
               <div class="card-badge">
                 <svg viewBox="0 0 24 24" fill="currentColor">
@@ -140,7 +140,7 @@
               <p>{{ guide.description }}</p>
               <div class="card-footer">
                 <div class="author-chip">
-                  <img :src="guide.authorAvatar" :alt="guide.author">
+                  <img :src="guide.authorAvatar" :alt="guide.author" @error="e => e.target.src = '/img/头像1.jpg'">
                   <span>{{ guide.author }}</span>
                 </div>
                 <div class="engagement">

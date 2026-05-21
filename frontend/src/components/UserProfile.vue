@@ -522,7 +522,7 @@
           <div v-else-if="followList.length === 0" class="empty">暂无数据</div>
           <div v-else class="follow-list">
             <div v-for="user in followList" :key="user.userId" class="follow-item" @click="viewPublicProfile(user.userId)">
-              <img :src="user.avatarUrl || '/img/avatar-default.png'" class="follow-avatar">
+              <img :src="user.avatarUrl || '/img/头像1.jpg'" class="follow-avatar" @error="e => e.target.src = '/img/头像1.jpg'">
               <span class="follow-name">{{ user.nickname || '用户' }}</span>
             </div>
           </div>

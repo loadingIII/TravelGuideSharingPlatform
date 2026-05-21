@@ -36,7 +36,7 @@
             @click="$emit('view-guide', guide.id)"
           >
             <div class="card-image">
-              <img :src="guide.image" :alt="guide.title" loading="lazy">
+              <img :src="guide.image" :alt="guide.title" loading="lazy" @error="e => e.target.src = '/img/富士山.jpg'">
             </div>
             <div class="card-content">
               <h3>{{ guide.title }}</h3>

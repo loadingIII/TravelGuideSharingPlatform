@@ -54,7 +54,7 @@
             class="guide-card"
           >
             <div class="card-visual" @click="viewGuideDetail(guide.id)">
-              <img :src="guide.coverImageUrl" :alt="guide.title" loading="lazy">
+              <img :src="guide.coverImageUrl" :alt="guide.title" loading="lazy" @error="e => e.target.src = '/img/富士山.jpg'">
               <div class="card-shine"></div>
             </div>
             <div class="card-body" @click="viewGuideDetail(guide.id)">
