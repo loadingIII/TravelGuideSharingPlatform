@@ -132,6 +132,23 @@ CREATE TABLE IF NOT EXISTS guide_itinerary_days (
     ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS guide_itinerary_spots (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  guide_id BIGINT UNSIGNED NOT NULL,
+  day_no SMALLINT UNSIGNED NOT NULL,
+  name VARCHAR(200) NOT NULL,
+  description VARCHAR(1000) NULL,
+  image_url VARCHAR(500) NULL,
+  time VARCHAR(50) NULL,
+  duration VARCHAR(50) NULL,
+  sort_order SMALLINT UNSIGNED NOT NULL DEFAULT 1,
+  PRIMARY KEY (id),
+  KEY idx_itinerary_spots_guide_day (guide_id, day_no),
+  CONSTRAINT fk_itinerary_spots_guide
+    FOREIGN KEY (guide_id) REFERENCES guides(id)
+    ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS guide_comments (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   guide_id BIGINT UNSIGNED NOT NULL,
@@ -444,7 +461,7 @@ INSERT IGNORE INTO guide_comments (guide_id, user_id, parent_comment_id, author_
 (4, 12, NULL, '自然探索者', '/avatars/user12.jpg', '长城的描述很真实，确实很壮观', 22),
 (4, 5, NULL, '美食家小刘', '/avatars/user5.jpg', '北京烤鸭推荐四季民福，比全聚德性价比高', 18),
 (6, 7, NULL, '奢华旅行者', '/avatars/user7.jpg', '巴厘岛蜜月太浪漫了，悬岸酒店一定要住', 20),
-(10, 1, NULL, '水上别墅太梦幻了，蜜月首选！', 25),
+(10, 1, NULL, '旅行达人小明', '/avatars/user1.jpg', '水上别墅太梦幻了，蜜月首选！', 25),
 (10, 7, 48, '奢华旅行者', '/avatars/user7.jpg', '大部分酒店包含早餐和晚餐，午餐另付，也可以升级全包', 8);
 
 INSERT IGNORE INTO guide_likes (guide_id, user_id) VALUES
