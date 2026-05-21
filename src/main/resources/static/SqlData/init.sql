@@ -430,47 +430,6 @@ INSERT IGNORE INTO guide_itinerary_days (guide_id, day_no, title, summary, sort_
 (3, 5, '美功铁道市场', '观看火车穿过市场的奇景', 5),
 (3, 6, '返回 & 最后购物', '购买纪念品和特产', 6);
 
-CREATE TABLE IF NOT EXISTS guide_budget_items (
-  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  guide_id BIGINT UNSIGNED NOT NULL,
-  category_code VARCHAR(50) NOT NULL,
-  category_name VARCHAR(100) NOT NULL,
-  amount DECIMAL(10,2) NOT NULL DEFAULT 0,
-  percentage DECIMAL(5,2) NULL,
-  sort_order INT NOT NULL DEFAULT 1,
-  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-  KEY idx_budget_items_guide (guide_id),
-  CONSTRAINT fk_budget_items_guide
-    FOREIGN KEY (guide_id) REFERENCES guides(id)
-    ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-INSERT IGNORE INTO guide_budget_items (guide_id, category_code, category_name, amount, percentage, sort_order) VALUES
-(1, 'flights', '机票', 5000.00, 33.33, 1),
-(1, 'accommodation', '住宿', 4500.00, 30.00, 2),
-(1, 'food', '餐饮', 2500.00, 16.67, 3),
-(1, 'transport', '交通', 1500.00, 10.00, 4),
-(1, 'shopping', '购物', 1000.00, 6.67, 5),
-(1, 'tickets', '门票', 500.00, 3.33, 6),
-(2, 'flights', '机票', 8000.00, 44.44, 1),
-(2, 'accommodation', '住宿', 5000.00, 27.78, 2),
-(2, 'food', '餐饮', 3000.00, 16.67, 3),
-(2, 'transport', '交通', 1000.00, 5.56, 4),
-(2, 'shopping', '购物', 1000.00, 5.56, 5),
-(3, 'flights', '机票', 1000.00, 33.33, 1),
-(3, 'accommodation', '住宿', 800.00, 26.67, 2),
-(3, 'food', '餐饮', 600.00, 20.00, 3),
-(3, 'transport', '交通', 300.00, 10.00, 4),
-(3, 'shopping', '购物', 200.00, 6.67, 5),
-(3, 'tickets', '门票', 100.00, 3.33, 6),
-(4, 'flights', '机票', 2000.00, 25.00, 1),
-(4, 'accommodation', '住宿', 2500.00, 31.25, 2),
-(4, 'food', '餐饮', 1500.00, 18.75, 3),
-(4, 'transport', '交通', 800.00, 10.00, 4),
-(4, 'shopping', '购物', 700.00, 8.75, 5),
-(4, 'tickets', '门票', 500.00, 6.25, 6);
 
 INSERT IGNORE INTO guide_comments (guide_id, user_id, parent_comment_id, author_name, author_avatar_url, content, likes_count) VALUES
 (1, 2, NULL, '背包客小红', '/avatars/user2.jpg', '太详细了！正计划去东京，收藏了', 25),
@@ -512,12 +471,121 @@ INSERT IGNORE INTO guide_favorites (guide_id, user_id) VALUES
 (9, 11), (9, 12),
 (10, 7), (10, 10);
 
+INSERT IGNORE INTO guide_comment_likes (comment_id, user_id) VALUES
+(1, 3), (1, 4), (1, 5),
+(2, 1), (2, 4),
+(3, 2), (3, 5),
+(4, 1), (4, 6), (4, 9),
+(6, 1), (6, 8),
+(7, 4), (7, 6),
+(8, 3), (8, 5),
+(10, 1), (10, 6), (10, 7),
+(11, 3), (11, 5),
+(12, 4), (12, 6),
+(13, 1), (13, 10),
+(14, 5), (14, 7),
+(15, 1), (15, 4), (15, 8), (15, 9),
+(16, 2), (16, 6),
+(17, 3), (17, 8),
+(18, 1), (18, 3), (18, 12),
+(19, 2), (19, 5),
+(20, 6), (20, 8),
+(21, 1), (21, 5), (21, 12),
+(22, 11), (22, 3),
+(23, 5), (23, 11),
+(24, 1), (24, 3), (24, 8),
+(25, 11), (25, 5),
+(26, 1), (26, 12);
+
+INSERT IGNORE INTO user_follows (follower_user_id, followed_user_id) VALUES
+(2, 1), (3, 1), (4, 1), (5, 1),
+(1, 3), (1, 4), (1, 10),
+(6, 2), (6, 3),
+(7, 1), (7, 10),
+(8, 1), (8, 3),
+(9, 1), (9, 5),
+(11, 4), (11, 1),
+(12, 3), (12, 1);
+
+INSERT IGNORE INTO traveler_stories (author_user_id, author_name, author_avatar_url, is_vip, content, published_at, likes_count, comments_count, shares_count) VALUES
+(1, '旅行达人小明', '/avatars/user1.jpg', 1, '刚从东京回来，太美了！浅草寺的樱花季真的不容错过。这次尝试了当地的小巷美食，发现了很多隐藏的宝藏餐厅', '2026-04-28 18:30:00', 156, 23, 12),
+(3, '探险家阿强', '/avatars/user3.jpg', 1, '今天挑战了北京慕田峪长城，虽然很累但成就感满满！站在长城上俯瞰群山，感觉一切都值得了', '2026-04-27 20:15:00', 234, 45, 28),
+(5, '美食家小刘', '/avatars/user5.jpg', 1, '曼谷的街头美食真的太棒了！从芒果糯米饭到泰式奶茶，每一口都是惊喜。强烈推荐大家去考山路逛逛', '2026-04-26 16:45:00', 189, 34, 15),
+(10, '旅行摄影师', '/avatars/user10.jpg', 0, '在巴黎埃菲尔铁塔下拍到了最美的日落，这次的摄影作品太满意了。分享几张精选照片给大家', '2026-04-25 21:00:00', 312, 56, 42),
+(8, '独自旅行者', '/avatars/user8.jpg', 0, '一个人的旅行也能很精彩！在清迈古城骑行，感受当地人的慢生活，这种自由的感觉太棒了', '2026-04-24 19:30:00', 145, 28, 18),
+(6, '穷游背包客', '/avatars/user6.jpg', 0, '学生党也能玩转纽约！分享我的穷游攻略，5天只花了5000元，包含机票住宿和所有开销', '2026-04-23 17:20:00', 278, 67, 35),
+(7, '奢华旅行者', '/avatars/user7.jpg', 1, '马尔代夫的水上别墅真的太梦幻了！从阳台直接跳进清澈的海里，这种体验无与伦比', '2026-04-22 15:10:00', 423, 78, 56),
+(12, '自然探索者', '/avatars/user12.jpg', 1, '在巴厘岛徒步了阿贡火山，虽然很艰辛，但山顶的日出美到窒息。大自然的力量真的很震撼', '2026-04-21 13:45:00', 198, 32, 22);
+
+INSERT IGNORE INTO traveler_story_images (story_id, image_url, sort_order) VALUES
+(1, '/stories/tokyo_sakura1.jpg', 1),
+(1, '/stories/tokyo_sakura2.jpg', 2),
+(2, '/stories/great_wall1.jpg', 1),
+(2, '/stories/great_wall2.jpg', 2),
+(2, '/stories/great_wall3.jpg', 3),
+(3, '/stories/bangkok_food1.jpg', 1),
+(3, '/stories/bangkok_food2.jpg', 2),
+(4, '/stories/paris_sunset1.jpg', 1),
+(4, '/stories/paris_sunset2.jpg', 2),
+(5, '/stories/chiangmai_bike1.jpg', 1),
+(6, '/stories/newyork_budget1.jpg', 1),
+(6, '/stories/newyork_budget2.jpg', 2),
+(7, '/stories/maldives_villa1.jpg', 1),
+(7, '/stories/maldives_villa2.jpg', 2),
+(8, '/stories/bali_hike1.jpg', 1),
+(8, '/stories/bali_hike2.jpg', 2);
+
+INSERT IGNORE INTO traveler_story_likes (story_id, user_id) VALUES
+(1, 2), (1, 3), (1, 5),
+(2, 1), (2, 4), (2, 12),
+(3, 1), (3, 2), (3, 9),
+(4, 1), (4, 3), (4, 7),
+(5, 1), (5, 6), (5, 10),
+(6, 1), (6, 3), (6, 8),
+(7, 1), (7, 5), (7, 10),
+(8, 1), (8, 3), (8, 5);
+
+INSERT IGNORE INTO traveler_story_comments (story_id, user_id, parent_comment_id, author_name, author_avatar_url, content, likes_count) VALUES
+(1, 2, NULL, '背包客小红', '/avatars/user2.jpg', '樱花季真的太美了！请问是几月份去的？', 8),
+(1, 1, 1, '旅行达人小明', '/avatars/user1.jpg', '我是3月底4月初去的，正好赶上樱花盛开', 5),
+(2, 12, NULL, '自然探索者', '/avatars/user12.jpg', '长城真的很壮观，下次一定要去！', 12),
+(3, 9, NULL, '吃货旅行家', '/avatars/user9.jpg', '曼谷的美食真的太诱人了，已经加入旅行清单', 15),
+(4, 3, NULL, '探险家阿强', '/avatars/user3.jpg', '这些照片拍得太美了，摄影技术真棒！', 20),
+(4, 10, 5, '旅行摄影师', '/avatars/user10.jpg', '谢谢夸奖！那天的光线特别美', 8),
+(5, 6, NULL, '穷游背包客', '/avatars/user6.jpg', '一个人的旅行也很精彩，学到了很多', 10),
+(6, 3, NULL, '探险家阿强', '/avatars/user3.jpg', '5000元玩纽约太厉害了，请问是怎么做到的？', 18),
+(6, 6, 8, '穷游背包客', '/avatars/user6.jpg', '主要是住青旅和吃街头美食，交通用地铁通票', 12),
+(7, 1, NULL, '旅行达人小明', '/avatars/user1.jpg', '水上别墅太梦幻了，蜜月首选！', 25),
+(8, 3, NULL, '探险家阿强', '/avatars/user3.jpg', '阿贡火山徒步确实很挑战，但值得！', 15);
+
+INSERT IGNORE INTO traveler_story_comment_likes (comment_id, user_id) VALUES
+(1, 3), (1, 5), (1, 8),
+(2, 6), (2, 10),
+(3, 1), (3, 7), (3, 12),
+(4, 1), (4, 5),
+(5, 1), (5, 4), (5, 7),
+(6, 3), (6, 5), (6, 9),
+(7, 1), (7, 4), (7, 6),
+(8, 1), (8, 6), (8, 10),
+(9, 2), (9, 5), (9, 8),
+(10, 2), (10, 4), (10, 7);
+
 UPDATE guides SET
   likes_count = (SELECT COUNT(*) FROM guide_likes WHERE guide_id = guides.id),
   favorites_count = (SELECT COUNT(*) FROM guide_favorites WHERE guide_id = guides.id),
   comments_count = (SELECT COUNT(*) FROM guide_comments WHERE guide_id = guides.id AND is_deleted = 0);
 
+UPDATE traveler_stories SET
+  likes_count = (SELECT COUNT(*) FROM traveler_story_likes WHERE story_id = traveler_stories.id),
+  comments_count = (SELECT COUNT(*) FROM traveler_story_comments WHERE story_id = traveler_stories.id AND is_deleted = 0);
+
 UPDATE user_profiles SET
   guides_count = (SELECT COUNT(*) FROM guides WHERE author_id = user_profiles.user_id AND publish_status = 'published'),
   followers_count = (SELECT COUNT(*) FROM user_follows WHERE followed_user_id = user_profiles.user_id),
   likes_received_count = (SELECT COUNT(*) FROM guide_likes WHERE user_id = user_profiles.user_id);
+
+UPDATE destinations SET
+  guides_count = (SELECT COUNT(*) FROM guides WHERE destination_id = destinations.id AND publish_status = 'published'),
+  travelers_count = (SELECT COUNT(DISTINCT author_id) FROM guides WHERE destination_id = destinations.id);
+
+SELECT '数据库初始化完成' AS message;
