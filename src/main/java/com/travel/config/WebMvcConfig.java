@@ -34,12 +34,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(adminInterceptor)
                 .addPathPatterns("/admin/**")
-                .excludePathPatterns("/admin/login", "/admin/login.html",
+                .excludePathPatterns("/admin", "/admin/login", "/admin/login.html",
                     "/admin/css/**", "/admin/js/**", "/admin/images/**");
 
         registry.addInterceptor(adminPermissionInterceptor)
                 .addPathPatterns("/admin/**")
-                .excludePathPatterns("/admin/login", "/admin/login.html",
+                .excludePathPatterns("/admin", "/admin/login", "/admin/login.html",
                     "/admin/css/**", "/admin/js/**", "/admin/images/**");
     }
 }

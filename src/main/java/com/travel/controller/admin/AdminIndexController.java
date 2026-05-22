@@ -18,7 +18,7 @@ public class AdminIndexController {
     @GetMapping("/admin")
     public String adminRoot(HttpSession session) {
         if (adminAuthService.isLoggedIn(session)) {
-            return "redirect:/admin/dashboard";
+            return "redirect:/admin/index.html";
         }
         return "redirect:/admin/login.html";
     }
