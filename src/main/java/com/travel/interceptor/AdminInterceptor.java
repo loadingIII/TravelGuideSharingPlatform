@@ -25,9 +25,7 @@ public class AdminInterceptor implements HandlerInterceptor {
 
             String accept = request.getHeader("Accept");
             boolean isAjax = accept != null && accept.contains("application/json");
-            String uri = request.getRequestURI();
-            boolean isStatic = uri.contains(".html") || uri.contains(".css") || uri.contains(".js") || uri.contains(".png") || uri.contains(".jpg");
-            if (isAjax || (!isStatic && !uri.equals("/admin/login"))) {
+            if (isAjax) {
                 response.setStatus(401);
                 response.setContentType("application/json;charset=UTF-8");
                 response.getWriter().write("{\"code\":\"NOT_LOGIN\",\"message\":\"未登录\",\"data\":null}");
