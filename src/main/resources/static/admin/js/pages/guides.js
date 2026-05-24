@@ -16,7 +16,6 @@ async function initGuides(page = 1, status = null) {
         <td>${g.publishedAt || '-'}</td>
         <td>
           <button class="btn-link" onclick="Router.navigate('/guides/detail/${g.id}')">详情</button>
-          <button class="btn-link" onclick="Router.navigate('/guides/edit/${g.id}')">编辑</button>
           ${g.status === 0 ? `
             <button class="btn-link" onclick="auditGuide(${g.id}, 'approve')">通过</button>
             <button class="btn-link danger" onclick="auditGuide(${g.id}, 'reject')">拒绝</button>
@@ -118,33 +117,6 @@ async function initGuideDetail(id) {
           <div class="detail-stat"><div class="detail-stat-value">${g.favoritesCount || 0}</div><div class="detail-stat-label">收藏</div></div>
         </div>
       </div>`;
-  } catch (err) { content.innerHTML = `<div class="alert alert-danger">加载失败: ${err.message}</div>`; }
-}
-
-async function initGuideEdit(id) {
-  const content = document.getElementById('content');
-  try {
-    const guide = await API.get(`/admin/guides/${id}`);
-    content.innerHTML = `
-      <div class="page-header">
-        <div class="page-title">编辑攻略</div>
-        <button class="btn btn-ghost" onclick="Router.navigate('/guides')">返回列表</button>
-      </div>
-      <div class="card edit-card"><div class="card-body">
-        <form id="editForm">
-          <div class="form-group"><label class="form-label">标题</label><input type="text" name="title" class="form-input" value="${guide.title || ''}" required></div>
-          <div class="form-group"><label class="form-label">摘要</label><textarea name="summary" class="form-textarea">${guide.summary || ''}</textarea></div>
-          <button type="submit" class="btn btn-primary">保存</button>
-        </form>
-      </div></div>`;
-    document.getElementById('editForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const fd = new FormData(e.target);
-      const body = {};
-      fd.forEach((v, k) => body[k] = v);
-      try { await API.put(`/admin/guides/${id}`, body); Toast.success('保存成功'); Router.navigate('/guides'); }
-      catch (err) { Toast.error(err.message); }
-    });
   } catch (err) { content.innerHTML = `<div class="alert alert-danger">加载失败: ${err.message}</div>`; }
 }
 

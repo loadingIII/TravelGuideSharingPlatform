@@ -15,7 +15,6 @@ async function initStories(page = 1, status = null) {
         <td>${s.createdAt || '-'}</td>
         <td>
           <button class="btn-link" onclick="Router.navigate('/stories/detail/${s.id}')">详情</button>
-          <button class="btn-link" onclick="Router.navigate('/stories/edit/${s.id}')">编辑</button>
           ${s.status === 0 ? `
             <button class="btn-link" onclick="auditStory(${s.id}, 'approve')">通过</button>
             <button class="btn-link danger" onclick="auditStory(${s.id}, 'reject')">拒绝</button>
@@ -106,32 +105,6 @@ async function initStoryDetail(id) {
           <div class="detail-stat"><div class="detail-stat-value">${s.sharesCount || 0}</div><div class="detail-stat-label">分享</div></div>
         </div>
       </div>`;
-  } catch (err) { content.innerHTML = `<div class="alert alert-danger">加载失败: ${err.message}</div>`; }
-}
-
-async function initStoryEdit(id) {
-  const content = document.getElementById('content');
-  try {
-    const story = await API.get(`/admin/stories/${id}`);
-    content.innerHTML = `
-      <div class="page-header">
-        <div class="page-title">编辑故事</div>
-        <button class="btn btn-ghost" onclick="Router.navigate('/stories')">返回列表</button>
-      </div>
-      <div class="card edit-card"><div class="card-body">
-        <form id="editForm">
-          <div class="form-group"><label class="form-label">内容</label><textarea name="content" class="form-textarea" rows="10" required>${story.content || ''}</textarea></div>
-          <button type="submit" class="btn btn-primary">保存</button>
-        </form>
-      </div></div>`;
-    document.getElementById('editForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const fd = new FormData(e.target);
-      const body = {};
-      fd.forEach((v, k) => body[k] = v);
-      try { await API.put(`/admin/stories/${id}`, body); Toast.success('保存成功'); Router.navigate('/stories'); }
-      catch (err) { Toast.error(err.message); }
-    });
   } catch (err) { content.innerHTML = `<div class="alert alert-danger">加载失败: ${err.message}</div>`; }
 }
 

@@ -1,9 +1,11 @@
 package com.travel.config;
 
+import com.travel.filter.CharacterEncodingFilter;
 import com.travel.interceptor.AdminInterceptor;
 import com.travel.interceptor.AdminPermissionInterceptor;
 import com.travel.security.AuthInterceptor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -16,6 +18,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private final AuthInterceptor authInterceptor;
     private final AdminInterceptor adminInterceptor;
     private final AdminPermissionInterceptor adminPermissionInterceptor;
+
+    @Bean
+    public CharacterEncodingFilter utf8CharacterEncodingFilter() {
+        return new CharacterEncodingFilter();
+    }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {

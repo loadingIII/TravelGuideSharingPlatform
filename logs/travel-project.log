@@ -1,458 +1,869 @@
-2026-05-22T12:40:36.868+08:00  INFO 31060 --- [TravelProject] [main] com.travel.TravelProjectApplication      : Starting TravelProjectApplication using Java 17.0.12 with PID 31060 (E:\JavaFile\project\TravelProject\target\classes started by Liuji in E:\JavaFile\project\TravelProject)
-2026-05-22T12:40:36.873+08:00  INFO 31060 --- [TravelProject] [main] com.travel.TravelProjectApplication      : The following 1 profile is active: "local"
-2026-05-22T12:40:37.908+08:00  INFO 31060 --- [TravelProject] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
-2026-05-22T12:40:37.921+08:00  INFO 31060 --- [TravelProject] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-05-22T12:40:37.921+08:00  INFO 31060 --- [TravelProject] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.48]
-2026-05-22T12:40:38.189+08:00  INFO 31060 --- [TravelProject] [main] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
-2026-05-22T12:40:38.202+08:00  INFO 31060 --- [TravelProject] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2026-05-22T12:40:38.202+08:00  INFO 31060 --- [TravelProject] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1288 ms
-2026-05-22T12:40:38.819+08:00  INFO 31060 --- [TravelProject] [main] com.travel.utils.OssUploadUtil           : OSS client initialized, endpoint: oss-cn-guangzhou.aliyuncs.com
-2026-05-22T12:40:39.291+08:00  INFO 31060 --- [TravelProject] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
-2026-05-22T12:40:39.302+08:00  INFO 31060 --- [TravelProject] [main] com.travel.TravelProjectApplication      : Started TravelProjectApplication in 2.888 seconds (process running for 3.557)
-2026-05-22T12:40:54.089+08:00  INFO 31060 --- [TravelProject] [http-nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-05-22T12:40:54.090+08:00  INFO 31060 --- [TravelProject] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2026-05-22T12:40:54.092+08:00  INFO 31060 --- [TravelProject] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
-2026-05-22T12:40:54.210+08:00  INFO 31060 --- [TravelProject] [http-nio-8082-exec-1] com.travel.listener.OnlineUserListener   : 用户上线 | 当前在线: 1
-2026-05-22T12:40:54.235+08:00  INFO 31060 --- [TravelProject] [http-nio-8082-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-05-22T12:40:54.660+08:00  INFO 31060 --- [TravelProject] [http-nio-8082-exec-1] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@69f52df7
-2026-05-22T12:40:54.662+08:00  INFO 31060 --- [TravelProject] [http-nio-8082-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-05-22T12:40:54.670+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-1] c.t.mapper.AdminUserMapper.selectById    : ==>  Preparing: SELECT * FROM admin_users WHERE id = ?
-2026-05-22T12:40:54.690+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-1] c.t.mapper.AdminUserMapper.selectById    : ==> Parameters: 1(Long)
-2026-05-22T12:40:54.719+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-1] c.t.mapper.AdminUserMapper.selectById    : <==      Total: 1
-2026-05-22T12:40:54.743+08:00  INFO 31060 --- [TravelProject] [http-nio-8082-exec-1] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin | IP: 0:0:0:0:0:0:0:1 | Status: 302 | 645ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:40:54.752+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-2] com.travel.mapper.UserMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM users WHERE (? IS NULL OR status = ?)
-2026-05-22T12:40:54.754+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-2] com.travel.mapper.UserMapper.countAll    : ==> Parameters: null, null
-2026-05-22T12:40:54.768+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-2] com.travel.mapper.UserMapper.countAll    : <==      Total: 1
-2026-05-22T12:40:54.792+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-2] com.travel.mapper.GuideMapper.countAll   : ==>  Preparing: SELECT COUNT(*) FROM guides g
-2026-05-22T12:40:54.793+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-2] com.travel.mapper.GuideMapper.countAll   : ==> Parameters: 
-2026-05-22T12:40:54.802+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-2] com.travel.mapper.GuideMapper.countAll   : <==      Total: 1
-2026-05-22T12:40:54.803+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-2] c.t.mapper.GuideStoryMapper.countAll     : ==>  Preparing: SELECT COUNT(1) FROM traveler_stories WHERE is_deleted = 0
-2026-05-22T12:40:54.803+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-2] c.t.mapper.GuideStoryMapper.countAll     : ==> Parameters: 
-2026-05-22T12:40:54.812+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-2] c.t.mapper.GuideStoryMapper.countAll     : <==      Total: 1
-2026-05-22T12:40:54.813+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-2] c.t.mapper.DestinationMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM destinations
-2026-05-22T12:40:54.813+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-2] c.t.mapper.DestinationMapper.countAll    : ==> Parameters: 
-2026-05-22T12:40:54.820+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-2] c.t.mapper.DestinationMapper.countAll    : <==      Total: 1
-2026-05-22T12:40:54.820+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-2] c.t.mapper.GuideCommentMapper.countAll   : ==>  Preparing: SELECT COUNT(*) FROM guide_comments c WHERE (? IS NULL OR c.status = ?)
-2026-05-22T12:40:54.821+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-2] c.t.mapper.GuideCommentMapper.countAll   : ==> Parameters: null, null
-2026-05-22T12:40:54.829+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-2] c.t.mapper.GuideCommentMapper.countAll   : <==      Total: 1
-2026-05-22T12:40:55.922+08:00  INFO 31060 --- [TravelProject] [http-nio-8082-exec-2] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/dashboard;jsessionid=0202B78B4C294AD65CCE8F1EA28460E5 | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 1171ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:40:56.723+08:00  INFO 31060 --- [TravelProject] [http-nio-8082-exec-3] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 80ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:40:59.801+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-4] com.travel.mapper.UserMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM users WHERE (? IS NULL OR status = ?)
-2026-05-22T12:40:59.801+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-4] com.travel.mapper.UserMapper.countAll    : ==> Parameters: null, null
-2026-05-22T12:40:59.808+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-4] com.travel.mapper.UserMapper.countAll    : <==      Total: 1
-2026-05-22T12:40:59.809+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-4] c.travel.mapper.UserMapper.selectPage    : ==>  Preparing: SELECT id, username, phone, email, password_hash, status, last_login_at, created_at, updated_at FROM users WHERE (? IS NULL OR status = ?) ORDER BY created_at DESC LIMIT ?, ?
-2026-05-22T12:40:59.809+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-4] c.travel.mapper.UserMapper.selectPage    : ==> Parameters: null, null, 0(Integer), 10(Integer)
-2026-05-22T12:40:59.819+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-4] c.travel.mapper.UserMapper.selectPage    : <==      Total: 10
-2026-05-22T12:40:59.828+08:00  INFO 31060 --- [TravelProject] [http-nio-8082-exec-4] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/users | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 43ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:40:59.902+08:00  INFO 31060 --- [TravelProject] [http-nio-8082-exec-5] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:41:03.013+08:00  INFO 31060 --- [TravelProject] [http-nio-8082-exec-6] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 7ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:41:03.837+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-7] com.travel.mapper.UserMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM users WHERE (? IS NULL OR status = ?)
-2026-05-22T12:41:03.838+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-7] com.travel.mapper.UserMapper.countAll    : ==> Parameters: null, null
-2026-05-22T12:41:03.845+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-7] com.travel.mapper.UserMapper.countAll    : <==      Total: 1
-2026-05-22T12:41:03.845+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-7] c.travel.mapper.UserMapper.selectPage    : ==>  Preparing: SELECT id, username, phone, email, password_hash, status, last_login_at, created_at, updated_at FROM users WHERE (? IS NULL OR status = ?) ORDER BY created_at DESC LIMIT ?, ?
-2026-05-22T12:41:03.846+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-7] c.travel.mapper.UserMapper.selectPage    : ==> Parameters: null, null, 0(Integer), 10(Integer)
-2026-05-22T12:41:03.856+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-7] c.travel.mapper.UserMapper.selectPage    : <==      Total: 10
-2026-05-22T12:41:03.860+08:00  INFO 31060 --- [TravelProject] [http-nio-8082-exec-7] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/users | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 30ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:41:03.948+08:00  INFO 31060 --- [TravelProject] [http-nio-8082-exec-8] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 3ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:41:05.564+08:00  INFO 31060 --- [TravelProject] [http-nio-8082-exec-9] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 3ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:41:06.245+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-10] com.travel.mapper.UserMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM users WHERE (? IS NULL OR status = ?)
-2026-05-22T12:41:06.246+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-10] com.travel.mapper.UserMapper.countAll    : ==> Parameters: null, null
-2026-05-22T12:41:06.252+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-10] com.travel.mapper.UserMapper.countAll    : <==      Total: 1
-2026-05-22T12:41:06.253+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-10] c.travel.mapper.UserMapper.selectPage    : ==>  Preparing: SELECT id, username, phone, email, password_hash, status, last_login_at, created_at, updated_at FROM users WHERE (? IS NULL OR status = ?) ORDER BY created_at DESC LIMIT ?, ?
-2026-05-22T12:41:06.254+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-10] c.travel.mapper.UserMapper.selectPage    : ==> Parameters: null, null, 0(Integer), 10(Integer)
-2026-05-22T12:41:06.262+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-10] c.travel.mapper.UserMapper.selectPage    : <==      Total: 10
-2026-05-22T12:41:06.264+08:00  INFO 31060 --- [TravelProject] [http-nio-8082-exec-10] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/users | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 26ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:41:06.340+08:00  INFO 31060 --- [TravelProject] [http-nio-8082-exec-1] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 3ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:41:07.395+08:00  INFO 31060 --- [TravelProject] [http-nio-8082-exec-2] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 3ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:41:07.950+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-3] com.travel.mapper.UserMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM users WHERE (? IS NULL OR status = ?)
-2026-05-22T12:41:07.950+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-3] com.travel.mapper.UserMapper.countAll    : ==> Parameters: null, null
-2026-05-22T12:41:07.957+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-3] com.travel.mapper.UserMapper.countAll    : <==      Total: 1
-2026-05-22T12:41:07.958+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-3] c.travel.mapper.UserMapper.selectPage    : ==>  Preparing: SELECT id, username, phone, email, password_hash, status, last_login_at, created_at, updated_at FROM users WHERE (? IS NULL OR status = ?) ORDER BY created_at DESC LIMIT ?, ?
-2026-05-22T12:41:07.958+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-3] c.travel.mapper.UserMapper.selectPage    : ==> Parameters: null, null, 0(Integer), 10(Integer)
-2026-05-22T12:41:07.965+08:00 DEBUG 31060 --- [TravelProject] [http-nio-8082-exec-3] c.travel.mapper.UserMapper.selectPage    : <==      Total: 10
-2026-05-22T12:41:07.975+08:00  INFO 31060 --- [TravelProject] [http-nio-8082-exec-3] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/users | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 33ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:41:08.069+08:00  INFO 31060 --- [TravelProject] [http-nio-8082-exec-4] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 4ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:41:15.716+08:00  INFO 31060 --- [TravelProject] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
-2026-05-22T12:41:16.263+08:00  INFO 31060 --- [TravelProject] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
-2026-05-22T12:41:16.267+08:00  INFO 31060 --- [TravelProject] [SpringApplicationShutdownHook] com.travel.utils.OssUploadUtil           : OSS client shutdown
-2026-05-22T12:41:16.268+08:00  INFO 31060 --- [TravelProject] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2026-05-22T12:41:16.274+08:00  INFO 31060 --- [TravelProject] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2026-05-22T12:41:16.275+08:00  INFO 31060 --- [TravelProject] [SpringApplicationShutdownHook] com.travel.listener.OnlineUserListener   : 用户下线 | 当前在线: 0
-2026-05-22T12:41:43.359+08:00  INFO 14208 --- [TravelProject] [main] c.travel.TravelProjectApplicationTests   : Starting TravelProjectApplicationTests using Java 17.0.12 with PID 14208 (started by Liuji in E:\JavaFile\project\TravelProject)
-2026-05-22T12:41:43.361+08:00  INFO 14208 --- [TravelProject] [main] c.travel.TravelProjectApplicationTests   : The following 1 profile is active: "local"
-2026-05-22T12:41:45.828+08:00  INFO 14208 --- [TravelProject] [main] com.travel.utils.OssUploadUtil           : OSS client initialized, endpoint: oss-cn-guangzhou.aliyuncs.com
-2026-05-22T12:41:47.078+08:00  INFO 14208 --- [TravelProject] [main] c.travel.TravelProjectApplicationTests   : Started TravelProjectApplicationTests in 4.112 seconds (process running for 5.137)
-2026-05-22T12:41:48.291+08:00  INFO 14208 --- [TravelProject] [SpringApplicationShutdownHook] com.travel.utils.OssUploadUtil           : OSS client shutdown
-2026-05-22T12:41:55.359+08:00  INFO 16228 --- [TravelProject] [main] com.travel.TravelProjectApplication      : Starting TravelProjectApplication using Java 17.0.12 with PID 16228 (E:\JavaFile\project\TravelProject\target\classes started by Liuji in E:\JavaFile\project\TravelProject)
-2026-05-22T12:41:55.362+08:00  INFO 16228 --- [TravelProject] [main] com.travel.TravelProjectApplication      : The following 1 profile is active: "local"
-2026-05-22T12:41:56.238+08:00  INFO 16228 --- [TravelProject] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
-2026-05-22T12:41:56.246+08:00  INFO 16228 --- [TravelProject] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-05-22T12:41:56.246+08:00  INFO 16228 --- [TravelProject] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.48]
-2026-05-22T12:41:56.458+08:00  INFO 16228 --- [TravelProject] [main] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
-2026-05-22T12:41:56.467+08:00  INFO 16228 --- [TravelProject] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2026-05-22T12:41:56.468+08:00  INFO 16228 --- [TravelProject] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1071 ms
-2026-05-22T12:41:56.920+08:00  INFO 16228 --- [TravelProject] [main] com.travel.utils.OssUploadUtil           : OSS client initialized, endpoint: oss-cn-guangzhou.aliyuncs.com
-2026-05-22T12:41:57.308+08:00  INFO 16228 --- [TravelProject] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
-2026-05-22T12:41:57.317+08:00  INFO 16228 --- [TravelProject] [main] com.travel.TravelProjectApplication      : Started TravelProjectApplication in 2.35 seconds (process running for 2.922)
-2026-05-22T12:42:05.503+08:00  INFO 16228 --- [TravelProject] [http-nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-05-22T12:42:05.503+08:00  INFO 16228 --- [TravelProject] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2026-05-22T12:42:05.506+08:00  INFO 16228 --- [TravelProject] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
-2026-05-22T12:42:05.620+08:00  INFO 16228 --- [TravelProject] [http-nio-8082-exec-1] com.travel.listener.OnlineUserListener   : 用户上线 | 当前在线: 1
-2026-05-22T12:42:05.638+08:00  INFO 16228 --- [TravelProject] [http-nio-8082-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-05-22T12:42:05.883+08:00  INFO 16228 --- [TravelProject] [http-nio-8082-exec-1] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2e1d22a1
-2026-05-22T12:42:05.884+08:00  INFO 16228 --- [TravelProject] [http-nio-8082-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-05-22T12:42:05.890+08:00 DEBUG 16228 --- [TravelProject] [http-nio-8082-exec-1] c.t.mapper.AdminUserMapper.selectById    : ==>  Preparing: SELECT * FROM admin_users WHERE id = ?
-2026-05-22T12:42:05.904+08:00 DEBUG 16228 --- [TravelProject] [http-nio-8082-exec-1] c.t.mapper.AdminUserMapper.selectById    : ==> Parameters: 1(Long)
-2026-05-22T12:42:05.935+08:00 DEBUG 16228 --- [TravelProject] [http-nio-8082-exec-1] c.t.mapper.AdminUserMapper.selectById    : <==      Total: 1
-2026-05-22T12:42:05.964+08:00  INFO 16228 --- [TravelProject] [http-nio-8082-exec-1] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin | IP: 0:0:0:0:0:0:0:1 | Status: 302 | 451ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:42:05.972+08:00 DEBUG 16228 --- [TravelProject] [http-nio-8082-exec-6] com.travel.mapper.UserMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM users WHERE (? IS NULL OR status = ?)
-2026-05-22T12:42:05.973+08:00 DEBUG 16228 --- [TravelProject] [http-nio-8082-exec-6] com.travel.mapper.UserMapper.countAll    : ==> Parameters: null, null
-2026-05-22T12:42:05.981+08:00 DEBUG 16228 --- [TravelProject] [http-nio-8082-exec-6] com.travel.mapper.UserMapper.countAll    : <==      Total: 1
-2026-05-22T12:42:06.001+08:00 DEBUG 16228 --- [TravelProject] [http-nio-8082-exec-6] com.travel.mapper.GuideMapper.countAll   : ==>  Preparing: SELECT COUNT(*) FROM guides g
-2026-05-22T12:42:06.002+08:00 DEBUG 16228 --- [TravelProject] [http-nio-8082-exec-6] com.travel.mapper.GuideMapper.countAll   : ==> Parameters: 
-2026-05-22T12:42:06.011+08:00 DEBUG 16228 --- [TravelProject] [http-nio-8082-exec-6] com.travel.mapper.GuideMapper.countAll   : <==      Total: 1
-2026-05-22T12:42:06.013+08:00 DEBUG 16228 --- [TravelProject] [http-nio-8082-exec-6] c.t.mapper.GuideStoryMapper.countAll     : ==>  Preparing: SELECT COUNT(1) FROM traveler_stories WHERE is_deleted = 0
-2026-05-22T12:42:06.014+08:00 DEBUG 16228 --- [TravelProject] [http-nio-8082-exec-6] c.t.mapper.GuideStoryMapper.countAll     : ==> Parameters: 
-2026-05-22T12:42:06.021+08:00 DEBUG 16228 --- [TravelProject] [http-nio-8082-exec-6] c.t.mapper.GuideStoryMapper.countAll     : <==      Total: 1
-2026-05-22T12:42:06.021+08:00 DEBUG 16228 --- [TravelProject] [http-nio-8082-exec-6] c.t.mapper.DestinationMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM destinations
-2026-05-22T12:42:06.022+08:00 DEBUG 16228 --- [TravelProject] [http-nio-8082-exec-6] c.t.mapper.DestinationMapper.countAll    : ==> Parameters: 
-2026-05-22T12:42:06.029+08:00 DEBUG 16228 --- [TravelProject] [http-nio-8082-exec-6] c.t.mapper.DestinationMapper.countAll    : <==      Total: 1
-2026-05-22T12:42:06.029+08:00 DEBUG 16228 --- [TravelProject] [http-nio-8082-exec-6] c.t.mapper.GuideCommentMapper.countAll   : ==>  Preparing: SELECT COUNT(*) FROM guide_comments c WHERE (? IS NULL OR c.status = ?)
-2026-05-22T12:42:06.030+08:00 DEBUG 16228 --- [TravelProject] [http-nio-8082-exec-6] c.t.mapper.GuideCommentMapper.countAll   : ==> Parameters: null, null
-2026-05-22T12:42:06.036+08:00 DEBUG 16228 --- [TravelProject] [http-nio-8082-exec-6] c.t.mapper.GuideCommentMapper.countAll   : <==      Total: 1
-2026-05-22T12:42:06.890+08:00  INFO 16228 --- [TravelProject] [http-nio-8082-exec-6] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/dashboard | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 919ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:42:07.094+08:00  INFO 16228 --- [TravelProject] [http-nio-8082-exec-9] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 63ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:42:08.729+08:00 DEBUG 16228 --- [TravelProject] [http-nio-8082-exec-4] com.travel.mapper.UserMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM users WHERE (? IS NULL OR status = ?)
-2026-05-22T12:42:08.730+08:00 DEBUG 16228 --- [TravelProject] [http-nio-8082-exec-4] com.travel.mapper.UserMapper.countAll    : ==> Parameters: null, null
-2026-05-22T12:42:08.737+08:00 DEBUG 16228 --- [TravelProject] [http-nio-8082-exec-4] com.travel.mapper.UserMapper.countAll    : <==      Total: 1
-2026-05-22T12:42:08.737+08:00 DEBUG 16228 --- [TravelProject] [http-nio-8082-exec-4] c.travel.mapper.UserMapper.selectPage    : ==>  Preparing: SELECT id, username, phone, email, password_hash, status, last_login_at, created_at, updated_at FROM users WHERE (? IS NULL OR status = ?) ORDER BY created_at DESC LIMIT ?, ?
-2026-05-22T12:42:08.738+08:00 DEBUG 16228 --- [TravelProject] [http-nio-8082-exec-4] c.travel.mapper.UserMapper.selectPage    : ==> Parameters: null, null, 0(Integer), 10(Integer)
-2026-05-22T12:42:08.747+08:00 DEBUG 16228 --- [TravelProject] [http-nio-8082-exec-4] c.travel.mapper.UserMapper.selectPage    : <==      Total: 10
-2026-05-22T12:42:08.755+08:00  INFO 16228 --- [TravelProject] [http-nio-8082-exec-4] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/users | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 39ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:42:08.831+08:00  INFO 16228 --- [TravelProject] [http-nio-8082-exec-5] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 3ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:43:38.667+08:00  INFO 16228 --- [TravelProject] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
-2026-05-22T12:43:39.320+08:00  INFO 16228 --- [TravelProject] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
-2026-05-22T12:43:39.324+08:00  INFO 16228 --- [TravelProject] [SpringApplicationShutdownHook] com.travel.utils.OssUploadUtil           : OSS client shutdown
-2026-05-22T12:43:39.326+08:00  INFO 16228 --- [TravelProject] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2026-05-22T12:43:39.330+08:00  INFO 16228 --- [TravelProject] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2026-05-22T12:43:39.331+08:00  INFO 16228 --- [TravelProject] [SpringApplicationShutdownHook] com.travel.listener.OnlineUserListener   : 用户下线 | 当前在线: 0
-2026-05-22T12:46:09.846+08:00  INFO 29404 --- [TravelProject] [main] c.travel.TravelProjectApplicationTests   : Starting TravelProjectApplicationTests using Java 17.0.12 with PID 29404 (started by Liuji in E:\JavaFile\project\TravelProject)
-2026-05-22T12:46:09.847+08:00  INFO 29404 --- [TravelProject] [main] c.travel.TravelProjectApplicationTests   : The following 1 profile is active: "local"
-2026-05-22T12:46:12.476+08:00  INFO 29404 --- [TravelProject] [main] com.travel.utils.OssUploadUtil           : OSS client initialized, endpoint: oss-cn-guangzhou.aliyuncs.com
-2026-05-22T12:46:13.780+08:00  INFO 29404 --- [TravelProject] [main] c.travel.TravelProjectApplicationTests   : Started TravelProjectApplicationTests in 4.345 seconds (process running for 5.362)
-2026-05-22T12:46:14.939+08:00  INFO 29404 --- [TravelProject] [SpringApplicationShutdownHook] com.travel.utils.OssUploadUtil           : OSS client shutdown
-2026-05-22T12:46:25.906+08:00  INFO 4284 --- [TravelProject] [main] com.travel.TravelProjectApplication      : Starting TravelProjectApplication using Java 17.0.12 with PID 4284 (E:\JavaFile\project\TravelProject\target\classes started by Liuji in E:\JavaFile\project\TravelProject)
-2026-05-22T12:46:25.908+08:00  INFO 4284 --- [TravelProject] [main] com.travel.TravelProjectApplication      : The following 1 profile is active: "local"
-2026-05-22T12:46:26.830+08:00  INFO 4284 --- [TravelProject] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
-2026-05-22T12:46:26.841+08:00  INFO 4284 --- [TravelProject] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-05-22T12:46:26.841+08:00  INFO 4284 --- [TravelProject] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.48]
-2026-05-22T12:46:27.071+08:00  INFO 4284 --- [TravelProject] [main] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
-2026-05-22T12:46:27.082+08:00  INFO 4284 --- [TravelProject] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2026-05-22T12:46:27.082+08:00  INFO 4284 --- [TravelProject] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1138 ms
-2026-05-22T12:46:27.576+08:00  INFO 4284 --- [TravelProject] [main] com.travel.utils.OssUploadUtil           : OSS client initialized, endpoint: oss-cn-guangzhou.aliyuncs.com
-2026-05-22T12:46:28.088+08:00  INFO 4284 --- [TravelProject] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
-2026-05-22T12:46:28.101+08:00  INFO 4284 --- [TravelProject] [main] com.travel.TravelProjectApplication      : Started TravelProjectApplication in 2.608 seconds (process running for 3.289)
-2026-05-22T12:46:37.754+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-05-22T12:46:37.755+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2026-05-22T12:46:37.756+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
-2026-05-22T12:46:37.877+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-1] com.travel.listener.OnlineUserListener   : 用户上线 | 当前在线: 1
-2026-05-22T12:46:37.888+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-1] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin | IP: 0:0:0:0:0:0:0:1 | Status: 302 | 127ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:37.907+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-2] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/login.html | IP: 0:0:0:0:0:0:0:1 | Status: 304 | 11ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:38.063+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-3] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 60ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:46.745+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-7] c.t.c.admin.AdminAuthApiController       : 登录尝试: username=admin
-2026-05-22T12:46:46.761+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-7] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-05-22T12:46:47.071+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-7] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3e6b858e
-2026-05-22T12:46:47.073+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-7] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-05-22T12:46:47.079+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-7] c.t.m.AdminUserMapper.selectByUsername   : ==>  Preparing: SELECT * FROM admin_users WHERE username = ?
-2026-05-22T12:46:47.098+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-7] c.t.m.AdminUserMapper.selectByUsername   : ==> Parameters: admin(String)
-2026-05-22T12:46:47.122+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-7] c.t.m.AdminUserMapper.selectByUsername   : <==      Total: 1
-2026-05-22T12:46:47.204+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-7] c.t.m.AdminUserMapper.updateLastLoginAt  : ==>  Preparing: UPDATE admin_users SET last_login_at = NOW() WHERE id = ?
-2026-05-22T12:46:47.205+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-7] c.t.m.AdminUserMapper.updateLastLoginAt  : ==> Parameters: 1(Long)
-2026-05-22T12:46:47.222+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-7] c.t.m.AdminUserMapper.updateLastLoginAt  : <==    Updates: 1
-2026-05-22T12:46:47.224+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-7] c.travel.mapper.AdminLogMapper.insert    : ==>  Preparing: INSERT INTO admin_logs (admin_id, admin_username, action, target_type, target_id, detail, ip_address) VALUES (?, ?, ?, ?, ?, ?, ?)
-2026-05-22T12:46:47.225+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-7] c.travel.mapper.AdminLogMapper.insert    : ==> Parameters: 1(Long), admin(String), LOGIN(String), ADMIN(String), null, 管理员登录(String), 0:0:0:0:0:0:0:1(String)
-2026-05-22T12:46:47.245+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-7] c.travel.mapper.AdminLogMapper.insert    : <==    Updates: 1
-2026-05-22T12:46:47.245+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-7] c.t.c.admin.AdminAuthApiController       : 登录成功: username=admin
-2026-05-22T12:46:47.246+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-7] com.travel.filter.RequestLoggingFilter   : [REQUEST] POST /admin/login | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 514ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:47.265+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-5] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/index.html | IP: 0:0:0:0:0:0:0:1 | Status: 304 | 3ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:47.304+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-4] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/css/layout.css?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 304 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:47.304+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-6] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/css/variables.css?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 304 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:47.305+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-9] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/css/pages.css?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 304 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:47.305+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-8] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/css/components.css?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 304 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:47.305+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-10] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/js/api.js?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 304 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:47.317+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-7] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/js/pages/users.js?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 304 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:47.317+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-1] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/js/router.js?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 304 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:47.317+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-2] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/js/components.js?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 304 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:47.317+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-3] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/js/pages/dashboard.js?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 304 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:47.318+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-5] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/js/pages/guides.js?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 304 | 3ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:47.321+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-4] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/js/pages/stories.js?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 304 | 3ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:47.323+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-6] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/js/pages/destinations.js?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 304 | 3ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:47.323+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-8] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/js/pages/staff.js?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 304 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:47.323+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-9] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/js/pages/comments.js?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 304 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:47.350+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-3] com.travel.mapper.UserMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM users WHERE (? IS NULL OR status = ?)
-2026-05-22T12:46:47.350+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-3] com.travel.mapper.UserMapper.countAll    : ==> Parameters: null, null
-2026-05-22T12:46:47.358+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-3] com.travel.mapper.UserMapper.countAll    : <==      Total: 1
-2026-05-22T12:46:47.361+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-10] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/me | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 12ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:47.378+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-3] com.travel.mapper.GuideMapper.countAll   : ==>  Preparing: SELECT COUNT(*) FROM guides g
-2026-05-22T12:46:47.378+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-3] com.travel.mapper.GuideMapper.countAll   : ==> Parameters: 
-2026-05-22T12:46:47.388+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-3] com.travel.mapper.GuideMapper.countAll   : <==      Total: 1
-2026-05-22T12:46:47.389+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-3] c.t.mapper.GuideStoryMapper.countAll     : ==>  Preparing: SELECT COUNT(1) FROM traveler_stories WHERE is_deleted = 0
-2026-05-22T12:46:47.389+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-3] c.t.mapper.GuideStoryMapper.countAll     : ==> Parameters: 
-2026-05-22T12:46:47.397+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-3] c.t.mapper.GuideStoryMapper.countAll     : <==      Total: 1
-2026-05-22T12:46:47.397+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-3] c.t.mapper.DestinationMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM destinations
-2026-05-22T12:46:47.398+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-3] c.t.mapper.DestinationMapper.countAll    : ==> Parameters: 
-2026-05-22T12:46:47.398+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-2] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 6ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:47.405+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-3] c.t.mapper.DestinationMapper.countAll    : <==      Total: 1
-2026-05-22T12:46:47.406+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-3] c.t.mapper.GuideCommentMapper.countAll   : ==>  Preparing: SELECT COUNT(*) FROM guide_comments c WHERE (? IS NULL OR c.status = ?)
-2026-05-22T12:46:47.407+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-3] c.t.mapper.GuideCommentMapper.countAll   : ==> Parameters: null, null
-2026-05-22T12:46:47.414+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-3] c.t.mapper.GuideCommentMapper.countAll   : <==      Total: 1
-2026-05-22T12:46:47.416+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-3] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/stats | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 67ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:49.087+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-1] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/me | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 1ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:49.088+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-5] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:49.095+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-7] com.travel.mapper.UserMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM users WHERE (? IS NULL OR status = ?)
-2026-05-22T12:46:49.096+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-7] com.travel.mapper.UserMapper.countAll    : ==> Parameters: null, null
-2026-05-22T12:46:49.103+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-7] com.travel.mapper.UserMapper.countAll    : <==      Total: 1
-2026-05-22T12:46:49.103+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-7] c.travel.mapper.UserMapper.selectPage    : ==>  Preparing: SELECT id, username, phone, email, password_hash, status, last_login_at, created_at, updated_at FROM users WHERE (? IS NULL OR status = ?) ORDER BY created_at DESC LIMIT ?, ?
-2026-05-22T12:46:49.105+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-7] c.travel.mapper.UserMapper.selectPage    : ==> Parameters: null, null, 0(Integer), 10(Integer)
-2026-05-22T12:46:49.114+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-7] c.travel.mapper.UserMapper.selectPage    : <==      Total: 10
-2026-05-22T12:46:49.120+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-7] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/users?page=1 | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 34ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:49.526+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-4] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/me | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 1ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:49.529+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-9] com.travel.mapper.GuideMapper.countAll   : ==>  Preparing: SELECT COUNT(*) FROM guides g
-2026-05-22T12:46:49.530+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-9] com.travel.mapper.GuideMapper.countAll   : ==> Parameters: 
-2026-05-22T12:46:49.532+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-8] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:49.537+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-9] com.travel.mapper.GuideMapper.countAll   : <==      Total: 1
-2026-05-22T12:46:49.538+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-9] c.travel.mapper.GuideMapper.selectPage   : ==>  Preparing: SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode, g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status, d.name AS destination_name, up.nickname AS author_name, up.avatar_url AS author_avatar_url FROM guides g LEFT JOIN destinations d ON d.id = g.destination_id LEFT JOIN user_profiles up ON up.user_id = g.author_id ORDER BY g.published_at DESC LIMIT ?, ?
-2026-05-22T12:46:49.538+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-9] c.travel.mapper.GuideMapper.selectPage   : ==> Parameters: 0(Integer), 10(Integer)
-2026-05-22T12:46:49.550+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-9] c.travel.mapper.GuideMapper.selectPage   : <==      Total: 10
-2026-05-22T12:46:49.564+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-9] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/guides?page=1 | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 35ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:57.691+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-6] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin | IP: 0:0:0:0:0:0:0:1 | Status: 302 | 1ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:57.713+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] com.travel.mapper.UserMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM users WHERE (? IS NULL OR status = ?)
-2026-05-22T12:46:57.714+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] com.travel.mapper.UserMapper.countAll    : ==> Parameters: null, null
-2026-05-22T12:46:57.721+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] com.travel.mapper.UserMapper.countAll    : <==      Total: 1
-2026-05-22T12:46:57.722+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] com.travel.mapper.GuideMapper.countAll   : ==>  Preparing: SELECT COUNT(*) FROM guides g
-2026-05-22T12:46:57.723+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] com.travel.mapper.GuideMapper.countAll   : ==> Parameters: 
-2026-05-22T12:46:57.729+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] com.travel.mapper.GuideMapper.countAll   : <==      Total: 1
-2026-05-22T12:46:57.731+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] c.t.mapper.GuideStoryMapper.countAll     : ==>  Preparing: SELECT COUNT(1) FROM traveler_stories WHERE is_deleted = 0
-2026-05-22T12:46:57.732+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] c.t.mapper.GuideStoryMapper.countAll     : ==> Parameters: 
-2026-05-22T12:46:57.739+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] c.t.mapper.GuideStoryMapper.countAll     : <==      Total: 1
-2026-05-22T12:46:57.740+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] c.t.mapper.DestinationMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM destinations
-2026-05-22T12:46:57.741+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] c.t.mapper.DestinationMapper.countAll    : ==> Parameters: 
-2026-05-22T12:46:57.748+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] c.t.mapper.DestinationMapper.countAll    : <==      Total: 1
-2026-05-22T12:46:57.749+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] c.t.mapper.GuideCommentMapper.countAll   : ==>  Preparing: SELECT COUNT(*) FROM guide_comments c WHERE (? IS NULL OR c.status = ?)
-2026-05-22T12:46:57.750+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] c.t.mapper.GuideCommentMapper.countAll   : ==> Parameters: null, null
-2026-05-22T12:46:57.758+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] c.t.mapper.GuideCommentMapper.countAll   : <==      Total: 1
-2026-05-22T12:46:58.764+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-10] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/dashboard | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 1060ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:46:58.883+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-2] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 4ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:00.839+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-3] com.travel.mapper.UserMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM users WHERE (? IS NULL OR status = ?)
-2026-05-22T12:47:00.840+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-3] com.travel.mapper.UserMapper.countAll    : ==> Parameters: null, null
-2026-05-22T12:47:00.848+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-3] com.travel.mapper.UserMapper.countAll    : <==      Total: 1
-2026-05-22T12:47:00.850+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-3] c.travel.mapper.UserMapper.selectPage    : ==>  Preparing: SELECT id, username, phone, email, password_hash, status, last_login_at, created_at, updated_at FROM users WHERE (? IS NULL OR status = ?) ORDER BY created_at DESC LIMIT ?, ?
-2026-05-22T12:47:00.850+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-3] c.travel.mapper.UserMapper.selectPage    : ==> Parameters: null, null, 0(Integer), 10(Integer)
-2026-05-22T12:47:00.861+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-3] c.travel.mapper.UserMapper.selectPage    : <==      Total: 10
-2026-05-22T12:47:00.865+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-3] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/users | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 33ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:00.941+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-1] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:02.210+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-5] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:07.733+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-7] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin | IP: 0:0:0:0:0:0:0:1 | Status: 302 | 1ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:07.750+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-4] com.travel.mapper.UserMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM users WHERE (? IS NULL OR status = ?)
-2026-05-22T12:47:07.751+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-4] com.travel.mapper.UserMapper.countAll    : ==> Parameters: null, null
-2026-05-22T12:47:07.757+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-4] com.travel.mapper.UserMapper.countAll    : <==      Total: 1
-2026-05-22T12:47:07.759+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-4] com.travel.mapper.GuideMapper.countAll   : ==>  Preparing: SELECT COUNT(*) FROM guides g
-2026-05-22T12:47:07.760+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-4] com.travel.mapper.GuideMapper.countAll   : ==> Parameters: 
-2026-05-22T12:47:07.767+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-4] com.travel.mapper.GuideMapper.countAll   : <==      Total: 1
-2026-05-22T12:47:07.767+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-4] c.t.mapper.GuideStoryMapper.countAll     : ==>  Preparing: SELECT COUNT(1) FROM traveler_stories WHERE is_deleted = 0
-2026-05-22T12:47:07.768+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-4] c.t.mapper.GuideStoryMapper.countAll     : ==> Parameters: 
-2026-05-22T12:47:07.775+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-4] c.t.mapper.GuideStoryMapper.countAll     : <==      Total: 1
-2026-05-22T12:47:07.775+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-4] c.t.mapper.DestinationMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM destinations
-2026-05-22T12:47:07.776+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-4] c.t.mapper.DestinationMapper.countAll    : ==> Parameters: 
-2026-05-22T12:47:07.782+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-4] c.t.mapper.DestinationMapper.countAll    : <==      Total: 1
-2026-05-22T12:47:07.783+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-4] c.t.mapper.GuideCommentMapper.countAll   : ==>  Preparing: SELECT COUNT(*) FROM guide_comments c WHERE (? IS NULL OR c.status = ?)
-2026-05-22T12:47:07.783+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-4] c.t.mapper.GuideCommentMapper.countAll   : ==> Parameters: null, null
-2026-05-22T12:47:07.790+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-4] c.t.mapper.GuideCommentMapper.countAll   : <==      Total: 1
-2026-05-22T12:47:07.792+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-4] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/dashboard | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 49ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:07.860+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-8] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 4ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:13.237+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-9] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin | IP: 0:0:0:0:0:0:0:1 | Status: 302 | 1ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:13.253+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-6] com.travel.mapper.UserMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM users WHERE (? IS NULL OR status = ?)
-2026-05-22T12:47:13.254+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-6] com.travel.mapper.UserMapper.countAll    : ==> Parameters: null, null
-2026-05-22T12:47:13.261+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-6] com.travel.mapper.UserMapper.countAll    : <==      Total: 1
-2026-05-22T12:47:13.262+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-6] com.travel.mapper.GuideMapper.countAll   : ==>  Preparing: SELECT COUNT(*) FROM guides g
-2026-05-22T12:47:13.262+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-6] com.travel.mapper.GuideMapper.countAll   : ==> Parameters: 
-2026-05-22T12:47:13.269+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-6] com.travel.mapper.GuideMapper.countAll   : <==      Total: 1
-2026-05-22T12:47:13.269+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-6] c.t.mapper.GuideStoryMapper.countAll     : ==>  Preparing: SELECT COUNT(1) FROM traveler_stories WHERE is_deleted = 0
-2026-05-22T12:47:13.270+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-6] c.t.mapper.GuideStoryMapper.countAll     : ==> Parameters: 
-2026-05-22T12:47:13.277+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-6] c.t.mapper.GuideStoryMapper.countAll     : <==      Total: 1
-2026-05-22T12:47:13.277+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-6] c.t.mapper.DestinationMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM destinations
-2026-05-22T12:47:13.277+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-6] c.t.mapper.DestinationMapper.countAll    : ==> Parameters: 
-2026-05-22T12:47:13.284+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-6] c.t.mapper.DestinationMapper.countAll    : <==      Total: 1
-2026-05-22T12:47:13.285+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-6] c.t.mapper.GuideCommentMapper.countAll   : ==>  Preparing: SELECT COUNT(*) FROM guide_comments c WHERE (? IS NULL OR c.status = ?)
-2026-05-22T12:47:13.285+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-6] c.t.mapper.GuideCommentMapper.countAll   : ==> Parameters: null, null
-2026-05-22T12:47:13.293+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-6] c.t.mapper.GuideCommentMapper.countAll   : <==      Total: 1
-2026-05-22T12:47:13.295+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-6] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/dashboard | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 49ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:13.357+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-10] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 4ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:46.394+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-2] com.travel.listener.OnlineUserListener   : 用户上线 | 当前在线: 2
-2026-05-22T12:47:46.395+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-2] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin | IP: 0:0:0:0:0:0:0:1 | Status: 302 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:46.414+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-3] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/login.html;jsessionid=273AC22FA0610F14F81A6F1F711EC582 | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 3ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:47.311+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-1] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:53.092+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-6] c.t.c.admin.AdminAuthApiController       : 登录尝试: username=admin
-2026-05-22T12:47:53.101+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.AdminUserMapper.selectByUsername   : ==>  Preparing: SELECT * FROM admin_users WHERE username = ?
-2026-05-22T12:47:53.101+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.AdminUserMapper.selectByUsername   : ==> Parameters: admin(String)
-2026-05-22T12:47:53.109+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.AdminUserMapper.selectByUsername   : <==      Total: 1
-2026-05-22T12:47:53.186+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.AdminUserMapper.updateLastLoginAt  : ==>  Preparing: UPDATE admin_users SET last_login_at = NOW() WHERE id = ?
-2026-05-22T12:47:53.187+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.AdminUserMapper.updateLastLoginAt  : ==> Parameters: 1(Long)
-2026-05-22T12:47:53.204+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.AdminUserMapper.updateLastLoginAt  : <==    Updates: 1
-2026-05-22T12:47:53.204+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-6] c.travel.mapper.AdminLogMapper.insert    : ==>  Preparing: INSERT INTO admin_logs (admin_id, admin_username, action, target_type, target_id, detail, ip_address) VALUES (?, ?, ?, ?, ?, ?, ?)
-2026-05-22T12:47:53.205+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-6] c.travel.mapper.AdminLogMapper.insert    : ==> Parameters: 1(Long), admin(String), LOGIN(String), ADMIN(String), null, 管理员登录(String), 0:0:0:0:0:0:0:1(String)
-2026-05-22T12:47:53.222+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-6] c.travel.mapper.AdminLogMapper.insert    : <==    Updates: 1
-2026-05-22T12:47:53.222+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-6] c.t.c.admin.AdminAuthApiController       : 登录成功: username=admin
-2026-05-22T12:47:53.223+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-6] com.travel.filter.RequestLoggingFilter   : [REQUEST] POST /admin/login | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 131ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:53.237+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-10] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/index.html | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:53.265+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-2] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/css/variables.css?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 1ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:53.265+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-3] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/css/layout.css?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 1ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:53.281+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-1] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/css/components.css?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:53.281+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-5] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/css/pages.css?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 1ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:53.285+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-7] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/js/api.js?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:53.285+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-9] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/js/pages/dashboard.js?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 1ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:53.285+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-4] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/js/router.js?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 1ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:53.285+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-8] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/js/components.js?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 1ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:53.288+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-6] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/js/pages/users.js?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:53.288+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-10] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/js/pages/guides.js?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:53.290+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-3] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/js/pages/destinations.js?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:53.290+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-2] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/js/pages/stories.js?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:53.291+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-5] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/js/pages/staff.js?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 1ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:53.291+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-1] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/js/pages/comments.js?v=2 | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 1ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:53.978+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-7] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/me | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 1ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:53.985+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-9] com.travel.mapper.UserMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM users WHERE (? IS NULL OR status = ?)
-2026-05-22T12:47:53.985+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-9] com.travel.mapper.UserMapper.countAll    : ==> Parameters: null, null
-2026-05-22T12:47:53.993+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-9] com.travel.mapper.UserMapper.countAll    : <==      Total: 1
-2026-05-22T12:47:53.993+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-9] com.travel.mapper.GuideMapper.countAll   : ==>  Preparing: SELECT COUNT(*) FROM guides g
-2026-05-22T12:47:53.994+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-9] com.travel.mapper.GuideMapper.countAll   : ==> Parameters: 
-2026-05-22T12:47:54.001+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-9] com.travel.mapper.GuideMapper.countAll   : <==      Total: 1
-2026-05-22T12:47:54.001+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-9] c.t.mapper.GuideStoryMapper.countAll     : ==>  Preparing: SELECT COUNT(1) FROM traveler_stories WHERE is_deleted = 0
-2026-05-22T12:47:54.002+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-9] c.t.mapper.GuideStoryMapper.countAll     : ==> Parameters: 
-2026-05-22T12:47:54.009+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-9] c.t.mapper.GuideStoryMapper.countAll     : <==      Total: 1
-2026-05-22T12:47:54.009+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-9] c.t.mapper.DestinationMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM destinations
-2026-05-22T12:47:54.010+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-9] c.t.mapper.DestinationMapper.countAll    : ==> Parameters: 
-2026-05-22T12:47:54.017+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-9] c.t.mapper.DestinationMapper.countAll    : <==      Total: 1
-2026-05-22T12:47:54.018+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-9] c.t.mapper.GuideCommentMapper.countAll   : ==>  Preparing: SELECT COUNT(*) FROM guide_comments c WHERE (? IS NULL OR c.status = ?)
-2026-05-22T12:47:54.018+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-9] c.t.mapper.GuideCommentMapper.countAll   : ==> Parameters: null, null
-2026-05-22T12:47:54.025+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-9] c.t.mapper.GuideCommentMapper.countAll   : <==      Total: 1
-2026-05-22T12:47:54.027+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-9] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/stats | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 50ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:54.136+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-4] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 3ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:57.795+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-8] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin | IP: 0:0:0:0:0:0:0:1 | Status: 302 | 1ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:57.816+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] com.travel.mapper.UserMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM users WHERE (? IS NULL OR status = ?)
-2026-05-22T12:47:57.817+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] com.travel.mapper.UserMapper.countAll    : ==> Parameters: null, null
-2026-05-22T12:47:57.823+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] com.travel.mapper.UserMapper.countAll    : <==      Total: 1
-2026-05-22T12:47:57.824+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] com.travel.mapper.GuideMapper.countAll   : ==>  Preparing: SELECT COUNT(*) FROM guides g
-2026-05-22T12:47:57.824+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] com.travel.mapper.GuideMapper.countAll   : ==> Parameters: 
-2026-05-22T12:47:57.832+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] com.travel.mapper.GuideMapper.countAll   : <==      Total: 1
-2026-05-22T12:47:57.832+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] c.t.mapper.GuideStoryMapper.countAll     : ==>  Preparing: SELECT COUNT(1) FROM traveler_stories WHERE is_deleted = 0
-2026-05-22T12:47:57.832+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] c.t.mapper.GuideStoryMapper.countAll     : ==> Parameters: 
-2026-05-22T12:47:57.839+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] c.t.mapper.GuideStoryMapper.countAll     : <==      Total: 1
-2026-05-22T12:47:57.840+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] c.t.mapper.DestinationMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM destinations
-2026-05-22T12:47:57.840+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] c.t.mapper.DestinationMapper.countAll    : ==> Parameters: 
-2026-05-22T12:47:57.847+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] c.t.mapper.DestinationMapper.countAll    : <==      Total: 1
-2026-05-22T12:47:57.847+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] c.t.mapper.GuideCommentMapper.countAll   : ==>  Preparing: SELECT COUNT(*) FROM guide_comments c WHERE (? IS NULL OR c.status = ?)
-2026-05-22T12:47:57.848+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] c.t.mapper.GuideCommentMapper.countAll   : ==> Parameters: null, null
-2026-05-22T12:47:57.859+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-10] c.t.mapper.GuideCommentMapper.countAll   : <==      Total: 1
-2026-05-22T12:47:57.860+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-10] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/dashboard | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 52ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:47:59.077+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-6] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:48:02.114+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-2] com.travel.mapper.UserMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM users WHERE (? IS NULL OR status = ?)
-2026-05-22T12:48:02.114+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-2] com.travel.mapper.UserMapper.countAll    : ==> Parameters: null, null
-2026-05-22T12:48:02.121+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-2] com.travel.mapper.UserMapper.countAll    : <==      Total: 1
-2026-05-22T12:48:02.121+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-2] c.travel.mapper.UserMapper.selectPage    : ==>  Preparing: SELECT id, username, phone, email, password_hash, status, last_login_at, created_at, updated_at FROM users WHERE (? IS NULL OR status = ?) ORDER BY created_at DESC LIMIT ?, ?
-2026-05-22T12:48:02.122+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-2] c.travel.mapper.UserMapper.selectPage    : ==> Parameters: null, null, 0(Integer), 10(Integer)
-2026-05-22T12:48:02.129+08:00 DEBUG 4284 --- [TravelProject] [http-nio-8082-exec-2] c.travel.mapper.UserMapper.selectPage    : <==      Total: 10
-2026-05-22T12:48:02.131+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-2] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/users | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 25ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:48:02.263+08:00  INFO 4284 --- [TravelProject] [http-nio-8082-exec-3] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 3ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:50:49.364+08:00  INFO 4284 --- [TravelProject] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
-2026-05-22T12:50:49.947+08:00  INFO 4284 --- [TravelProject] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
-2026-05-22T12:50:49.950+08:00  INFO 4284 --- [TravelProject] [SpringApplicationShutdownHook] com.travel.utils.OssUploadUtil           : OSS client shutdown
-2026-05-22T12:50:49.951+08:00  INFO 4284 --- [TravelProject] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2026-05-22T12:50:49.954+08:00  INFO 4284 --- [TravelProject] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2026-05-22T12:50:49.955+08:00  INFO 4284 --- [TravelProject] [SpringApplicationShutdownHook] com.travel.listener.OnlineUserListener   : 用户下线 | 当前在线: 1
-2026-05-22T12:50:49.957+08:00  INFO 4284 --- [TravelProject] [SpringApplicationShutdownHook] com.travel.listener.OnlineUserListener   : 用户下线 | 当前在线: 0
-2026-05-22T12:51:12.453+08:00  INFO 20140 --- [TravelProject] [main] com.travel.TravelProjectApplication      : Starting TravelProjectApplication using Java 17.0.12 with PID 20140 (E:\JavaFile\project\TravelProject\target\classes started by Liuji in E:\JavaFile\project\TravelProject)
-2026-05-22T12:51:12.455+08:00  INFO 20140 --- [TravelProject] [main] com.travel.TravelProjectApplication      : The following 1 profile is active: "local"
-2026-05-22T12:51:13.354+08:00  INFO 20140 --- [TravelProject] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
-2026-05-22T12:51:13.364+08:00  INFO 20140 --- [TravelProject] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-05-22T12:51:13.365+08:00  INFO 20140 --- [TravelProject] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.48]
-2026-05-22T12:51:13.589+08:00  INFO 20140 --- [TravelProject] [main] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
-2026-05-22T12:51:13.601+08:00  INFO 20140 --- [TravelProject] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2026-05-22T12:51:13.601+08:00  INFO 20140 --- [TravelProject] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1104 ms
-2026-05-22T12:51:14.099+08:00  INFO 20140 --- [TravelProject] [main] com.travel.utils.OssUploadUtil           : OSS client initialized, endpoint: oss-cn-guangzhou.aliyuncs.com
-2026-05-22T12:51:14.512+08:00  INFO 20140 --- [TravelProject] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
-2026-05-22T12:51:14.521+08:00  INFO 20140 --- [TravelProject] [main] com.travel.TravelProjectApplication      : Started TravelProjectApplication in 2.47 seconds (process running for 3.035)
-2026-05-22T12:51:19.647+08:00  INFO 20140 --- [TravelProject] [http-nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-05-22T12:51:19.648+08:00  INFO 20140 --- [TravelProject] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2026-05-22T12:51:19.649+08:00  INFO 20140 --- [TravelProject] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
-2026-05-22T12:51:19.782+08:00  INFO 20140 --- [TravelProject] [http-nio-8082-exec-1] com.travel.listener.OnlineUserListener   : 用户上线 | 当前在线: 1
-2026-05-22T12:51:19.791+08:00  INFO 20140 --- [TravelProject] [http-nio-8082-exec-1] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin | IP: 0:0:0:0:0:0:0:1 | Status: 302 | 136ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:51:19.996+08:00  INFO 20140 --- [TravelProject] [http-nio-8082-exec-6] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 66ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:51:21.408+08:00  INFO 20140 --- [TravelProject] [http-nio-8082-exec-3] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/login.html | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 6ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:51:21.825+08:00  INFO 20140 --- [TravelProject] [http-nio-8082-exec-4] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 4ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:51:27.081+08:00  INFO 20140 --- [TravelProject] [http-nio-8082-exec-5] c.t.c.admin.AdminAuthApiController       : 登录尝试: username=admin
-2026-05-22T12:51:27.099+08:00  INFO 20140 --- [TravelProject] [http-nio-8082-exec-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-05-22T12:51:27.340+08:00  INFO 20140 --- [TravelProject] [http-nio-8082-exec-5] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@598da163
-2026-05-22T12:51:27.341+08:00  INFO 20140 --- [TravelProject] [http-nio-8082-exec-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-05-22T12:51:27.347+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.AdminUserMapper.selectByUsername   : ==>  Preparing: SELECT * FROM admin_users WHERE username = ?
-2026-05-22T12:51:27.366+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.AdminUserMapper.selectByUsername   : ==> Parameters: admin(String)
-2026-05-22T12:51:27.398+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.AdminUserMapper.selectByUsername   : <==      Total: 1
-2026-05-22T12:51:27.487+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.AdminUserMapper.updateLastLoginAt  : ==>  Preparing: UPDATE admin_users SET last_login_at = NOW() WHERE id = ?
-2026-05-22T12:51:27.488+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.AdminUserMapper.updateLastLoginAt  : ==> Parameters: 1(Long)
-2026-05-22T12:51:27.508+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.AdminUserMapper.updateLastLoginAt  : <==    Updates: 1
-2026-05-22T12:51:27.510+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-5] c.travel.mapper.AdminLogMapper.insert    : ==>  Preparing: INSERT INTO admin_logs (admin_id, admin_username, action, target_type, target_id, detail, ip_address) VALUES (?, ?, ?, ?, ?, ?, ?)
-2026-05-22T12:51:27.511+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-5] c.travel.mapper.AdminLogMapper.insert    : ==> Parameters: 1(Long), admin(String), LOGIN(String), ADMIN(String), null, 管理员登录(String), 0:0:0:0:0:0:0:1(String)
-2026-05-22T12:51:27.531+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-5] c.travel.mapper.AdminLogMapper.insert    : <==    Updates: 1
-2026-05-22T12:51:27.532+08:00  INFO 20140 --- [TravelProject] [http-nio-8082-exec-5] c.t.c.admin.AdminAuthApiController       : 登录成功: username=admin
-2026-05-22T12:51:27.533+08:00  INFO 20140 --- [TravelProject] [http-nio-8082-exec-5] com.travel.filter.RequestLoggingFilter   : [REQUEST] POST /admin/login | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 465ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:51:27.636+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-7] com.travel.mapper.UserMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM users WHERE (? IS NULL OR status = ?)
-2026-05-22T12:51:27.637+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-7] com.travel.mapper.UserMapper.countAll    : ==> Parameters: null, null
-2026-05-22T12:51:27.645+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-7] com.travel.mapper.UserMapper.countAll    : <==      Total: 1
-2026-05-22T12:51:27.649+08:00  INFO 20140 --- [TravelProject] [http-nio-8082-exec-2] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/me | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 14ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:51:27.667+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-7] com.travel.mapper.GuideMapper.countAll   : ==>  Preparing: SELECT COUNT(*) FROM guides g
-2026-05-22T12:51:27.668+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-7] com.travel.mapper.GuideMapper.countAll   : ==> Parameters: 
-2026-05-22T12:51:27.679+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-7] com.travel.mapper.GuideMapper.countAll   : <==      Total: 1
-2026-05-22T12:51:27.679+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-7] c.t.mapper.GuideStoryMapper.countAll     : ==>  Preparing: SELECT COUNT(1) FROM traveler_stories WHERE is_deleted = 0
-2026-05-22T12:51:27.680+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-7] c.t.mapper.GuideStoryMapper.countAll     : ==> Parameters: 
-2026-05-22T12:51:27.680+08:00  INFO 20140 --- [TravelProject] [http-nio-8082-exec-8] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 5ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:51:27.688+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-7] c.t.mapper.GuideStoryMapper.countAll     : <==      Total: 1
-2026-05-22T12:51:27.689+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-7] c.t.mapper.DestinationMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM destinations
-2026-05-22T12:51:27.689+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-7] c.t.mapper.DestinationMapper.countAll    : ==> Parameters: 
-2026-05-22T12:51:27.697+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-7] c.t.mapper.DestinationMapper.countAll    : <==      Total: 1
-2026-05-22T12:51:27.698+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-7] c.t.mapper.GuideCommentMapper.countAll   : ==>  Preparing: SELECT COUNT(*) FROM guide_comments c WHERE (? IS NULL OR c.status = ?)
-2026-05-22T12:51:27.698+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-7] c.t.mapper.GuideCommentMapper.countAll   : ==> Parameters: null, null
-2026-05-22T12:51:27.706+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-7] c.t.mapper.GuideCommentMapper.countAll   : <==      Total: 1
-2026-05-22T12:51:27.708+08:00  INFO 20140 --- [TravelProject] [http-nio-8082-exec-7] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/stats | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 73ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:51:33.897+08:00  INFO 20140 --- [TravelProject] [http-nio-8082-exec-9] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin | IP: 0:0:0:0:0:0:0:1 | Status: 302 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:51:34.003+08:00  INFO 20140 --- [TravelProject] [http-nio-8082-exec-10] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/me | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 1ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:51:34.011+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-1] com.travel.mapper.UserMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM users WHERE (? IS NULL OR status = ?)
-2026-05-22T12:51:34.012+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-1] com.travel.mapper.UserMapper.countAll    : ==> Parameters: null, null
-2026-05-22T12:51:34.020+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-1] com.travel.mapper.UserMapper.countAll    : <==      Total: 1
-2026-05-22T12:51:34.021+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-1] com.travel.mapper.GuideMapper.countAll   : ==>  Preparing: SELECT COUNT(*) FROM guides g
-2026-05-22T12:51:34.021+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-1] com.travel.mapper.GuideMapper.countAll   : ==> Parameters: 
-2026-05-22T12:51:34.030+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-1] com.travel.mapper.GuideMapper.countAll   : <==      Total: 1
-2026-05-22T12:51:34.031+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-1] c.t.mapper.GuideStoryMapper.countAll     : ==>  Preparing: SELECT COUNT(1) FROM traveler_stories WHERE is_deleted = 0
-2026-05-22T12:51:34.031+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-1] c.t.mapper.GuideStoryMapper.countAll     : ==> Parameters: 
-2026-05-22T12:51:34.039+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-1] c.t.mapper.GuideStoryMapper.countAll     : <==      Total: 1
-2026-05-22T12:51:34.039+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-1] c.t.mapper.DestinationMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM destinations
-2026-05-22T12:51:34.040+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-1] c.t.mapper.DestinationMapper.countAll    : ==> Parameters: 
-2026-05-22T12:51:34.049+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-1] c.t.mapper.DestinationMapper.countAll    : <==      Total: 1
-2026-05-22T12:51:34.049+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-1] c.t.mapper.GuideCommentMapper.countAll   : ==>  Preparing: SELECT COUNT(*) FROM guide_comments c WHERE (? IS NULL OR c.status = ?)
-2026-05-22T12:51:34.050+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-1] c.t.mapper.GuideCommentMapper.countAll   : ==> Parameters: null, null
-2026-05-22T12:51:34.056+08:00  INFO 20140 --- [TravelProject] [http-nio-8082-exec-6] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 3ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:51:34.058+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-1] c.t.mapper.GuideCommentMapper.countAll   : <==      Total: 1
-2026-05-22T12:51:34.059+08:00  INFO 20140 --- [TravelProject] [http-nio-8082-exec-1] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/stats | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 57ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:51:35.782+08:00  INFO 20140 --- [TravelProject] [http-nio-8082-exec-3] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/me | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:51:35.784+08:00  INFO 20140 --- [TravelProject] [http-nio-8082-exec-5] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:51:35.790+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-4] com.travel.mapper.UserMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM users WHERE (? IS NULL OR status = ?)
-2026-05-22T12:51:35.791+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-4] com.travel.mapper.UserMapper.countAll    : ==> Parameters: null, null
-2026-05-22T12:51:35.800+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-4] com.travel.mapper.UserMapper.countAll    : <==      Total: 1
-2026-05-22T12:51:35.800+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-4] c.travel.mapper.UserMapper.selectPage    : ==>  Preparing: SELECT id, username, phone, email, password_hash, status, last_login_at, created_at, updated_at FROM users WHERE (? IS NULL OR status = ?) ORDER BY created_at DESC LIMIT ?, ?
-2026-05-22T12:51:35.801+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-4] c.travel.mapper.UserMapper.selectPage    : ==> Parameters: null, null, 0(Integer), 10(Integer)
-2026-05-22T12:51:35.811+08:00 DEBUG 20140 --- [TravelProject] [http-nio-8082-exec-4] c.travel.mapper.UserMapper.selectPage    : <==      Total: 10
-2026-05-22T12:51:35.816+08:00  INFO 20140 --- [TravelProject] [http-nio-8082-exec-4] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/users?page=1 | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 36ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
-2026-05-22T12:51:38.957+08:00  INFO 20140 --- [TravelProject] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
-2026-05-22T12:51:39.753+08:00  INFO 20140 --- [TravelProject] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
-2026-05-22T12:51:39.756+08:00  INFO 20140 --- [TravelProject] [SpringApplicationShutdownHook] com.travel.utils.OssUploadUtil           : OSS client shutdown
-2026-05-22T12:51:39.759+08:00  INFO 20140 --- [TravelProject] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2026-05-22T12:51:39.763+08:00  INFO 20140 --- [TravelProject] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2026-05-22T12:51:39.765+08:00  INFO 20140 --- [TravelProject] [SpringApplicationShutdownHook] com.travel.listener.OnlineUserListener   : 用户下线 | 当前在线: 0
+2026-05-24T15:22:26.542+08:00  INFO 29928 --- [TravelProject] [main] com.travel.TravelProjectApplication      : Starting TravelProjectApplication using Java 17.0.12 with PID 29928 (E:\JavaFile\project\TravelProject\target\classes started by Liuji in E:\JavaFile\project\TravelProject)
+2026-05-24T15:22:26.546+08:00  INFO 29928 --- [TravelProject] [main] com.travel.TravelProjectApplication      : The following 1 profile is active: "local"
+2026-05-24T15:22:27.232+08:00  WARN 29928 --- [TravelProject] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.support.BeanDefinitionOverrideException: Invalid bean definition with name 'characterEncodingFilter' defined in class path resource [org/springframework/boot/autoconfigure/web/servlet/HttpEncodingAutoConfiguration.class]: Cannot register bean definition [Root bean: class=null; scope=; abstract=false; lazyInit=null; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; fallback=false; factoryBeanName=org.springframework.boot.autoconfigure.web.servlet.HttpEncodingAutoConfiguration; factoryMethodName=characterEncodingFilter; initMethodNames=null; destroyMethodNames=[(inferred)]; defined in class path resource [org/springframework/boot/autoconfigure/web/servlet/HttpEncodingAutoConfiguration.class]] for bean 'characterEncodingFilter' since there is already [Generic bean: class=com.travel.filter.CharacterEncodingFilter; scope=singleton; abstract=false; lazyInit=null; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; fallback=false; factoryBeanName=null; factoryMethodName=null; initMethodNames=null; destroyMethodNames=null; defined in file [E:\JavaFile\project\TravelProject\target\classes\com\travel\filter\CharacterEncodingFilter.class]] bound.
+2026-05-24T15:22:27.238+08:00  INFO 29928 --- [TravelProject] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-05-24T15:22:27.254+08:00 ERROR 29928 --- [TravelProject] [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+The bean 'characterEncodingFilter', defined in class path resource [org/springframework/boot/autoconfigure/web/servlet/HttpEncodingAutoConfiguration.class], could not be registered. A bean with that name has already been defined in file [E:\JavaFile\project\TravelProject\target\classes\com\travel\filter\CharacterEncodingFilter.class] and overriding is disabled.
+
+Action:
+
+Consider renaming one of the beans or enabling overriding by setting spring.main.allow-bean-definition-overriding=true
+
+2026-05-24T15:24:03.884+08:00  INFO 33076 --- [TravelProject] [main] com.travel.TravelProjectApplication      : Starting TravelProjectApplication using Java 17.0.12 with PID 33076 (E:\JavaFile\project\TravelProject\target\classes started by Liuji in E:\JavaFile\project\TravelProject)
+2026-05-24T15:24:03.887+08:00  INFO 33076 --- [TravelProject] [main] com.travel.TravelProjectApplication      : The following 1 profile is active: "local"
+2026-05-24T15:24:04.811+08:00  INFO 33076 --- [TravelProject] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2026-05-24T15:24:04.823+08:00  INFO 33076 --- [TravelProject] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-24T15:24:04.824+08:00  INFO 33076 --- [TravelProject] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.48]
+2026-05-24T15:24:05.057+08:00  INFO 33076 --- [TravelProject] [main] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2026-05-24T15:24:05.067+08:00  INFO 33076 --- [TravelProject] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-24T15:24:05.068+08:00  INFO 33076 --- [TravelProject] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1145 ms
+2026-05-24T15:24:05.388+08:00  INFO 33076 --- [TravelProject] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-24T15:24:10.672+08:00 ERROR 33076 --- [TravelProject] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Exception sending context initialized event to listener instance of class [com.travel.listener.DataInitListener]
+
+org.mybatis.spring.MyBatisSystemException: 
+### Error querying database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+### The error may exist in com/travel/mapper/TagMapper.java (best guess)
+### The error may involve com.travel.mapper.TagMapper.selectHotTags
+### The error occurred while executing a query
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:99) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:347) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	at jdk.proxy2/jdk.proxy2.$Proxy76.selectList(Unknown Source) ~[na:na]
+	at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:194) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	at org.apache.ibatis.binding.MapperMethod.executeForMany(MapperMethod.java:147) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:80) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.binding.MapperProxy$PlainMethodInvoker.invoke(MapperProxy.java:141) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86) ~[mybatis-3.5.17.jar:3.5.17]
+	at jdk.proxy2/jdk.proxy2.$Proxy79.selectHotTags(Unknown Source) ~[na:na]
+	at com.travel.listener.DataInitListener.contextInitialized(DataInitListener.java:27) ~[classes/:na]
+	at org.apache.catalina.core.StandardContext.listenerStart(StandardContext.java:4032) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:4462) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1201) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1191) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[na:na]
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:81) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145) ~[na:na]
+	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:747) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardHost.startInternal(StandardHost.java:770) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1201) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1191) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[na:na]
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:81) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145) ~[na:na]
+	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:747) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardEngine.startInternal(StandardEngine.java:201) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardService.startInternal(StandardService.java:410) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardServer.startInternal(StandardServer.java:868) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.startup.Tomcat.start(Tomcat.java:436) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:128) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.<init>(TomcatWebServer.java:107) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getTomcatWebServer(TomcatServletWebServerFactory.java:517) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getWebServer(TomcatServletWebServerFactory.java:219) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:193) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:167) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:621) ~[spring-context-6.2.12.jar:6.2.12]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350) ~[spring-boot-3.5.7.jar:3.5.7]
+	at com.travel.TravelProjectApplication.main(TravelProjectApplication.java:14) ~[classes/:na]
+Caused by: org.apache.ibatis.exceptions.PersistenceException: 
+### Error querying database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+### The error may exist in com/travel/mapper/TagMapper.java (best guess)
+### The error may involve com.travel.mapper.TagMapper.selectHotTags
+### The error occurred while executing a query
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.apache.ibatis.exceptions.ExceptionFactory.wrapException(ExceptionFactory.java:30) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:156) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:147) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:142) ~[mybatis-3.5.17.jar:3.5.17]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568) ~[na:na]
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:333) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	... 46 common frames omitted
+Caused by: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:84) ~[spring-jdbc-6.2.12.jar:6.2.12]
+	at org.mybatis.spring.transaction.SpringManagedTransaction.openConnection(SpringManagedTransaction.java:77) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	at org.mybatis.spring.transaction.SpringManagedTransaction.getConnection(SpringManagedTransaction.java:64) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	at org.apache.ibatis.executor.BaseExecutor.getConnection(BaseExecutor.java:348) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.SimpleExecutor.prepareStatement(SimpleExecutor.java:89) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:64) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:336) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:158) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:110) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:90) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:154) ~[mybatis-3.5.17.jar:3.5.17]
+	... 53 common frames omitted
+Caused by: java.sql.SQLNonTransientConnectionException: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:102) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:89) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:81) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:55) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:65) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:913) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:832) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:415) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:237) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:180) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:370) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:207) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:488) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.checkFailFast(HikariPool.java:576) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.<init>(HikariPool.java:97) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.HikariDataSource.getConnection(HikariDataSource.java:111) ~[HikariCP-6.3.3.jar:na]
+	at org.springframework.jdbc.datasource.DataSourceUtils.fetchConnection(DataSourceUtils.java:160) ~[spring-jdbc-6.2.12.jar:6.2.12]
+	at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:118) ~[spring-jdbc-6.2.12.jar:6.2.12]
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:81) ~[spring-jdbc-6.2.12.jar:6.2.12]
+	... 63 common frames omitted
+Caused by: com.mysql.cj.exceptions.CJException: Public Key Retrieval is not allowed
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[na:na]
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499) ~[na:na]
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:480) ~[na:na]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:52) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:95) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:140) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:113) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.authentication.CachingSha2PasswordPlugin.nextAuthenticationStep(CachingSha2PasswordPlugin.java:145) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.authentication.CachingSha2PasswordPlugin.nextAuthenticationStep(CachingSha2PasswordPlugin.java:40) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.NativeAuthenticationProvider.proceedHandshakeWithPluggableAuthentication(NativeAuthenticationProvider.java:436) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.NativeAuthenticationProvider.connect(NativeAuthenticationProvider.java:206) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.NativeProtocol.connect(NativeProtocol.java:1333) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.NativeSession.connect(NativeSession.java:155) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:853) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	... 77 common frames omitted
+Caused by: com.mysql.cj.exceptions.UnableToConnectException: Public Key Retrieval is not allowed
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[na:na]
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499) ~[na:na]
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:480) ~[na:na]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:52) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:76) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.authentication.CachingSha2PasswordPlugin.nextAuthenticationStep(CachingSha2PasswordPlugin.java:122) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	... 83 common frames omitted
+
+2026-05-24T15:24:10.676+08:00 ERROR 33076 --- [TravelProject] [main] o.apache.catalina.core.StandardContext   : One or more listeners failed to start. Full details will be found in the appropriate container log file
+2026-05-24T15:24:10.677+08:00 ERROR 33076 --- [TravelProject] [main] o.apache.catalina.core.StandardContext   : Context [] startup failed due to previous errors
+2026-05-24T15:24:10.678+08:00  INFO 33076 --- [TravelProject] [main] com.travel.listener.DataInitListener     : 应用上下文销毁，清除缓存数据
+2026-05-24T15:24:11.346+08:00  INFO 33076 --- [TravelProject] [main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2026-05-24T15:24:11.350+08:00  WARN 33076 --- [TravelProject] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start web server
+2026-05-24T15:24:11.356+08:00  INFO 33076 --- [TravelProject] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-05-24T15:24:11.367+08:00 ERROR 33076 --- [TravelProject] [main] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.context.ApplicationContextException: Unable to start web server
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:170) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:621) ~[spring-context-6.2.12.jar:6.2.12]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350) ~[spring-boot-3.5.7.jar:3.5.7]
+	at com.travel.TravelProjectApplication.main(TravelProjectApplication.java:14) ~[classes/:na]
+Caused by: org.springframework.boot.web.server.WebServerException: Unable to start embedded Tomcat
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:147) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.<init>(TomcatWebServer.java:107) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getTomcatWebServer(TomcatServletWebServerFactory.java:517) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getWebServer(TomcatServletWebServerFactory.java:219) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:193) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:167) ~[spring-boot-3.5.7.jar:3.5.7]
+	... 8 common frames omitted
+Caused by: java.lang.IllegalStateException: StandardEngine[Tomcat].StandardHost[localhost].TomcatEmbeddedContext[] failed to start
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.rethrowDeferredStartupExceptions(TomcatWebServer.java:209) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:131) ~[spring-boot-3.5.7.jar:3.5.7]
+	... 13 common frames omitted
+
+2026-05-24T15:24:36.490+08:00  INFO 26296 --- [TravelProject] [main] com.travel.TravelProjectApplication      : Starting TravelProjectApplication using Java 17.0.12 with PID 26296 (E:\JavaFile\project\TravelProject\target\classes started by Liuji in E:\JavaFile\project\TravelProject)
+2026-05-24T15:24:36.493+08:00  INFO 26296 --- [TravelProject] [main] com.travel.TravelProjectApplication      : The following 1 profile is active: "local"
+2026-05-24T15:24:37.370+08:00  INFO 26296 --- [TravelProject] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2026-05-24T15:24:37.379+08:00  INFO 26296 --- [TravelProject] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-24T15:24:37.379+08:00  INFO 26296 --- [TravelProject] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.48]
+2026-05-24T15:24:37.597+08:00  INFO 26296 --- [TravelProject] [main] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2026-05-24T15:24:37.608+08:00  INFO 26296 --- [TravelProject] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-24T15:24:37.608+08:00  INFO 26296 --- [TravelProject] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1078 ms
+2026-05-24T15:24:37.862+08:00  INFO 26296 --- [TravelProject] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-24T15:24:43.060+08:00 ERROR 26296 --- [TravelProject] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Exception sending context initialized event to listener instance of class [com.travel.listener.DataInitListener]
+
+org.mybatis.spring.MyBatisSystemException: 
+### Error querying database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+### The error may exist in com/travel/mapper/TagMapper.java (best guess)
+### The error may involve com.travel.mapper.TagMapper.selectHotTags
+### The error occurred while executing a query
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:99) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:347) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	at jdk.proxy2/jdk.proxy2.$Proxy76.selectList(Unknown Source) ~[na:na]
+	at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:194) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	at org.apache.ibatis.binding.MapperMethod.executeForMany(MapperMethod.java:147) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:80) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.binding.MapperProxy$PlainMethodInvoker.invoke(MapperProxy.java:141) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86) ~[mybatis-3.5.17.jar:3.5.17]
+	at jdk.proxy2/jdk.proxy2.$Proxy79.selectHotTags(Unknown Source) ~[na:na]
+	at com.travel.listener.DataInitListener.contextInitialized(DataInitListener.java:27) ~[classes/:na]
+	at org.apache.catalina.core.StandardContext.listenerStart(StandardContext.java:4032) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:4462) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1201) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1191) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[na:na]
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:81) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145) ~[na:na]
+	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:747) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardHost.startInternal(StandardHost.java:770) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1201) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1191) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[na:na]
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:81) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145) ~[na:na]
+	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:747) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardEngine.startInternal(StandardEngine.java:201) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardService.startInternal(StandardService.java:410) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardServer.startInternal(StandardServer.java:868) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.startup.Tomcat.start(Tomcat.java:436) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:128) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.<init>(TomcatWebServer.java:107) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getTomcatWebServer(TomcatServletWebServerFactory.java:517) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getWebServer(TomcatServletWebServerFactory.java:219) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:193) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:167) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:621) ~[spring-context-6.2.12.jar:6.2.12]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350) ~[spring-boot-3.5.7.jar:3.5.7]
+	at com.travel.TravelProjectApplication.main(TravelProjectApplication.java:14) ~[classes/:na]
+Caused by: org.apache.ibatis.exceptions.PersistenceException: 
+### Error querying database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+### The error may exist in com/travel/mapper/TagMapper.java (best guess)
+### The error may involve com.travel.mapper.TagMapper.selectHotTags
+### The error occurred while executing a query
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.apache.ibatis.exceptions.ExceptionFactory.wrapException(ExceptionFactory.java:30) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:156) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:147) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:142) ~[mybatis-3.5.17.jar:3.5.17]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568) ~[na:na]
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:333) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	... 46 common frames omitted
+Caused by: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:84) ~[spring-jdbc-6.2.12.jar:6.2.12]
+	at org.mybatis.spring.transaction.SpringManagedTransaction.openConnection(SpringManagedTransaction.java:77) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	at org.mybatis.spring.transaction.SpringManagedTransaction.getConnection(SpringManagedTransaction.java:64) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	at org.apache.ibatis.executor.BaseExecutor.getConnection(BaseExecutor.java:348) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.SimpleExecutor.prepareStatement(SimpleExecutor.java:89) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:64) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:336) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:158) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:110) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:90) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:154) ~[mybatis-3.5.17.jar:3.5.17]
+	... 53 common frames omitted
+Caused by: java.sql.SQLNonTransientConnectionException: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:102) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:89) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:81) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:55) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:65) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:913) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:832) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:415) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:237) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:180) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:370) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:207) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:488) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.checkFailFast(HikariPool.java:576) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.<init>(HikariPool.java:97) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.HikariDataSource.getConnection(HikariDataSource.java:111) ~[HikariCP-6.3.3.jar:na]
+	at org.springframework.jdbc.datasource.DataSourceUtils.fetchConnection(DataSourceUtils.java:160) ~[spring-jdbc-6.2.12.jar:6.2.12]
+	at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:118) ~[spring-jdbc-6.2.12.jar:6.2.12]
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:81) ~[spring-jdbc-6.2.12.jar:6.2.12]
+	... 63 common frames omitted
+Caused by: com.mysql.cj.exceptions.CJException: Public Key Retrieval is not allowed
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[na:na]
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499) ~[na:na]
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:480) ~[na:na]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:52) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:95) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:140) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:113) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.authentication.CachingSha2PasswordPlugin.nextAuthenticationStep(CachingSha2PasswordPlugin.java:145) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.authentication.CachingSha2PasswordPlugin.nextAuthenticationStep(CachingSha2PasswordPlugin.java:40) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.NativeAuthenticationProvider.proceedHandshakeWithPluggableAuthentication(NativeAuthenticationProvider.java:436) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.NativeAuthenticationProvider.connect(NativeAuthenticationProvider.java:206) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.NativeProtocol.connect(NativeProtocol.java:1333) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.NativeSession.connect(NativeSession.java:155) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:853) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	... 77 common frames omitted
+Caused by: com.mysql.cj.exceptions.UnableToConnectException: Public Key Retrieval is not allowed
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[na:na]
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499) ~[na:na]
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:480) ~[na:na]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:52) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:76) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.authentication.CachingSha2PasswordPlugin.nextAuthenticationStep(CachingSha2PasswordPlugin.java:122) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	... 83 common frames omitted
+
+2026-05-24T15:24:43.065+08:00 ERROR 26296 --- [TravelProject] [main] o.apache.catalina.core.StandardContext   : One or more listeners failed to start. Full details will be found in the appropriate container log file
+2026-05-24T15:24:43.065+08:00 ERROR 26296 --- [TravelProject] [main] o.apache.catalina.core.StandardContext   : Context [] startup failed due to previous errors
+2026-05-24T15:24:43.066+08:00  INFO 26296 --- [TravelProject] [main] com.travel.listener.DataInitListener     : 应用上下文销毁，清除缓存数据
+2026-05-24T15:24:43.714+08:00  INFO 26296 --- [TravelProject] [main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2026-05-24T15:24:43.717+08:00  WARN 26296 --- [TravelProject] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start web server
+2026-05-24T15:24:43.722+08:00  INFO 26296 --- [TravelProject] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-05-24T15:24:43.731+08:00 ERROR 26296 --- [TravelProject] [main] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.context.ApplicationContextException: Unable to start web server
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:170) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:621) ~[spring-context-6.2.12.jar:6.2.12]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350) ~[spring-boot-3.5.7.jar:3.5.7]
+	at com.travel.TravelProjectApplication.main(TravelProjectApplication.java:14) ~[classes/:na]
+Caused by: org.springframework.boot.web.server.WebServerException: Unable to start embedded Tomcat
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:147) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.<init>(TomcatWebServer.java:107) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getTomcatWebServer(TomcatServletWebServerFactory.java:517) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getWebServer(TomcatServletWebServerFactory.java:219) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:193) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:167) ~[spring-boot-3.5.7.jar:3.5.7]
+	... 8 common frames omitted
+Caused by: java.lang.IllegalStateException: StandardEngine[Tomcat].StandardHost[localhost].TomcatEmbeddedContext[] failed to start
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.rethrowDeferredStartupExceptions(TomcatWebServer.java:209) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:131) ~[spring-boot-3.5.7.jar:3.5.7]
+	... 13 common frames omitted
+
+2026-05-24T15:25:12.310+08:00  INFO 26184 --- [TravelProject] [main] com.travel.TravelProjectApplication      : Starting TravelProjectApplication using Java 17.0.12 with PID 26184 (E:\JavaFile\project\TravelProject\target\classes started by Liuji in E:\JavaFile\project\TravelProject)
+2026-05-24T15:25:12.313+08:00  INFO 26184 --- [TravelProject] [main] com.travel.TravelProjectApplication      : The following 1 profile is active: "local"
+2026-05-24T15:25:13.167+08:00  INFO 26184 --- [TravelProject] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2026-05-24T15:25:13.180+08:00  INFO 26184 --- [TravelProject] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-24T15:25:13.180+08:00  INFO 26184 --- [TravelProject] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.48]
+2026-05-24T15:25:13.394+08:00  INFO 26184 --- [TravelProject] [main] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2026-05-24T15:25:13.404+08:00  INFO 26184 --- [TravelProject] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-24T15:25:13.404+08:00  INFO 26184 --- [TravelProject] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1053 ms
+2026-05-24T15:25:13.667+08:00  INFO 26184 --- [TravelProject] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-24T15:25:18.849+08:00 ERROR 26184 --- [TravelProject] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Exception sending context initialized event to listener instance of class [com.travel.listener.DataInitListener]
+
+org.mybatis.spring.MyBatisSystemException: 
+### Error querying database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+### The error may exist in com/travel/mapper/TagMapper.java (best guess)
+### The error may involve com.travel.mapper.TagMapper.selectHotTags
+### The error occurred while executing a query
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:99) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:347) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	at jdk.proxy2/jdk.proxy2.$Proxy76.selectList(Unknown Source) ~[na:na]
+	at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:194) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	at org.apache.ibatis.binding.MapperMethod.executeForMany(MapperMethod.java:147) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:80) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.binding.MapperProxy$PlainMethodInvoker.invoke(MapperProxy.java:141) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86) ~[mybatis-3.5.17.jar:3.5.17]
+	at jdk.proxy2/jdk.proxy2.$Proxy79.selectHotTags(Unknown Source) ~[na:na]
+	at com.travel.listener.DataInitListener.contextInitialized(DataInitListener.java:27) ~[classes/:na]
+	at org.apache.catalina.core.StandardContext.listenerStart(StandardContext.java:4032) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:4462) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1201) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1191) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[na:na]
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:81) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145) ~[na:na]
+	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:747) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardHost.startInternal(StandardHost.java:770) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1201) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1191) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[na:na]
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:81) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145) ~[na:na]
+	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:747) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardEngine.startInternal(StandardEngine.java:201) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardService.startInternal(StandardService.java:410) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardServer.startInternal(StandardServer.java:868) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.startup.Tomcat.start(Tomcat.java:436) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:128) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.<init>(TomcatWebServer.java:107) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getTomcatWebServer(TomcatServletWebServerFactory.java:517) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getWebServer(TomcatServletWebServerFactory.java:219) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:193) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:167) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:621) ~[spring-context-6.2.12.jar:6.2.12]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350) ~[spring-boot-3.5.7.jar:3.5.7]
+	at com.travel.TravelProjectApplication.main(TravelProjectApplication.java:14) ~[classes/:na]
+Caused by: org.apache.ibatis.exceptions.PersistenceException: 
+### Error querying database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+### The error may exist in com/travel/mapper/TagMapper.java (best guess)
+### The error may involve com.travel.mapper.TagMapper.selectHotTags
+### The error occurred while executing a query
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.apache.ibatis.exceptions.ExceptionFactory.wrapException(ExceptionFactory.java:30) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:156) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:147) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:142) ~[mybatis-3.5.17.jar:3.5.17]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568) ~[na:na]
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:333) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	... 46 common frames omitted
+Caused by: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:84) ~[spring-jdbc-6.2.12.jar:6.2.12]
+	at org.mybatis.spring.transaction.SpringManagedTransaction.openConnection(SpringManagedTransaction.java:77) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	at org.mybatis.spring.transaction.SpringManagedTransaction.getConnection(SpringManagedTransaction.java:64) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	at org.apache.ibatis.executor.BaseExecutor.getConnection(BaseExecutor.java:348) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.SimpleExecutor.prepareStatement(SimpleExecutor.java:89) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:64) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:336) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:158) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:110) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:90) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:154) ~[mybatis-3.5.17.jar:3.5.17]
+	... 53 common frames omitted
+Caused by: java.sql.SQLNonTransientConnectionException: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:102) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:89) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:81) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:55) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:65) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:913) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:832) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:415) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:237) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:180) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:370) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:207) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:488) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.checkFailFast(HikariPool.java:576) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.<init>(HikariPool.java:97) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.HikariDataSource.getConnection(HikariDataSource.java:111) ~[HikariCP-6.3.3.jar:na]
+	at org.springframework.jdbc.datasource.DataSourceUtils.fetchConnection(DataSourceUtils.java:160) ~[spring-jdbc-6.2.12.jar:6.2.12]
+	at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:118) ~[spring-jdbc-6.2.12.jar:6.2.12]
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:81) ~[spring-jdbc-6.2.12.jar:6.2.12]
+	... 63 common frames omitted
+Caused by: com.mysql.cj.exceptions.CJException: Public Key Retrieval is not allowed
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[na:na]
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499) ~[na:na]
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:480) ~[na:na]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:52) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:95) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:140) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:113) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.authentication.CachingSha2PasswordPlugin.nextAuthenticationStep(CachingSha2PasswordPlugin.java:145) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.authentication.CachingSha2PasswordPlugin.nextAuthenticationStep(CachingSha2PasswordPlugin.java:40) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.NativeAuthenticationProvider.proceedHandshakeWithPluggableAuthentication(NativeAuthenticationProvider.java:436) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.NativeAuthenticationProvider.connect(NativeAuthenticationProvider.java:206) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.NativeProtocol.connect(NativeProtocol.java:1333) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.NativeSession.connect(NativeSession.java:155) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:853) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	... 77 common frames omitted
+Caused by: com.mysql.cj.exceptions.UnableToConnectException: Public Key Retrieval is not allowed
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[na:na]
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499) ~[na:na]
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:480) ~[na:na]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:52) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:76) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.authentication.CachingSha2PasswordPlugin.nextAuthenticationStep(CachingSha2PasswordPlugin.java:122) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	... 83 common frames omitted
+
+2026-05-24T15:25:18.852+08:00 ERROR 26184 --- [TravelProject] [main] o.apache.catalina.core.StandardContext   : One or more listeners failed to start. Full details will be found in the appropriate container log file
+2026-05-24T15:25:18.853+08:00 ERROR 26184 --- [TravelProject] [main] o.apache.catalina.core.StandardContext   : Context [] startup failed due to previous errors
+2026-05-24T15:25:18.853+08:00  INFO 26184 --- [TravelProject] [main] com.travel.listener.DataInitListener     : 应用上下文销毁，清除缓存数据
+2026-05-24T15:25:19.504+08:00  INFO 26184 --- [TravelProject] [main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2026-05-24T15:25:19.506+08:00  WARN 26184 --- [TravelProject] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start web server
+2026-05-24T15:25:19.511+08:00  INFO 26184 --- [TravelProject] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-05-24T15:25:19.523+08:00 ERROR 26184 --- [TravelProject] [main] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.context.ApplicationContextException: Unable to start web server
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:170) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:621) ~[spring-context-6.2.12.jar:6.2.12]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350) ~[spring-boot-3.5.7.jar:3.5.7]
+	at com.travel.TravelProjectApplication.main(TravelProjectApplication.java:14) ~[classes/:na]
+Caused by: org.springframework.boot.web.server.WebServerException: Unable to start embedded Tomcat
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:147) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.<init>(TomcatWebServer.java:107) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getTomcatWebServer(TomcatServletWebServerFactory.java:517) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getWebServer(TomcatServletWebServerFactory.java:219) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:193) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:167) ~[spring-boot-3.5.7.jar:3.5.7]
+	... 8 common frames omitted
+Caused by: java.lang.IllegalStateException: StandardEngine[Tomcat].StandardHost[localhost].TomcatEmbeddedContext[] failed to start
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.rethrowDeferredStartupExceptions(TomcatWebServer.java:209) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:131) ~[spring-boot-3.5.7.jar:3.5.7]
+	... 13 common frames omitted
+
+2026-05-24T15:26:23.986+08:00  INFO 2592 --- [TravelProject] [main] com.travel.TravelProjectApplication      : Starting TravelProjectApplication using Java 17.0.12 with PID 2592 (E:\JavaFile\project\TravelProject\target\classes started by Liuji in E:\JavaFile\project\TravelProject)
+2026-05-24T15:26:23.988+08:00  INFO 2592 --- [TravelProject] [main] com.travel.TravelProjectApplication      : The following 1 profile is active: "local"
+2026-05-24T15:26:24.860+08:00  INFO 2592 --- [TravelProject] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2026-05-24T15:26:24.870+08:00  INFO 2592 --- [TravelProject] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-24T15:26:24.870+08:00  INFO 2592 --- [TravelProject] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.48]
+2026-05-24T15:26:25.091+08:00  INFO 2592 --- [TravelProject] [main] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2026-05-24T15:26:25.101+08:00  INFO 2592 --- [TravelProject] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-24T15:26:25.102+08:00  INFO 2592 --- [TravelProject] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1073 ms
+2026-05-24T15:26:25.368+08:00  INFO 2592 --- [TravelProject] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-24T15:26:30.552+08:00 ERROR 2592 --- [TravelProject] [main] com.travel.listener.DataInitListener     : 初始化数据失败
+
+org.mybatis.spring.MyBatisSystemException: 
+### Error querying database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+### The error may exist in com/travel/mapper/TagMapper.java (best guess)
+### The error may involve com.travel.mapper.TagMapper.selectHotTags
+### The error occurred while executing a query
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:99) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:347) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	at jdk.proxy2/jdk.proxy2.$Proxy76.selectList(Unknown Source) ~[na:na]
+	at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:194) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	at org.apache.ibatis.binding.MapperMethod.executeForMany(MapperMethod.java:147) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:80) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.binding.MapperProxy$PlainMethodInvoker.invoke(MapperProxy.java:141) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86) ~[mybatis-3.5.17.jar:3.5.17]
+	at jdk.proxy2/jdk.proxy2.$Proxy79.selectHotTags(Unknown Source) ~[na:na]
+	at com.travel.listener.DataInitListener.contextInitialized(DataInitListener.java:30) ~[classes/:na]
+	at org.apache.catalina.core.StandardContext.listenerStart(StandardContext.java:4032) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:4462) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1201) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1191) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[na:na]
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:81) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145) ~[na:na]
+	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:747) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardHost.startInternal(StandardHost.java:770) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1201) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1191) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[na:na]
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:81) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145) ~[na:na]
+	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:747) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardEngine.startInternal(StandardEngine.java:201) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardService.startInternal(StandardService.java:410) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardServer.startInternal(StandardServer.java:868) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.startup.Tomcat.start(Tomcat.java:436) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:128) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.<init>(TomcatWebServer.java:107) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getTomcatWebServer(TomcatServletWebServerFactory.java:517) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getWebServer(TomcatServletWebServerFactory.java:219) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:193) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:167) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:621) ~[spring-context-6.2.12.jar:6.2.12]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350) ~[spring-boot-3.5.7.jar:3.5.7]
+	at com.travel.TravelProjectApplication.main(TravelProjectApplication.java:14) ~[classes/:na]
+Caused by: org.apache.ibatis.exceptions.PersistenceException: 
+### Error querying database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+### The error may exist in com/travel/mapper/TagMapper.java (best guess)
+### The error may involve com.travel.mapper.TagMapper.selectHotTags
+### The error occurred while executing a query
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.apache.ibatis.exceptions.ExceptionFactory.wrapException(ExceptionFactory.java:30) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:156) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:147) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:142) ~[mybatis-3.5.17.jar:3.5.17]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568) ~[na:na]
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:333) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	... 46 common frames omitted
+Caused by: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:84) ~[spring-jdbc-6.2.12.jar:6.2.12]
+	at org.mybatis.spring.transaction.SpringManagedTransaction.openConnection(SpringManagedTransaction.java:77) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	at org.mybatis.spring.transaction.SpringManagedTransaction.getConnection(SpringManagedTransaction.java:64) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	at org.apache.ibatis.executor.BaseExecutor.getConnection(BaseExecutor.java:348) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.SimpleExecutor.prepareStatement(SimpleExecutor.java:89) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:64) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:336) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:158) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:110) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:90) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:154) ~[mybatis-3.5.17.jar:3.5.17]
+	... 53 common frames omitted
+Caused by: java.sql.SQLNonTransientConnectionException: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:102) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:89) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:81) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:55) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:65) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:913) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:832) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:415) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:237) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:180) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:370) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:207) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:488) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.checkFailFast(HikariPool.java:576) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.<init>(HikariPool.java:97) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.HikariDataSource.getConnection(HikariDataSource.java:111) ~[HikariCP-6.3.3.jar:na]
+	at org.springframework.jdbc.datasource.DataSourceUtils.fetchConnection(DataSourceUtils.java:160) ~[spring-jdbc-6.2.12.jar:6.2.12]
+	at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:118) ~[spring-jdbc-6.2.12.jar:6.2.12]
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:81) ~[spring-jdbc-6.2.12.jar:6.2.12]
+	... 63 common frames omitted
+Caused by: com.mysql.cj.exceptions.CJException: Public Key Retrieval is not allowed
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[na:na]
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499) ~[na:na]
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:480) ~[na:na]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:52) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:95) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:140) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:113) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.authentication.CachingSha2PasswordPlugin.nextAuthenticationStep(CachingSha2PasswordPlugin.java:145) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.authentication.CachingSha2PasswordPlugin.nextAuthenticationStep(CachingSha2PasswordPlugin.java:40) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.NativeAuthenticationProvider.proceedHandshakeWithPluggableAuthentication(NativeAuthenticationProvider.java:436) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.NativeAuthenticationProvider.connect(NativeAuthenticationProvider.java:206) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.NativeProtocol.connect(NativeProtocol.java:1333) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.NativeSession.connect(NativeSession.java:155) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:853) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	... 77 common frames omitted
+Caused by: com.mysql.cj.exceptions.UnableToConnectException: Public Key Retrieval is not allowed
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[na:na]
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499) ~[na:na]
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:480) ~[na:na]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:52) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:76) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.authentication.CachingSha2PasswordPlugin.nextAuthenticationStep(CachingSha2PasswordPlugin.java:122) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	... 83 common frames omitted
+
+2026-05-24T15:26:30.868+08:00  INFO 2592 --- [TravelProject] [main] com.travel.utils.OssUploadUtil           : OSS client initialized, endpoint: oss-cn-guangzhou.aliyuncs.com
+2026-05-24T15:26:31.309+08:00  INFO 2592 --- [TravelProject] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2026-05-24T15:26:31.318+08:00  INFO 2592 --- [TravelProject] [main] com.travel.TravelProjectApplication      : Started TravelProjectApplication in 7.723 seconds (process running for 8.279)
+2026-05-24T15:28:37.775+08:00  INFO 2592 --- [TravelProject] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-24T15:28:38.402+08:00  INFO 2592 --- [TravelProject] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-05-24T15:28:38.405+08:00  INFO 2592 --- [TravelProject] [SpringApplicationShutdownHook] com.travel.utils.OssUploadUtil           : OSS client shutdown
+2026-05-24T15:28:38.407+08:00  INFO 2592 --- [TravelProject] [SpringApplicationShutdownHook] com.travel.listener.DataInitListener     : 应用上下文销毁，清除缓存数据
+2026-05-24T15:29:16.285+08:00  INFO 29220 --- [TravelProject] [main] com.travel.TravelProjectApplication      : Starting TravelProjectApplication using Java 17.0.12 with PID 29220 (E:\JavaFile\project\TravelProject\target\classes started by Liuji in E:\JavaFile\project\TravelProject)
+2026-05-24T15:29:16.287+08:00  INFO 29220 --- [TravelProject] [main] com.travel.TravelProjectApplication      : The following 1 profile is active: "local"
+2026-05-24T15:29:17.164+08:00  INFO 29220 --- [TravelProject] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2026-05-24T15:29:17.174+08:00  INFO 29220 --- [TravelProject] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-24T15:29:17.175+08:00  INFO 29220 --- [TravelProject] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.48]
+2026-05-24T15:29:17.389+08:00  INFO 29220 --- [TravelProject] [main] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2026-05-24T15:29:17.399+08:00  INFO 29220 --- [TravelProject] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-24T15:29:17.400+08:00  INFO 29220 --- [TravelProject] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1077 ms
+2026-05-24T15:29:17.901+08:00  INFO 29220 --- [TravelProject] [main] com.travel.utils.OssUploadUtil           : OSS client initialized, endpoint: oss-cn-guangzhou.aliyuncs.com
+2026-05-24T15:29:18.313+08:00  INFO 29220 --- [TravelProject] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2026-05-24T15:29:18.334+08:00  INFO 29220 --- [TravelProject] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-24T15:29:23.505+08:00 ERROR 29220 --- [TravelProject] [main] com.travel.listener.DataInitListener     : 初始化数据失败
+
+org.mybatis.spring.MyBatisSystemException: 
+### Error querying database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+### The error may exist in com/travel/mapper/TagMapper.java (best guess)
+### The error may involve com.travel.mapper.TagMapper.selectHotTags
+### The error occurred while executing a query
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:99) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:347) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	at jdk.proxy2/jdk.proxy2.$Proxy76.selectList(Unknown Source) ~[na:na]
+	at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:194) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	at org.apache.ibatis.binding.MapperMethod.executeForMany(MapperMethod.java:147) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:80) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.binding.MapperProxy$PlainMethodInvoker.invoke(MapperProxy.java:141) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86) ~[mybatis-3.5.17.jar:3.5.17]
+	at jdk.proxy2/jdk.proxy2.$Proxy90.selectHotTags(Unknown Source) ~[na:na]
+	at com.travel.listener.DataInitListener.onContextRefreshed(DataInitListener.java:49) ~[classes/:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568) ~[na:na]
+	at org.springframework.context.event.ApplicationListenerMethodAdapter.doInvoke(ApplicationListenerMethodAdapter.java:383) ~[spring-context-6.2.12.jar:6.2.12]
+	at org.springframework.context.event.ApplicationListenerMethodAdapter.processEvent(ApplicationListenerMethodAdapter.java:255) ~[spring-context-6.2.12.jar:6.2.12]
+	at org.springframework.context.event.ApplicationListenerMethodAdapter.onApplicationEvent(ApplicationListenerMethodAdapter.java:174) ~[spring-context-6.2.12.jar:6.2.12]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:185) ~[spring-context-6.2.12.jar:6.2.12]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:178) ~[spring-context-6.2.12.jar:6.2.12]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:156) ~[spring-context-6.2.12.jar:6.2.12]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:454) ~[spring-context-6.2.12.jar:6.2.12]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:387) ~[spring-context-6.2.12.jar:6.2.12]
+	at org.springframework.context.support.AbstractApplicationContext.finishRefresh(AbstractApplicationContext.java:1012) ~[spring-context-6.2.12.jar:6.2.12]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:630) ~[spring-context-6.2.12.jar:6.2.12]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361) ~[spring-boot-3.5.7.jar:3.5.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350) ~[spring-boot-3.5.7.jar:3.5.7]
+	at com.travel.TravelProjectApplication.main(TravelProjectApplication.java:14) ~[classes/:na]
+Caused by: org.apache.ibatis.exceptions.PersistenceException: 
+### Error querying database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+### The error may exist in com/travel/mapper/TagMapper.java (best guess)
+### The error may involve com.travel.mapper.TagMapper.selectHotTags
+### The error occurred while executing a query
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.apache.ibatis.exceptions.ExceptionFactory.wrapException(ExceptionFactory.java:30) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:156) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:147) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:142) ~[mybatis-3.5.17.jar:3.5.17]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568) ~[na:na]
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:333) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	... 29 common frames omitted
+Caused by: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:84) ~[spring-jdbc-6.2.12.jar:6.2.12]
+	at org.mybatis.spring.transaction.SpringManagedTransaction.openConnection(SpringManagedTransaction.java:77) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	at org.mybatis.spring.transaction.SpringManagedTransaction.getConnection(SpringManagedTransaction.java:64) ~[mybatis-spring-3.0.4.jar:3.0.4]
+	at org.apache.ibatis.executor.BaseExecutor.getConnection(BaseExecutor.java:348) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.SimpleExecutor.prepareStatement(SimpleExecutor.java:89) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:64) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:336) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:158) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:110) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:90) ~[mybatis-3.5.17.jar:3.5.17]
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:154) ~[mybatis-3.5.17.jar:3.5.17]
+	... 36 common frames omitted
+Caused by: java.sql.SQLNonTransientConnectionException: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:102) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:89) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:81) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:55) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:65) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:913) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:832) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:415) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:237) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:180) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:370) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:207) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:488) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.checkFailFast(HikariPool.java:576) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.<init>(HikariPool.java:97) ~[HikariCP-6.3.3.jar:na]
+	at com.zaxxer.hikari.HikariDataSource.getConnection(HikariDataSource.java:111) ~[HikariCP-6.3.3.jar:na]
+	at org.springframework.jdbc.datasource.DataSourceUtils.fetchConnection(DataSourceUtils.java:160) ~[spring-jdbc-6.2.12.jar:6.2.12]
+	at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:118) ~[spring-jdbc-6.2.12.jar:6.2.12]
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:81) ~[spring-jdbc-6.2.12.jar:6.2.12]
+	... 46 common frames omitted
+Caused by: com.mysql.cj.exceptions.CJException: Public Key Retrieval is not allowed
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[na:na]
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499) ~[na:na]
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:480) ~[na:na]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:52) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:95) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:140) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:113) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.authentication.CachingSha2PasswordPlugin.nextAuthenticationStep(CachingSha2PasswordPlugin.java:145) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.authentication.CachingSha2PasswordPlugin.nextAuthenticationStep(CachingSha2PasswordPlugin.java:40) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.NativeAuthenticationProvider.proceedHandshakeWithPluggableAuthentication(NativeAuthenticationProvider.java:436) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.NativeAuthenticationProvider.connect(NativeAuthenticationProvider.java:206) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.NativeProtocol.connect(NativeProtocol.java:1333) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.NativeSession.connect(NativeSession.java:155) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:853) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	... 60 common frames omitted
+Caused by: com.mysql.cj.exceptions.UnableToConnectException: Public Key Retrieval is not allowed
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[na:na]
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499) ~[na:na]
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:480) ~[na:na]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:52) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:76) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	at com.mysql.cj.protocol.a.authentication.CachingSha2PasswordPlugin.nextAuthenticationStep(CachingSha2PasswordPlugin.java:122) ~[mysql-connector-j-9.4.0.jar:9.4.0]
+	... 66 common frames omitted
+
+2026-05-24T15:29:23.511+08:00  INFO 29220 --- [TravelProject] [main] com.travel.TravelProjectApplication      : Started TravelProjectApplication in 7.608 seconds (process running for 8.158)
+2026-05-24T15:29:52.795+08:00  INFO 29220 --- [TravelProject] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-24T15:29:53.385+08:00  INFO 29220 --- [TravelProject] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-05-24T15:29:53.389+08:00  INFO 29220 --- [TravelProject] [SpringApplicationShutdownHook] com.travel.utils.OssUploadUtil           : OSS client shutdown
+2026-05-24T15:29:53.393+08:00  INFO 29220 --- [TravelProject] [SpringApplicationShutdownHook] com.travel.listener.DataInitListener     : 应用上下文销毁，清除缓存数据
+2026-05-24T15:29:56.744+08:00  INFO 8592 --- [TravelProject] [main] com.travel.TravelProjectApplication      : Starting TravelProjectApplication using Java 17.0.12 with PID 8592 (E:\JavaFile\project\TravelProject\target\classes started by Liuji in E:\JavaFile\project\TravelProject)
+2026-05-24T15:29:56.746+08:00  INFO 8592 --- [TravelProject] [main] com.travel.TravelProjectApplication      : The following 1 profile is active: "local"
+2026-05-24T15:29:57.615+08:00  INFO 8592 --- [TravelProject] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2026-05-24T15:29:57.628+08:00  INFO 8592 --- [TravelProject] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-24T15:29:57.628+08:00  INFO 8592 --- [TravelProject] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.48]
+2026-05-24T15:29:57.843+08:00  INFO 8592 --- [TravelProject] [main] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2026-05-24T15:29:57.852+08:00  INFO 8592 --- [TravelProject] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-24T15:29:57.853+08:00  INFO 8592 --- [TravelProject] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1072 ms
+2026-05-24T15:29:58.308+08:00  INFO 8592 --- [TravelProject] [main] com.travel.utils.OssUploadUtil           : OSS client initialized, endpoint: oss-cn-guangzhou.aliyuncs.com
+2026-05-24T15:29:58.696+08:00  INFO 8592 --- [TravelProject] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2026-05-24T15:29:58.714+08:00  INFO 8592 --- [TravelProject] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-24T15:29:59.001+08:00  INFO 8592 --- [TravelProject] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4a41caed
+2026-05-24T15:29:59.003+08:00  INFO 8592 --- [TravelProject] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-05-24T15:29:59.007+08:00 DEBUG 8592 --- [TravelProject] [main] c.travel.mapper.TagMapper.selectHotTags  : ==>  Preparing: SELECT t.id, t.name FROM tags t INNER JOIN guide_tags gt ON t.id = gt.tag_id GROUP BY t.id ORDER BY COUNT(gt.guide_id) DESC LIMIT 10
+2026-05-24T15:29:59.017+08:00 DEBUG 8592 --- [TravelProject] [main] c.travel.mapper.TagMapper.selectHotTags  : ==> Parameters: 
+2026-05-24T15:29:59.045+08:00 DEBUG 8592 --- [TravelProject] [main] c.travel.mapper.TagMapper.selectHotTags  : <==      Total: 10
+2026-05-24T15:29:59.047+08:00  INFO 8592 --- [TravelProject] [main] com.travel.listener.DataInitListener     : 初始化热门标签数据: 10 条
+2026-05-24T15:29:59.049+08:00 DEBUG 8592 --- [TravelProject] [main] c.t.m.D.listHotDestinations              : ==>  Preparing: SELECT id, name, country, city, description, cover_image_url, rating_avg, guides_count, travelers_count, popularity_score FROM destinations ORDER BY popularity_score DESC, id DESC LIMIT ?
+2026-05-24T15:29:59.050+08:00 DEBUG 8592 --- [TravelProject] [main] c.t.m.D.listHotDestinations              : ==> Parameters: 10(Integer)
+2026-05-24T15:29:59.067+08:00 DEBUG 8592 --- [TravelProject] [main] c.t.m.D.listHotDestinations              : <==      Total: 10
+2026-05-24T15:29:59.067+08:00  INFO 8592 --- [TravelProject] [main] com.travel.listener.DataInitListener     : 初始化热门目的地数据: 10 条
+2026-05-24T15:29:59.067+08:00  INFO 8592 --- [TravelProject] [main] com.travel.TravelProjectApplication      : Started TravelProjectApplication in 2.691 seconds (process running for 3.248)
+2026-05-24T15:35:29.039+08:00  INFO 8592 --- [TravelProject] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-24T15:35:29.666+08:00  INFO 8592 --- [TravelProject] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-05-24T15:35:29.670+08:00  INFO 8592 --- [TravelProject] [SpringApplicationShutdownHook] com.travel.utils.OssUploadUtil           : OSS client shutdown
+2026-05-24T15:35:29.671+08:00  INFO 8592 --- [TravelProject] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-05-24T15:35:29.676+08:00  INFO 8592 --- [TravelProject] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-05-24T15:35:29.678+08:00  INFO 8592 --- [TravelProject] [SpringApplicationShutdownHook] com.travel.listener.DataInitListener     : 应用上下文销毁，清除缓存数据
