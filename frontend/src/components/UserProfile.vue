@@ -382,10 +382,10 @@
             <path d="M18 6L6 18M6 6l12 12"/>
           </svg>
         </button>
-        <img 
-          v-if="userInfo.avatar" 
-          :src="userInfo.avatar" 
-          alt="用户头像" 
+        <img
+          v-if="userInfo.avatar"
+          :src="userInfo.avatar"
+          alt="用户头像"
           class="preview-avatar-img"
         >
         <div v-else class="preview-avatar-placeholder">
@@ -394,6 +394,18 @@
             <circle cx="12" cy="7" r="4"/>
           </svg>
         </div>
+        <button
+          v-if="userInfo.avatar"
+          class="download-preview-btn"
+          @click="downloadAvatar"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          <span>下载头像</span>
+        </button>
       </div>
     </div>
     <ConfirmDialog ref="confirmRef" />
@@ -690,6 +702,12 @@ const openAvatarPreview = () => {
 const closeAvatarPreview = () => {
   showAvatarPreview.value = false
   document.body.style.overflow = ''
+}
+
+// 下载头像
+const downloadAvatar = () => {
+  if (!props.userInfo.avatar) return
+  window.location.href = '/api/files/download?url=' + encodeURIComponent(props.userInfo.avatar)
 }
 
 // 处理头像更换
@@ -1869,6 +1887,32 @@ onMounted(() => {
   width: 24px;
   height: 24px;
   color: white;
+}
+
+.download-preview-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 16px auto 0;
+  padding: 10px 24px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+.download-preview-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.download-preview-btn svg {
+  width: 18px;
+  height: 18px;
 }
 
 /* 响应式 */

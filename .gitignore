@@ -40,4 +40,4 @@ build/
 ### 敏感配置文件 ###
 src/main/resources/application-local.yml
 *.local
-.env
+src/main/resources/templates/.env
