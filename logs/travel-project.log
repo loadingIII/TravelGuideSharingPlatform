@@ -7,3 +7,655 @@
 2026-05-28T08:24:08.444+08:00  INFO 9124 --- [TravelProject] [main] com.travel.utils.OssUploadUtil           : OSS client initialized, endpoint: oss-cn-guangzhou.aliyuncs.com
 2026-05-28T08:24:08.904+08:00  INFO 9124 --- [TravelProject] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
 2026-05-28T08:24:08.924+08:00  INFO 9124 --- [TravelProject] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-28T08:25:23.709+08:00  INFO 9608 --- [TravelProject] [main] com.travel.TravelProjectApplication      : Starting TravelProjectApplication using Java 17.0.12 with PID 9608 (E:\JavaFile\project\TravelProject\target\classes started by Liuji in E:\JavaFile\project\TravelProject)
+2026-05-28T08:25:23.710+08:00  INFO 9608 --- [TravelProject] [main] com.travel.TravelProjectApplication      : The following 1 profile is active: "local"
+2026-05-28T08:25:24.530+08:00  INFO 9608 --- [TravelProject] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2026-05-28T08:25:24.539+08:00  INFO 9608 --- [TravelProject] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-28T08:25:24.539+08:00  INFO 9608 --- [TravelProject] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.48]
+2026-05-28T08:25:24.738+08:00  INFO 9608 --- [TravelProject] [main] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2026-05-28T08:25:24.750+08:00  INFO 9608 --- [TravelProject] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-28T08:25:24.750+08:00  INFO 9608 --- [TravelProject] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1008 ms
+2026-05-28T08:25:25.216+08:00  INFO 9608 --- [TravelProject] [main] com.travel.utils.OssUploadUtil           : OSS client initialized, endpoint: oss-cn-guangzhou.aliyuncs.com
+2026-05-28T08:25:25.606+08:00  INFO 9608 --- [TravelProject] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2026-05-28T08:25:25.623+08:00  INFO 9608 --- [TravelProject] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-28T08:25:25.960+08:00  INFO 9608 --- [TravelProject] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@1e7d3d87
+2026-05-28T08:25:25.963+08:00  INFO 9608 --- [TravelProject] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-05-28T08:25:25.969+08:00 DEBUG 9608 --- [TravelProject] [main] c.travel.mapper.TagMapper.selectHotTags  : ==>  Preparing: SELECT t.id, t.name FROM tags t INNER JOIN guide_tags gt ON t.id = gt.tag_id GROUP BY t.id ORDER BY COUNT(gt.guide_id) DESC LIMIT 10
+2026-05-28T08:25:25.982+08:00 DEBUG 9608 --- [TravelProject] [main] c.travel.mapper.TagMapper.selectHotTags  : ==> Parameters: 
+2026-05-28T08:25:26.242+08:00 DEBUG 9608 --- [TravelProject] [main] c.travel.mapper.TagMapper.selectHotTags  : <==      Total: 10
+2026-05-28T08:25:26.246+08:00  INFO 9608 --- [TravelProject] [main] com.travel.listener.DataInitListener     : 初始化热门标签数据: 10 条
+2026-05-28T08:25:26.248+08:00 DEBUG 9608 --- [TravelProject] [main] c.t.m.D.listHotDestinations              : ==>  Preparing: SELECT id, name, country, city, description, cover_image_url, rating_avg, guides_count, travelers_count, popularity_score FROM destinations ORDER BY popularity_score DESC, id DESC LIMIT ?
+2026-05-28T08:25:26.250+08:00 DEBUG 9608 --- [TravelProject] [main] c.t.m.D.listHotDestinations              : ==> Parameters: 10(Integer)
+2026-05-28T08:25:26.262+08:00 DEBUG 9608 --- [TravelProject] [main] c.t.m.D.listHotDestinations              : <==      Total: 10
+2026-05-28T08:25:26.263+08:00  INFO 9608 --- [TravelProject] [main] com.travel.listener.DataInitListener     : 初始化热门目的地数据: 10 条
+2026-05-28T08:25:26.263+08:00  INFO 9608 --- [TravelProject] [main] com.travel.TravelProjectApplication      : Started TravelProjectApplication in 2.931 seconds (process running for 3.488)
+2026-05-28T08:25:45.284+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-28T08:25:45.285+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-05-28T08:25:45.285+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2026-05-28T08:25:45.338+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.t.m.D.listHotDestinations              : ==>  Preparing: SELECT id, name, country, city, description, cover_image_url, rating_avg, guides_count, travelers_count, popularity_score FROM destinations ORDER BY popularity_score DESC, id DESC LIMIT ?
+2026-05-28T08:25:45.339+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.t.m.D.listHotDestinations              : ==> Parameters: 4(Integer)
+2026-05-28T08:25:45.340+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.GuideMapper.listTopGuidesByLikes   : ==>  Preparing: SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode, g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status, d.name AS destination_name, up.nickname AS author_name, up.avatar_url AS author_avatar_url FROM guides g LEFT JOIN destinations d ON d.id = g.destination_id LEFT JOIN user_profiles up ON up.user_id = g.author_id WHERE g.publish_status = 'published' ORDER BY g.likes_count DESC, g.id DESC LIMIT ?
+2026-05-28T08:25:45.340+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.GuideMapper.listTopGuidesByLikes   : ==> Parameters: 6(Integer)
+2026-05-28T08:25:45.359+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.t.m.D.listHotDestinations              : <==      Total: 4
+2026-05-28T08:25:45.367+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.GuideMapper.listTopGuidesByLikes   : <==      Total: 6
+2026-05-28T08:25:45.445+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-2] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/destinations/hot | IP: 127.0.0.1 | Status: 200 | 147ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:25:45.445+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-1] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/guides/ranking/likes | IP: 127.0.0.1 | Status: 200 | 147ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:26:00.103+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-3] com.travel.listener.OnlineUserListener   : 用户上线 | 当前在线: 1
+2026-05-28T08:26:00.111+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-3] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin | IP: 0:0:0:0:0:0:0:1 | Status: 302 | 109ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:26:00.130+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-10] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/login.html;jsessionid=DE86CE8A274E13712AADE2834A2690FD | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 13ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:26:00.256+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-5] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 9ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:26:06.561+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.c.admin.AdminAuthApiController       : 登录尝试: username=admin
+2026-05-28T08:26:06.572+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.AdminUserMapper.selectByUsername   : ==>  Preparing: SELECT * FROM admin_users WHERE username = ?
+2026-05-28T08:26:06.573+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.AdminUserMapper.selectByUsername   : ==> Parameters: admin(String)
+2026-05-28T08:26:06.583+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.AdminUserMapper.selectByUsername   : <==      Total: 1
+2026-05-28T08:26:06.664+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.AdminUserMapper.updateLastLoginAt  : ==>  Preparing: UPDATE admin_users SET last_login_at = NOW() WHERE id = ?
+2026-05-28T08:26:06.664+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.AdminUserMapper.updateLastLoginAt  : ==> Parameters: 1(Long)
+2026-05-28T08:26:06.690+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.AdminUserMapper.updateLastLoginAt  : <==    Updates: 1
+2026-05-28T08:26:06.692+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.travel.mapper.AdminLogMapper.insert    : ==>  Preparing: INSERT INTO admin_logs (admin_id, admin_username, action, target_type, target_id, detail, ip_address) VALUES (?, ?, ?, ?, ?, ?, ?)
+2026-05-28T08:26:06.693+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.travel.mapper.AdminLogMapper.insert    : ==> Parameters: 1(Long), admin(String), LOGIN(String), ADMIN(String), null, 管理员登录(String), 0:0:0:0:0:0:0:1(String)
+2026-05-28T08:26:06.933+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.travel.mapper.AdminLogMapper.insert    : <==    Updates: 1
+2026-05-28T08:26:06.933+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.c.admin.AdminAuthApiController       : 登录成功: username=admin
+2026-05-28T08:26:06.934+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-6] com.travel.filter.RequestLoggingFilter   : [REQUEST] POST /admin/login | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 391ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:26:07.034+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] com.travel.mapper.UserMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM users WHERE (? IS NULL OR status = ?)
+2026-05-28T08:26:07.035+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] com.travel.mapper.UserMapper.countAll    : ==> Parameters: null, null
+2026-05-28T08:26:07.042+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-7] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/me | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 8ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:26:07.046+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] com.travel.mapper.UserMapper.countAll    : <==      Total: 1
+2026-05-28T08:26:07.068+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] com.travel.mapper.GuideMapper.countAll   : ==>  Preparing: SELECT COUNT(*) FROM guides g
+2026-05-28T08:26:07.068+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] com.travel.mapper.GuideMapper.countAll   : ==> Parameters: 
+2026-05-28T08:26:07.070+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-9] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 8ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:26:07.084+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] com.travel.mapper.GuideMapper.countAll   : <==      Total: 1
+2026-05-28T08:26:07.084+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.t.mapper.GuideStoryMapper.countAll     : ==>  Preparing: SELECT COUNT(1) FROM traveler_stories WHERE is_deleted = 0
+2026-05-28T08:26:07.085+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.t.mapper.GuideStoryMapper.countAll     : ==> Parameters: 
+2026-05-28T08:26:07.094+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.t.mapper.GuideStoryMapper.countAll     : <==      Total: 1
+2026-05-28T08:26:07.095+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.t.mapper.DestinationMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM destinations
+2026-05-28T08:26:07.095+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.t.mapper.DestinationMapper.countAll    : ==> Parameters: 
+2026-05-28T08:26:07.103+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.t.mapper.DestinationMapper.countAll    : <==      Total: 1
+2026-05-28T08:26:07.104+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.t.mapper.GuideCommentMapper.countAll   : ==>  Preparing: SELECT COUNT(*) FROM guide_comments c WHERE (? IS NULL OR c.status = ?)
+2026-05-28T08:26:07.105+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.t.mapper.GuideCommentMapper.countAll   : ==> Parameters: null, null
+2026-05-28T08:26:07.114+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.t.mapper.GuideCommentMapper.countAll   : <==      Total: 1
+2026-05-28T08:26:07.116+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-8] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/stats | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 82ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:26:37.686+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-4] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/me | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 1ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:26:37.702+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-1] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 4ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:26:37.710+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] com.travel.mapper.UserMapper.countAll    : ==>  Preparing: SELECT COUNT(*) FROM users WHERE (? IS NULL OR status = ?)
+2026-05-28T08:26:37.711+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] com.travel.mapper.UserMapper.countAll    : ==> Parameters: null, null
+2026-05-28T08:26:37.720+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] com.travel.mapper.UserMapper.countAll    : <==      Total: 1
+2026-05-28T08:26:37.720+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.travel.mapper.UserMapper.selectPage    : ==>  Preparing: SELECT id, username, phone, email, password_hash, status, last_login_at, created_at, updated_at FROM users WHERE (? IS NULL OR status = ?) ORDER BY created_at DESC LIMIT ?, ?
+2026-05-28T08:26:37.720+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.travel.mapper.UserMapper.selectPage    : ==> Parameters: null, null, 0(Integer), 10(Integer)
+2026-05-28T08:26:37.731+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.travel.mapper.UserMapper.selectPage    : <==      Total: 10
+2026-05-28T08:26:37.735+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-2] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/users?page=1 | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 37ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:26:38.182+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] com.travel.mapper.GuideMapper.countAll   : ==>  Preparing: SELECT COUNT(*) FROM guides g
+2026-05-28T08:26:38.183+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-3] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/me | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:26:38.183+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] com.travel.mapper.GuideMapper.countAll   : ==> Parameters: 
+2026-05-28T08:26:38.183+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-5] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /favicon.ico | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 2ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:26:38.197+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] com.travel.mapper.GuideMapper.countAll   : <==      Total: 1
+2026-05-28T08:26:38.198+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.travel.mapper.GuideMapper.selectPage   : ==>  Preparing: SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode, g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status, d.name AS destination_name, up.nickname AS author_name, up.avatar_url AS author_avatar_url FROM guides g LEFT JOIN destinations d ON d.id = g.destination_id LEFT JOIN user_profiles up ON up.user_id = g.author_id ORDER BY g.published_at DESC LIMIT ?, ?
+2026-05-28T08:26:38.199+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.travel.mapper.GuideMapper.selectPage   : ==> Parameters: 0(Integer), 10(Integer)
+2026-05-28T08:26:38.268+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.travel.mapper.GuideMapper.selectPage   : <==      Total: 10
+2026-05-28T08:26:38.272+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-10] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /admin/guides?page=1 | IP: 0:0:0:0:0:0:0:1 | Status: 200 | 91ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:27:43.982+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.travel.mapper.GuideMapper.listGuides   : ==>  Preparing: SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode, g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status, d.name AS destination_name, up.nickname AS author_name, up.avatar_url AS author_avatar_url FROM guides g LEFT JOIN destinations d ON d.id = g.destination_id LEFT JOIN user_profiles up ON up.user_id = g.author_id WHERE g.publish_status = 'published' ORDER BY g.published_at DESC, g.id DESC LIMIT ?, ?
+2026-05-28T08:27:43.983+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.travel.mapper.GuideMapper.listGuides   : ==> Parameters: 0(Integer), 12(Integer)
+2026-05-28T08:27:44.007+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.travel.mapper.GuideMapper.listGuides   : <==      Total: 11
+2026-05-28T08:27:44.009+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.travel.mapper.GuideMapper.countGuides  : ==>  Preparing: SELECT COUNT(1) FROM guides g WHERE g.publish_status = 'published'
+2026-05-28T08:27:44.009+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.travel.mapper.GuideMapper.countGuides  : ==> Parameters: 
+2026-05-28T08:27:44.018+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.travel.mapper.GuideMapper.countGuides  : <==      Total: 1
+2026-05-28T08:27:44.024+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-8] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/guides/page?page=1&pageSize=12&sort=latest | IP: 127.0.0.1 | Status: 200 | 62ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:27:46.021+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.mapper.GuideStoryMapper.selectAll    : ==>  Preparing: SELECT id, author_user_id, author_name, author_avatar_url, is_vip, content, published_at, likes_count, comments_count, shares_count, status, created_at FROM traveler_stories WHERE is_deleted = 0 ORDER BY published_at DESC LIMIT ?, ?
+2026-05-28T08:27:46.021+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.mapper.GuideStoryMapper.selectAll    : ==> Parameters: 0(Integer), 10(Integer)
+2026-05-28T08:27:46.033+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.mapper.GuideStoryMapper.selectAll    : <==      Total: 7
+2026-05-28T08:27:46.034+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.selectImageUrlsByStoryId         : ==>  Preparing: SELECT image_url FROM traveler_story_images WHERE story_id = ? ORDER BY sort_order
+2026-05-28T08:27:46.035+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.selectImageUrlsByStoryId         : ==> Parameters: 1(Long)
+2026-05-28T08:27:46.045+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.selectImageUrlsByStoryId         : <==      Total: 2
+2026-05-28T08:27:46.046+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.selectImageUrlsByStoryId         : ==>  Preparing: SELECT image_url FROM traveler_story_images WHERE story_id = ? ORDER BY sort_order
+2026-05-28T08:27:46.046+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.selectImageUrlsByStoryId         : ==> Parameters: 2(Long)
+2026-05-28T08:27:46.055+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.selectImageUrlsByStoryId         : <==      Total: 3
+2026-05-28T08:27:46.055+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.selectImageUrlsByStoryId         : ==>  Preparing: SELECT image_url FROM traveler_story_images WHERE story_id = ? ORDER BY sort_order
+2026-05-28T08:27:46.055+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.selectImageUrlsByStoryId         : ==> Parameters: 3(Long)
+2026-05-28T08:27:46.066+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.selectImageUrlsByStoryId         : <==      Total: 2
+2026-05-28T08:27:46.067+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.selectImageUrlsByStoryId         : ==>  Preparing: SELECT image_url FROM traveler_story_images WHERE story_id = ? ORDER BY sort_order
+2026-05-28T08:27:46.067+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.selectImageUrlsByStoryId         : ==> Parameters: 4(Long)
+2026-05-28T08:27:46.076+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.selectImageUrlsByStoryId         : <==      Total: 2
+2026-05-28T08:27:46.076+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.selectImageUrlsByStoryId         : ==>  Preparing: SELECT image_url FROM traveler_story_images WHERE story_id = ? ORDER BY sort_order
+2026-05-28T08:27:46.077+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.selectImageUrlsByStoryId         : ==> Parameters: 5(Long)
+2026-05-28T08:27:46.093+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.selectImageUrlsByStoryId         : <==      Total: 1
+2026-05-28T08:27:46.093+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.selectImageUrlsByStoryId         : ==>  Preparing: SELECT image_url FROM traveler_story_images WHERE story_id = ? ORDER BY sort_order
+2026-05-28T08:27:46.094+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.selectImageUrlsByStoryId         : ==> Parameters: 6(Long)
+2026-05-28T08:27:46.102+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.selectImageUrlsByStoryId         : <==      Total: 2
+2026-05-28T08:27:46.103+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.selectImageUrlsByStoryId         : ==>  Preparing: SELECT image_url FROM traveler_story_images WHERE story_id = ? ORDER BY sort_order
+2026-05-28T08:27:46.103+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.selectImageUrlsByStoryId         : ==> Parameters: 7(Long)
+2026-05-28T08:27:46.112+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.selectImageUrlsByStoryId         : <==      Total: 2
+2026-05-28T08:27:46.112+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.mapper.GuideStoryMapper.countAll     : ==>  Preparing: SELECT COUNT(1) FROM traveler_stories WHERE is_deleted = 0
+2026-05-28T08:27:46.113+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.mapper.GuideStoryMapper.countAll     : ==> Parameters: 
+2026-05-28T08:27:46.125+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.mapper.GuideStoryMapper.countAll     : <==      Total: 1
+2026-05-28T08:27:46.130+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-4] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/stories/page?page=1&pageSize=10 | IP: 127.0.0.1 | Status: 200 | 189ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:27:47.602+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.mapper.GuideStoryMapper.selectById   : ==>  Preparing: SELECT id, author_user_id, author_name, author_avatar_url, is_vip, content, published_at, likes_count, comments_count, shares_count, status, created_at FROM traveler_stories WHERE id = ? AND is_deleted = 0
+2026-05-28T08:27:47.603+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.mapper.GuideStoryMapper.selectById   : ==> Parameters: 1(Long)
+2026-05-28T08:27:47.648+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.mapper.GuideStoryMapper.selectById   : <==      Total: 1
+2026-05-28T08:27:47.649+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.G.selectImageUrlsByStoryId         : ==>  Preparing: SELECT image_url FROM traveler_story_images WHERE story_id = ? ORDER BY sort_order
+2026-05-28T08:27:47.650+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.G.selectImageUrlsByStoryId         : ==> Parameters: 1(Long)
+2026-05-28T08:27:47.661+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.G.selectImageUrlsByStoryId         : <==      Total: 2
+2026-05-28T08:27:47.664+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-1] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/stories/1 | IP: 127.0.0.1 | Status: 200 | 314ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:27:47.796+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.travel.mapper.UserMapper.selectById    : ==>  Preparing: SELECT id, username, phone, email, password_hash, status, last_login_at, created_at, updated_at FROM users WHERE id = ?
+2026-05-28T08:27:47.797+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.travel.mapper.UserMapper.selectById    : ==> Parameters: 4(Long)
+2026-05-28T08:27:48.034+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.travel.mapper.UserMapper.selectById    : <==      Total: 1
+2026-05-28T08:27:48.034+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.t.m.UserProfileMapper.selectByUserId   : ==>  Preparing: SELECT user_id, nickname, avatar_url, bio, is_vip, guides_count, followers_count, likes_received_count, created_at, updated_at FROM user_profiles WHERE user_id = ?
+2026-05-28T08:27:48.035+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.t.m.UserProfileMapper.selectByUserId   : ==> Parameters: 4(Long)
+2026-05-28T08:27:48.043+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.t.m.UserProfileMapper.selectByUserId   : <==      Total: 1
+2026-05-28T08:27:48.047+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-2] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/users/me | IP: 127.0.0.1 | Status: 200 | 370ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:27:48.066+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-3] c.travel.mapper.StoryLikeMapper.exists   : ==>  Preparing: SELECT COUNT(*) FROM traveler_story_likes WHERE story_id=? AND user_id=?
+2026-05-28T08:27:48.067+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-3] c.travel.mapper.StoryLikeMapper.exists   : ==> Parameters: 1(Long), 4(Long)
+2026-05-28T08:27:48.076+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-3] c.travel.mapper.StoryLikeMapper.exists   : <==      Total: 1
+2026-05-28T08:27:48.077+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-3] c.t.m.StoryLikeMapper.selectLikesCount   : ==>  Preparing: SELECT likes_count FROM traveler_stories WHERE id = ?
+2026-05-28T08:27:48.078+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-3] c.t.m.StoryLikeMapper.selectLikesCount   : ==> Parameters: 1(Long)
+2026-05-28T08:27:48.086+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-3] c.t.m.StoryLikeMapper.selectLikesCount   : <==      Total: 1
+2026-05-28T08:27:48.088+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-3] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/stories/1/like | IP: 127.0.0.1 | Status: 200 | 23ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:27:48.096+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.S.selectAllByStoryId               : ==>  Preparing: SELECT c.id, c.story_id, c.user_id, c.content, c.parent_comment_id, c.likes_count, c.status, c.created_at, up.nickname AS author_name, up.avatar_url AS author_avatar_url FROM traveler_story_comments c LEFT JOIN user_profiles up ON up.user_id = c.user_id WHERE c.story_id = ? AND c.is_deleted = 0 ORDER BY c.created_at ASC
+2026-05-28T08:27:48.097+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.S.selectAllByStoryId               : ==> Parameters: 1(Long)
+2026-05-28T08:27:48.110+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.S.selectAllByStoryId               : <==      Total: 2
+2026-05-28T08:27:48.116+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-5] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/stories/1/comments | IP: 127.0.0.1 | Status: 200 | 21ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:27:50.332+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.travel.mapper.StoryLikeMapper.exists   : ==>  Preparing: SELECT COUNT(*) FROM traveler_story_likes WHERE story_id=? AND user_id=?
+2026-05-28T08:27:50.332+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.travel.mapper.StoryLikeMapper.exists   : ==> Parameters: 1(Long), 4(Long)
+2026-05-28T08:27:50.342+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.travel.mapper.StoryLikeMapper.exists   : <==      Total: 1
+2026-05-28T08:27:50.343+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.travel.mapper.StoryLikeMapper.insert   : ==>  Preparing: INSERT INTO traveler_story_likes (story_id, user_id) VALUES (?, ?)
+2026-05-28T08:27:50.343+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.travel.mapper.StoryLikeMapper.insert   : ==> Parameters: 1(Long), 4(Long)
+2026-05-28T08:27:50.374+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.travel.mapper.StoryLikeMapper.insert   : <==    Updates: 1
+2026-05-28T08:27:50.374+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.t.m.S.incrementLikesCount              : ==>  Preparing: UPDATE traveler_stories SET likes_count = likes_count + 1 WHERE id = ?
+2026-05-28T08:27:50.375+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.t.m.S.incrementLikesCount              : ==> Parameters: 1(Long)
+2026-05-28T08:27:50.411+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.t.m.S.incrementLikesCount              : <==    Updates: 1
+2026-05-28T08:27:50.413+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.t.m.StoryLikeMapper.selectLikesCount   : ==>  Preparing: SELECT likes_count FROM traveler_stories WHERE id = ?
+2026-05-28T08:27:50.413+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.t.m.StoryLikeMapper.selectLikesCount   : ==> Parameters: 1(Long)
+2026-05-28T08:27:50.423+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.t.m.StoryLikeMapper.selectLikesCount   : <==      Total: 1
+2026-05-28T08:27:50.442+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-10] com.travel.filter.RequestLoggingFilter   : [REQUEST] POST /api/stories/1/like | IP: 127.0.0.1 | Status: 200 | 152ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:27:51.916+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.mapper.GuideStoryMapper.selectAll    : ==>  Preparing: SELECT id, author_user_id, author_name, author_avatar_url, is_vip, content, published_at, likes_count, comments_count, shares_count, status, created_at FROM traveler_stories WHERE is_deleted = 0 ORDER BY published_at DESC LIMIT ?, ?
+2026-05-28T08:27:51.917+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.mapper.GuideStoryMapper.selectAll    : ==> Parameters: 0(Integer), 10(Integer)
+2026-05-28T08:27:51.933+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.mapper.GuideStoryMapper.selectAll    : <==      Total: 7
+2026-05-28T08:27:51.933+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.G.selectImageUrlsByStoryId         : ==>  Preparing: SELECT image_url FROM traveler_story_images WHERE story_id = ? ORDER BY sort_order
+2026-05-28T08:27:51.934+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.G.selectImageUrlsByStoryId         : ==> Parameters: 1(Long)
+2026-05-28T08:27:51.943+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.G.selectImageUrlsByStoryId         : <==      Total: 2
+2026-05-28T08:27:51.945+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.G.selectImageUrlsByStoryId         : ==>  Preparing: SELECT image_url FROM traveler_story_images WHERE story_id = ? ORDER BY sort_order
+2026-05-28T08:27:51.945+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.G.selectImageUrlsByStoryId         : ==> Parameters: 2(Long)
+2026-05-28T08:27:51.958+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.G.selectImageUrlsByStoryId         : <==      Total: 3
+2026-05-28T08:27:51.959+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.G.selectImageUrlsByStoryId         : ==>  Preparing: SELECT image_url FROM traveler_story_images WHERE story_id = ? ORDER BY sort_order
+2026-05-28T08:27:51.959+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.G.selectImageUrlsByStoryId         : ==> Parameters: 3(Long)
+2026-05-28T08:27:51.968+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.G.selectImageUrlsByStoryId         : <==      Total: 2
+2026-05-28T08:27:51.968+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.G.selectImageUrlsByStoryId         : ==>  Preparing: SELECT image_url FROM traveler_story_images WHERE story_id = ? ORDER BY sort_order
+2026-05-28T08:27:51.968+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.G.selectImageUrlsByStoryId         : ==> Parameters: 4(Long)
+2026-05-28T08:27:51.977+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.G.selectImageUrlsByStoryId         : <==      Total: 2
+2026-05-28T08:27:51.978+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.G.selectImageUrlsByStoryId         : ==>  Preparing: SELECT image_url FROM traveler_story_images WHERE story_id = ? ORDER BY sort_order
+2026-05-28T08:27:51.978+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.G.selectImageUrlsByStoryId         : ==> Parameters: 5(Long)
+2026-05-28T08:27:52.210+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.G.selectImageUrlsByStoryId         : <==      Total: 1
+2026-05-28T08:27:52.210+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.G.selectImageUrlsByStoryId         : ==>  Preparing: SELECT image_url FROM traveler_story_images WHERE story_id = ? ORDER BY sort_order
+2026-05-28T08:27:52.210+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.G.selectImageUrlsByStoryId         : ==> Parameters: 6(Long)
+2026-05-28T08:27:52.222+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.G.selectImageUrlsByStoryId         : <==      Total: 2
+2026-05-28T08:27:52.222+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.G.selectImageUrlsByStoryId         : ==>  Preparing: SELECT image_url FROM traveler_story_images WHERE story_id = ? ORDER BY sort_order
+2026-05-28T08:27:52.223+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.G.selectImageUrlsByStoryId         : ==> Parameters: 7(Long)
+2026-05-28T08:27:52.233+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.G.selectImageUrlsByStoryId         : <==      Total: 2
+2026-05-28T08:27:52.234+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.mapper.GuideStoryMapper.countAll     : ==>  Preparing: SELECT COUNT(1) FROM traveler_stories WHERE is_deleted = 0
+2026-05-28T08:27:52.234+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.mapper.GuideStoryMapper.countAll     : ==> Parameters: 
+2026-05-28T08:27:52.242+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.mapper.GuideStoryMapper.countAll     : <==      Total: 1
+2026-05-28T08:27:52.245+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-6] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/stories/page?page=1&pageSize=10 | IP: 127.0.0.1 | Status: 200 | 338ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:27:52.256+08:00 ERROR 9608 --- [TravelProject] [http-nio-8082-exec-7] c.travel.handler.GlobalExceptionHandler  : 未处理异常
+
+org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'id': Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; For input string: "page"
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:301) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:136) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:227) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:181) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:991) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:896) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564) ~[tomcat-embed-core-10.1.48.jar:6.0]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[tomcat-embed-core-10.1.48.jar:6.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-embed-websocket-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at com.travel.filter.RequestLoggingFilter.doFilterInternal(RequestLoggingFilter.java:25) ~[classes/:na]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at com.travel.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:20) ~[classes/:na]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:88) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:399) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1774) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:973) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:491) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
+Caused by: java.lang.NumberFormatException: For input string: "page"
+	at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:67) ~[na:na]
+	at java.base/java.lang.Long.parseLong(Long.java:711) ~[na:na]
+	at java.base/java.lang.Long.valueOf(Long.java:1163) ~[na:na]
+	at org.springframework.util.NumberUtils.parseNumber(NumberUtils.java:204) ~[spring-core-6.2.12.jar:6.2.12]
+	at org.springframework.beans.propertyeditors.CustomNumberEditor.setAsText(CustomNumberEditor.java:115) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.TypeConverterDelegate.doConvertTextValue(TypeConverterDelegate.java:439) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.TypeConverterDelegate.doConvertValue(TypeConverterDelegate.java:412) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConverterDelegate.java:161) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:80) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:53) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.validation.DataBinder.convertIfNecessary(DataBinder.java:867) ~[spring-context-6.2.12.jar:6.2.12]
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:293) ~[spring-web-6.2.12.jar:6.2.12]
+	... 56 common frames omitted
+
+2026-05-28T08:27:52.265+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-7] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/destinations/page?page=1&pageSize=12 | IP: 127.0.0.1 | Status: 200 | 13ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:28:01.288+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-9] c.t.mapper.DestinationMapper.selectById  : ==>  Preparing: SELECT id, name, country, city, description, cover_image_url, rating_avg, guides_count, travelers_count, popularity_score FROM destinations WHERE id = ?
+2026-05-28T08:28:01.288+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-9] c.t.mapper.DestinationMapper.selectById  : ==> Parameters: 7(Long)
+2026-05-28T08:28:01.308+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-9] c.t.mapper.DestinationMapper.selectById  : <==      Total: 1
+2026-05-28T08:28:01.310+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-9] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/destinations/7 | IP: 127.0.0.1 | Status: 200 | 35ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:28:01.590+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.t.m.G.listGuidesByDestination          : ==>  Preparing: SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode, g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status, d.name AS destination_name, up.nickname AS author_name, up.avatar_url AS author_avatar_url FROM guides g LEFT JOIN destinations d ON d.id = g.destination_id LEFT JOIN user_profiles up ON up.user_id = g.author_id WHERE g.publish_status = 'published' AND g.destination_id = ? ORDER BY g.published_at DESC, g.id DESC LIMIT ?, ?
+2026-05-28T08:28:01.590+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.t.m.G.listGuidesByDestination          : ==> Parameters: 7(Long), 0(Integer), 20(Integer)
+2026-05-28T08:28:01.602+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.t.m.G.listGuidesByDestination          : <==      Total: 1
+2026-05-28T08:28:01.602+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.t.m.G.countGuidesByDestination         : ==>  Preparing: SELECT COUNT(1) FROM guides WHERE publish_status = 'published' AND destination_id = ?
+2026-05-28T08:28:01.603+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.t.m.G.countGuidesByDestination         : ==> Parameters: 7(Long)
+2026-05-28T08:28:01.612+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.t.m.G.countGuidesByDestination         : <==      Total: 1
+2026-05-28T08:28:01.614+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-8] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/destinations/7/guides?page=1&pageSize=20 | IP: 127.0.0.1 | Status: 200 | 25ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:28:03.284+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.GuideMapper.selectGuideDetail      : ==>  Preparing: SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.content_html, g.cover_image_url, g.location_text, g.scope, g.travel_mode, g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status, d.name AS destination_name, up.nickname AS author_name, up.avatar_url AS author_avatar_url FROM guides g LEFT JOIN destinations d ON d.id = g.destination_id LEFT JOIN user_profiles up ON up.user_id = g.author_id WHERE g.id = ? AND g.publish_status = 'published'
+2026-05-28T08:28:03.284+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.travel.mapper.TagMapper.selectHotTags  : ==>  Preparing: SELECT t.id, t.name FROM tags t INNER JOIN guide_tags gt ON t.id = gt.tag_id GROUP BY t.id ORDER BY COUNT(gt.guide_id) DESC LIMIT 10
+2026-05-28T08:28:03.284+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.travel.mapper.UserMapper.selectById    : ==>  Preparing: SELECT id, username, phone, email, password_hash, status, last_login_at, created_at, updated_at FROM users WHERE id = ?
+2026-05-28T08:28:03.284+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.travel.mapper.TagMapper.selectHotTags  : ==> Parameters: 
+2026-05-28T08:28:03.284+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.travel.mapper.UserMapper.selectById    : ==> Parameters: 4(Long)
+2026-05-28T08:28:03.284+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.GuideMapper.selectGuideDetail      : ==> Parameters: 4(Long)
+2026-05-28T08:28:03.297+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.travel.mapper.UserMapper.selectById    : <==      Total: 1
+2026-05-28T08:28:03.297+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.UserProfileMapper.selectByUserId   : ==>  Preparing: SELECT user_id, nickname, avatar_url, bio, is_vip, guides_count, followers_count, likes_received_count, created_at, updated_at FROM user_profiles WHERE user_id = ?
+2026-05-28T08:28:03.297+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.travel.mapper.TagMapper.selectHotTags  : <==      Total: 10
+2026-05-28T08:28:03.297+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.UserProfileMapper.selectByUserId   : ==> Parameters: 4(Long)
+2026-05-28T08:28:03.299+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.GuideMapper.selectGuideDetail      : <==      Total: 1
+2026-05-28T08:28:03.299+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-2] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/tags/hot | IP: 127.0.0.1 | Status: 200 | 29ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:28:03.299+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.GuideMapper.incrementViewsCount    : ==>  Preparing: UPDATE guides SET views_count = views_count + 1 WHERE id = ?
+2026-05-28T08:28:03.299+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.GuideMapper.incrementViewsCount    : ==> Parameters: 4(Long)
+2026-05-28T08:28:03.309+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.UserProfileMapper.selectByUserId   : <==      Total: 1
+2026-05-28T08:28:03.311+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-4] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/users/me | IP: 127.0.0.1 | Status: 200 | 41ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:28:03.320+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.GuideMapper.incrementViewsCount    : <==    Updates: 1
+2026-05-28T08:28:03.321+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.GuideMapper.listItineraryDays      : ==>  Preparing: SELECT id, guide_id, day_no, title, summary, sort_order FROM guide_itinerary_days WHERE guide_id = ? ORDER BY day_no ASC
+2026-05-28T08:28:03.321+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.GuideMapper.listItineraryDays      : ==> Parameters: 4(Long)
+2026-05-28T08:28:03.338+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.GuideMapper.listItineraryDays      : <==      Total: 5
+2026-05-28T08:28:03.339+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.G.listByGuideId                    : ==>  Preparing: SELECT id, guide_id, day_no, name, description, image_url, time, duration, sort_order FROM guide_itinerary_spots WHERE guide_id = ? ORDER BY day_no ASC, sort_order ASC
+2026-05-28T08:28:03.339+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.G.listByGuideId                    : ==> Parameters: 4(Long)
+2026-05-28T08:28:03.358+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.G.listByGuideId                    : <==      Total: 0
+2026-05-28T08:28:03.358+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.UserProfileMapper.selectByUserId   : ==>  Preparing: SELECT user_id, nickname, avatar_url, bio, is_vip, guides_count, followers_count, likes_received_count, created_at, updated_at FROM user_profiles WHERE user_id = ?
+2026-05-28T08:28:03.359+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.UserProfileMapper.selectByUserId   : ==> Parameters: 3(Long)
+2026-05-28T08:28:03.387+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.UserProfileMapper.selectByUserId   : <==      Total: 1
+2026-05-28T08:28:03.387+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.G.listGuidesByDestination          : ==>  Preparing: SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode, g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status, d.name AS destination_name, up.nickname AS author_name, up.avatar_url AS author_avatar_url FROM guides g LEFT JOIN destinations d ON d.id = g.destination_id LEFT JOIN user_profiles up ON up.user_id = g.author_id WHERE g.publish_status = 'published' AND g.destination_id = ? ORDER BY g.published_at DESC, g.id DESC LIMIT ?, ?
+2026-05-28T08:28:03.388+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.G.listGuidesByDestination          : ==> Parameters: 7(Long), 0(Integer), 4(Integer)
+2026-05-28T08:28:03.405+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.G.listGuidesByDestination          : <==      Total: 1
+2026-05-28T08:28:03.416+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-1] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/guides/4 | IP: 127.0.0.1 | Status: 200 | 146ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:28:03.425+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-3] c.t.mapper.TagMapper.selectByGuideId     : ==>  Preparing: SELECT t.id, t.name FROM tags t INNER JOIN guide_tags gt ON t.id = gt.tag_id WHERE gt.guide_id = ?
+2026-05-28T08:28:03.426+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-3] c.t.mapper.TagMapper.selectByGuideId     : ==> Parameters: 4(Long)
+2026-05-28T08:28:03.437+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-3] c.t.mapper.TagMapper.selectByGuideId     : <==      Total: 3
+2026-05-28T08:28:03.438+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-3] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/guides/4/tags | IP: 127.0.0.1 | Status: 200 | 14ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:28:03.532+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.travel.mapper.GuideLikeMapper.exists   : ==>  Preparing: SELECT COUNT(*) FROM guide_likes WHERE guide_id=? AND user_id=?
+2026-05-28T08:28:03.533+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.travel.mapper.GuideLikeMapper.exists   : ==> Parameters: 4(Long), 4(Long)
+2026-05-28T08:28:03.543+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.travel.mapper.GuideLikeMapper.exists   : <==      Total: 1
+2026-05-28T08:28:03.544+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.GuideLikeMapper.selectLikesCount   : ==>  Preparing: SELECT likes_count FROM guides WHERE id = ?
+2026-05-28T08:28:03.544+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.GuideLikeMapper.selectLikesCount   : ==> Parameters: 4(Long)
+2026-05-28T08:28:03.553+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.GuideLikeMapper.selectLikesCount   : <==      Total: 1
+2026-05-28T08:28:03.555+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-5] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/guides/4/like | IP: 127.0.0.1 | Status: 200 | 24ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:28:03.752+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-7] c.t.controller.user.GuideController      : 获取攻略评论列表
+2026-05-28T08:28:03.753+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.travel.mapper.UserFollowMapper.exists  : ==>  Preparing: SELECT COUNT(*) FROM user_follows WHERE follower_user_id=? AND followed_user_id=?
+2026-05-28T08:28:03.753+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-7] c.t.m.GuideCommentMapper.listByGuideId   : ==>  Preparing: SELECT gc.id, gc.guide_id, gc.user_id, gc.content, gc.parent_comment_id, gc.likes_count, gc.status, gc.created_at, up.nickname AS author_name, up.avatar_url AS author_avatar_url FROM guide_comments gc LEFT JOIN user_profiles up ON up.user_id = gc.user_id WHERE gc.guide_id = ? AND gc.is_deleted = 0 ORDER BY gc.created_at ASC
+2026-05-28T08:28:03.753+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.t.mapper.GuideFavoriteMapper.exists    : ==>  Preparing: SELECT COUNT(*) FROM guide_favorites WHERE guide_id=? AND user_id=?
+2026-05-28T08:28:03.753+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.travel.mapper.UserFollowMapper.exists  : ==> Parameters: 4(Long), 3(Long)
+2026-05-28T08:28:03.753+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-7] c.t.m.GuideCommentMapper.listByGuideId   : ==> Parameters: 4(Long)
+2026-05-28T08:28:03.753+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.t.mapper.GuideFavoriteMapper.exists    : ==> Parameters: 4(Long), 4(Long)
+2026-05-28T08:28:03.762+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.t.mapper.GuideFavoriteMapper.exists    : <==      Total: 1
+2026-05-28T08:28:03.764+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-7] c.t.m.GuideCommentMapper.listByGuideId   : <==      Total: 3
+2026-05-28T08:28:03.764+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.travel.mapper.UserFollowMapper.exists  : <==      Total: 1
+2026-05-28T08:28:03.764+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.t.m.G.selectFavoritesCount             : ==>  Preparing: SELECT favorites_count FROM guides WHERE id = ?
+2026-05-28T08:28:03.764+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.t.m.G.selectFavoritesCount             : ==> Parameters: 4(Long)
+2026-05-28T08:28:03.765+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.U.selectFollowersCount             : ==>  Preparing: SELECT followers_count FROM user_profiles WHERE user_id = ?
+2026-05-28T08:28:03.765+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.U.selectFollowersCount             : ==> Parameters: 3(Long)
+2026-05-28T08:28:03.770+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-7] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/guides/comments/4 | IP: 127.0.0.1 | Status: 200 | 18ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:28:03.778+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.t.m.G.selectFavoritesCount             : <==      Total: 1
+2026-05-28T08:28:03.778+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.U.selectFollowersCount             : <==      Total: 1
+2026-05-28T08:28:03.781+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-6] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/users/3/follow | IP: 127.0.0.1 | Status: 200 | 28ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:28:03.781+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-10] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/guides/4/favorite | IP: 127.0.0.1 | Status: 200 | 28ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:28:07.093+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-9] c.travel.mapper.GuideMapper.listGuides   : ==>  Preparing: SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode, g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status, d.name AS destination_name, up.nickname AS author_name, up.avatar_url AS author_avatar_url FROM guides g LEFT JOIN destinations d ON d.id = g.destination_id LEFT JOIN user_profiles up ON up.user_id = g.author_id WHERE g.publish_status = 'published' ORDER BY g.published_at DESC, g.id DESC LIMIT ?, ?
+2026-05-28T08:28:07.093+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-9] c.travel.mapper.GuideMapper.listGuides   : ==> Parameters: 0(Integer), 12(Integer)
+2026-05-28T08:28:07.127+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-9] c.travel.mapper.GuideMapper.listGuides   : <==      Total: 11
+2026-05-28T08:28:07.128+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-9] c.travel.mapper.GuideMapper.countGuides  : ==>  Preparing: SELECT COUNT(1) FROM guides g WHERE g.publish_status = 'published'
+2026-05-28T08:28:07.128+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-9] c.travel.mapper.GuideMapper.countGuides  : ==> Parameters: 
+2026-05-28T08:28:07.136+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-9] c.travel.mapper.GuideMapper.countGuides  : <==      Total: 1
+2026-05-28T08:28:07.137+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-9] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/guides/page?page=1&pageSize=12&sort=latest | IP: 127.0.0.1 | Status: 200 | 54ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:28:09.249+08:00 ERROR 9608 --- [TravelProject] [http-nio-8082-exec-8] c.travel.handler.GlobalExceptionHandler  : 未处理异常
+
+org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'id': Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; For input string: "page"
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:301) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:136) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:227) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:181) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:991) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:896) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564) ~[tomcat-embed-core-10.1.48.jar:6.0]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[tomcat-embed-core-10.1.48.jar:6.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-embed-websocket-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at com.travel.filter.RequestLoggingFilter.doFilterInternal(RequestLoggingFilter.java:25) ~[classes/:na]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at com.travel.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:20) ~[classes/:na]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:88) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:399) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1774) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:973) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:491) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
+Caused by: java.lang.NumberFormatException: For input string: "page"
+	at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:67) ~[na:na]
+	at java.base/java.lang.Long.parseLong(Long.java:711) ~[na:na]
+	at java.base/java.lang.Long.valueOf(Long.java:1163) ~[na:na]
+	at org.springframework.util.NumberUtils.parseNumber(NumberUtils.java:204) ~[spring-core-6.2.12.jar:6.2.12]
+	at org.springframework.beans.propertyeditors.CustomNumberEditor.setAsText(CustomNumberEditor.java:115) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.TypeConverterDelegate.doConvertTextValue(TypeConverterDelegate.java:439) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.TypeConverterDelegate.doConvertValue(TypeConverterDelegate.java:412) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConverterDelegate.java:161) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:80) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:53) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.validation.DataBinder.convertIfNecessary(DataBinder.java:867) ~[spring-context-6.2.12.jar:6.2.12]
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:293) ~[spring-web-6.2.12.jar:6.2.12]
+	... 56 common frames omitted
+
+2026-05-28T08:28:09.252+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-8] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/destinations/page?page=1&pageSize=12 | IP: 127.0.0.1 | Status: 200 | 4ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:28:10.219+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.t.mapper.DestinationMapper.selectById  : ==>  Preparing: SELECT id, name, country, city, description, cover_image_url, rating_avg, guides_count, travelers_count, popularity_score FROM destinations WHERE id = ?
+2026-05-28T08:28:10.219+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.t.mapper.DestinationMapper.selectById  : ==> Parameters: 1(Long)
+2026-05-28T08:28:10.231+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.t.mapper.DestinationMapper.selectById  : <==      Total: 1
+2026-05-28T08:28:10.232+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-2] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/destinations/1 | IP: 127.0.0.1 | Status: 200 | 22ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:28:10.534+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.listGuidesByDestination          : ==>  Preparing: SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode, g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status, d.name AS destination_name, up.nickname AS author_name, up.avatar_url AS author_avatar_url FROM guides g LEFT JOIN destinations d ON d.id = g.destination_id LEFT JOIN user_profiles up ON up.user_id = g.author_id WHERE g.publish_status = 'published' AND g.destination_id = ? ORDER BY g.published_at DESC, g.id DESC LIMIT ?, ?
+2026-05-28T08:28:10.534+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.listGuidesByDestination          : ==> Parameters: 1(Long), 0(Integer), 20(Integer)
+2026-05-28T08:28:10.544+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.listGuidesByDestination          : <==      Total: 2
+2026-05-28T08:28:10.544+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.countGuidesByDestination         : ==>  Preparing: SELECT COUNT(1) FROM guides WHERE publish_status = 'published' AND destination_id = ?
+2026-05-28T08:28:10.545+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.countGuidesByDestination         : ==> Parameters: 1(Long)
+2026-05-28T08:28:10.555+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.t.m.G.countGuidesByDestination         : <==      Total: 1
+2026-05-28T08:28:10.557+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-4] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/destinations/1/guides?page=1&pageSize=20 | IP: 127.0.0.1 | Status: 200 | 34ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:28:11.714+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-3] c.travel.mapper.TagMapper.selectHotTags  : ==>  Preparing: SELECT t.id, t.name FROM tags t INNER JOIN guide_tags gt ON t.id = gt.tag_id GROUP BY t.id ORDER BY COUNT(gt.guide_id) DESC LIMIT 10
+2026-05-28T08:28:11.714+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-3] c.travel.mapper.TagMapper.selectHotTags  : ==> Parameters: 
+2026-05-28T08:28:11.715+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.GuideMapper.selectGuideDetail      : ==>  Preparing: SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.content_html, g.cover_image_url, g.location_text, g.scope, g.travel_mode, g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status, d.name AS destination_name, up.nickname AS author_name, up.avatar_url AS author_avatar_url FROM guides g LEFT JOIN destinations d ON d.id = g.destination_id LEFT JOIN user_profiles up ON up.user_id = g.author_id WHERE g.id = ? AND g.publish_status = 'published'
+2026-05-28T08:28:11.715+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.GuideMapper.selectGuideDetail      : ==> Parameters: 1(Long)
+2026-05-28T08:28:11.718+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.travel.mapper.UserMapper.selectById    : ==>  Preparing: SELECT id, username, phone, email, password_hash, status, last_login_at, created_at, updated_at FROM users WHERE id = ?
+2026-05-28T08:28:11.718+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.travel.mapper.UserMapper.selectById    : ==> Parameters: 4(Long)
+2026-05-28T08:28:11.723+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-3] c.travel.mapper.TagMapper.selectHotTags  : <==      Total: 10
+2026-05-28T08:28:11.724+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-3] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/tags/hot | IP: 127.0.0.1 | Status: 200 | 19ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:28:11.726+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.GuideMapper.selectGuideDetail      : <==      Total: 1
+2026-05-28T08:28:11.726+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.GuideMapper.incrementViewsCount    : ==>  Preparing: UPDATE guides SET views_count = views_count + 1 WHERE id = ?
+2026-05-28T08:28:11.727+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.GuideMapper.incrementViewsCount    : ==> Parameters: 1(Long)
+2026-05-28T08:28:11.727+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.travel.mapper.UserMapper.selectById    : <==      Total: 1
+2026-05-28T08:28:11.727+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.UserProfileMapper.selectByUserId   : ==>  Preparing: SELECT user_id, nickname, avatar_url, bio, is_vip, guides_count, followers_count, likes_received_count, created_at, updated_at FROM user_profiles WHERE user_id = ?
+2026-05-28T08:28:11.728+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.UserProfileMapper.selectByUserId   : ==> Parameters: 4(Long)
+2026-05-28T08:28:11.737+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.UserProfileMapper.selectByUserId   : <==      Total: 1
+2026-05-28T08:28:11.738+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-1] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/users/me | IP: 127.0.0.1 | Status: 200 | 33ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:28:11.748+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.GuideMapper.incrementViewsCount    : <==    Updates: 1
+2026-05-28T08:28:11.748+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.GuideMapper.listItineraryDays      : ==>  Preparing: SELECT id, guide_id, day_no, title, summary, sort_order FROM guide_itinerary_days WHERE guide_id = ? ORDER BY day_no ASC
+2026-05-28T08:28:11.749+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.GuideMapper.listItineraryDays      : ==> Parameters: 1(Long)
+2026-05-28T08:28:11.766+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.GuideMapper.listItineraryDays      : <==      Total: 7
+2026-05-28T08:28:11.767+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.G.listByGuideId                    : ==>  Preparing: SELECT id, guide_id, day_no, name, description, image_url, time, duration, sort_order FROM guide_itinerary_spots WHERE guide_id = ? ORDER BY day_no ASC, sort_order ASC
+2026-05-28T08:28:11.767+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.G.listByGuideId                    : ==> Parameters: 1(Long)
+2026-05-28T08:28:11.786+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.G.listByGuideId                    : <==      Total: 1
+2026-05-28T08:28:11.786+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.UserProfileMapper.selectByUserId   : ==>  Preparing: SELECT user_id, nickname, avatar_url, bio, is_vip, guides_count, followers_count, likes_received_count, created_at, updated_at FROM user_profiles WHERE user_id = ?
+2026-05-28T08:28:11.786+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.UserProfileMapper.selectByUserId   : ==> Parameters: 1(Long)
+2026-05-28T08:28:11.797+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.UserProfileMapper.selectByUserId   : <==      Total: 1
+2026-05-28T08:28:11.798+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.G.listGuidesByDestination          : ==>  Preparing: SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode, g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status, d.name AS destination_name, up.nickname AS author_name, up.avatar_url AS author_avatar_url FROM guides g LEFT JOIN destinations d ON d.id = g.destination_id LEFT JOIN user_profiles up ON up.user_id = g.author_id WHERE g.publish_status = 'published' AND g.destination_id = ? ORDER BY g.published_at DESC, g.id DESC LIMIT ?, ?
+2026-05-28T08:28:11.798+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.G.listGuidesByDestination          : ==> Parameters: 1(Long), 0(Integer), 4(Integer)
+2026-05-28T08:28:11.808+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.G.listGuidesByDestination          : <==      Total: 2
+2026-05-28T08:28:11.812+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-5] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/guides/1 | IP: 127.0.0.1 | Status: 200 | 107ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:28:11.823+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-7] c.t.mapper.TagMapper.selectByGuideId     : ==>  Preparing: SELECT t.id, t.name FROM tags t INNER JOIN guide_tags gt ON t.id = gt.tag_id WHERE gt.guide_id = ?
+2026-05-28T08:28:11.823+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-7] c.t.mapper.TagMapper.selectByGuideId     : ==> Parameters: 1(Long)
+2026-05-28T08:28:11.833+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-7] c.t.mapper.TagMapper.selectByGuideId     : <==      Total: 4
+2026-05-28T08:28:11.834+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-7] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/guides/1/tags | IP: 127.0.0.1 | Status: 200 | 12ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:28:11.970+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.travel.mapper.GuideLikeMapper.exists   : ==>  Preparing: SELECT COUNT(*) FROM guide_likes WHERE guide_id=? AND user_id=?
+2026-05-28T08:28:11.970+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.travel.mapper.GuideLikeMapper.exists   : ==> Parameters: 1(Long), 4(Long)
+2026-05-28T08:28:12.159+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-8] c.t.controller.user.GuideController      : 获取攻略评论列表
+2026-05-28T08:28:12.159+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.t.m.GuideCommentMapper.listByGuideId   : ==>  Preparing: SELECT gc.id, gc.guide_id, gc.user_id, gc.content, gc.parent_comment_id, gc.likes_count, gc.status, gc.created_at, up.nickname AS author_name, up.avatar_url AS author_avatar_url FROM guide_comments gc LEFT JOIN user_profiles up ON up.user_id = gc.user_id WHERE gc.guide_id = ? AND gc.is_deleted = 0 ORDER BY gc.created_at ASC
+2026-05-28T08:28:12.159+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.t.mapper.GuideFavoriteMapper.exists    : ==>  Preparing: SELECT COUNT(*) FROM guide_favorites WHERE guide_id=? AND user_id=?
+2026-05-28T08:28:12.159+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.t.m.GuideCommentMapper.listByGuideId   : ==> Parameters: 1(Long)
+2026-05-28T08:28:12.159+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.t.mapper.GuideFavoriteMapper.exists    : ==> Parameters: 1(Long), 4(Long)
+2026-05-28T08:28:12.169+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-9] c.travel.mapper.UserFollowMapper.exists  : ==>  Preparing: SELECT COUNT(*) FROM user_follows WHERE follower_user_id=? AND followed_user_id=?
+2026-05-28T08:28:12.169+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.t.mapper.GuideFavoriteMapper.exists    : <==      Total: 1
+2026-05-28T08:28:12.169+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-9] c.travel.mapper.UserFollowMapper.exists  : ==> Parameters: 4(Long), 1(Long)
+2026-05-28T08:28:12.169+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.t.m.GuideCommentMapper.listByGuideId   : <==      Total: 4
+2026-05-28T08:28:12.169+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.t.m.G.selectFavoritesCount             : ==>  Preparing: SELECT favorites_count FROM guides WHERE id = ?
+2026-05-28T08:28:12.169+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.t.m.G.selectFavoritesCount             : ==> Parameters: 1(Long)
+2026-05-28T08:28:12.171+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-8] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/guides/comments/1 | IP: 127.0.0.1 | Status: 200 | 13ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:28:12.178+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-9] c.travel.mapper.UserFollowMapper.exists  : <==      Total: 1
+2026-05-28T08:28:12.178+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.t.m.G.selectFavoritesCount             : <==      Total: 1
+2026-05-28T08:28:12.179+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-9] c.t.m.U.selectFollowersCount             : ==>  Preparing: SELECT followers_count FROM user_profiles WHERE user_id = ?
+2026-05-28T08:28:12.179+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-9] c.t.m.U.selectFollowersCount             : ==> Parameters: 1(Long)
+2026-05-28T08:28:12.180+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-10] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/guides/1/favorite | IP: 127.0.0.1 | Status: 200 | 22ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:28:12.198+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-9] c.t.m.U.selectFollowersCount             : <==      Total: 1
+2026-05-28T08:28:12.200+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-9] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/users/1/follow | IP: 127.0.0.1 | Status: 200 | 42ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:28:12.200+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.travel.mapper.GuideLikeMapper.exists   : <==      Total: 1
+2026-05-28T08:28:12.201+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.GuideLikeMapper.selectLikesCount   : ==>  Preparing: SELECT likes_count FROM guides WHERE id = ?
+2026-05-28T08:28:12.201+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.GuideLikeMapper.selectLikesCount   : ==> Parameters: 1(Long)
+2026-05-28T08:28:12.216+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.GuideLikeMapper.selectLikesCount   : <==      Total: 1
+2026-05-28T08:28:12.217+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-6] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/guides/1/like | IP: 127.0.0.1 | Status: 200 | 249ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:28:15.773+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.travel.mapper.GuideMapper.listGuides   : ==>  Preparing: SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode, g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status, d.name AS destination_name, up.nickname AS author_name, up.avatar_url AS author_avatar_url FROM guides g LEFT JOIN destinations d ON d.id = g.destination_id LEFT JOIN user_profiles up ON up.user_id = g.author_id WHERE g.publish_status = 'published' ORDER BY g.published_at DESC, g.id DESC LIMIT ?, ?
+2026-05-28T08:28:15.774+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.travel.mapper.GuideMapper.listGuides   : ==> Parameters: 0(Integer), 12(Integer)
+2026-05-28T08:28:15.802+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.travel.mapper.GuideMapper.listGuides   : <==      Total: 11
+2026-05-28T08:28:15.802+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.travel.mapper.GuideMapper.countGuides  : ==>  Preparing: SELECT COUNT(1) FROM guides g WHERE g.publish_status = 'published'
+2026-05-28T08:28:15.803+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.travel.mapper.GuideMapper.countGuides  : ==> Parameters: 
+2026-05-28T08:28:16.048+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.travel.mapper.GuideMapper.countGuides  : <==      Total: 1
+2026-05-28T08:28:16.050+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-2] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/guides/page?page=1&pageSize=12&sort=latest | IP: 127.0.0.1 | Status: 200 | 288ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:28:17.769+08:00 ERROR 9608 --- [TravelProject] [http-nio-8082-exec-4] c.travel.handler.GlobalExceptionHandler  : 未处理异常
+
+org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'id': Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; For input string: "page"
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:301) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:136) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:227) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:181) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:991) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:896) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564) ~[tomcat-embed-core-10.1.48.jar:6.0]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885) ~[spring-webmvc-6.2.12.jar:6.2.12]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[tomcat-embed-core-10.1.48.jar:6.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-embed-websocket-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at com.travel.filter.RequestLoggingFilter.doFilterInternal(RequestLoggingFilter.java:25) ~[classes/:na]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at com.travel.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:20) ~[classes/:na]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.12.jar:6.2.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:88) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:399) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1774) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:973) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:491) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.48.jar:10.1.48]
+	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
+Caused by: java.lang.NumberFormatException: For input string: "page"
+	at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:67) ~[na:na]
+	at java.base/java.lang.Long.parseLong(Long.java:711) ~[na:na]
+	at java.base/java.lang.Long.valueOf(Long.java:1163) ~[na:na]
+	at org.springframework.util.NumberUtils.parseNumber(NumberUtils.java:204) ~[spring-core-6.2.12.jar:6.2.12]
+	at org.springframework.beans.propertyeditors.CustomNumberEditor.setAsText(CustomNumberEditor.java:115) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.TypeConverterDelegate.doConvertTextValue(TypeConverterDelegate.java:439) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.TypeConverterDelegate.doConvertValue(TypeConverterDelegate.java:412) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConverterDelegate.java:161) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:80) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:53) ~[spring-beans-6.2.12.jar:6.2.12]
+	at org.springframework.validation.DataBinder.convertIfNecessary(DataBinder.java:867) ~[spring-context-6.2.12.jar:6.2.12]
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:293) ~[spring-web-6.2.12.jar:6.2.12]
+	... 56 common frames omitted
+
+2026-05-28T08:28:17.773+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-4] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/destinations/page?page=1&pageSize=12 | IP: 127.0.0.1 | Status: 200 | 4ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:37:38.512+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.t.m.G.selectFavoritedGuideIds          : ==>  Preparing: SELECT gf.guide_id FROM guide_favorites gf WHERE gf.user_id=? ORDER BY gf.created_at DESC LIMIT ?, ?
+2026-05-28T08:37:38.512+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.travel.mapper.UserMapper.selectById    : ==>  Preparing: SELECT id, username, phone, email, password_hash, status, last_login_at, created_at, updated_at FROM users WHERE id = ?
+2026-05-28T08:37:38.512+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.GuideCommentMapper.selectByUserId  : ==>  Preparing: SELECT c.id, c.guide_id, c.user_id, c.content, c.parent_comment_id, c.likes_count, c.status, c.created_at, up.nickname AS author_name, up.avatar_url AS author_avatar_url, g.title AS guide_title FROM guide_comments c LEFT JOIN user_profiles up ON up.user_id = c.user_id LEFT JOIN guides g ON c.guide_id = g.id WHERE c.user_id = ? AND c.is_deleted = 0 ORDER BY c.created_at DESC LIMIT ?, ?
+2026-05-28T08:37:38.512+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-7] c.t.m.G.selectLikedGuideIds              : ==>  Preparing: SELECT gl.guide_id FROM guide_likes gl WHERE gl.user_id=? ORDER BY gl.created_at DESC LIMIT ?, ?
+2026-05-28T08:37:38.512+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.GuideStoryMapper.selectByUserId    : ==>  Preparing: SELECT id, author_user_id, author_name, author_avatar_url, is_vip, content, published_at, likes_count, comments_count, shares_count, created_at FROM traveler_stories WHERE author_user_id = ? AND is_deleted = 0 ORDER BY published_at DESC LIMIT ?, ?
+2026-05-28T08:37:38.513+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.travel.mapper.UserMapper.selectById    : ==> Parameters: 4(Long)
+2026-05-28T08:37:38.513+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.t.m.G.selectFavoritedGuideIds          : ==> Parameters: 4(Long), 0(Integer), 50(Integer)
+2026-05-28T08:37:38.513+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-7] c.t.m.G.selectLikedGuideIds              : ==> Parameters: 4(Long), 0(Integer), 50(Integer)
+2026-05-28T08:37:38.513+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.GuideCommentMapper.selectByUserId  : ==> Parameters: 4(Long), 0(Integer), 50(Integer)
+2026-05-28T08:37:38.513+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.GuideStoryMapper.selectByUserId    : ==> Parameters: 4(Long), 0(Integer), 50(Integer)
+2026-05-28T08:37:39.216+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.t.m.G.selectFavoritedGuideIds          : <==      Total: 1
+2026-05-28T08:37:39.216+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.GuideStoryMapper.selectByUserId    : <==      Total: 0
+2026-05-28T08:37:39.216+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-7] c.t.m.G.selectLikedGuideIds              : <==      Total: 2
+2026-05-28T08:37:39.216+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.GuideCommentMapper.selectByUserId  : <==      Total: 1
+2026-05-28T08:37:39.216+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.travel.mapper.UserMapper.selectById    : <==      Total: 1
+2026-05-28T08:37:39.217+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-3] c.t.mapper.GuideMapper.selectByAuthorId  : ==>  Preparing: SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode, g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status, d.name AS destination_name, up.nickname AS author_name, up.avatar_url AS author_avatar_url FROM guides g LEFT JOIN destinations d ON d.id = g.destination_id LEFT JOIN user_profiles up ON up.user_id = g.author_id WHERE g.author_id = ? ORDER BY g.created_at DESC LIMIT ?, ?
+2026-05-28T08:37:39.217+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.t.m.UserProfileMapper.selectByUserId   : ==>  Preparing: SELECT user_id, nickname, avatar_url, bio, is_vip, guides_count, followers_count, likes_received_count, created_at, updated_at FROM user_profiles WHERE user_id = ?
+2026-05-28T08:37:39.217+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-7] c.t.m.GuideLikeMapper.countByUserId      : ==>  Preparing: SELECT COUNT(*) FROM guide_likes WHERE user_id=?
+2026-05-28T08:37:39.217+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.GuideCommentMapper.countByUserId   : ==>  Preparing: SELECT COUNT(*) FROM guide_comments WHERE user_id = ? AND is_deleted = 0
+2026-05-28T08:37:39.217+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.t.m.GuideFavoriteMapper.countByUserId  : ==>  Preparing: SELECT COUNT(*) FROM guide_favorites WHERE user_id=?
+2026-05-28T08:37:39.217+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-7] c.t.m.GuideLikeMapper.countByUserId      : ==> Parameters: 4(Long)
+2026-05-28T08:37:39.217+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.t.m.GuideFavoriteMapper.countByUserId  : ==> Parameters: 4(Long)
+2026-05-28T08:37:39.217+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.GuideCommentMapper.countByUserId   : ==> Parameters: 4(Long)
+2026-05-28T08:37:39.217+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.t.m.UserProfileMapper.selectByUserId   : ==> Parameters: 4(Long)
+2026-05-28T08:37:39.217+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-3] c.t.mapper.GuideMapper.selectByAuthorId  : ==> Parameters: 4(Long), 0(Integer), 50(Integer)
+2026-05-28T08:37:39.366+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-5] c.t.m.GuideCommentMapper.countByUserId   : <==      Total: 1
+2026-05-28T08:37:39.367+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-3] c.t.mapper.GuideMapper.selectByAuthorId  : <==      Total: 1
+2026-05-28T08:37:39.366+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.t.m.GuideFavoriteMapper.countByUserId  : <==      Total: 1
+2026-05-28T08:37:39.366+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-10] c.t.m.UserProfileMapper.selectByUserId   : <==      Total: 1
+2026-05-28T08:37:39.366+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-7] c.t.m.GuideLikeMapper.countByUserId      : <==      Total: 1
+2026-05-28T08:37:39.367+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.GuideStoryMapper.countByUserId     : ==>  Preparing: SELECT COUNT(1) FROM traveler_stories WHERE author_user_id = ? AND is_deleted = 0
+2026-05-28T08:37:39.367+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.GuideStoryMapper.countByUserId     : ==> Parameters: 4(Long)
+2026-05-28T08:37:39.367+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-3] c.t.mapper.GuideMapper.countByAuthorId   : ==>  Preparing: SELECT COUNT(*) FROM guides WHERE author_id = ?
+2026-05-28T08:37:39.367+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-3] c.t.mapper.GuideMapper.countByAuthorId   : ==> Parameters: 4(Long)
+2026-05-28T08:37:39.368+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-10] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/users/me | IP: 127.0.0.1 | Status: 200 | 1285ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:37:39.368+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-5] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/users/me/comments?page=1&pageSize=50 | IP: 127.0.0.1 | Status: 200 | 1285ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:37:39.369+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.travel.mapper.GuideMapper.selectByIds  : ==>  Preparing: SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode, g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status, d.name AS destination_name, up.nickname AS author_name, up.avatar_url AS author_avatar_url FROM guides g LEFT JOIN destinations d ON d.id = g.destination_id LEFT JOIN user_profiles up ON up.user_id = g.author_id WHERE g.id IN ( ? ) ORDER BY g.created_at DESC
+2026-05-28T08:37:39.369+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-7] c.travel.mapper.GuideMapper.selectByIds  : ==>  Preparing: SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode, g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status, d.name AS destination_name, up.nickname AS author_name, up.avatar_url AS author_avatar_url FROM guides g LEFT JOIN destinations d ON d.id = g.destination_id LEFT JOIN user_profiles up ON up.user_id = g.author_id WHERE g.id IN ( ? , ? ) ORDER BY g.created_at DESC
+2026-05-28T08:37:39.369+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.travel.mapper.GuideMapper.selectByIds  : ==> Parameters: 3(Long)
+2026-05-28T08:37:39.369+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-7] c.travel.mapper.GuideMapper.selectByIds  : ==> Parameters: 1(Long), 3(Long)
+2026-05-28T08:37:39.900+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-3] c.t.mapper.GuideMapper.countByAuthorId   : <==      Total: 1
+2026-05-28T08:37:39.901+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-8] c.travel.mapper.GuideMapper.selectByIds  : <==      Total: 1
+2026-05-28T08:37:39.900+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-1] c.t.m.GuideStoryMapper.countByUserId     : <==      Total: 1
+2026-05-28T08:37:39.901+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-7] c.travel.mapper.GuideMapper.selectByIds  : <==      Total: 2
+2026-05-28T08:37:39.902+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-1] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/users/me/stories?page=1&pageSize=50 | IP: 127.0.0.1 | Status: 200 | 1819ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:37:39.902+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-3] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/users/me/guides?page=1&pageSize=50 | IP: 127.0.0.1 | Status: 200 | 1819ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:37:39.903+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-7] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/users/me/liked-guides?page=1&pageSize=50 | IP: 127.0.0.1 | Status: 200 | 1820ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:37:39.903+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-8] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/users/me/favorite-guides?page=1&pageSize=50 | IP: 127.0.0.1 | Status: 200 | 1820ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:37:40.217+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-9] c.t.m.UserFollowMapper.selectFollowing   : ==>  Preparing: SELECT up.user_id, up.nickname, up.avatar_url, up.is_vip FROM user_follows uf JOIN user_profiles up ON uf.followed_user_id = up.user_id WHERE uf.follower_user_id = ? ORDER BY uf.created_at DESC
+2026-05-28T08:37:40.217+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-9] c.t.m.UserFollowMapper.selectFollowing   : ==> Parameters: 4(Long)
+2026-05-28T08:37:40.811+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-9] c.t.m.UserFollowMapper.selectFollowing   : <==      Total: 1
+2026-05-28T08:37:40.813+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-9] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/users/4/following | IP: 127.0.0.1 | Status: 200 | 597ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:37:53.200+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.D.listHotDestinations              : ==>  Preparing: SELECT id, name, country, city, description, cover_image_url, rating_avg, guides_count, travelers_count, popularity_score FROM destinations ORDER BY popularity_score DESC, id DESC LIMIT ?
+2026-05-28T08:37:53.201+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.D.listHotDestinations              : ==> Parameters: 4(Integer)
+2026-05-28T08:37:53.291+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.t.m.GuideMapper.listTopGuidesByLikes   : ==>  Preparing: SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode, g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status, d.name AS destination_name, up.nickname AS author_name, up.avatar_url AS author_avatar_url FROM guides g LEFT JOIN destinations d ON d.id = g.destination_id LEFT JOIN user_profiles up ON up.user_id = g.author_id WHERE g.publish_status = 'published' ORDER BY g.likes_count DESC, g.id DESC LIMIT ?
+2026-05-28T08:37:53.292+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-6] c.t.m.D.listHotDestinations              : <==      Total: 4
+2026-05-28T08:37:53.292+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.t.m.GuideMapper.listTopGuidesByLikes   : ==> Parameters: 6(Integer)
+2026-05-28T08:37:53.293+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-6] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/destinations/hot | IP: 127.0.0.1 | Status: 200 | 379ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:37:53.511+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-2] c.t.m.GuideMapper.listTopGuidesByLikes   : <==      Total: 6
+2026-05-28T08:37:53.512+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-2] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/guides/ranking/likes | IP: 127.0.0.1 | Status: 200 | 295ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:37:56.528+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.travel.mapper.GuideMapper.listGuides   : ==>  Preparing: SELECT g.id, g.destination_id, g.author_id, g.title, g.summary, g.cover_image_url, g.location_text, g.scope, g.travel_mode, g.published_at, g.days, g.budget_total, g.views_count, g.likes_count, g.comments_count, g.favorites_count, g.status, d.name AS destination_name, up.nickname AS author_name, up.avatar_url AS author_avatar_url FROM guides g LEFT JOIN destinations d ON d.id = g.destination_id LEFT JOIN user_profiles up ON up.user_id = g.author_id WHERE g.publish_status = 'published' ORDER BY g.published_at DESC, g.id DESC LIMIT ?, ?
+2026-05-28T08:37:56.529+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.travel.mapper.GuideMapper.listGuides   : ==> Parameters: 0(Integer), 12(Integer)
+2026-05-28T08:37:56.735+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.travel.mapper.GuideMapper.listGuides   : <==      Total: 11
+2026-05-28T08:37:56.736+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.travel.mapper.GuideMapper.countGuides  : ==>  Preparing: SELECT COUNT(1) FROM guides g WHERE g.publish_status = 'published'
+2026-05-28T08:37:56.736+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.travel.mapper.GuideMapper.countGuides  : ==> Parameters: 
+2026-05-28T08:37:57.158+08:00 DEBUG 9608 --- [TravelProject] [http-nio-8082-exec-4] c.travel.mapper.GuideMapper.countGuides  : <==      Total: 1
+2026-05-28T08:37:57.159+08:00  INFO 9608 --- [TravelProject] [http-nio-8082-exec-4] com.travel.filter.RequestLoggingFilter   : [REQUEST] GET /api/guides/page?page=1&pageSize=12&sort=latest | IP: 127.0.0.1 | Status: 200 | 788ms | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb
+2026-05-28T08:49:57.377+08:00  WARN 9608 --- [TravelProject] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@7ec22fad (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-05-28T08:50:23.590+08:00  WARN 9608 --- [TravelProject] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@360ea7eb (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-05-28T08:50:37.493+08:00  WARN 9608 --- [TravelProject] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@520a8c2c (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-05-28T08:51:26.723+08:00  WARN 9608 --- [TravelProject] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@3a7bb02b (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-05-28T08:52:06.857+08:00  WARN 9608 --- [TravelProject] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@4d7fe07f (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-05-28T08:52:11.865+08:00  WARN 9608 --- [TravelProject] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@55d1dfd3 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-05-28T08:52:21.983+08:00  WARN 9608 --- [TravelProject] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@3e7dbef9 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-05-28T08:52:37.915+08:00  WARN 9608 --- [TravelProject] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@bac222d (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2026-05-28T08:56:42.774+08:00  INFO 9608 --- [TravelProject] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-28T08:56:42.970+08:00  INFO 9608 --- [TravelProject] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-05-28T08:56:42.974+08:00  INFO 9608 --- [TravelProject] [SpringApplicationShutdownHook] com.travel.utils.OssUploadUtil           : OSS client shutdown
+2026-05-28T08:56:42.976+08:00  INFO 9608 --- [TravelProject] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-05-28T08:56:42.977+08:00  INFO 9608 --- [TravelProject] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-05-28T08:56:42.979+08:00  INFO 9608 --- [TravelProject] [SpringApplicationShutdownHook] com.travel.listener.OnlineUserListener   : 用户下线 | 当前在线: 0
+2026-05-28T08:56:42.979+08:00  INFO 9608 --- [TravelProject] [SpringApplicationShutdownHook] com.travel.listener.DataInitListener     : 应用上下文销毁，清除缓存数据

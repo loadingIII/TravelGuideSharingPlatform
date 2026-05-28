@@ -4,10 +4,10 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-.claude
+src/test/.claude
 .superpowers
 docs
-CLAUDE.md
+src/test/CLAUDE.md
 
 ### STS ###
 .apt_generated
